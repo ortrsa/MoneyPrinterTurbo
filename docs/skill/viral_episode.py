@@ -1,0 +1,267 @@
+#!/usr/bin/env python3
+"""
+端到端生成一集"事实合集"短视频：脚本 -> 语音 -> 素材 -> 逐词高亮字幕叠加层。
+
+用法::
+
+    uv run python docs/skill/viral_episode.py \
+        --facts-file facts.txt --episode 2 [--dry-run]
+
+`facts.txt` 每行一条原始事实（中英文均可，脚本会按 `--language` 改写）。
+
+流程
+----
+1. 用 LLM 把每条原始事实改写成 1-2 句的口播稿，并生成开场钩子。
+2. 拼成完整脚本，交给 MoneyPrinterTurbo 生成"无字幕"成片
+   （字幕交给叠加层，避免和 MoviePy 字幕重叠）。
+3. 用 faster-whisper 从成片音频反解逐词时间轴。
+4. 把每条事实的文本对齐到词序列，得到计数器/进度条所需的区间。
+5. 生成并烧录 ASS 叠加层：逐词高亮字幕 + `3/6` 计数器 + 进度条。
+6. 输出成片路径与可直接发布的标题/文案/话题标签。
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from loguru import logger  # noqa: E402
+
+from app.services import viral  # noqa: E402
+
+# 研究结论：50-60 秒档位在事实类短视频里平均表现最好，而完播率仍是核心指标。
+# 按 150-170 WPM 的口播语速，约 50 秒对应 125-140 个词，正好放得下 6 条事实。
+DEFAULT_FACT_COUNT = 6
+
+FACT_PROMPT = (
+    "Rewrite this fact as ONE or TWO short punchy sentences for a rapid-fire facts "
+    "compilation video. Open directly with the surprising claim - no greeting, no "
+    "'did you know', no preamble, no filler words. Keep it under 25 words. "
+    "Write in {language}."
+)
+
+HOOK_PROMPT = (
+    "Write a single opening hook sentence, at most 12 words, for a short video that "
+    "lists {count} surprising facts. It must create a specific curiosity gap and "
+    "promise the payoff - not a vague tease. Do not greet the viewer. Do not use "
+    "'did you know'. Return only the sentence, in {language}."
+)
+
+# 平台把"点赞/关注求互动"归为 engagement bait，因此默认结尾用"具体的悬念"
+# 而不是泛化的号召，把关注动机建立在"下一条内容"上。
+DEFAULT_OUTRO = "The last one still breaks my brain - episode {next_episode} goes even further."
+
+
+def run(command: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess:
+    logger.info("$ " + " ".join(command[:6]) + (" ..." if len(command) > 6 else ""))
+    return subprocess.run(command, cwd=cwd, capture_output=True, text=True)
+
+
+def build_scripts(
+    raw_facts: list[str], language: str, episode: int, outro: str | None = None
+) -> dict:
+    """调用项目内的 LLM 服务，把原始事实改写成口播稿并生成钩子。"""
+    from app.services import llm
+
+    fact_lines = []
+    for fact in raw_facts:
+        line = llm.generate_script(
+            video_subject=fact,
+            language=language,
+            paragraph_number=1,
+            video_script_prompt=FACT_PROMPT.format(language=language),
+        ).strip()
+        logger.info(f"fact: {line}")
+        fact_lines.append(line)
+
+    hook = llm.generate_script(
+        video_subject=f"{len(fact_lines)} surprising facts",
+        language=language,
+        paragraph_number=1,
+        video_script_prompt=HOOK_PROMPT.format(
+            count=len(fact_lines), language=language
+        ),
+    ).strip()
+    # 钩子必须只有一句；LLM 偶尔会多写，这里截断到第一个句号
+    hook = hook.split(". ")[0].strip().rstrip(".") + "."
+    logger.info(f"hook: {hook}")
+
+    resolved_outro = outro or DEFAULT_OUTRO.format(next_episode=episode + 1)
+    return {"hook": hook, "facts": fact_lines, "outro": resolved_outro}
+
+
+def generate_base_video(
+    script_text: str,
+    subject: str,
+    voice_name: str,
+    video_terms: str,
+    root: Path,
+    skill_dir: Path,
+) -> Path:
+    """跑 MoneyPrinterTurbo 生成无字幕成片，返回 final-1.mp4 的路径。"""
+    command = [
+        "uv", "run", "--no-project", "--python", "3.11", "python", "mpt_agent.py",
+        "--root", str(root),
+        "--subject", subject,
+        "--",
+        "--voice-name", voice_name,
+        "--video-source", "pexels",
+        "--video-script", script_text,
+        "--video-terms", video_terms,
+        # 字幕由 ASS 叠加层负责，这里必须关掉，否则两层字幕会叠在一起
+        "--no-subtitle-enabled",
+    ]
+    result = run(command, cwd=skill_dir)
+    if result.returncode != 0:
+        tail = (result.stdout or "") + (result.stderr or "")
+        raise RuntimeError("base video generation failed:\n" + tail[-2000:])
+
+    video_file = ""
+    for line in (result.stdout or "").splitlines():
+        if line.startswith("VIDEO_FILE="):
+            video_file = line.split("=", 1)[1].strip()
+    if not video_file:
+        raise RuntimeError("could not find VIDEO_FILE in helper output")
+    return Path(video_file)
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--facts-file", required=True, type=Path)
+    parser.add_argument("--episode", type=int, default=1)
+    parser.add_argument("--series-name", default="Random But True Facts")
+    parser.add_argument("--language", default="en-US")
+    parser.add_argument("--voice-name", default="gemini:Puck-Male")
+    parser.add_argument("--fact-count", type=int, default=DEFAULT_FACT_COUNT)
+    parser.add_argument("--root", type=Path, default=PROJECT_ROOT)
+    parser.add_argument(
+        "--video-terms",
+        default="kinetic sand cutting satisfying,slime asmr satisfying,"
+        "hydraulic press crushing,soap cutting satisfying,"
+        "paint pouring abstract satisfying,glass cutting satisfying",
+    )
+    parser.add_argument(
+        "--outro",
+        default=None,
+        help=(
+            "结尾口播语；默认使用指向下一集的悬念。平台把泛化的"
+            "点赞/关注号召视为 engagement bait，如需沿用旧的 "
+            "'Follow for more...' 文案，用这个参数显式传入。"
+        ),
+    )
+    parser.add_argument("--highlight-color", default="#FFE500")
+    parser.add_argument("--words-per-caption", type=int, default=3)
+    parser.add_argument("--whisper-model", default="base.en")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="只生成脚本和元数据，不渲染视频",
+    )
+    args = parser.parse_args(argv)
+
+    skill_dir = Path(__file__).resolve().parent
+    raw_facts = [
+        line.strip()
+        for line in args.facts_file.read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.strip().startswith("#")
+    ][: args.fact_count]
+    if not raw_facts:
+        parser.error(f"no facts found in {args.facts_file}")
+    logger.info(f"episode {args.episode}: {len(raw_facts)} facts")
+
+    parts = build_scripts(
+        raw_facts, language=args.language, episode=args.episode, outro=args.outro
+    )
+    spoken_segments = [parts["hook"], *parts["facts"], parts["outro"]]
+    script_text = " ".join(spoken_segments)
+
+    title = f"{args.series_name} {args.episode} \U0001F440"
+    from app.services import llm
+
+    metadata = llm.generate_social_metadata(
+        video_subject=f"{len(raw_facts)} surprising true facts",
+        video_script=script_text,
+        language="en",
+        platform="youtube_shorts",
+    )
+    metadata["title"] = title  # 系列标题固定，不让 LLM 自由发挥
+
+    if args.dry_run:
+        print(json.dumps({"script": script_text, "metadata": metadata}, indent=2, ensure_ascii=False))
+        return 0
+
+    video_path = generate_base_video(
+        script_text=script_text,
+        subject=f"{args.series_name} {args.episode}",
+        voice_name=args.voice_name,
+        video_terms=args.video_terms,
+        root=args.root,
+        skill_dir=skill_dir,
+    )
+    task_dir = video_path.parent
+    audio_path = task_dir / "audio.mp3"
+
+    words = viral.transcribe_word_timings(str(audio_path), model_size=args.whisper_model)
+    if not words:
+        raise RuntimeError("no word timings produced; cannot build overlay")
+    duration = max(word.end for word in words)
+
+    # 钩子和结尾不计入"第 N 条事实"，所以先把它们一起参与对齐，再只取中间的事实区间
+    all_segments = viral.align_facts_to_words(
+        spoken_segments, words, total_duration=duration
+    )
+    fact_segments = all_segments[1:-1] if len(all_segments) >= 3 else all_segments
+    fact_segments = [
+        viral.FactSegment(index=i + 1, start=s.start, end=s.end)
+        for i, s in enumerate(fact_segments)
+    ]
+
+    ass_text = viral.build_ass(
+        words=words,
+        duration=duration,
+        facts=fact_segments,
+        highlight_color=args.highlight_color,
+        words_per_caption=args.words_per_caption,
+    )
+    ass_path = task_dir / "overlay.ass"
+    ass_path.write_text(ass_text, encoding="utf-8")
+
+    output_path = task_dir / "final-viral.mp4"
+    viral.burn_overlay(
+        video_in=str(video_path),
+        ass_file=str(ass_path),
+        video_out=str(output_path),
+        fonts_dir=str(PROJECT_ROOT / "resource" / "fonts"),
+    )
+
+    result = {
+        "episode": args.episode,
+        "video_file": str(output_path),
+        "duration_seconds": round(duration, 2),
+        "fact_count": len(fact_segments),
+        "script": script_text,
+        # 保留分段与区间，便于只重跑叠加层而不必重新渲染底片
+        "segments": spoken_segments,
+        "fact_timings": [
+            {"index": s.index, "start": round(s.start, 2), "end": round(s.end, 2)}
+            for s in fact_segments
+        ],
+        "metadata": metadata,
+    }
+    (task_dir / "viral-result.json").write_text(
+        json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
+    print("VIRAL_RESULT")
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -4,7 +4,7 @@ description: Use this skill whenever the user wants to create a finished video f
 compatibility: Requires an AI agent with terminal, network, filesystem, and long-running command support. Supports macOS and Windows and uses uv exclusively.
 metadata:
   author: "harry0703@hotmail.com"
-  version: "1.6.0"
+  version: "2.0.0"
   upstream: "https://github.com/harry0703/MoneyPrinterTurbo"
 ---
 
@@ -34,11 +34,17 @@ There is no guaranteed-viral setting, but these defaults measurably improve rete
    ```text
    Open with the most surprising or counter-intuitive part of this fact in the very first sentence - no greeting, no preamble, no 'did you know' filler. Use short, punchy sentences with no filler words. Write in English.
    ```
-2. **Fixed English CTA appended verbatim to every video.** Always end every video with this exact sentence, word for word, regardless of the video's topic or script language — do not let the LLM paraphrase it, and do not ask the user whether to include it:
+2. **Fixed English closing line, appended verbatim.** Whatever the closing line is, append it yourself rather than letting the LLM phrase it, so it survives every generation unchanged.
+
+   **Default is now a next-episode cliffhanger, not a follow/comment CTA.** Meta's and TikTok's policies treat "follow for more", "like for part 2" and "comment X" as engagement bait, so the previous fixed CTA below is kept only as an opt-in:
+   ```text
+   The last one still breaks my brain - episode <N+1> goes even further.
+   ```
+   Legacy CTA, use only if the user explicitly asks for it (`--outro` on `viral_episode.py`):
    ```text
    Follow for more wild facts, and comment which one surprised you the most!
    ```
-   Because letting the LLM write its own closing line risks it dropping or rewording the CTA, generate the script in two steps instead of one:
+   Because letting the LLM write its own closing line risks it dropping or rewording it, generate the script in two steps instead of one:
    - Call `llm.generate_script(video_subject=topic, video_script_prompt=<hook prompt above>, ...)` (or run the CLI once with `--stop-at script` using `--video-script-prompt`) to get the AI-written body.
    - Append the fixed CTA sentence to that text yourself (`script.strip() + " " + CTA`).
    - Pass the combined text back in via `--video-script "<body + CTA>"` for the actual generation run — `--video-script` skips LLM script generation entirely and uses the text verbatim, guaranteeing the CTA survives untouched in both narration and subtitles.
@@ -48,24 +54,40 @@ There is no guaranteed-viral setting, but these defaults measurably improve rete
 6. **Cross-post.** Suggest posting the same file to TikTok and Instagram Reels in addition to YouTube Shorts — it is outside this skill's scope to automate, but worth a one-line mention since it meaningfully expands reach for zero extra generation cost.
 7. **This is a feedback loop, not a one-shot setting.** Point the user at YouTube Studio's retention graph after their first few videos — where viewers drop off is the most reliable signal for what to change next (usually the hook or the pacing), more reliable than any fixed template.
 
-## Compilation Format (current channel default)
+## Viral Episode Pipeline (preferred path)
 
-The channel format is modeled on BrainBlud (~606K subscribers, ~187M views): a numbered series of multi-fact compilations over generic "satisfying" background footage, not one-fact-per-video with topical footage. Use this format by default for this channel's facts videos instead of a single-fact video, unless the user asks for a one-off single-fact video.
+For this channel's facts episodes, prefer the one-shot pipeline over hand-assembling steps:
 
-1. **5-8 facts per video, one to two sentences each.** For every fact in the batch, call `llm.generate_script(video_subject=<fact>, video_script_prompt=<mini-hook prompt>, ...)` with a stricter prompt than the single-fact hook prompt:
-   ```text
-   Write this as ONE or TWO short punchy sentences only, for a rapid-fire facts compilation video. Open directly with the surprising claim - no greeting, no 'did you know', no preamble, no filler words. Write in English.
-   ```
-   Join all the resulting mini-facts with spaces into one script, then append the fixed CTA sentence from the Shorts Virality Guidelines once at the very end (not after each fact). Pass the whole joined string via `--video-script` as usual.
-2. **Generic "satisfying" B-roll, not topical footage.** Do not let search terms come from the facts' content. Pass `--video-terms` explicitly with generic oddly-satisfying stock categories, e.g.:
-   ```text
-   --video-terms "kinetic sand cutting satisfying,slime asmr satisfying,hydraulic press crushing,soap cutting satisfying,paint pouring abstract satisfying,glass cutting satisfying"
-   ```
-   Rotate/vary the exact terms between episodes so consecutive videos don't reuse identical footage, but keep them in this same "satisfying visual, unrelated to the facts" category.
-3. **Numbered series title, not a unique title per video.** Use the fixed series name with an incrementing number and the 👀 emoji, e.g. `Random But True Facts 1 👀`, `Random But True Facts 2 👀`. Track the last-used number (e.g. by counting prior generations in the conversation, or asking the user which number to continue from) and increment it — do not let `generate_social_metadata` invent its own title for compilation episodes; overwrite its `title` field with the numbered series title after calling it.
-4. **Large, centered, few-words-at-a-time subtitles.** Default sentence-length subtitles read as a wall of text at the bottom — replace them with short pop-in captions:
-   - Set `subtitle_words_per_chunk = 3` (or another small integer) in `config.toml`'s `[app]` section. This is a project-level setting added for this channel (see `app/utils/utils.py`'s `split_string_by_word_chunks` and its use in `app/services/voice.py`'s `populate_legacy_submaker_with_full_text` / `create_subtitle`) — when unset it falls back to the original full-sentence behavior, so it's safe to leave on permanently for this channel.
-   - Pass `--subtitle-position center --font-size 110` (or similar) on every generation run so captions sit in the middle of the frame at an attention-grabbing size, instead of the small bottom-aligned default.
+```bash
+uv run python docs/skill/viral_episode.py --facts-file facts.txt --episode 2
+```
+
+It generates hook + per-fact scripts, renders a subtitle-free base video, derives word-level timings with faster-whisper, and burns an ASS overlay with karaoke captions, a fact counter and a progress bar. `--dry-run` prints the script and metadata without rendering. Add `--outro "<text>"` to override the default cliffhanger close.
+
+Design notes that matter if you modify it:
+
+- **Word timings come from whisper, not the TTS.** Gemini/OpenAI TTS return no timestamps, and Edge TTS's `WordBoundary` needs a WebSocket that is blocked in some sandboxes. `app/services/viral.py::transcribe_word_timings` re-derives timings from the rendered audio with `faster-whisper` (`base.en`, CPU, a few seconds for a 50s clip). Do not add a paid TTS purely to get timestamps.
+- **Captions are ASS burned by ffmpeg, not MoviePy.** Per-word coloring inside one line is impossible with MoviePy's single-color `TextClip`; ASS `\1c` inline overrides handle it, and libass renders in one C pass instead of compositing hundreds of Python clips. Always pass `--no-subtitle-enabled` to the base render or you get two stacked subtitle layers.
+- **`PlayResX/PlayResY` must equal the output resolution**, or libass rescales font size, outline and margins — the most common ASS burn bug.
+- **Fact boundaries use sequence alignment, not word counts.** `align_facts_to_words` diffs the known script against the whisper tokens; a single insertion would shift every later boundary if we split by count. It always returns one segment per input so callers can slice off the hook and outro positionally.
+
+## Episode Format (research-backed defaults)
+
+Modeled on BrainBlud (~596K subscribers, ~188M views) plus retention research. Where evidence is thin, this says so — do not present these as proven numbers to the user.
+
+1. **6 facts, target 45-55s.** The 50-60s bucket shows the highest average views (~4.1M) at ~76% completion, and completion rate still beats duration in the ranking signal. At 150-170 WPM that is ~125-140 words, which fits 6 facts plus hook and outro. Note honestly: **no A/B data exists on 5 vs 7 vs 10 facts** — 6 is derived from the length target, not measured.
+2. **Hook in the first sentence, ≤12 words.** TikTok's own guidance: ~65% of viewers who watch 3 seconds watch 10+. Use Loewenstein's information-gap model — name a *specific* gap ("the third one still isn't explained"), never a vague tease, and make sure the payoff lands or the hook backfires.
+3. **Close on a specific cliffhanger, not a generic CTA.** Meta's and TikTok's policies treat "follow for more" / "comment YES" as engagement bait. Point at the next episode instead. Keep the outro to one line — a long outro with no reason to stay is a documented drop-off cause.
+4. **Captions: 3 words per screen, centered, Anton, active word in yellow.** Base white, `#FFE500` highlight, black outline ~9% of font size, font size ~6% of frame height. Highlight fires ~60ms before the word (reading outruns listening). Subtitling research puts the comfortable ceiling at 160-200 WPM — keep narration under it. The specific claim that karaoke captions beat static ones on retention is **unverified marketing copy**, but it is the universal convention across CapCut/Submagic/Opus Clip.
+5. **Counter and progress bar are a bet, not a proven win.** No published A/B test exists for them in short video. The supporting evidence is the endowed-progress effect (34% vs 19% completion — in a loyalty-card field experiment, not video). None of the named facts channels visibly use them, so treat this as a differentiator to test, not table stakes.
+6. **Generic "satisfying" B-roll, unrelated to the facts.** Pass `--video-terms` explicitly with categories like kinetic sand, slime, hydraulic press, soap cutting, paint pouring. Rotate terms between episodes so consecutive videos don't reuse footage.
+7. **Numbered series title** (`Random But True Facts 2 👀`). Numbering aids channel-page binging and loyalty; it is **not** a discovery lever, since Shorts recommendation favors recent uploads. What converts a numbered series into subscribers is a consistent recognizable format, not the number.
+8. **Frame 1 is the thumbnail.** Custom Shorts thumbnails do not appear in the swipe feed — only in search/grid/shelf placements. Judge the opening frame on retention-after-view, not click appeal.
+9. **Cost model: keep it near zero.** Pexels footage, Gemini TTS, and local whisper are free or negligible; spend on Veo image-to-video clips only for hero shots. Cross-post the same file to TikTok and Reels — no extra generation cost.
+
+### Fallback: MoviePy captions without the overlay
+
+If the ASS overlay path is unavailable (no ffmpeg with libass, or whisper cannot run), fall back to the built-in caption path: set `subtitle_words_per_chunk = 3` in `config.toml`'s `[app]` section and pass `--subtitle-position center --font-size 110`. This gives large centered few-word captions but **no** per-word highlighting, counter or progress bar.
 
 ## Execution
 
