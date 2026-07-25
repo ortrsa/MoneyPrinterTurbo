@@ -4,7 +4,7 @@ description: Use this skill whenever the user wants to create a finished video f
 compatibility: Requires an AI agent with terminal, network, filesystem, and long-running command support. Supports macOS and Windows and uses uv exclusively.
 metadata:
   author: "harry0703@hotmail.com"
-  version: "1.4.1"
+  version: "1.5.0"
   upstream: "https://github.com/harry0703/MoneyPrinterTurbo"
 ---
 
@@ -47,6 +47,22 @@ There is no guaranteed-viral setting, but these defaults measurably improve rete
 5. **Generate a title, caption, and hashtags alongside the video.** `app/services/llm.py` already has `generate_social_metadata(video_subject, video_script, language="en", platform="youtube_shorts")` for this, but it is not wired into `cli.py`. Call it directly in a short Python snippet (pass it the same body+CTA script used for generation) and hand the title/caption/hashtags to the user together with the video file as one packaged deliverable — do not make the user ask for these separately.
 6. **Cross-post.** Suggest posting the same file to TikTok and Instagram Reels in addition to YouTube Shorts — it is outside this skill's scope to automate, but worth a one-line mention since it meaningfully expands reach for zero extra generation cost.
 7. **This is a feedback loop, not a one-shot setting.** Point the user at YouTube Studio's retention graph after their first few videos — where viewers drop off is the most reliable signal for what to change next (usually the hook or the pacing), more reliable than any fixed template.
+
+## Compilation Format (current channel default)
+
+The channel format is modeled on BrainBlud (~606K subscribers, ~187M views): a numbered series of multi-fact compilations over generic "satisfying" background footage, not one-fact-per-video with topical footage. Use this format by default for this channel's facts videos instead of a single-fact video, unless the user asks for a one-off single-fact video.
+
+1. **5-8 facts per video, one to two sentences each.** For every fact in the batch, call `llm.generate_script(video_subject=<fact>, video_script_prompt=<mini-hook prompt>, ...)` with a stricter prompt than the single-fact hook prompt:
+   ```text
+   Write this as ONE or TWO short punchy sentences only, for a rapid-fire facts compilation video. Open directly with the surprising claim - no greeting, no 'did you know', no preamble, no filler words. Write in English.
+   ```
+   Join all the resulting mini-facts with spaces into one script, then append the fixed CTA sentence from the Shorts Virality Guidelines once at the very end (not after each fact). Pass the whole joined string via `--video-script` as usual.
+2. **Generic "satisfying" B-roll, not topical footage.** Do not let search terms come from the facts' content. Pass `--video-terms` explicitly with generic oddly-satisfying stock categories, e.g.:
+   ```text
+   --video-terms "kinetic sand cutting satisfying,slime asmr satisfying,hydraulic press crushing,soap cutting satisfying,paint pouring abstract satisfying,glass cutting satisfying"
+   ```
+   Rotate/vary the exact terms between episodes so consecutive videos don't reuse identical footage, but keep them in this same "satisfying visual, unrelated to the facts" category.
+3. **Numbered series title, not a unique title per video.** Use the fixed series name with an incrementing number and the 👀 emoji, e.g. `Random But True Facts 1 👀`, `Random But True Facts 2 👀`. Track the last-used number (e.g. by counting prior generations in the conversation, or asking the user which number to continue from) and increment it — do not let `generate_social_metadata` invent its own title for compilation episodes; overwrite its `title` field with the numbered series title after calling it.
 
 ## Execution
 
