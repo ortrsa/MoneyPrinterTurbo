@@ -4,7 +4,7 @@ description: Use this skill whenever the user wants to create a finished video f
 compatibility: Requires an AI agent with terminal, network, filesystem, and long-running command support. Supports macOS and Windows and uses uv exclusively.
 metadata:
   author: "harry0703@hotmail.com"
-  version: "1.4.0"
+  version: "1.4.1"
   upstream: "https://github.com/harry0703/MoneyPrinterTurbo"
 ---
 
@@ -30,14 +30,21 @@ Unless the user requests otherwise, generate one Chinese `9:16` portrait video w
 
 There is no guaranteed-viral setting, but these defaults measurably improve retention on short-form platforms. Apply them unless the user's request already specifies its own script, hook, or tone.
 
-1. **Hook-first script, no preamble.** Pass a `--video-script-prompt` that forces the script to open with the single most surprising or counter-intuitive part of the topic in the first sentence — no greetings, no "did you know," no scene-setting. Example addition:
+1. **Hook-first script, no preamble.** Generate the script with a `video_script_prompt` that forces it to open with the single most surprising or counter-intuitive part of the topic in the first sentence — no greetings, no "did you know," no scene-setting:
    ```text
-   --video-script-prompt "Open with the most surprising or counter-intuitive part of this fact in the very first sentence - no greeting, no preamble, no 'did you know' filler. Use short, punchy sentences with no filler words. End on a line that loops back to the opening or invites the viewer to react/comment."
+   Open with the most surprising or counter-intuitive part of this fact in the very first sentence - no greeting, no preamble, no 'did you know' filler. Use short, punchy sentences with no filler words. Write in English.
    ```
-2. **Tight pacing.** Prefer `paragraph_number=1` (the default) and a short script over a long one — a Short that ends before it overstays its welcome retains better than one padded with extra sentences.
-3. **Loop-able ending.** The closing line should call back to the opening or ask a question, since a viewer who rewatches the first second again counts as retained watch time.
+2. **Fixed English CTA appended verbatim to every video.** Always end every video with this exact sentence, word for word, regardless of the video's topic or script language — do not let the LLM paraphrase it, and do not ask the user whether to include it:
+   ```text
+   Follow for more wild facts, and comment which one surprised you the most!
+   ```
+   Because letting the LLM write its own closing line risks it dropping or rewording the CTA, generate the script in two steps instead of one:
+   - Call `llm.generate_script(video_subject=topic, video_script_prompt=<hook prompt above>, ...)` (or run the CLI once with `--stop-at script` using `--video-script-prompt`) to get the AI-written body.
+   - Append the fixed CTA sentence to that text yourself (`script.strip() + " " + CTA`).
+   - Pass the combined text back in via `--video-script "<body + CTA>"` for the actual generation run — `--video-script` skips LLM script generation entirely and uses the text verbatim, guaranteeing the CTA survives untouched in both narration and subtitles.
+3. **Tight pacing.** Prefer `paragraph_number=1` (the default) and a short script over a long one — a Short that ends before it overstays its welcome retains better than one padded with extra sentences.
 4. **Always keep subtitles and background music on** (already the default) — both measurably help retention and accessibility.
-5. **Generate a title, caption, and hashtags alongside the video.** `app/services/llm.py` already has `generate_social_metadata(video_subject, video_script, language, platform)` for this, but it is not wired into `cli.py`. Call it directly in a short Python snippet after the video finishes (read `script.json` from the task dir for `video_subject`/`script`, reuse the same configured LLM provider) and hand the title/caption/hashtags to the user together with the video file — do not make the user ask for these separately.
+5. **Generate a title, caption, and hashtags alongside the video.** `app/services/llm.py` already has `generate_social_metadata(video_subject, video_script, language="en", platform="youtube_shorts")` for this, but it is not wired into `cli.py`. Call it directly in a short Python snippet (pass it the same body+CTA script used for generation) and hand the title/caption/hashtags to the user together with the video file as one packaged deliverable — do not make the user ask for these separately.
 6. **Cross-post.** Suggest posting the same file to TikTok and Instagram Reels in addition to YouTube Shorts — it is outside this skill's scope to automate, but worth a one-line mention since it meaningfully expands reach for zero extra generation cost.
 7. **This is a feedback loop, not a one-shot setting.** Point the user at YouTube Studio's retention graph after their first few videos — where viewers drop off is the most reliable signal for what to change next (usually the hook or the pacing), more reliable than any fixed template.
 
