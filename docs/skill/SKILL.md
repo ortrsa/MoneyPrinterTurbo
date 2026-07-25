@@ -4,7 +4,7 @@ description: Use this skill whenever the user wants to create a finished video f
 compatibility: Requires an AI agent with terminal, network, filesystem, and long-running command support. Supports macOS and Windows and uses uv exclusively.
 metadata:
   author: "harry0703@hotmail.com"
-  version: "1.5.0"
+  version: "1.6.0"
   upstream: "https://github.com/harry0703/MoneyPrinterTurbo"
 ---
 
@@ -63,6 +63,9 @@ The channel format is modeled on BrainBlud (~606K subscribers, ~187M views): a n
    ```
    Rotate/vary the exact terms between episodes so consecutive videos don't reuse identical footage, but keep them in this same "satisfying visual, unrelated to the facts" category.
 3. **Numbered series title, not a unique title per video.** Use the fixed series name with an incrementing number and the 👀 emoji, e.g. `Random But True Facts 1 👀`, `Random But True Facts 2 👀`. Track the last-used number (e.g. by counting prior generations in the conversation, or asking the user which number to continue from) and increment it — do not let `generate_social_metadata` invent its own title for compilation episodes; overwrite its `title` field with the numbered series title after calling it.
+4. **Large, centered, few-words-at-a-time subtitles.** Default sentence-length subtitles read as a wall of text at the bottom — replace them with short pop-in captions:
+   - Set `subtitle_words_per_chunk = 3` (or another small integer) in `config.toml`'s `[app]` section. This is a project-level setting added for this channel (see `app/utils/utils.py`'s `split_string_by_word_chunks` and its use in `app/services/voice.py`'s `populate_legacy_submaker_with_full_text` / `create_subtitle`) — when unset it falls back to the original full-sentence behavior, so it's safe to leave on permanently for this channel.
+   - Pass `--subtitle-position center --font-size 110` (or similar) on every generation run so captions sit in the middle of the frame at an attention-grabbing size, instead of the small bottom-aligned default.
 
 ## Execution
 

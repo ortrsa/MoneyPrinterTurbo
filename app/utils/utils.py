@@ -263,6 +263,26 @@ def split_string_by_punctuations(s):
     return result
 
 
+def split_string_by_word_chunks(s: str, words_per_chunk: int) -> list:
+    """
+    将文本按固定词数切分为多行，用于生成大字号、居中、少字数的字幕
+    （类似热门 Shorts 频道的“逐词跳出”效果），而不是按标点切成完整句子。
+
+    切分前先按标点分句，避免把两句话的词拼接到同一行；每个分句内部再
+    按 `words_per_chunk` 切块，保证块内文字连续。
+    """
+    words_per_chunk = max(int(words_per_chunk), 1)
+    sentences = split_string_by_punctuations(s)
+    chunks = []
+    for sentence in sentences:
+        words = sentence.split()
+        for i in range(0, len(words), words_per_chunk):
+            chunk = " ".join(words[i : i + words_per_chunk]).strip()
+            if chunk:
+                chunks.append(chunk)
+    return chunks
+
+
 def normalize_script_for_subtitle_matching(video_script: str) -> str:
     """
     清理字幕匹配前的脚本文本。

@@ -214,6 +214,12 @@ mimo_tts_style_prompt = "请用自然、清晰、适合短视频旁白的语气�
 # Leave empty to skip generation.
 subtitle_provider = "edge"
 
+# When set to a positive integer, subtitles are split into fixed-size word
+# chunks (e.g. 3 words per line) instead of full sentences - useful for a
+# large, centered, "pop-in" caption style. 0 or unset keeps the default
+# punctuation-based sentence splitting.
+subtitle_words_per_chunk = 0
+
 # FFmpeg is normally downloaded and detected automatically. If detection fails,
 # download it from https://www.gyan.dev/ffmpeg/builds/ and set the executable.
 # Windows example: ffmpeg_path = "C:\\path\\to\\ffmpeg.exe"

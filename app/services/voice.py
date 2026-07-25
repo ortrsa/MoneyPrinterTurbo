@@ -531,7 +531,17 @@ def populate_legacy_submaker_with_full_text(
     # Gemini / SiliconFlow 这类路径拿不到逐词边界时，仍然尽量沿用项目
     # 原来的“按标点断句 + 按字符数比例分配时长”的策略。这样既能让
     # create_subtitle() 匹配脚本断句，也能避免再次回退 Whisper。
-    sentences = utils.split_string_by_punctuations(normalized_text)
+    #
+    # 当 config.app.subtitle_words_per_chunk 设置为正整数时，改为按固定
+    # 词数切块（而不是整句），配合居中大字号可以做出类似热门 Shorts
+    # 频道的“少字数跳出”字幕效果。未设置时行为完全不变。
+    words_per_chunk = config.app.get("subtitle_words_per_chunk", 0)
+    if words_per_chunk and int(words_per_chunk) > 0:
+        sentences = utils.split_string_by_word_chunks(
+            normalized_text, int(words_per_chunk)
+        )
+    else:
+        sentences = utils.split_string_by_punctuations(normalized_text)
     if not sentences:
         sentences = [normalized_text]
 
@@ -1682,7 +1692,11 @@ def create_subtitle(sub_maker: SubMaker, text: str, subtitle_file: str):
     3. 生成新的字幕文件
     """
     text = _format_text(text)
-    script_lines = utils.split_string_by_punctuations(text)
+    words_per_chunk = config.app.get("subtitle_words_per_chunk", 0)
+    if words_per_chunk and int(words_per_chunk) > 0:
+        script_lines = utils.split_string_by_word_chunks(text, int(words_per_chunk))
+    else:
+        script_lines = utils.split_string_by_punctuations(text)
     try:
         if hasattr(sub_maker, "cues") and sub_maker.cues:
             sub_items = _build_subtitle_items_from_edge_cues(sub_maker, script_lines)
