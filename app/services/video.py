@@ -73,6 +73,9 @@ fps = 30
 # 这里给视频素材多留一个很小的安全余量，避免音频末尾因为帧舍入出现黑屏、
 # 卡顿或最后一小段旁白没有画面的情况。
 _VIDEO_DURATION_SAFETY_MARGIN = 0.1
+# 成片结尾允许出现的最短镜头。短于这个长度的尾部片段会像是画面"闪了一下"，
+# 因此宁可让上一个镜头多播一会儿，也不要再起一个不到一秒的新镜头。
+MIN_TAIL_CLIP_SECONDS = 1.0
 _MIN_MATERIAL_DIMENSION = 480
 # 消息类应用和部分编码器会把画面尺寸向下取整，例如 WhatsApp 会把 9:16 的
 # 素材压成 478x850，比 480 少两个像素。直接按 480 硬卡会让这类素材全部被
@@ -535,6 +538,31 @@ def get_bgm_file(bgm_type: str = "random", bgm_file: str = ""):
     return ""
 
 
+def plan_clip_duration(remaining: float, max_clip_duration: float) -> float:
+    """
+    决定当前镜头应该切多长，保证成片结尾不会出现不到一秒的碎片镜头。
+
+    成片会被截断到旁白时长，所以"最后一个镜头露出多久"由前面片段的累计长度
+    决定。如果按上限切完只剩下零点几秒，结尾就会闪过一个碎片镜头。
+
+    规则：
+    - 剩余时间已经不超过上限时，让这个镜头刚好收尾；
+    - 按上限切会留下不足 ``MIN_TAIL_CLIP_SECONDS`` 的尾巴时，把剩余时间对半分，
+      这样最后两个镜头都至少有 ``max_clip_duration / 2`` 的长度；
+    - 其余情况按上限切。
+
+    每一轮都基于"实际剩余时间"重新计算，因此即使某个素材比目标时长短、
+    只贡献了一部分，下一轮也会自动重新分配，不会累积误差。
+    """
+    if remaining <= 0:
+        return max_clip_duration
+    if remaining <= max_clip_duration:
+        return remaining
+    if remaining - max_clip_duration < MIN_TAIL_CLIP_SECONDS:
+        return remaining / 2
+    return max_clip_duration
+
+
 def combine_videos(
     combined_video_path: str,
     video_paths: List[str],
@@ -690,9 +718,13 @@ def combine_videos(
                 shuffle_transition = random.choice(transition_funcs)
                 clip = shuffle_transition(clip)
 
-            if clip.duration > max_clip_duration:
-                clip = clip.subclipped(0, max_clip_duration)
-                
+            effective_max_duration = plan_clip_duration(
+                remaining=audio_duration - video_duration,
+                max_clip_duration=max_clip_duration,
+            )
+            if clip.duration > effective_max_duration:
+                clip = clip.subclipped(0, effective_max_duration)
+
             # wirte clip to temp file
             clip_file = f"{output_dir}/temp-clip-{i+1}.mp4"
             _write_videofile_with_codec_fallback(
