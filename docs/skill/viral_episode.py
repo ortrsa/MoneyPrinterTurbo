@@ -183,6 +183,16 @@ def main(argv: list[str] | None = None) -> int:
         help="ffmpeg 编码线程数，默认用满可用核心（项目默认值 2 只用了一半算力）",
     )
     parser.add_argument(
+        "--title",
+        default=None,
+        help=(
+            "完整标题，直接使用，不再用 --series-name/--episode 拼接。"
+            "内容日历里的标题列应始终用这个参数传入——系列名不一定等于标题前缀"
+            "（例如系列名 'Random But True' 但标题是 'Random But True Facts N'），"
+            "拼接会产出错误标题。"
+        ),
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="只生成脚本和元数据，不渲染视频",
@@ -209,7 +219,7 @@ def main(argv: list[str] | None = None) -> int:
     spoken_segments = [parts["hook"], *parts["facts"], parts["outro"]]
     script_text = " ".join(spoken_segments)
 
-    title = f"{args.series_name} {args.episode} \U0001F440"
+    title = args.title or f"{args.series_name} {args.episode} \U0001F440"
     from app.services import llm
 
     metadata = llm.generate_social_metadata(

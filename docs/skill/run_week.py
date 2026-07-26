@@ -60,6 +60,10 @@ def main(argv: list[str] | None = None) -> int:
             "--facts-file", str(facts_file.resolve()),
             "--episode", row["episode"],
             "--series-name", row["series"],
+            # 标题始终按日历里写好的原文传入，不依赖 series-name 拼接——
+            # 系列名和标题前缀不一定一致（例如 "Random But True" 系列下的
+            # 标题实际是 "Random But True Facts N"），拼接会产出错误标题。
+            "--title", row["title"],
             "--hook", row["hook_line_spoken"],
             "--outro", row["outro_line_spoken"],
         ]
