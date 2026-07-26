@@ -40,18 +40,35 @@ from app.services import viral  # noqa: E402
 # 按 150-170 WPM 的口播语速，约 50 秒对应 125-140 个词，正好放得下 6 条事实。
 DEFAULT_FACT_COUNT = 6
 
+# 一组常见的、读起来明显"像 AI 写的"词汇/说法，直接写进 prompt 里禁止，
+# 比重新生成后再事后过滤要便宜、也更可靠——模型一开始就不会往这个方向写。
+AI_TELL_BLOCKLIST = (
+    "here's the thing, let's dive in, game-changer, revolutionary, unlock, "
+    "unleash, in today's fast-paced world, it's important to note, leverage, "
+    "delve, boasts, testament to, elevate, tapestry, in conclusion, moreover, "
+    "furthermore"
+)
+
 FACT_PROMPT = (
     "Rewrite this fact as ONE or TWO short punchy sentences for a rapid-fire facts "
     "compilation video. Open directly with the surprising claim - no greeting, no "
     "'did you know', no preamble, no filler words. Keep it under 25 words. "
+    f"Never use any of these overused AI-writing phrases: {AI_TELL_BLOCKLIST}. "
     "Write in {language}."
 )
 
+# 三种经过验证的开场钩子结构，取代原本笼统的"写一句吸引人的开场"——
+# 给模型具体的句式模板，比只说"要有悬念"更容易稳定产出好结果。
 HOOK_PROMPT = (
     "Write a single opening hook sentence, at most 12 words, for a short video that "
-    "lists {count} surprising facts. It must create a specific curiosity gap and "
-    "promise the payoff - not a vague tease. Do not greet the viewer. Do not use "
-    "'did you know'. Return only the sentence, in {language}."
+    "lists {count} surprising facts. Use ONE of these three structures, whichever "
+    "fits best: "
+    "(1) Prediction + stakes - 'This is the [thing] that [consequence]'; "
+    "(2) Before/after compression - 'What used to take [X] now just [Y]'; "
+    "(3) A specific curiosity gap that promises a real payoff, not a vague tease. "
+    "Do not greet the viewer. Do not use 'did you know'. "
+    f"Never use any of these overused AI-writing phrases: {AI_TELL_BLOCKLIST}. "
+    "Return only the sentence, in {language}."
 )
 
 # 明确要求关注/评论是被允许的，被压制的是"点赞就关注"这类模板化空话。
@@ -61,6 +78,22 @@ HOOK_PROMPT = (
 DEFAULT_OUTRO = (
     "Follow this page so episode {next_episode} actually reaches you."
 )
+
+
+def find_ai_tells(text: str) -> list[str]:
+    """
+    在生成好的文案里做一次事后检查，看有没有漏网的 AI 腔调用词。
+
+    prompt 里已经明确禁止了这些词，这里只是兜底——LLM 偶尔还是会忽略指令。
+    检测到时只记录日志，不做自动改写：自动改写有改变原意的风险，不如让人
+    决定是否要重新生成这一句。
+    """
+    lowered = text.lower()
+    return [
+        term.strip()
+        for term in AI_TELL_BLOCKLIST.split(",")
+        if term.strip() and term.strip() in lowered
+    ]
 
 
 def run(command: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess:
@@ -87,6 +120,9 @@ def build_scripts(
             video_script_prompt=FACT_PROMPT.format(language=language),
         ).strip()
         logger.info(f"fact: {line}")
+        tells = find_ai_tells(line)
+        if tells:
+            logger.warning(f"AI-tell phrase slipped through despite the prompt guard: {tells} in: {line}")
         fact_lines.append(line)
 
     if hook:
@@ -106,6 +142,9 @@ def build_scripts(
     # 钩子必须只有一句；LLM 偶尔会多写，这里截断到第一个句号
     hook = hook.split(". ")[0].strip().rstrip(".") + "."
     logger.info(f"hook: {hook}")
+    tells = find_ai_tells(hook)
+    if tells:
+        logger.warning(f"AI-tell phrase slipped through despite the prompt guard: {tells} in: {hook}")
 
     resolved_outro = outro or DEFAULT_OUTRO.format(next_episode=episode + 1)
     return {"hook": hook, "facts": fact_lines, "outro": resolved_outro}

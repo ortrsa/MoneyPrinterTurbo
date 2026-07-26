@@ -834,10 +834,11 @@ Write engaging publishing metadata for a short video that will be posted on {lab
 ## Constraints
 1. Respond ONLY with a single valid minified JSON object. No markdown, no code fences, no commentary.
 2. The JSON must contain exactly these keys: "title", "caption", "hashtags".
-3. "title": a catchy hook, at most {spec["title_max"]} characters.
-4. "caption": an engaging description that ends with a call to action, at most {spec["caption_max"]} characters. Do not put hashtags inside the caption.
+3. "title": a catchy hook, at most {spec["title_max"]} characters. Prefer a specific claim over a vague tease.
+4. "caption": an engaging description, at most {spec["caption_max"]} characters. Do not put hashtags inside the caption. End on an actionable command tied to this video's content (e.g. "Follow for the one that started this whole habit" or "Comment which fact you're checking first"), never on a generic bait question like "What do you think?" or "Let us know!".
 5. "hashtags": a JSON array of exactly {spec["hashtag_count"]} strings. Each must start with "#", contain no spaces, and be relevant to the topic and to {label}.
 6. {language_instruction}
+7. Do not use these overused AI-writing tells anywhere in the output: "here's the thing", "let's dive in", "game-changer", "revolutionary", "unlock", "unleash", "in today's fast-paced world", "it's important to note", "in conclusion", "leverage", "delve", "boasts", "testament to", "elevate", "navigate" (as a metaphor), "tapestry". Do not open the caption with "Did you know".
 
 ## Output Example
 {{"title":"...","caption":"...","hashtags":["#example","#video"]}}
