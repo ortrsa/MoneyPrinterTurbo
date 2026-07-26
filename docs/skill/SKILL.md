@@ -4,7 +4,7 @@ description: Use this skill whenever the user wants to create a finished video f
 compatibility: Requires an AI agent with terminal, network, filesystem, and long-running command support. Supports macOS and Windows and uses uv exclusively.
 metadata:
   author: "harry0703@hotmail.com"
-  version: "2.0.0"
+  version: "2.1.0"
   upstream: "https://github.com/harry0703/MoneyPrinterTurbo"
 ---
 
@@ -34,16 +34,17 @@ There is no guaranteed-viral setting, but these defaults measurably improve rete
    ```text
    Open with the most surprising or counter-intuitive part of this fact in the very first sentence - no greeting, no preamble, no 'did you know' filler. Use short, punchy sentences with no filler words. Write in English.
    ```
-2. **Fixed English closing line, appended verbatim.** Whatever the closing line is, append it yourself rather than letting the LLM phrase it, so it survives every generation unchanged.
+2. **A written-per-episode closing CTA, appended verbatim.** Append the closing line yourself rather than letting the LLM phrase it, so it survives every generation unchanged.
 
-   **Default is now a next-episode cliffhanger, not a follow/comment CTA.** Meta's and TikTok's policies treat "follow for more", "like for part 2" and "comment X" as engagement bait, so the previous fixed CTA below is kept only as an opt-in:
-   ```text
-   The last one still breaks my brain - episode <N+1> goes even further.
-   ```
-   Legacy CTA, use only if the user explicitly asks for it (`--outro` on `viral_episode.py`):
-   ```text
-   Follow for more wild facts, and comment which one surprised you the most!
-   ```
+   **Asking for a follow or a comment is explicitly allowed.** An earlier version of this file claimed platforms treat any follow/comment ask as engagement bait — that was wrong. YouTube permits asking viewers to like, comment or subscribe. What gets demoted is *templated, content-free* prompts ("subscribe if you agree", "comment YES"); classifiers score the caption, on-screen text and early comments together and shrink the test audience the more manufactured it reads. So ask directly, but tie the ask to this specific video.
+
+   **Never reuse one CTA across episodes.** A fixed closing line makes a serialised channel feel automated and wastes the strongest conversion moment. Write a fresh one per episode that:
+   - references something concrete from that video (a callback to fact 1 or the hook lands best),
+   - rotates deliberately between **FOLLOW**, **COMMENT** and **BOTH**, chosen by what the content invites — a testable claim ("check which nostril you're breathing through") earns a comment ask; a topic with obvious series potential earns a follow ask,
+   - can be playful or cheeky. Self-aware jokes about the feed work well in this genre, e.g. *"You're blind forty minutes a day. Don't spend the rest of it not following this page."*
+
+   The month-1 calendar carries a per-episode `outro_line_spoken` and a `cta_type` column for exactly this; pass them through `--outro`. Keep `cta_type` populated so CTA style can be compared against subscriber conversion later.
+
    Because letting the LLM write its own closing line risks it dropping or rewording it, generate the script in two steps instead of one:
    - Call `llm.generate_script(video_subject=topic, video_script_prompt=<hook prompt above>, ...)` (or run the CLI once with `--stop-at script` using `--video-script-prompt`) to get the AI-written body.
    - Append the fixed CTA sentence to that text yourself (`script.strip() + " " + CTA`).
@@ -52,7 +53,14 @@ There is no guaranteed-viral setting, but these defaults measurably improve rete
 4. **Always keep subtitles and background music on** (already the default) — both measurably help retention and accessibility.
 5. **Generate a title, caption, and hashtags alongside the video.** `app/services/llm.py` already has `generate_social_metadata(video_subject, video_script, language="en", platform="youtube_shorts")` for this, but it is not wired into `cli.py`. Call it directly in a short Python snippet (pass it the same body+CTA script used for generation) and hand the title/caption/hashtags to the user together with the video file as one packaged deliverable — do not make the user ask for these separately.
 6. **Cross-post.** Suggest posting the same file to TikTok and Instagram Reels in addition to YouTube Shorts — it is outside this skill's scope to automate, but worth a one-line mention since it meaningfully expands reach for zero extra generation cost.
-7. **This is a feedback loop, not a one-shot setting.** Point the user at YouTube Studio's retention graph after their first few videos — where viewers drop off is the most reliable signal for what to change next (usually the hook or the pacing), more reliable than any fixed template.
+
+7. **Views do not equal subscribers — hand over the conversion steps too.** A healthy Shorts view-to-subscriber rate is roughly **0.5-2%**, so a video needs volume before subscriber counts move; do not let the user read a low number as failure. What actually converts, in rough order of impact at under 1,000 subscribers:
+   - **A series format** — structured multi-episode series report meaningfully higher subscriber conversion than one-off videos. This is already the channel's format; say so, because it is the main lever.
+   - **A pinned comment posted immediately after publishing**, giving a concrete reason to subscribe (what the next episode covers, when it lands). Deliver suggested pinned-comment text with the upload kit.
+   - **Replying to every comment early on.** At this scale personal replies convert unusually well, and early engagement also feeds the algorithm.
+   - **A playlist per series** on the channel page, so a viewer who clicks through immediately sees there is more.
+   - **A consistent schedule** — consistency is associated with materially faster subscriber growth than sporadic posting.
+8. **This is a feedback loop, not a one-shot setting.** Point the user at YouTube Studio's retention graph after their first few videos — where viewers drop off is the most reliable signal for what to change next (usually the hook or the pacing), more reliable than any fixed template.
 
 ## Viral Episode Pipeline (preferred path)
 
@@ -77,7 +85,7 @@ Modeled on BrainBlud (~596K subscribers, ~188M views) plus retention research. W
 
 1. **6 facts, target 45-55s.** The 50-60s bucket shows the highest average views (~4.1M) at ~76% completion, and completion rate still beats duration in the ranking signal. At 150-170 WPM that is ~125-140 words, which fits 6 facts plus hook and outro. Note honestly: **no A/B data exists on 5 vs 7 vs 10 facts** — 6 is derived from the length target, not measured.
 2. **Hook in the first sentence, ≤12 words.** TikTok's own guidance: ~65% of viewers who watch 3 seconds watch 10+. Use Loewenstein's information-gap model — name a *specific* gap ("the third one still isn't explained"), never a vague tease, and make sure the payoff lands or the hook backfires.
-3. **Close on a specific cliffhanger, not a generic CTA.** Meta's and TikTok's policies treat "follow for more" / "comment YES" as engagement bait. Point at the next episode instead. Keep the outro to one line — a long outro with no reason to stay is a documented drop-off cause.
+3. **Close on a direct but content-specific CTA** (see Shorts Virality Guidelines item 2 for the full rule). Asking for a follow or comment is allowed and is the strongest conversion moment in the video — what fails is a generic, reused line. Write a new one per episode, tie it to that episode's content, and rotate FOLLOW / COMMENT / BOTH. Keep it to one line: a long outro with no reason to stay is a documented drop-off cause.
 4. **Captions: 3 words per screen, centered, Anton, active word in yellow.** Base white, `#FFE500` highlight, black outline ~9% of font size, font size ~6% of frame height. Highlight fires ~60ms before the word (reading outruns listening). Subtitling research puts the comfortable ceiling at 160-200 WPM — keep narration under it. The specific claim that karaoke captions beat static ones on retention is **unverified marketing copy**, but it is the universal convention across CapCut/Submagic/Opus Clip.
 5. **Counter and progress bar are a bet, not a proven win.** No published A/B test exists for them in short video. The supporting evidence is the endowed-progress effect (34% vs 19% completion — in a loyalty-card field experiment, not video). None of the named facts channels visibly use them, so treat this as a differentiator to test, not table stakes.
 6. **Generic "satisfying" B-roll, unrelated to the facts.** Pass `--video-terms` explicitly with categories like kinetic sand, slime, hydraulic press, soap cutting, paint pouring. Rotate terms between episodes so consecutive videos don't reuse footage.

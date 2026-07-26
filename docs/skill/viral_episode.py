@@ -54,9 +54,13 @@ HOOK_PROMPT = (
     "'did you know'. Return only the sentence, in {language}."
 )
 
-# 平台把"点赞/关注求互动"归为 engagement bait，因此默认结尾用"具体的悬念"
-# 而不是泛化的号召，把关注动机建立在"下一条内容"上。
-DEFAULT_OUTRO = "The last one still breaks my brain - episode {next_episode} goes even further."
+# 明确要求关注/评论是被允许的，被压制的是"点赞就关注"这类模板化空话。
+# 但同一句结尾反复用会让系列显得自动化，所以正确做法是每集在内容日历里
+# 单独写一句、并轮换 FOLLOW / COMMENT / BOTH。这里的默认值只是兜底，
+# 调用方应当始终通过 --outro 传入当集专属文案。
+DEFAULT_OUTRO = (
+    "Follow this page so episode {next_episode} actually reaches you."
+)
 
 
 def run(command: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess:
@@ -163,9 +167,9 @@ def main(argv: list[str] | None = None) -> int:
         "--outro",
         default=None,
         help=(
-            "结尾口播语；默认使用指向下一集的悬念。平台把泛化的"
-            "点赞/关注号召视为 engagement bait，如需沿用旧的 "
-            "'Follow for more...' 文案，用这个参数显式传入。"
+            "结尾口播语。应当每集不同：绑定当集内容，并在 FOLLOW / COMMENT / "
+            "BOTH 之间轮换（内容日历的 outro_line_spoken 与 cta_type 两列即为此设计）。"
+            "不传则退回一句通用兜底文案。"
         ),
     )
     parser.add_argument(
