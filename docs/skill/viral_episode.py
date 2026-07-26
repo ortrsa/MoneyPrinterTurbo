@@ -208,10 +208,15 @@ def main(argv: list[str] | None = None) -> int:
     task_dir = video_path.parent
     audio_path = task_dir / "audio.mp3"
 
-    words = viral.transcribe_word_timings(str(audio_path), model_size=args.whisper_model)
-    if not words:
+    raw_words = viral.transcribe_word_timings(
+        str(audio_path), model_size=args.whisper_model
+    )
+    if not raw_words:
         raise RuntimeError("no word timings produced; cannot build overlay")
-    duration = max(word.end for word in words)
+    duration = max(word.end for word in raw_words)
+    # 字幕文字取自脚本原文，Whisper 只负责提供时间：避免识别错误或
+    # `[Music]` 这类非语音标注被直接烧进画面
+    words = viral.align_script_to_words(script_text, raw_words)
 
     # 钩子和结尾不计入"第 N 条事实"，所以先把它们一起参与对齐，再只取中间的事实区间
     all_segments = viral.align_facts_to_words(
