@@ -49,11 +49,20 @@ AI_TELL_BLOCKLIST = (
     "furthermore"
 )
 
+# 段落开头的过渡词、以及只在 25 词内容里就用长破折号的习惯，都是"AI 腔"的
+# 常见来源，和 AI_TELL_BLOCKLIST 一起作为负向约束写进 prompt。
+HUMANIZATION_NOTE = (
+    "Do not start a sentence with 'However', 'Moreover', or 'Overall'. "
+    "Use contractions where natural (it's, that's, you're). Vary sentence "
+    "length instead of writing uniform-length sentences."
+)
+
 FACT_PROMPT = (
     "Rewrite this fact as ONE or TWO short punchy sentences for a rapid-fire facts "
     "compilation video. Open directly with the surprising claim - no greeting, no "
     "'did you know', no preamble, no filler words. Keep it under 25 words. "
     f"Never use any of these overused AI-writing phrases: {AI_TELL_BLOCKLIST}. "
+    f"{HUMANIZATION_NOTE} "
     "Write in {language}."
 )
 
@@ -68,6 +77,7 @@ HOOK_PROMPT = (
     "(3) A specific curiosity gap that promises a real payoff, not a vague tease. "
     "Do not greet the viewer. Do not use 'did you know'. "
     f"Never use any of these overused AI-writing phrases: {AI_TELL_BLOCKLIST}. "
+    f"{HUMANIZATION_NOTE} "
     "Return only the sentence, in {language}."
 )
 
@@ -96,9 +106,83 @@ def find_ai_tells(text: str) -> list[str]:
     ]
 
 
+# 高唤醒度、负向措辞往往比正向措辞点击率更高；这里只是一个粗糙的启发式词表，
+# 不是精确的情绪分类器，只用来做方向性打分，不作为唯一判据。
+_HIGH_AROUSAL_WORDS = (
+    "shocking secret hidden banned exposed mistake wrong lie danger deadly "
+    "warning brain blind never nobody worst destroy"
+).split()
+
+
+def score_title(title: str) -> dict:
+    """
+    只用于「独立单条」视频的自由标题，不用于本频道固定的系列标题
+    （"AI Unfiltered 3 👀" 这类标题不需要打分，也不该被打分逻辑影响）。
+
+    三个维度各打 0-3 分，总分 9 分，7 分为发布门槛。这是启发式规则，不是
+    精确度量——目的是给一个方向性信号，用来决定"这个标题要不要再改一版"，
+    而不是自动卡死发布流程。
+    """
+    lowered = title.lower()
+
+    specificity = 3 if any(ch.isdigit() for ch in title) else 0
+
+    emotion_hits = sum(1 for word in _HIGH_AROUSAL_WORDS if word in lowered)
+    emotion = min(3, emotion_hits * 2) if emotion_hits else 0
+
+    # 好奇心信号：标题提出问题/悬念但不直接给出答案。粗略地用问号、
+    # "why/how/secret/reason" 这类词，或者标题明显没有把结论写全来近似。
+    curiosity_markers = ("?", "why", "how", "secret", "reason", "this is")
+    curiosity = 3 if any(m in lowered for m in curiosity_markers) else 1
+
+    total = specificity + emotion + curiosity
+    return {
+        "specificity": specificity,
+        "emotion": emotion,
+        "curiosity": curiosity,
+        "total": total,
+        "passes": total >= 7,
+    }
+
+
 def run(command: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess:
     logger.info("$ " + " ".join(command[:6]) + (" ..." if len(command) > 6 else ""))
     return subprocess.run(command, cwd=cwd, capture_output=True, text=True)
+
+
+# 五个批判视角合并成一次调用，而不是五次独立的 LLM 请求：对一条 12 词的
+# 钩子来说，五次往返的成本和延迟不值得，把五个视角都交给同一次调用去权衡
+# 通常就够了。只精炼钩子这一句——它是整条视频里杠杆最大的一句话。
+HOOK_CRITIQUE_PROMPT = (
+    "You are five critics reviewing this video hook, one after another: "
+    "(1) a skeptic asking why anyone should care, "
+    "(2) a subject-matter expert checking it is not misleading or wrong, "
+    "(3) someone scrolling fast who will only stop for a real pattern interrupt, "
+    "(4) a competitor who has seen a dozen similar videos and wants real difference, "
+    "(5) an editor who cuts anything that does not earn its place. "
+    "Hook: \"{hook}\"\n"
+    "Fact this hook is teasing: \"{first_fact}\"\n"
+    "If the hook already survives all five, return it completely unchanged. "
+    "If not, return an improved version, still at most 12 words, still no greeting "
+    "and no 'did you know'. Return ONLY the final hook sentence, nothing else."
+)
+
+
+def refine_hook(hook: str, first_fact: str, language: str) -> str:
+    """对开场钩子跑一次五视角合并批判，返回原句或改写后的句子。"""
+    from app.services import llm
+
+    critique_prompt = HOOK_CRITIQUE_PROMPT.format(hook=hook, first_fact=first_fact)
+    revised = llm.generate_script(
+        video_subject=hook,
+        language=language,
+        paragraph_number=1,
+        video_script_prompt=critique_prompt,
+    ).strip()
+    revised = revised.split(". ")[0].strip().rstrip(".") + "."
+    if revised.lower() != hook.lower():
+        logger.info(f"hook refined: {hook!r} -> {revised!r}")
+    return revised
 
 
 def build_scripts(
@@ -142,6 +226,9 @@ def build_scripts(
     # 钩子必须只有一句；LLM 偶尔会多写，这里截断到第一个句号
     hook = hook.split(". ")[0].strip().rstrip(".") + "."
     logger.info(f"hook: {hook}")
+    # 只有自由生成的钩子才跑五视角批判；日历里手写好的钩子已经是人工把关过的，
+    # 不需要再让 LLM 重写一遍。
+    hook = refine_hook(hook, first_fact=fact_lines[0] if fact_lines else "", language=language)
     tells = find_ai_tells(hook)
     if tells:
         logger.warning(f"AI-tell phrase slipped through despite the prompt guard: {tells} in: {hook}")
@@ -236,6 +323,15 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--standalone",
+        action="store_true",
+        help=(
+            "一次性单条视频，不属于任何系列：保留 LLM 自由生成的标题（而不是"
+            "覆盖成固定的系列标题格式），并对该标题跑启发式打分"
+            "（curiosity/specificity/emotion，各 0-3 分，7/9 为发布门槛）。"
+        ),
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="只生成脚本和元数据，不渲染视频",
@@ -262,7 +358,6 @@ def main(argv: list[str] | None = None) -> int:
     spoken_segments = [parts["hook"], *parts["facts"], parts["outro"]]
     script_text = " ".join(spoken_segments)
 
-    title = args.title or f"{args.series_name} {args.episode} \U0001F440"
     from app.services import llm
 
     metadata = llm.generate_social_metadata(
@@ -271,7 +366,19 @@ def main(argv: list[str] | None = None) -> int:
         language="en",
         platform="youtube_shorts",
     )
-    metadata["title"] = title  # 系列标题固定，不让 LLM 自由发挥
+    if args.standalone and not args.title:
+        # 独立单条视频：保留 LLM 自由生成的标题，并打分记录，方便发布前决定
+        # 要不要再改一版。7/9 只是启发式门槛，不阻断生成。
+        score = score_title(metadata["title"])
+        logger.info(f"title score: {score['total']}/9 ({metadata['title']!r})")
+        if not score["passes"]:
+            logger.warning(
+                f"title scored below the 7/9 threshold: {score} — consider rewriting before publishing"
+            )
+        metadata["title_score"] = score
+    else:
+        # 系列视频：标题固定为 series-name + episode，不让 LLM 自由发挥
+        metadata["title"] = args.title or f"{args.series_name} {args.episode} \U0001F440"
 
     if args.dry_run:
         print(json.dumps({"script": script_text, "metadata": metadata}, indent=2, ensure_ascii=False))
