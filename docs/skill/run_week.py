@@ -36,6 +36,11 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="只跑某一天（如 Mon），用于单条重跑或排查",
     )
+    parser.add_argument(
+        "--skip-days",
+        default=None,
+        help="逗号分隔要跳过的天（如 Mon），用于已发布过、不需要重新生成的那几集",
+    )
     args = parser.parse_args(argv)
 
     rows = list(csv.DictReader(args.calendar.open(encoding="utf-8")))
@@ -43,6 +48,9 @@ def main(argv: list[str] | None = None) -> int:
     week_rows.sort(key=lambda r: DAY_ORDER[r["day"]])
     if args.only_day:
         week_rows = [r for r in week_rows if r["day"] == args.only_day]
+    if args.skip_days:
+        skip = {d.strip() for d in args.skip_days.split(",") if d.strip()}
+        week_rows = [r for r in week_rows if r["day"] not in skip]
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
     results = []
