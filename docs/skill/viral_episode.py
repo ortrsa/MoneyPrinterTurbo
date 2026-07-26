@@ -65,7 +65,11 @@ def run(command: list[str], cwd: Path | None = None) -> subprocess.CompletedProc
 
 
 def build_scripts(
-    raw_facts: list[str], language: str, episode: int, outro: str | None = None
+    raw_facts: list[str],
+    language: str,
+    episode: int,
+    outro: str | None = None,
+    hook: str | None = None,
 ) -> dict:
     """调用项目内的 LLM 服务，把原始事实改写成口播稿并生成钩子。"""
     from app.services import llm
@@ -80,6 +84,12 @@ def build_scripts(
         ).strip()
         logger.info(f"fact: {line}")
         fact_lines.append(line)
+
+    if hook:
+        # 内容日历里已经写好了钩子：直接采用，避免每集都被 LLM 写成同一句
+        logger.info(f"hook (provided): {hook}")
+        resolved_outro = outro or DEFAULT_OUTRO.format(next_episode=episode + 1)
+        return {"hook": hook.strip(), "facts": fact_lines, "outro": resolved_outro}
 
     hook = llm.generate_script(
         video_subject=f"{len(fact_lines)} surprising facts",
@@ -158,6 +168,11 @@ def main(argv: list[str] | None = None) -> int:
             "'Follow for more...' 文案，用这个参数显式传入。"
         ),
     )
+    parser.add_argument(
+        "--hook",
+        default=None,
+        help="开场钩子；不传则由 LLM 生成。内容日历里逐集写好钩子可避免开头雷同。",
+    )
     parser.add_argument("--highlight-color", default="#FFE500")
     parser.add_argument("--words-per-caption", type=int, default=3)
     parser.add_argument("--whisper-model", default="base.en")
@@ -185,7 +200,11 @@ def main(argv: list[str] | None = None) -> int:
     logger.info(f"episode {args.episode}: {len(raw_facts)} facts")
 
     parts = build_scripts(
-        raw_facts, language=args.language, episode=args.episode, outro=args.outro
+        raw_facts,
+        language=args.language,
+        episode=args.episode,
+        outro=args.outro,
+        hook=args.hook,
     )
     spoken_segments = [parts["hook"], *parts["facts"], parts["outro"]]
     script_text = " ".join(spoken_segments)
