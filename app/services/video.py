@@ -73,6 +73,8 @@ fps = 30
 # 这里给视频素材多留一个很小的安全余量，避免音频末尾因为帧舍入出现黑屏、
 # 卡顿或最后一小段旁白没有画面的情况。
 _VIDEO_DURATION_SAFETY_MARGIN = 0.1
+# 拼接前的临时分片会被整体重新编码，所以这里只求快，不求压缩率。
+_INTERMEDIATE_ENCODE_PRESET = "ultrafast"
 # 成片结尾允许出现的最短镜头。短于这个长度的尾部片段会像是画面"闪了一下"，
 # 因此宁可让上一个镜头多播一会儿，也不要再起一个不到一秒的新镜头。
 MIN_TAIL_CLIP_SECONDS = 1.0
@@ -727,12 +729,17 @@ def combine_videos(
 
             # wirte clip to temp file
             clip_file = f"{output_dir}/temp-clip-{i+1}.mp4"
+            # 这些分片只是中间产物：拼接后还会整体重新编码一次，最后就被删掉。
+            # 因此用最快的 x264 预设换取速度——多花的磁盘空间是临时的，而画质
+            # 损失会被随后那次正式编码掩盖。实测这一步能快约 5 倍。
             _write_videofile_with_codec_fallback(
                 clip,
                 clip_file,
                 codec=_get_configured_video_codec(),
                 logger=None,
                 fps=fps,
+                preset=_INTERMEDIATE_ENCODE_PRESET,
+                threads=threads,
             )
 
             # Store clip duration before closing

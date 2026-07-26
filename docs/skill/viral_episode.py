@@ -104,6 +104,7 @@ def generate_base_video(
     video_terms: str,
     root: Path,
     skill_dir: Path,
+    threads: int,
 ) -> Path:
     """跑 MoneyPrinterTurbo 生成无字幕成片，返回 final-1.mp4 的路径。"""
     command = [
@@ -115,6 +116,7 @@ def generate_base_video(
         "--video-source", "pexels",
         "--video-script", script_text,
         "--video-terms", video_terms,
+        "--n-threads", str(threads),
         # 字幕由 ASS 叠加层负责，这里必须关掉，否则两层字幕会叠在一起
         "--no-subtitle-enabled",
     ]
@@ -160,6 +162,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--words-per-caption", type=int, default=3)
     parser.add_argument("--whisper-model", default="base.en")
     parser.add_argument(
+        "--threads",
+        type=int,
+        default=max(1, os.cpu_count() or 2),
+        help="ffmpeg 编码线程数，默认用满可用核心（项目默认值 2 只用了一半算力）",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="只生成脚本和元数据，不渲染视频",
@@ -204,6 +212,7 @@ def main(argv: list[str] | None = None) -> int:
         video_terms=args.video_terms,
         root=args.root,
         skill_dir=skill_dir,
+        threads=args.threads,
     )
     task_dir = video_path.parent
     audio_path = task_dir / "audio.mp3"

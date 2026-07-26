@@ -553,7 +553,9 @@ def burn_overlay(
     video_out: str,
     fonts_dir: str | None = None,
     crf: int = 20,
-    preset: str = "medium",
+    # 这是成片的最后一次编码，但 `veryfast` 在同样 CRF 下与 `medium` 的
+    # 观感差异对短视频来说可以忽略，编码时间却只有约 40%。
+    preset: str = "veryfast",
 ) -> str:
     """
     把 ASS 叠加层烧进视频。音频直接 `copy`，不重新编码，避免二次损伤。
