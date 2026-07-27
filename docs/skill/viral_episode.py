@@ -27,6 +27,7 @@ import json
 import os
 import subprocess
 import sys
+import uuid
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -237,6 +238,104 @@ def build_scripts(
     return {"hook": hook, "facts": fact_lines, "outro": resolved_outro}
 
 
+# 每段单独出搜索词。关键约束是"可被素材库搜到"——LLM 很容易写出
+# "artificial intelligence concept"这种在图库里只会返回蓝色电路板抽象画面的词，
+# 所以这里强制要求写成"能被拍下来的具体场景"。
+SEGMENT_TERMS_PROMPT = (
+    "You are choosing stock-footage search terms for ONE line of a narrated video.\n"
+    'Line: "{text}"\n\n'
+    "Return exactly 3 search terms, comma-separated.\n"
+    "Rules:\n"
+    "- Each term is 2-4 plain English words naming a scene that could actually be "
+    "filmed: concrete objects, people doing something, or real places.\n"
+    "- No abstract concept words ('innovation', 'future', 'technology concept', "
+    "'data abstract') - stock sites return generic blue circuit-board filler for those.\n"
+    "- If the line is abstract, pick the closest literal scene a viewer would "
+    "connect to it. Example: a line about voice cloning -> 'person speaking microphone'.\n"
+    "- No brand names, no on-screen text requests, no camera directions.\n"
+    "Return ONLY the comma-separated terms, nothing else."
+)
+
+# 开场 3 秒对应研究里的 Declare 阶段：画面必须一眼看懂，不能让观众先花
+# 半秒去解析构图。所以钩子这一段额外要求单一主体、干净背景。
+HOOK_TERMS_EXTRA = (
+    " This is the opening shot, so every term must describe a CLEAN scene with a "
+    "single clear subject, strong lighting and an uncluttered background."
+)
+
+
+def generate_segment_terms(segments: list[str], language: str) -> list[list[str]]:
+    """为每段口播各生成一组素材搜索词。"""
+    from app.services import llm
+
+    all_terms: list[list[str]] = []
+    used: list[str] = []
+    for index, text in enumerate(segments):
+        prompt = SEGMENT_TERMS_PROMPT.format(text=text)
+        if index == 0:
+            prompt += HOOK_TERMS_EXTRA
+        if used:
+            # 同一集里各条事实主题相近时，模型很容易每段都给出"person typing laptop"。
+            # 把已用过的词回传，强制它换一个角度，避免整条视频看起来都是同一个画面。
+            prompt += (
+                "\nThese terms are already used earlier in this same video, so do "
+                "NOT repeat them or return near-identical wording: "
+                + "; ".join(used)
+            )
+        raw = llm.generate_script(
+            video_subject=text,
+            language=language,
+            paragraph_number=1,
+            video_script_prompt=prompt,
+        ).strip()
+
+        terms = [t.strip(" .\"'") for t in raw.replace("\n", ",").split(",")]
+        terms = [t for t in terms if t and len(t.split()) <= 6][:3]
+        if not terms:
+            # LLM 偶尔会返回一整句话；退回用这段口播的前几个词去搜，
+            # 至少还和当前主题相关，比落回全局通用素材好。
+            terms = [" ".join(text.split()[:4])]
+        logger.info(f"segment {index} terms: {terms}")
+        all_terms.append(terms)
+        used.extend(terms)
+    return all_terms
+
+
+def generate_audio_only(
+    script_text: str,
+    subject: str,
+    voice_name: str,
+    task_id: str,
+    root: Path,
+    threads: int,
+) -> Path:
+    """
+    只跑到音频阶段，返回 audio.mp3 路径。
+
+    画面要对齐口播就必须先有真实音频：每段的起止时间来自 whisper，
+    而不是按字数估算。mpt_agent.py 固定 `--stop-at video`，所以这里直接调 cli.py。
+    """
+    command = [
+        "uv", "run", "--no-project", "--python", "3.11", "python", "cli.py",
+        "--task-id", task_id,
+        "--video-subject", subject,
+        "--video-script", script_text,
+        "--voice-name", voice_name,
+        "--n-threads", str(threads),
+        "--no-subtitle-enabled",
+        "--stop-at", "audio",
+    ]
+    result = run(command, cwd=root)
+    if result.returncode != 0:
+        tail = (result.stdout or "") + (result.stderr or "")
+        raise RuntimeError("audio generation failed:\n" + tail[-2000:])
+
+    audio_path = root / "storage" / "tasks" / task_id / "audio.mp3"
+    if not audio_path.is_file():
+        raise RuntimeError(f"audio stage finished but {audio_path} is missing")
+    return audio_path
+
+
 def generate_base_video(
     script_text: str,
     subject: str,
@@ -302,6 +401,16 @@ def main(argv: list[str] | None = None) -> int:
         "--hook",
         default=None,
         help="开场钩子；不传则由 LLM 生成。内容日历里逐集写好钩子可避免开头雷同。",
+    )
+    parser.add_argument(
+        "--footage-mode",
+        choices=("synced", "generic"),
+        default="synced",
+        help=(
+            "synced：每段口播单独出搜索词、单独取材，画面精确铺在该段时间窗里，"
+            "讲到第 N 条事实时画面就是第 N 条的内容（默认）。"
+            "generic：旧行为，用 --video-terms 的全局素材池，画面与口播无关。"
+        ),
     )
     parser.add_argument("--highlight-color", default="#FFE500")
     parser.add_argument("--words-per-caption", type=int, default=3)
@@ -384,32 +493,78 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"script": script_text, "metadata": metadata}, indent=2, ensure_ascii=False))
         return 0
 
-    video_path = generate_base_video(
-        script_text=script_text,
-        subject=f"{args.series_name} {args.episode}",
-        voice_name=args.voice_name,
-        video_terms=args.video_terms,
-        root=args.root,
-        skill_dir=skill_dir,
-        threads=args.threads,
-    )
-    task_dir = video_path.parent
-    audio_path = task_dir / "audio.mp3"
+    def transcribe(audio_file: Path):
+        """从音频反解逐词时间轴，并把字幕文字换回脚本原文。"""
+        raw_words = viral.transcribe_word_timings(
+            str(audio_file), model_size=args.whisper_model
+        )
+        if not raw_words:
+            raise RuntimeError("no word timings produced; cannot build overlay")
+        total = max(word.end for word in raw_words)
+        # 字幕文字取自脚本原文，Whisper 只负责提供时间：避免识别错误或
+        # `[Music]` 这类非语音标注被直接烧进画面
+        return viral.align_script_to_words(script_text, raw_words), total
 
-    raw_words = viral.transcribe_word_timings(
-        str(audio_path), model_size=args.whisper_model
-    )
-    if not raw_words:
-        raise RuntimeError("no word timings produced; cannot build overlay")
-    duration = max(word.end for word in raw_words)
-    # 字幕文字取自脚本原文，Whisper 只负责提供时间：避免识别错误或
-    # `[Music]` 这类非语音标注被直接烧进画面
-    words = viral.align_script_to_words(script_text, raw_words)
+    segment_terms: list[list[str]] | None = None
+    if args.footage_mode == "synced":
+        # 先出音频 -> 反解每段时间窗 -> 每段按自己的主题取材，
+        # 保证讲到第 N 条时画面就是第 N 条的画面。
+        from app.services import topic_footage
+
+        task_id = str(uuid.uuid4())
+        audio_path = generate_audio_only(
+            script_text=script_text,
+            subject=f"{args.series_name} {args.episode}",
+            voice_name=args.voice_name,
+            task_id=task_id,
+            root=args.root,
+            threads=args.threads,
+        )
+        task_dir = audio_path.parent
+        words, duration = transcribe(audio_path)
+
+        all_segments = viral.align_facts_to_words(
+            spoken_segments, words, total_duration=duration
+        )
+        segment_terms = generate_segment_terms(spoken_segments, language=args.language)
+        plans = [
+            topic_footage.SegmentPlan(
+                index=i,
+                text=text,
+                start=seg.start,
+                end=seg.end,
+                terms=terms,
+            )
+            for i, (text, seg, terms) in enumerate(
+                zip(spoken_segments, all_segments, segment_terms)
+            )
+        ]
+        video_path = Path(
+            topic_footage.build_synced_footage(
+                plans=plans,
+                audio_file=str(audio_path),
+                output_path=str(task_dir / "combined-synced.mp4"),
+                task_id=task_id,
+                threads=args.threads,
+            )
+        )
+    else:
+        video_path = generate_base_video(
+            script_text=script_text,
+            subject=f"{args.series_name} {args.episode}",
+            voice_name=args.voice_name,
+            video_terms=args.video_terms,
+            root=args.root,
+            skill_dir=skill_dir,
+            threads=args.threads,
+        )
+        task_dir = video_path.parent
+        words, duration = transcribe(task_dir / "audio.mp3")
+        all_segments = viral.align_facts_to_words(
+            spoken_segments, words, total_duration=duration
+        )
 
     # 钩子和结尾不计入"第 N 条事实"，所以先把它们一起参与对齐，再只取中间的事实区间
-    all_segments = viral.align_facts_to_words(
-        spoken_segments, words, total_duration=duration
-    )
     fact_segments = all_segments[1:-1] if len(all_segments) >= 3 else all_segments
     fact_segments = [
         viral.FactSegment(index=i + 1, start=s.start, end=s.end)
@@ -439,9 +594,16 @@ def main(argv: list[str] | None = None) -> int:
         "video_file": str(output_path),
         "duration_seconds": round(duration, 2),
         "fact_count": len(fact_segments),
+        "footage_mode": args.footage_mode,
         "script": script_text,
         # 保留分段与区间，便于只重跑叠加层而不必重新渲染底片
         "segments": spoken_segments,
+        # 记录每段实际用的搜索词，方便事后核对"画面为什么配成这样"
+        "segment_terms": segment_terms if args.footage_mode == "synced" else None,
+        "segment_timings": [
+            {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
+            for i, s in enumerate(all_segments)
+        ],
         "fact_timings": [
             {"index": s.index, "start": round(s.start, 2), "end": round(s.end, 2)}
             for s in fact_segments
