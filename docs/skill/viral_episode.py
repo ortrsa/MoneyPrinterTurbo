@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import uuid
@@ -264,6 +265,50 @@ HOOK_TERMS_EXTRA = (
 )
 
 
+# 句尾误判的常见来源：这些缩写后面的点不是句号。
+_ABBREVIATIONS = frozenset(
+    "mr. mrs. ms. dr. prof. st. jr. sr. vs. etc. fig. no. approx. inc. ltd. dept.".split()
+)
+
+
+def _ends_with_abbreviation(text: str) -> bool:
+    """判断一段文字是不是停在缩写上（因而不该在这里断句）。"""
+    match = re.search(r"(\S+)\s*$", text)
+    if not match:
+        return False
+    token = match.group(1)
+    if token.lower() in _ABBREVIATIONS:
+        return True
+    # 首字母缩写，如 "U.S."、"A.I."：结尾是"单个字母 + 点"
+    return bool(re.search(r"(?:^|\W)[A-Za-z]\.$", token))
+
+
+def format_caption_paragraphs(caption: str) -> str:
+    """
+    每句之间空一行。
+
+    LLM 返回的是一整块文字，在 YouTube 描述框里会挤成一堵墙，观众不会读。
+    每条事实各占一段之后才扫得动。
+
+    断句先要求"句号 + 空格 + 大写字母"，这样 "0.4" 这类小数不会被切开；
+    但这条规则挡不住 "U.S. Constitution"——本集脚本里就有这个词。所以切完
+    之后再把停在缩写上的碎片并回去。Python 的 lookbehind 要求定长，
+    没法在正则里直接排除长度不一的缩写，只能事后合并。
+    """
+    parts = re.split(r"(?<=[.!?])\s+(?=[A-Z])", caption.strip())
+
+    merged: list[str] = []
+    for part in parts:
+        part = part.strip()
+        if not part:
+            continue
+        if merged and _ends_with_abbreviation(merged[-1]):
+            merged[-1] = f"{merged[-1]} {part}"
+        else:
+            merged.append(part)
+    return "\n\n".join(merged)
+
+
 def generate_segment_terms(segments: list[str], language: str) -> list[list[str]]:
     """为每段口播各生成一组素材搜索词。"""
     from app.services import llm
@@ -475,6 +520,7 @@ def main(argv: list[str] | None = None) -> int:
         language="en",
         platform="youtube_shorts",
     )
+    metadata["caption"] = format_caption_paragraphs(metadata["caption"])
     if args.standalone and not args.title:
         # 独立单条视频：保留 LLM 自由生成的标题，并打分记录，方便发布前决定
         # 要不要再改一版。7/9 只是启发式门槛，不阻断生成。
