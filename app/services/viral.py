@@ -341,14 +341,24 @@ def _caption_events(
     highlight = _ass_color(highlight_color)
     events: list[str] = []
 
-    for chunk in chunks:
+    for chunk_index, chunk in enumerate(chunks):
+        # 每块的首词都会提前 lead_seconds 出现（读字比听字快）。如果上一块
+        # 的末词仍按自己的 word.end 收尾，这一提前量就会让两块在同一个
+        # \pos 上重叠约 lead_seconds，画面上表现为两行字叠印在一起。
+        # 因此把本块的结束时间夹到下一块出现的那一刻：既消除叠字，
+        # 也顺带填掉块间静音时的空白闪烁。
+        if chunk_index + 1 < len(chunks):
+            chunk_limit = max(0.0, chunks[chunk_index + 1][0].start - lead_seconds)
+        else:
+            chunk_limit = total_duration
+
         for i, word in enumerate(chunk):
             start = max(0.0, word.start - lead_seconds)
             # 高亮持续到下一个词开始，避免词间静音时字幕闪烁回全白
             if i + 1 < len(chunk):
                 end = max(start, chunk[i + 1].start - lead_seconds)
             else:
-                end = max(start, min(word.end, total_duration))
+                end = max(start, min(chunk_limit, total_duration))
             if end <= start:
                 continue
 
