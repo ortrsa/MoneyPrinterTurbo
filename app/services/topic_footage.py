@@ -270,7 +270,8 @@ def build_synced_footage(
         video = video.subclipped(0, min(video.duration, narration.duration))
         video = video.with_audio(narration)
 
-        os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+        out_dir = os.path.dirname(output_path) or "."
+        os.makedirs(out_dir, exist_ok=True)
         video.write_videofile(
             output_path,
             fps=30,
@@ -279,6 +280,10 @@ def build_synced_footage(
             threads=threads,
             preset="veryfast",
             logger=None,
+            # MoviePy 的临时音频文件默认落在当前工作目录，也就是仓库根目录，
+            # 每渲染一集就往仓库里扔一个 TEMP_MPY_*.mp4。显式指定到任务目录，
+            # 让中间产物和成片待在一起。
+            temp_audiofile=os.path.join(out_dir, "temp-audio.m4a"),
         )
 
     logger.success(f"synced footage written: {output_path}")

@@ -43,3 +43,7 @@ htmlcov/
 .codegraph
 /docs/superpowers
 .understand-anything
+
+# MoviePy 渲染时产生的临时音频文件。已经通过 temp_audiofile 指定到任务目录，
+# 这里再兜一层：任何一个没走那条路径的调用都不该把仓库根目录弄脏。
+*TEMP_MPY_*
