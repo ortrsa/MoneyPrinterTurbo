@@ -4,7 +4,7 @@ description: Use this skill whenever the user wants to create a finished video f
 compatibility: Requires an AI agent with terminal, network, filesystem, and long-running command support. Supports macOS and Windows and uses uv exclusively.
 metadata:
   author: "harry0703@hotmail.com"
-  version: "2.5.0"
+  version: "2.6.0"
   upstream: "https://github.com/harry0703/MoneyPrinterTurbo"
 ---
 
@@ -29,6 +29,12 @@ Unless the user requests otherwise, generate one Chinese `9:16` portrait video w
 ## Shorts Virality Guidelines
 
 There is no guaranteed-viral setting, but these defaults measurably improve retention on short-form platforms. Apply them unless the user's request already specifies its own script, hook, or tone.
+
+> **Working on the `@RBTfacts` "Random But True" channel? Read [`channel_playbook.md`](channel_playbook.md) first.**
+> It carries the measured analytics, which topics have and have not worked, the
+> production traps already paid for, and the agreed division of labour. This file
+> says how to build a video; the playbook says what has actually been learned
+> about making this channel work. Update it when new numbers arrive.
 
 1. **Hook-first script, no preamble.** Generate the script with a `video_script_prompt` that forces it to open with the single most surprising or counter-intuitive part of the topic in the first sentence — no greetings, no "did you know," no scene-setting:
    ```text

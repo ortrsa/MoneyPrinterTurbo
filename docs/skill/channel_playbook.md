@@ -1,0 +1,189 @@
+# Random But True — channel playbook
+
+Accumulated findings for the `@RBTfacts` YouTube Shorts channel. `SKILL.md` covers
+how to *build* a video; this file covers what has actually been learned about
+making this specific channel work, so a fresh session does not restart from zero.
+
+**Read this before proposing changes to format, topic mix, or episode length.**
+
+Measurements are dated. Anything not marked as measured is reasoning, and is
+labelled as such — several conclusions below rest on very few data points, and
+saying so is more useful than sounding confident.
+
+---
+
+## 1. Channel
+
+- Handle `@RBTfacts`, name "Random But True". Faceless narrated facts, 9:16.
+- Stated goal: **1000 subscribers** to reach monetisation.
+- Format: 6 facts per episode, hook + facts + outro, karaoke captions, fact
+  counter and progress bar. Built by `docs/skill/viral_episode.py`.
+
+## 2. Measured performance — 2026-07-28 (28-day window)
+
+Channel totals:
+
+| metric | value |
+|---|---|
+| views | 2.4K |
+| engaged views | 854 |
+| likes | 60 |
+| **subscribers** | **0** |
+| stayed to watch | **33.1%** |
+| swiped away | 66.9% |
+
+Per video:
+
+| video | views | note |
+|---|---|---|
+| 25 Jul (flamingo) | 1.4K | best performer; **36.4%** stayed, 500 engaged / 489 unique |
+| 26 Jul | 837 | ~28% stayed (derived from channel average) |
+| Random But True Facts 3 | 111 | |
+| AI Unfiltered 3 | 40 | |
+| AI Unfiltered 2 | 9 | |
+| 25 Jul | 4 | |
+| 25 Jul | 3 | |
+
+## 3. What this data supports
+
+**Retention is the bottleneck, not reach or titles.** 33.1% against commonly
+cited benchmarks (70%+ strong, ~50% average, ~30% dies) is near the floor. The
+flamingo's engaged-views curve rose for one day and went flat: the algorithm
+tested it, two thirds left, it stopped pushing. Nothing was blocked — it just
+did not earn more.
+
+**Upload timing and format do not explain the spread.** Three videos published
+on 25 July got 1.4K, 4 and 3 views — a 400x spread on one day. And AI Unfiltered
+2 is *older* than AI Unfiltered 3 yet has fewer views. Whatever decides this is
+per-video, and it happens in the first seconds.
+
+**Titles are not the lever.** The two best videos have no title at all, just a
+date. They beat every carefully-constructed series title on the channel. Effort
+spent on title formatting was misallocated.
+
+**The AI series is the weakest content on the channel.** 40 and 9 views, against
+1.4K for an animal video and 111 for general science. Consistently at the bottom.
+
+**People who stay, enjoy it.** 60 likes / 854 engaged ≈ 7%. That is a healthy
+rate. The funnel breaks at the top, not in the content — which means the fix is
+the opening, not the writing.
+
+**0 subscribers is downstream of retention.** Someone who leaves at second 2
+never hears a CTA at second 50. Fix retention before rewriting CTAs again.
+
+## 4. What this data does NOT support
+
+Be strict about this; the temptation to over-read seven videos is strong.
+
+- **Whether the synced-footage format helps is unknown.** All new-format videos
+  combined have ~160 views. A retention percentage on 9 views is noise. No
+  conclusion either way is available yet.
+- **Whether animals beat other topics is one data point.** The flamingo is a
+  single video. It may be the topic; it may be that specific clip.
+- **The 70/50/30 retention benchmarks come from industry blogs, not YouTube.**
+  Directionally useful, not authoritative. Do not quote them as official.
+
+**The channel is in a closed loop:** low retention → low reach → too few views
+per video to measure retention → nothing to learn from. A/B tests do not
+currently produce readable results, because a variant that gets 9 views tells
+you nothing. Until reach recovers, judge changes on the channel-level number
+across 8-10 videos, not per video.
+
+## 5. Strategy decisions
+
+**One theme per episode — already in place, keep it.** All six facts share a
+subject so each builds on the last.
+
+**The channel is too scattered — narrow it.** Five parallel topics (AI, objects,
+body, hacks, random) means the recommendation system cannot converge on an
+audience, and every upload starts cold. It also plausibly explains 0
+subscribers: subscribing is a bet on the next video, and if the next video is
+unpredictable there is no bet to make. 1.4K people watched a flamingo and none
+subscribed, because nothing signalled what they would get next.
+
+**Saturation matters less here than intuition suggests.** In search you compete
+for a ranked slot. In a Shorts feed you are matched against interest profiles —
+so a "common" topic means a large, well-defined audience the algorithm already
+knows how to find, which helps a channel with no audience. A very niche topic
+gives it a small pool to test against. The real cost of a saturated topic is a
+higher quality bar, not worse distribution.
+
+**Topic shortlist, ranked by stock-footage availability** (a hard constraint,
+see §6):
+
+| topic | audience | Pexels coverage |
+|---|---|---|
+| ocean / deep sea | very broad | excellent |
+| food | broadest | best available |
+| money and prices | broad | good |
+| everyday objects | broad | excellent |
+| space | very broad | good, more saturated |
+| exotic animals | broad | **poor — avoid** |
+
+Keep animals in the mix — it is the only thing that has demonstrably worked —
+but restrict to species with real coverage (sharks, octopus, birds, dogs, cats),
+never wombats or sloths.
+
+**Untested hypotheses worth trying,** in order:
+
+1. **Shorten to 25-30s.** 52-57s is a lot of runway when two thirds already
+   leave early. Also halves the cost of every experiment.
+2. **Open on the strange image, not a sentence describing it.** Current hooks
+   are statements *about* a fact ("Wombats produce cube-shaped droppings, and
+   scientists needed years to explain it"). A close-up of the thing before a
+   word is spoken is the stronger opening.
+
+## 6. Production rules learned the hard way
+
+Full detail in `SKILL.md`; the short version:
+
+- **Probe the stock library before rendering** — `docs/skill/probe_footage.py`.
+  Thirty seconds versus a six-minute render. Skipping it cost five consecutive
+  rejected renders of one animals episode.
+- **Result counts are worthless.** Pexels returns ~20 hits for any query,
+  including ones with no matching footage. Only looking at frames tells you.
+  Zero "black filler" warnings is likewise not evidence of correct footage.
+- **Sample every cut when verifying, not one frame per segment.** Judging a
+  three-cut segment by its midpoint hides two thirds of what shipped.
+- Recurring failure modes: a common word with a dominant other meaning
+  (`octopus` → carpaccio), a species the library lacks (sloth → sloth *bears*),
+  and any year in a query (`1956 summer workshop` → nothing).
+- Pin verified terms with `--segment-terms` so the LLM cannot overwrite them.
+
+## 7. Working agreement
+
+**Ship the video, then report what is weak.** Do not silently iterate toward
+perfection. On 2026-07-28 a single request for one episode became five renders;
+each failure was real, but the user should have been given the choice after the
+first or second, along with the option to accept a good-enough cut.
+
+**Watch for optimising the measurable instead of the important.** That same day,
+substantial effort went into footage-topic matching — measurable, verifiable —
+while the actual problem (67% leaving in two seconds) went untouched. Production
+quality is already adequate. The opening is not.
+
+**Division of labour.** The mechanical parts — generation, quality checks,
+measurement, reporting — are well suited to automation. Two decisions are not,
+and should stay with the user: **what the video is about**, and **what the first
+two seconds look like**. Those are where human judgement genuinely outperforms.
+
+**On running the channel autonomously** (asked and answered 2026-07-28):
+technically straightforward — YouTube Data API uploads, Analytics API reads,
+~6 uploads/day within default quota. But it would likely not produce virality:
+the feedback loop is far too slow and noisy for the number of experiments
+needed, breakouts are heavy-tailed and substantially luck, and there is no
+real-time cultural sense for trend-jacking. It would also amplify the
+optimise-the-measurable failure above. Separately, fully automated daily
+templated uploads sit exactly in the profile YouTube scrutinises under its
+inauthentic / mass-produced content policy — a real risk when the goal is
+monetisation.
+
+## 8. Open items
+
+- Five unpublished week-1 videos still carry the caption-overlap bug (~2.3s of
+  overprinted text each). Re-burn is ~1 minute per video, no footage re-render.
+  Two already-published videos would cost their view counts to replace.
+- Sloth fact in Random But True Facts 4 shows a dolphin, which the script names.
+  Veo would provide a real sloth for roughly one clip's cost.
+- Content calendar still built around the old five-topic mix. Rebuilding it
+  around the §5 shortlist has not been done.
