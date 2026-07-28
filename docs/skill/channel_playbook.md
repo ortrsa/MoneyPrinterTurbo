@@ -44,6 +44,40 @@ Per video:
 | 25 Jul | 4 | |
 | 25 Jul | 3 | |
 
+## 2b. Random But True Facts 4 — first 6 hours (2026-07-28 19:51)
+
+The animals episode, and the first video built with topic-matched footage.
+
+| metric | value |
+|---|---|
+| views (6h) | 867, still climbing — curve had not flattened |
+| **subscribers** | **+2** — the channel's first, ever |
+| stayed to watch | ~40% (reported by user; best on the channel) |
+| traffic source | 849 / 867 from the Shorts feed |
+| retention curve | not yet processed |
+
+**Why this matters more than the view count:** the channel had 0 subscribers from
+2.4K lifetime views. This one video produced 2 from 867 (~0.23%). Still under the
+0.5-2% benchmark, but zero to non-zero is a categorical change, not an
+incremental one — it is the first evidence the content and CTA convert at all.
+
+Velocity also differs in kind: the flamingo took roughly two days to reach 1.4K
+and then flattened; this reached 867 in six hours and was still rising.
+
+**Two changes moved at once, so causation is not available.** This episode is
+both an animals topic (already the strongest) *and* the new synced-footage
+format. The only single-variable comparison is against the flamingo — also
+animals, old format — which gives 36.4% → 40%. A real improvement, but modest,
+and possibly noise.
+
+40% remains below the ~50% "average" mark. Better, not good.
+
+**Next diagnostic:** once the retention curve processes (up to two days), it will
+show *where* viewers leave. No video on this channel has previously had enough
+views for that curve to render at all. It is the only thing that will
+distinguish "the first second fails" from "they leave in the middle", and that
+distinction decides whether the fix is the opening shot or the episode length.
+
 ## 3. What this data supports
 
 **Retention is the bottleneck, not reach or titles.** 33.1% against commonly
@@ -68,18 +102,21 @@ spent on title formatting was misallocated.
 rate. The funnel breaks at the top, not in the content — which means the fix is
 the opening, not the writing.
 
-**0 subscribers is downstream of retention.** Someone who leaves at second 2
-never hears a CTA at second 50. Fix retention before rewriting CTAs again.
+**Subscribers are downstream of retention.** Someone who leaves at second 2 never
+hears a CTA at second 50. This held while the channel sat at 0 subscribers, and
+the first conversions (§2b) arrived on its highest-retention video — consistent
+with the same reading. Fix retention before rewriting CTAs again.
 
 ## 4. What this data does NOT support
 
 Be strict about this; the temptation to over-read seven videos is strong.
 
-- **Whether the synced-footage format helps is unknown.** All new-format videos
-  combined have ~160 views. A retention percentage on 9 views is noise. No
-  conclusion either way is available yet.
-- **Whether animals beat other topics is one data point.** The flamingo is a
-  single video. It may be the topic; it may be that specific clip.
+- **Whether the synced-footage format helps is still unresolved.** Facts 4 is the
+  first episode with real reach behind it (§2b), but it changed topic and format
+  together. Against the flamingo — the one same-topic comparison — it is 36.4%
+  → 40%: encouraging, not conclusive.
+- **Whether animals beat other topics is now two data points**, both positive
+  (flamingo 1.4K, Facts 4 867-plus). Better than one. Still not many.
 - **The 70/50/30 retention benchmarks come from industry blogs, not YouTube.**
   Directionally useful, not authoritative. Do not quote them as official.
 
