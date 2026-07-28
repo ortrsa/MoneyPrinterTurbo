@@ -342,10 +342,20 @@ def generate_segment_terms(
         if used:
             # 同一集里各条事实主题相近时，模型很容易每段都给出"person typing laptop"。
             # 把已用过的词回传，强制它换一个角度，避免整条视频看起来都是同一个画面。
+            #
+            # 但"不要重复"绝不能把主体本身挤掉。之前钩子用了 wombat，这条
+            # 禁令就让讲袋熊肠道的那一段改用 "cubical feces"，图库回给了
+            # 一排方形写字楼。所以这里只约束陪衬镜头，并明确说明主体名词
+            # 该重复就重复。
             prompt += (
-                "\nThese terms are already used earlier in this same video, so do "
-                "NOT repeat them or return near-identical wording: "
-                + "; ".join(used)
+                "\nThese terms already appear earlier in this same video. Do not "
+                "repeat them AS SUPPORTING SHOTS, and do not return near-identical "
+                "wording for them: " + "; ".join(used) + "\n"
+                "This does NOT apply to the subject itself. If this line is about "
+                "the same animal, object or place as an earlier line, the first "
+                "term must still be that noun, even though it repeats. Showing the "
+                "right subject twice is correct; switching to a different subject "
+                "to avoid repeating a word is wrong."
             )
         raw = llm.generate_script(
             video_subject=text,
