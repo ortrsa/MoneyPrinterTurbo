@@ -119,6 +119,12 @@ def download_segment_materials(
     ``seen_urls`` 由调用方跨段共享：不同段的搜索词经常会命中同一批热门素材
     （例如多条 AI 事实都会搜到同一个"打字的手"），不做全局去重的话，
     同一个画面会在一条视频里重复出现好几次。
+
+    但全局去重不能凌驾于"画面要对得上口播"之上。相邻两段讲的是同一个主体
+    时（钩子和第 1 条事实都在讲袋熊），前一段会把该主体的素材取光，后一段
+    再去重就只能落到它那两个更宽泛的备用词上——于是"袋熊的肠道"这句话配的
+    是一只鹰。宁可两段出现相似的袋熊镜头，也不能配错动物，所以第一个词
+    （即该段的主体）不参与去重。
     """
     search_videos = material.search_videos_pexels
     if source == "pixabay":
@@ -131,7 +137,8 @@ def download_segment_materials(
     if seen_urls is None:
         seen_urls = set()
 
-    for term in plan.terms:
+    for term_index, term in enumerate(plan.terms):
+        primary = term_index == 0
         # minimum_duration 传 1：这里的镜头长度由时间窗决定，短素材同样可用，
         # 按 max_clip_duration 过滤会把很多贴题的短素材白白筛掉。
         items = search_videos(
@@ -142,7 +149,7 @@ def download_segment_materials(
         for item in items:
             if taken >= max_clips_per_term:
                 break
-            if item.url in seen_urls:
+            if item.url in seen_urls and not primary:
                 continue
             seen_urls.add(item.url)
             try:
