@@ -258,6 +258,10 @@ SEGMENT_TERMS_PROMPT = (
     "'data abstract') - stock sites return generic blue circuit-board filler for those.\n"
     "- If the line is abstract, pick the closest literal scene a viewer would "
     "connect to it. Example: a line about voice cloning -> 'person speaking microphone'.\n"
+    "- Never put a year or a date in a term. Stock libraries do not tag footage "
+    "by the year an event happened, so '1956 summer workshop' matches nothing and "
+    "falls back to generic filler. Describe how the period looked instead: "
+    "'vintage lecture hall', 'retro computer room'.\n"
     "- No brand names, no on-screen text requests, no camera directions.\n"
     "Return ONLY the comma-separated terms, nothing else."
 )
