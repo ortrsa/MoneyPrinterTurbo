@@ -314,13 +314,28 @@ def format_caption_paragraphs(caption: str) -> str:
     return "\n\n".join(merged)
 
 
-def generate_segment_terms(segments: list[str], language: str) -> list[list[str]]:
+def generate_segment_terms(
+    segments: list[str],
+    language: str,
+    overrides: dict[int, list[str]] | None = None,
+) -> list[list[str]]:
     """为每段口播各生成一组素材搜索词。"""
     from app.services import llm
 
+    overrides = overrides or {}
     all_terms: list[list[str]] = []
     used: list[str] = []
     for index, text in enumerate(segments):
+        # 有些主题图库就是没有对得上的素材（树懒），或者同名词会命中完全
+        # 不同的东西（"octopus" 会返回章鱼料理）。这类段落靠改 prompt 是
+        # 治不好的，只能人工把关键词钉死，所以这里允许按段覆盖。
+        if index in overrides:
+            terms = overrides[index]
+            logger.info(f"segment {index} terms (override): {terms}")
+            all_terms.append(terms)
+            used.extend(terms)
+            continue
+
         prompt = SEGMENT_TERMS_PROMPT.format(text=text)
         if index == 0:
             prompt += HOOK_TERMS_EXTRA
@@ -462,6 +477,16 @@ def main(argv: list[str] | None = None) -> int:
             "generic：旧行为，用 --video-terms 的全局素材池，画面与口播无关。"
         ),
     )
+    parser.add_argument(
+        "--segment-terms",
+        default=None,
+        help=(
+            "按段钉死素材搜索词，JSON 对象：段序号 -> 逗号分隔的关键词。"
+            "段序号 0 是钩子，1..N 是每条事实，最后一段是结尾。"
+            "用于图库确实没有对应素材、或同名词会命中别的东西的段落"
+            '（例："{\\"5\\": \\"octopus underwater,coral reef\\"}"）。'
+        ),
+    )
     parser.add_argument("--highlight-color", default="#FFE500")
     parser.add_argument("--words-per-caption", type=int, default=3)
     parser.add_argument("--whisper-model", default="base.en")
@@ -516,6 +541,25 @@ def main(argv: list[str] | None = None) -> int:
     )
     spoken_segments = [parts["hook"], *parts["facts"], parts["outro"]]
     script_text = " ".join(spoken_segments)
+
+    # 覆盖表在这里就校验：写错段序号是很容易犯的错，等跑完 TTS 再报错
+    # 会白白浪费一次语音生成。
+    term_overrides: dict[int, list[str]] = {}
+    if args.segment_terms:
+        for key, value in json.loads(args.segment_terms).items():
+            parsed = [t.strip() for t in value.split(",") if t.strip()]
+            if not parsed:
+                parser.error(f"--segment-terms entry {key!r} has no usable terms")
+            term_overrides[int(key)] = parsed
+        out_of_range = sorted(
+            i for i in term_overrides if not 0 <= i < len(spoken_segments)
+        )
+        if out_of_range:
+            parser.error(
+                f"--segment-terms index out of range: {out_of_range}; "
+                f"this episode has segments 0..{len(spoken_segments) - 1} "
+                f"(0 = hook, {len(spoken_segments) - 1} = outro)"
+            )
 
     from app.services import llm
 
@@ -577,7 +621,9 @@ def main(argv: list[str] | None = None) -> int:
         all_segments = viral.align_facts_to_words(
             spoken_segments, words, total_duration=duration
         )
-        segment_terms = generate_segment_terms(spoken_segments, language=args.language)
+        segment_terms = generate_segment_terms(
+            spoken_segments, language=args.language, overrides=term_overrides
+        )
         plans = [
             topic_footage.SegmentPlan(
                 index=i,
