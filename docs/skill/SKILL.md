@@ -4,7 +4,7 @@ description: Use this skill whenever the user wants to create a finished video f
 compatibility: Requires an AI agent with terminal, network, filesystem, and long-running command support. Supports macOS and Windows and uses uv exclusively.
 metadata:
   author: "harry0703@hotmail.com"
-  version: "2.4.0"
+  version: "2.5.0"
   upstream: "https://github.com/harry0703/MoneyPrinterTurbo"
 ---
 
@@ -97,6 +97,31 @@ Modeled on BrainBlud (~596K subscribers, ~188M views) plus retention research. W
 8. **Frame 1 is the thumbnail.** Custom Shorts thumbnails do not appear in the swipe feed — only in search/grid/shelf placements. Judge the opening frame on retention-after-view, not click appeal. The general thumbnail-legibility rules (≤3 visual elements, high contrast, readable at a glance, bold sans-serif text ≤4 words) still apply to that first frame — our karaoke caption design (3 words, Anton, black outline on white/yellow) already satisfies these by construction. One rule genuinely does not transfer: "a face with a shocked expression" boosts click-through in face-forward content, but this channel is deliberately faceless B-roll, so there is no face to add — don't force one in.
 9. **Trend-jacking is deliberately out of scope for now.** Tying facts to breaking news/trending topics is a plausible future format (discussed and shelved per the user), not something to build speculatively into this pipeline.
 10. **Cost model: keep it near zero.** Pexels footage, Gemini TTS, and local whisper are free or negligible; spend on Veo image-to-video clips only for hero shots. Cross-post the same file to TikTok and Reels — no extra generation cost.
+
+### Probe the stock library before rendering, not after
+
+**Always do this before an episode whose facts name specific animals, objects, places or historical periods.** A render takes about six minutes; a probe takes thirty seconds. Skipping it once cost five consecutive rejected renders of a single animals episode.
+
+For each fact whose subject might be rare, search Pexels directly, download the top result, extract one frame, and look at it:
+
+```python
+from app.services import material
+from app.models.schema import VideoAspect
+r = material.search_videos_pexels("wombat", minimum_duration=1, video_aspect=VideoAspect.portrait)
+material.save_video(video_url=r[0].url, save_dir="/tmp/probe")
+```
+
+Then `ffmpeg -ss 1 -i clip.mp4 -frames:v 1 out.jpg` (the binary lives under `.venv/lib/python3.11/site-packages/imageio_ffmpeg/binaries/`) and read the image. Pass every verified term to `--segment-terms` so the LLM cannot overwrite it.
+
+**Result counts prove nothing.** Pexels returns roughly 20 results for any query, including ones it has no real footage for — `wombat`, `sloth` and `animal digestion` all returned about 20. Only looking at frames distinguishes a real match from fuzzy filler. For the same reason, zero "black filler" warnings in the log is not evidence the footage is right.
+
+Three failure modes worth probing for specifically:
+
+- **A common word with a dominant other meaning.** `octopus` returns octopus *carpaccio* as often as the animal — a plate of food under a fact about octopus intelligence. Qualify it: `octopus underwater`.
+- **A species the library simply lacks.** No wording finds tree sloths; `sloth` returns sloth *bears* in a zoo. Either pick a different fact, use an adjacent subject the script already names (a fact comparing sloths to dolphins can legitimately show a dolphin), or generate the shot with Veo.
+- **A year or date in the query.** Stock is tagged by what is in the shot, never by when an event happened. Describe the period's look instead.
+
+When verifying the finished render, sample **every cut**, not one frame per segment. A segment of three cuts judged on its midpoint hides two thirds of what shipped — that mistake made a correct octopus segment look like a failure.
 
 ### Shot pacing: what transfers from the 6-step transformation formula
 
