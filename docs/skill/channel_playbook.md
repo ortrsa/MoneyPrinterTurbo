@@ -186,6 +186,21 @@ Full detail in `SKILL.md`; the short version:
   (`octopus` → carpaccio), a species the library lacks (sloth → sloth *bears*),
   and any year in a query (`1956 summer workshop` → nothing).
 - Pin verified terms with `--segment-terms` so the LLM cannot overwrite them.
+- **Fact-check claims with real web search before rendering, not after — and
+  when a correction is needed, verify the actual spoken script, not just the
+  generated caption/description.** On Facts 5, "elephants are the only mammal
+  that can't jump" was false (sloths, hippos, rhinos can't either). The fix
+  attempt removed "only" from the source fact text and re-rendered; the
+  per-fact rewrite prompt (`FACT_PROMPT`) silently reintroduced "only mammals"
+  anyway, because deleting a claim leaves room for the model to reinvent it.
+  The regenerated video's *caption* (written separately by
+  `generate_social_metadata`) happened to avoid the error, which briefly masked
+  the fact that the narration and burned-in captions still had it. What
+  actually fixed it: giving the model the correcting fact explicitly ("neither
+  can sloths, hippos, or rhinos") instead of just deleting the wrong claim, so
+  there was no room to reinvent it, and then grepping
+  `viral-result.json["segments"]` — the literal spoken text — for the banned
+  phrase before treating the fix as done.
 
 ## 7. Working agreement
 
