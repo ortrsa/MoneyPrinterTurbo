@@ -78,6 +78,36 @@ views for that curve to render at all. It is the only thing that will
 distinguish "the first second fails" from "they leave in the middle", and that
 distinction decides whether the fix is the opening shot or the episode length.
 
+## 2c. Random But True Facts 5 — first 5 hours (2026-07-29 13:37)
+
+Third consecutive animals episode, second with topic-matched footage, first
+after the elephant-fact correction (§6).
+
+| metric | value |
+|---|---|
+| engaged views (5h) | 387 |
+| stayed to watch | **51.6%** — first time on the channel above the ~50% "average" mark |
+| swiped away | 48.4% |
+| retention curve | not yet processed |
+
+**Three animals episodes in a row, each better than the last:**
+
+| video | stayed |
+|---|---|
+| flamingo (old format) | 36.4% |
+| Facts 4 | ~40% |
+| Facts 5 | **51.6%** |
+
+A single win is a data point. A monotonic rise across three consecutive
+same-topic videos is a trend, and this is the first evidence strong enough to
+start calling the topic-narrowing hypothesis (§5) supported rather than merely
+plausible.
+
+**Still not fully separable:** format changes (synced footage, no caption
+overlap), fact-quality (a shark/tree hook is unusually strong on its own), and
+channel-level algorithm learning all moved together across these three videos.
+None of the three can be credited in isolation yet.
+
 ## 3. What this data supports
 
 **Retention is the bottleneck, not reach or titles.** 33.1% against commonly
