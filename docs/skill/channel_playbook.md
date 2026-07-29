@@ -231,6 +231,22 @@ Full detail in `SKILL.md`; the short version:
   there was no room to reinvent it, and then grepping
   `viral-result.json["segments"]` — the literal spoken text — for the banned
   phrase before treating the fix as done.
+- **Check the species list below before picking facts for a new animal
+  episode.** Flamingo was the channel's best-performing video (36.4% retention,
+  §2), then reappeared as a fact in Facts 6 with no one having checked whether
+  it had been used already. Not wrong to reuse a proven subject, but it should
+  be a deliberate choice, not a repeat nobody tracked.
+
+### Species used so far
+
+| species | episode |
+|---|---|
+| flamingo | standalone video (old format), Facts 6 |
+| wombat, sea otter, cow, crow, octopus, dolphin | Facts 4 |
+| shark, cat, dog, honeybee, elephant/rhino/hippo/sloth (named, not shown), Adelie penguin (African penguin footage) | Facts 5 |
+| owl, giraffe, sea turtle, butterfly, kangaroo, flamingo | Facts 6 |
+
+Update this table whenever a new animal episode is built.
 
 ## 7. Working agreement
 

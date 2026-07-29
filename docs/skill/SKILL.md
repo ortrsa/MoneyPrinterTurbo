@@ -4,7 +4,7 @@ description: Use this skill whenever the user wants to create a finished video f
 compatibility: Requires an AI agent with terminal, network, filesystem, and long-running command support. Supports macOS and Windows and uses uv exclusively.
 metadata:
   author: "harry0703@hotmail.com"
-  version: "2.7.0"
+  version: "2.8.0"
   upstream: "https://github.com/harry0703/MoneyPrinterTurbo"
 ---
 
