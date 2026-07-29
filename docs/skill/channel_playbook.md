@@ -236,6 +236,35 @@ Full detail in `SKILL.md`; the short version:
   §2), then reappeared as a fact in Facts 6 with no one having checked whether
   it had been used already. Not wrong to reuse a proven subject, but it should
   be a deliberate choice, not a repeat nobody tracked.
+- **A verified footage term is not a verified footage *pool*.** `probe_footage.py`
+  and manual checks only look at each term's *first* result. `download_segment_materials`
+  pulls up to `MAX_CLIPS_PER_TERM` (3) per term, and on Facts 7 both "cuttlefish"
+  and "mantis shrimp" had a real animal at result 0 but sea turtles, a stingray,
+  a fish school, and a seafood market scene scattered through results 1-2 of the
+  *same* pinned terms. Two of eight segments ended up on the wrong animal despite
+  every term having been individually confirmed good. Some species (this pair,
+  alongside sloth) simply do not have deep, clean coverage on Pexels no matter
+  which synonym is tried - the honest fix was checking every unique candidate
+  clip across all pinned terms, not just each term's top hit, and when only one
+  clip out of six actually showed the right animal, splicing that single clip
+  into the segment's exact window directly (`ffmpeg` trim + concat, matching
+  resolution/fps, replacing only the video stream so the full original audio
+  stays untouched and in sync) rather than gambling on another full render.
+- **A Whisper transcription can silently corrupt an otherwise-correct episode.**
+  On the same Facts 7 render, the narration said "hearts" twice (heart
+  regeneration, then again a sentence later). `faster-whisper`, conditioning
+  each segment on previously transcribed text by default, got stuck on the
+  second occurrence and transcribed the following ~30 seconds of real,
+  perfectly good narration as the word "hearts" repeated roughly thirty times.
+  That collapsed the back half of the word-level timeline to a single
+  timestamp, and every fact after it got squeezed into a zero-duration window -
+  a pure transcription bug, unrelated to facts or footage, that would have been
+  invisible without checking `segment_timings` for duplicate/zero-length
+  windows. Fixed for good by passing `condition_on_previous_text=False` to
+  `transcribe_word_timings()` (`app/services/viral.py`). If a future episode's
+  `segment_timings` ever shows two adjacent entries with identical start/end,
+  suspect this same failure mode again - check `segments` for large repeated-word
+  runs before assuming the footage or facts are at fault.
 
 ### Species used so far
 
@@ -244,6 +273,8 @@ Full detail in `SKILL.md`; the short version:
 | flamingo | standalone video (old format), Facts 6 |
 | wombat, sea otter, cow, crow, octopus, dolphin | Facts 4 |
 | shark, cat, dog, honeybee, elephant/rhino/hippo/sloth (named, not shown), Adelie penguin (African penguin footage) | Facts 5 |
+| owl, giraffe, sea turtle, butterfly, kangaroo | Facts 6 (flamingo repeated, see above) |
+| axolotl, mantis shrimp, cuttlefish, hedgehog, peacock, seahorse | Facts 7 |
 | owl, giraffe, sea turtle, butterfly, kangaroo, flamingo | Facts 6 |
 
 Update this table whenever a new animal episode is built.
