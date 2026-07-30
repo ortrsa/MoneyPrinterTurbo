@@ -310,6 +310,17 @@ Full detail in `SKILL.md`; the short version:
   there was no room to reinvent it, and then grepping
   `viral-result.json["segments"]` — the literal spoken text — for the banned
   phrase before treating the fix as done.
+  **Confirmed again on Facts 10**, before rendering rather than after: the raw
+  fact said the bumblebee bat is "arguably the smallest mammal on Earth, by
+  body length" (the honest phrasing — the Etruscan shrew is smaller by mass);
+  `FACT_PROMPT`'s dry-run rewrite dropped the qualifier and turned it into "it's
+  tied as the absolute smallest mammal on Earth" — a false, invented absolute.
+  Caught in the `--dry-run` script text before any TTS/render cost was spent,
+  fixed by rewriting the raw fact to state the correction explicitly ("the
+  smallest bat... but not by weight, since the Etruscan shrew is lighter"),
+  which the rewrite preserved intact on the next pass. `--dry-run` is worth
+  running as a matter of course before every real render for exactly this
+  check, not just when a correction is already suspected.
 - **Check the species list below before picking facts for a new animal
   episode.** Flamingo was the channel's best-performing video (36.4% retention,
   §2), then reappeared as a fact in Facts 6 with no one having checked whether
@@ -329,6 +340,26 @@ Full detail in `SKILL.md`; the short version:
   into the segment's exact window directly (`ffmpeg` trim + concat, matching
   resolution/fps, replacing only the video stream so the full original audio
   stays untouched and in sync) rather than gambling on another full render.
+- **Bats are close to a total Pexels gap, worse than sloth.** Building Facts 10,
+  roughly 20 candidate search terms were probed (`bat`, `vampire bat`, `bat
+  flying`, `bat hanging upside down`, `bumblebee bat`, `bat teeth`, `bat wing
+  membrane`, `tiny bat`, and more) and only **two** returned a real bat: one
+  close-up of flying foxes hanging in a tree, one wide shot of a colony
+  emerging at dusk. Every other term resolved to Halloween paper-bat
+  decorations, a kid in vampire-fang makeup, a Halloween pumpkin prop, a
+  baseball bat (word collision), an owl, a chicken, or a praying mantis. Pinning
+  the two good terms still wasn't enough: `download_segment_materials`'
+  9-clip-per-segment pool for `gray headed flying fox,fruit bat,megabat` also
+  contained a flock-of-pigeons-in-a-plaza clip and a ducks-on-a-pond clip, and
+  random selection put one or both into 4 of the episode's 6 fact segments
+  despite every pinned term's rank-0 result being a real bat. Caught only by
+  sampling frames across the *rendered output*, not by re-checking the search
+  terms — the terms were never wrong, the pool behind them was contaminated.
+  Fixed with the same splice technique as the Facts 7 cuttlefish case, looping
+  the one verified close-up clip to cover all four contaminated segments. Two
+  Veo prompts were handed to the user for future variety (a moodier
+  two-bats-roosting shot for the vampire-bat fact, a scale shot for the
+  bumblebee-bat fact) but not yet generated as of this writing.
 - **A Whisper transcription can silently corrupt an otherwise-correct episode.**
   On the same Facts 7 render, the narration said "hearts" twice (heart
   regeneration, then again a sentence later). `faster-whisper`, conditioning
@@ -356,7 +387,7 @@ Full detail in `SKILL.md`; the short version:
 | axolotl, mantis shrimp, cuttlefish, hedgehog, peacock, seahorse | Facts 7 |
 | axolotl, mantis shrimp, cuttlefish | Facts 8 (length experiment, split from Facts 7) |
 | hedgehog, peacock, seahorse | Facts 9 (length experiment, split from Facts 7) |
-| owl, giraffe, sea turtle, butterfly, kangaroo, flamingo | Facts 6 |
+| bat (flying fox / megabat footage) | Facts 10 |
 
 Update this table whenever a new animal episode is built.
 
