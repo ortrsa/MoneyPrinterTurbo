@@ -6,6 +6,13 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
+> **Strategy note (2026-07-29):** [`shorts_growth_guide.md`](shorts_growth_guide.md)
+> is now the adopted strategy and takes precedence on targets. It sets **≤20s
+> length** and **≥70% stayed-to-watch**; our best measured figure is 51.6% at
+> ~52s. The §5 strategy decisions below still hold on topic mix, but the length
+> hypothesis in §5 is now a governing requirement rather than an idea to try
+> eventually.
+
 Measurements are dated. Anything not marked as measured is reasoning, and is
 labelled as such — several conclusions below rest on very few data points, and
 saying so is more useful than sounding confident.
