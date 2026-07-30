@@ -59,10 +59,15 @@ HUMANIZATION_NOTE = (
     "length instead of writing uniform-length sentences."
 )
 
+# 每条事实的词数上限直接决定成片长度：25 词一条大约 8-9 秒口播，六条就是
+# 50-60 秒；要压到 20 秒以内（增长指南 Rank 1 的硬指标）只能同时减少条数
+# 并把每条压到 14 词左右（约 4-5 秒）。所以词数必须可调，不能写死。
+DEFAULT_FACT_MAX_WORDS = 25
+
 FACT_PROMPT = (
     "Rewrite this fact as ONE or TWO short punchy sentences for a rapid-fire facts "
     "compilation video. Open directly with the surprising claim - no greeting, no "
-    "'did you know', no preamble, no filler words. Keep it under 25 words. "
+    "'did you know', no preamble, no filler words. Keep it under {max_words} words. "
     f"Never use any of these overused AI-writing phrases: {AI_TELL_BLOCKLIST}. "
     f"{HUMANIZATION_NOTE} "
     "Write in {language}."
@@ -193,6 +198,7 @@ def build_scripts(
     episode: int,
     outro: str | None = None,
     hook: str | None = None,
+    fact_max_words: int = DEFAULT_FACT_MAX_WORDS,
 ) -> dict:
     """调用项目内的 LLM 服务，把原始事实改写成口播稿并生成钩子。"""
     from app.services import llm
@@ -203,7 +209,9 @@ def build_scripts(
             video_subject=fact,
             language=language,
             paragraph_number=1,
-            video_script_prompt=FACT_PROMPT.format(language=language),
+            video_script_prompt=FACT_PROMPT.format(
+                language=language, max_words=fact_max_words
+            ),
         ).strip()
         logger.info(f"fact: {line}")
         tells = find_ai_tells(line)
@@ -460,6 +468,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--language", default="en-US")
     parser.add_argument("--voice-name", default="gemini:Puck-Male")
     parser.add_argument("--fact-count", type=int, default=DEFAULT_FACT_COUNT)
+    parser.add_argument(
+        "--fact-max-words",
+        type=int,
+        default=DEFAULT_FACT_MAX_WORDS,
+        help=(
+            "每条事实口播的词数上限，直接决定成片长度。25 词约 8-9 秒一条；"
+            "要做 20 秒以内的短版本，配合 --fact-count 3 用 14 左右。"
+        ),
+    )
     parser.add_argument("--root", type=Path, default=PROJECT_ROOT)
     parser.add_argument(
         "--video-terms",
@@ -552,6 +569,7 @@ def main(argv: list[str] | None = None) -> int:
         episode=args.episode,
         outro=args.outro,
         hook=args.hook,
+        fact_max_words=args.fact_max_words,
     )
     spoken_segments = [parts["hook"], *parts["facts"], parts["outro"]]
     script_text = " ".join(spoken_segments)
