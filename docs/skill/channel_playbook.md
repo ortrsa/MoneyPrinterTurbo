@@ -244,6 +244,34 @@ never wombats or sloths.
    scientists needed years to explain it"). A close-up of the thing before a
    word is spoken is the stronger opening.
 
+## 5a. Outlier topic research (adopted 2026-07-30)
+
+Guide Rank 3 (9.0/10): stop inventing topics from scratch; find a niche channel's
+proven outlier video and remake its *topic* with fresh clips and facts. Full
+method now lives in `SKILL.md` step 0 — this entry records the first research
+pass and its honest limits.
+
+**What a general web search actually returned:** no per-video view counts (this
+pipeline has no YouTube Data API access, and `WebSearch`/`WebFetch` only reach
+channel-level aggregates and secondhand blog summaries). One concrete channel
+data point surfaced repeatedly: **The Fact Animal**, ~130K subscribers and ~30M
+views across 22 videos (≈1.4M views/video average) — a strong ratio, but that is
+a channel average, not a verified outlier video, and no individual video's view
+count could be confirmed from here.
+
+**Candidate topic categories reported (secondhand, unverified) as strong
+performers in this niche:** ferocious dog breeds/temperament rankings, animal
+strength comparisons, bat behavior oddities, frog abilities, sloth statistics.
+Treat these as directional leads, not proof — the honest gap above still stands.
+Against the species table below: `dog` and `sloth` (named, not shown) have
+already appeared (Facts 5), so a dog or sloth episode would be a deliberate
+repeat with a new angle, not virgin territory; bat and frog are unused.
+
+**If a real go/no-go on a specific outlier claim is ever needed:** that requires
+either the user checking a channel's Shorts tab sorted by "Popular" in a
+browser, or wiring a YouTube Data API key into this pipeline. Say so rather than
+treating a blog-post summary as equivalent.
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
@@ -369,3 +397,8 @@ monetisation.
   Veo would provide a real sloth for roughly one clip's cost.
 - Content calendar still built around the old five-topic mix. Rebuilding it
   around the §5 shortlist has not been done.
+- **No YouTube Data API access from this pipeline.** §5a's outlier-topic research
+  had to rely on secondhand web summaries instead of real per-video view counts.
+  A read-only Data API key (or the user manually sorting a channel's Shorts by
+  "Popular") would let future topic research verify an actual outlier instead of
+  a reported channel average.
