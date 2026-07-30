@@ -115,6 +115,43 @@ overlap), fact-quality (a shark/tree hook is unusually strong on its own), and
 channel-level algorithm learning all moved together across these three videos.
 None of the three can be credited in isolation yet.
 
+## 2d. Length experiment — built 2026-07-30, results pending
+
+The growth guide's Rank 1 requires **≤20s**; every retention figure we own comes
+from 52–62s videos, so length has never actually been tested. This experiment
+isolates it.
+
+**Design:** Facts 7 (57.1s, 6 facts) was split into two 3-fact shorts using the
+*same already-fact-checked facts and same already-verified footage terms*, so the
+only variable that moves is length.
+
+| variant | length | facts | content |
+|---|---|---|---|
+| A (control) | 57.1s | 6 | the original Facts 7 |
+| B — Facts 8 | 25.6s | 3 | axolotl, mantis shrimp, cuttlefish |
+| C — Facts 9 | 25.6s | 3 | hedgehog, peacock, seahorse |
+
+All three archived side by side in `/tmp/experiment_length/` with their
+`viral-result.json`. The Facts 7 task directory was left fully intact.
+
+**Reading the result:** publish B and C a day apart and compare stayed-to-watch
+against the long-format baseline (Facts 5 at 51.6%, Facts 7 pending). 65–70%+ on
+the shorts means the guide is right and the format changes. ~50% means length was
+not the constraint and the real problem is elsewhere.
+
+**Two honest caveats on this experiment:**
+
+- **25.6s missed the ≤20s target.** Facts were capped at 14 words expecting
+  ~4-5s each; Gemini TTS actually delivers 5–6.5s per fact. Hitting sub-20s needs
+  ~10 words per fact or dropping the spoken outro. 25.6s vs 57.1s is still a real
+  length test, just not a test of the guide's actual threshold.
+- **Compression cost factual precision.** Facts 8's axolotl line became "regrow
+  damaged brains and accept *any* organ transplants" — the verified claim is
+  *parts* of the brain and transplants *from other axolotls*. Fourteen words left
+  no room for the qualifiers. This is itself a finding about the short format:
+  fewer words means less space to stay precise, so short episodes need their
+  facts chosen for brevity rather than truncated after the fact.
+
 ## 3. What this data supports
 
 **Retention is the bottleneck, not reach or titles.** 33.1% against commonly
@@ -223,6 +260,13 @@ Full detail in `SKILL.md`; the short version:
   (`octopus` → carpaccio), a species the library lacks (sloth → sloth *bears*),
   and any year in a query (`1956 summer workshop` → nothing).
 - Pin verified terms with `--segment-terms` so the LLM cannot overwrite them.
+- **Order the pinned terms so the verified-good one is FIRST.** The first term in
+  a segment's list is the primary — it is exempt from cross-segment URL de-dup and
+  supplies the opening cut, the one that plays while the fact is actually spoken.
+  Pinning `cuttlefish swimming,common cuttlefish,cuttlefish` put a term whose top
+  result is a *sea turtle* in the primary slot and shipped the turtle again, even
+  though `common cuttlefish` (the verified one) was right there in position two.
+  Same mistake twice, once in Facts 7 and again in Facts 8.
 - **Fact-check claims with real web search before rendering, not after — and
   when a correction is needed, verify the actual spoken script, not just the
   generated caption/description.** On Facts 5, "elephants are the only mammal
@@ -282,6 +326,8 @@ Full detail in `SKILL.md`; the short version:
 | shark, cat, dog, honeybee, elephant/rhino/hippo/sloth (named, not shown), Adelie penguin (African penguin footage) | Facts 5 |
 | owl, giraffe, sea turtle, butterfly, kangaroo | Facts 6 (flamingo repeated, see above) |
 | axolotl, mantis shrimp, cuttlefish, hedgehog, peacock, seahorse | Facts 7 |
+| axolotl, mantis shrimp, cuttlefish | Facts 8 (length experiment, split from Facts 7) |
+| hedgehog, peacock, seahorse | Facts 9 (length experiment, split from Facts 7) |
 | owl, giraffe, sea turtle, butterfly, kangaroo, flamingo | Facts 6 |
 
 Update this table whenever a new animal episode is built.
