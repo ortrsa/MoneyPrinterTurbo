@@ -483,6 +483,16 @@ def main(argv: list[str] | None = None) -> int:
             "必须靠它才成立——否则渲染出来的是另一版没被核对过的文本。"
         ),
     )
+    parser.add_argument(
+        "--pinned-comment",
+        default=None,
+        help="发布后建议置顶的评论文案，随成片一起发去 Telegram。不传则跳过这一项。",
+    )
+    parser.add_argument(
+        "--no-telegram",
+        action="store_true",
+        help="渲染成功后不自动发去 Telegram（默认会发；需要先在 config.toml 配 [telegram]）。",
+    )
     args = parser.parse_args(argv)
 
     if not MIN_SECONDS <= args.target_seconds <= MAX_SECONDS:
@@ -721,6 +731,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     print("STORY_RESULT")
     print(json.dumps(result, indent=2, ensure_ascii=False))
+
+    if not args.no_telegram:
+        from send_to_telegram import send_episode
+
+        send_episode(result, root=args.root, pinned_comment=args.pinned_comment)
+
     return 0
 
 

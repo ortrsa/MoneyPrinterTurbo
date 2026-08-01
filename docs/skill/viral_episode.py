@@ -551,6 +551,16 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="只生成脚本和元数据，不渲染视频",
     )
+    parser.add_argument(
+        "--pinned-comment",
+        default=None,
+        help="发布后建议置顶的评论文案，随成片一起发去 Telegram。不传则跳过这一项。",
+    )
+    parser.add_argument(
+        "--no-telegram",
+        action="store_true",
+        help="渲染成功后不自动发去 Telegram（默认会发；需要先在 config.toml 配 [telegram]）。",
+    )
     args = parser.parse_args(argv)
 
     skill_dir = Path(__file__).resolve().parent
@@ -744,6 +754,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     print("VIRAL_RESULT")
     print(json.dumps(result, indent=2, ensure_ascii=False))
+
+    if not args.no_telegram:
+        from send_to_telegram import send_episode
+
+        send_episode(result, root=args.root, pinned_comment=args.pinned_comment)
+
     return 0
 
 
