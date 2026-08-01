@@ -185,6 +185,41 @@ hours of data, following the §2b/§2c format — this is also another data poin
 for or against §2d's length question, since it's a long-format episode built
 after the guide was adopted.
 
+## 2f. Random But True Facts 11 — published 2026-08-01, results pending
+
+First real test of §5's two untested hypotheses: cut to **25.7s** (well inside
+the 25-30s target, well under the usual 50-60s) and the hook **opens directly
+on the frog's face in the water**, no scene-setting line before the visual.
+Topic: frog biology (skin breathing, third eyelid, eyeball-assisted
+swallowing) — picked from §5a's unused-category shortlist (bat now used in
+Facts 10, so frog was next).
+
+**Planned facts were glass frog, wood frog (freeze-survival), and poison dart
+frog — none of them survived footage probing.** Every specific-species query
+(`glass frog transparent`, `poison dart frog colorful`, `wood frog winter
+snow`, `red eyed tree frog`) returned the same two generic clips (a pond frog
+floating, a frog on a lily pad) or, for `wood frog winter snow`, a literal log
+in snow (word collision on "wood"). Same trap as sloths/wombats, now confirmed
+for frogs as a genus, not just specific rare species. Facts were rewritten
+around what the two real clips actually show — ordinary frog biology instead
+of the exotic species — rather than rendering with a known-bad match.
+
+**`refine_hook()` produced a near-duplicate of fact 1 in the list format, not
+just the story format.** §7a documented this failure mode for
+`story_episode.py` and explicitly disabled the call there; this is the first
+confirmed case of the same failure in `viral_episode.py`'s list flow. The
+auto-generated hook ("Frogs breathe entirely through their skin, drinking
+oxygen straight from water.") was nearly word-for-word fact 1 ("Frogs breathe
+right through their skin, absorbing oxygen straight from the water.") spoken
+back to back. `_too_similar()` exists in `viral.py` but evidently didn't fire
+here, or isn't wired into `refine_hook`'s own gate the way it is in
+`build_story_script`. Fixed by passing `--hook` manually (skips
+`refine_hook()` entirely, same escape hatch the story flow uses by design).
+**Worth checking `viral.py`'s `refine_hook` similarity gate against
+`_too_similar()`'s threshold** — this may be a real bug, not a one-off.
+
+No retention/view numbers yet.
+
 ## 3. What this data supports
 
 **Retention is the bottleneck, not reach or titles.** 33.1% against commonly
@@ -421,6 +456,7 @@ Full detail in `SKILL.md`; the short version:
 | axolotl, mantis shrimp, cuttlefish | Facts 8 (length experiment, split from Facts 7) |
 | hedgehog, peacock, seahorse | Facts 9 (length experiment, split from Facts 7) |
 | bat (flying fox / megabat footage) | Facts 10 |
+| frog (generic pond/tree frog footage only -- glass frog, wood frog, poison dart frog have no real Pexels coverage in this tier) | Facts 11 |
 
 Update this table whenever a new animal episode is built.
 
