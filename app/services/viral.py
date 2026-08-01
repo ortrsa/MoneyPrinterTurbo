@@ -65,13 +65,25 @@ def transcribe_word_timings(
 
     `base.en` 在 CPU 上对几十秒的英文旁白只需几秒，精度足够做字幕对齐；
     需要更高精度时可传入更大的模型。
+
+    `condition_on_previous_text=False` 是必须的，不是可选优化：默认值为
+    True 时，Whisper 会把已经转录的文本喂回去作为下一段的上下文，遇到某些
+    音频（这里是旁白里出现了两次 "hearts"）会诱发重复幻觉——实测中模型在
+    第一次识别到 "hearts" 后卡住，把接下来三十秒的音频全部转录成同一个词
+    重复几十遍，导致 30 秒的时间轴被压缩成几乎为零，下游对齐把后面几条
+    事实全部推到同一个时间点。这不是偶发的音频质量问题，是 Whisper 这个
+    参数在特定重复词模式下的已知失败模式；关掉上下文条件后同一段音频转录
+    完全正常。
     """
     from faster_whisper import WhisperModel
 
     logger.info(f"transcribing word timings: model={model_size}, device={device}")
     model = WhisperModel(model_size, device=device, compute_type=compute_type)
     segments, _info = model.transcribe(
-        audio_file, word_timestamps=True, vad_filter=True
+        audio_file,
+        word_timestamps=True,
+        vad_filter=True,
+        condition_on_previous_text=False,
     )
 
     words: list[WordTiming] = []
@@ -341,14 +353,24 @@ def _caption_events(
     highlight = _ass_color(highlight_color)
     events: list[str] = []
 
-    for chunk in chunks:
+    for chunk_index, chunk in enumerate(chunks):
+        # 每块的首词都会提前 lead_seconds 出现（读字比听字快）。如果上一块
+        # 的末词仍按自己的 word.end 收尾，这一提前量就会让两块在同一个
+        # \pos 上重叠约 lead_seconds，画面上表现为两行字叠印在一起。
+        # 因此把本块的结束时间夹到下一块出现的那一刻：既消除叠字，
+        # 也顺带填掉块间静音时的空白闪烁。
+        if chunk_index + 1 < len(chunks):
+            chunk_limit = max(0.0, chunks[chunk_index + 1][0].start - lead_seconds)
+        else:
+            chunk_limit = total_duration
+
         for i, word in enumerate(chunk):
             start = max(0.0, word.start - lead_seconds)
             # 高亮持续到下一个词开始，避免词间静音时字幕闪烁回全白
             if i + 1 < len(chunk):
                 end = max(start, chunk[i + 1].start - lead_seconds)
             else:
-                end = max(start, min(word.end, total_duration))
+                end = max(start, min(chunk_limit, total_duration))
             if end <= start:
                 continue
 

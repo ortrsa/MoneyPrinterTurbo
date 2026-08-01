@@ -4,7 +4,7 @@ description: Use this skill whenever the user wants to create a finished video f
 compatibility: Requires an AI agent with terminal, network, filesystem, and long-running command support. Supports macOS and Windows and uses uv exclusively.
 metadata:
   author: "harry0703@hotmail.com"
-  version: "2.3.0"
+  version: "3.0.0"
   upstream: "https://github.com/harry0703/MoneyPrinterTurbo"
 ---
 
@@ -30,6 +30,36 @@ Unless the user requests otherwise, generate one Chinese `9:16` portrait video w
 
 There is no guaranteed-viral setting, but these defaults measurably improve retention on short-form platforms. Apply them unless the user's request already specifies its own script, hook, or tone.
 
+> **Working on the `@RBTfacts` "Random But True" channel? Read these two first.**
+> - [`shorts_growth_guide.md`](shorts_growth_guide.md) — the **adopted strategy**,
+>   ranked by impact. It governs length, hooks, titles, tags, cadence and topic
+>   selection. Where it conflicts with our own measurements, both are stated.
+> - [`channel_playbook.md`](channel_playbook.md) — the **measured analytics** for
+>   this channel, which topics have and have not worked, and the production traps
+>   already paid for.
+>
+> This file says how to build a video; the guide says what to aim for; the
+> playbook says what actually happened. Update the playbook when new numbers
+> arrive. Note the guide targets **≤20s and ≥70% stayed-to-watch**, which the
+> current 6-fact/50-60s format does not meet — do not build a long episode on
+> autopilot without checking that decision first.
+>
+> **Two flows exist. Pick the right one before writing anything:**
+> - **List format** — `viral_episode.py`. N unrelated facts on one theme, `N/6`
+>   counter, ~55s. Everything below describes this flow.
+> - **Story format** — `story_episode.py`. One true story told as escalating
+>   beats, 30–90s, no counter, with a burned-in 2-line title banner. Built for
+>   narrative leads (a historical event, a true-crime case). See
+>   [`channel_playbook.md`](channel_playbook.md) §7a for its rules, its two
+>   known traps (`refine_hook` must not be used; scripts must be locked with
+>   `--from-dry-run` before rendering or the fact-check is void), and the
+>   copyright workflow when the lead comes from someone else's post.
+
+0. **Research a proven topic before writing facts — do not invent from scratch.** Per the growth guide's Rank 3 (9.0/10), the highest-leverage step happens before a single fact is drafted: find a topic with a demonstrated track record in the niche and remake *that topic*, not a topic invented cold.
+   - Search recently-active channels in the niche (e.g. "animal facts shorts channel viral") for ones with a visibly strong ratio of views to subscriber count or video count — that ratio is the signal a channel found something that works, not the channel's absolute size.
+   - Within a promising channel, look for an **outlier**: a video running 5-10x that channel's typical view count. Its *topic* (dog temperament rankings, animal-strength comparisons, a specific species' odd behavior) is the proven element — never copy its script, footage, or wording, only the subject.
+   - **Known tooling gap: this pipeline has no YouTube Data API access, so exact per-video view counts are not queryable from here.** `WebSearch`/`WebFetch` only surface channel-level aggregates and secondhand summaries (blog posts, vidIQ pages), not a sortable-by-views Shorts tab. Treat anything found this way as a *topic-category* signal ("ferocious dog breeds," "animal strength records" are reported as strong performers), not a verified outlier claim — record it as such rather than presenting it as measured. If precise per-video numbers matter for a decision, that requires the user to open the channel's Shorts tab sorted by "Popular" in a browser, or a YouTube Data API key wired into the pipeline; flag that gap explicitly rather than quietly substituting a weaker signal for it.
+   - Cross-check any candidate topic/species against the "Species used so far" table in `channel_playbook.md` before committing, so a proven topic is a deliberate repeat or a genuine gap, not an accidental collision.
 1. **Hook-first script, no preamble.** Generate the script with a `video_script_prompt` that forces it to open with the single most surprising or counter-intuitive part of the topic in the first sentence — no greetings, no "did you know," no scene-setting:
    ```text
    Open with the most surprising or counter-intuitive part of this fact in the very first sentence - no greeting, no preamble, no 'did you know' filler. Use short, punchy sentences with no filler words. Write in English.
@@ -56,6 +86,10 @@ There is no guaranteed-viral setting, but these defaults measurably improve rete
 6. **Tight pacing.** Prefer `paragraph_number=1` (the default) and a short script over a long one — a Short that ends before it overstays its welcome retains better than one padded with extra sentences.
 7. **Always keep subtitles and background music on** (already the default) — both measurably help retention and accessibility.
 8. **Generate a title, caption, and hashtags alongside the video.** `app/services/llm.py` already has `generate_social_metadata(video_subject, video_script, language="en", platform="youtube_shorts")` for this, but it is not wired into `cli.py`. Call it directly in a short Python snippet (pass it the same body+CTA script used for generation) and hand the title/caption/hashtags to the user together with the video file as one packaged deliverable — do not make the user ask for these separately.
+
+8a. **Both `viral_episode.py` and `story_episode.py` deliver the upload kit to Telegram automatically** once a real (non-`--dry-run`) render finishes, via `docs/skill/send_to_telegram.py`. Requires `[telegram]` `bot_token`/`chat_id` in `config.toml` (gitignored — create a bot via @BotFather, message it once, read the chat_id from `https://api.telegram.org/bot<token>/getUpdates`). Sends five separate messages: the video, then title/caption+hashtags/tags(plain, no `#`)/pinned-comment each as a "label:" message followed by a "content" message, so a phone user can long-press-copy just the content. Pass `--pinned-comment "..."` when you have one — the pipeline does not generate this field itself. `--no-telegram` skips delivery (e.g. for test renders); delivery failures are logged as warnings and never fail an otherwise-successful render.
+
+8b. **Inbound side: `docs/skill/check_telegram_inbox.py` polls for new topic/story messages sent to the same bot,** idempotently (state in `storage/telegram_state.json`, gitignored). **This is manual-only by design — not on a schedule.** Run it only when the channel owner explicitly asks for a check. When it returns non-empty, treat every message as a full episode to build end-to-end (fact-check independently even if the message carries its own sources, pick list vs. story format by content, verify footage and output as usual) — see `channel_playbook.md` §9 for the full handoff, including why the scheduled version was attempted and shelved.
 9. **Cross-post.** Suggest posting the same file to TikTok and Instagram Reels in addition to YouTube Shorts — it is outside this skill's scope to automate, but worth a one-line mention since it meaningfully expands reach for zero extra generation cost.
 
 10. **Views do not equal subscribers — hand over the conversion steps too.** A healthy Shorts view-to-subscriber rate is roughly **0.5-2%**, so a video needs volume before subscriber counts move; do not let the user read a low number as failure. What actually converts, in rough order of impact at under 1,000 subscribers:
@@ -92,11 +126,46 @@ Modeled on BrainBlud (~596K subscribers, ~188M views) plus retention research. W
 3. **Close on a direct but content-specific CTA** (see Shorts Virality Guidelines item 5 for the full rule). Asking for a follow or comment is allowed and is the strongest conversion moment in the video — what fails is a generic, reused line. Write a new one per episode, tie it to that episode's content, and rotate FOLLOW / COMMENT / BOTH. Keep it to one line: a long outro with no reason to stay is a documented drop-off cause.
 4. **Captions: 3 words per screen, centered, Anton, active word in yellow.** Base white, `#FFE500` highlight, black outline ~9% of font size, font size ~6% of frame height. Highlight fires ~60ms before the word (reading outruns listening). Subtitling research puts the comfortable ceiling at 160-200 WPM — keep narration under it. The specific claim that karaoke captions beat static ones on retention is **unverified marketing copy**, but it is the universal convention across CapCut/Submagic/Opus Clip.
 5. **Counter and progress bar are a bet, not a proven win.** No published A/B test exists for them in short video. The supporting evidence is the endowed-progress effect (34% vs 19% completion — in a loyalty-card field experiment, not video). None of the named facts channels visibly use them, so treat this as a differentiator to test, not table stakes.
-6. **Generic "satisfying" B-roll, unrelated to the facts.** Pass `--video-terms` explicitly with categories like kinetic sand, slime, hydraulic press, soap cutting, paint pouring. Rotate terms between episodes so consecutive videos don't reuse footage.
+6. **Footage matches the fact being spoken (`--footage-mode synced`, the default).** Each spoken segment gets its own LLM-generated Pexels search terms, and its clips are laid into that segment's exact whisper-derived time window — so when fact 3 is about voice cloning, the screen shows a microphone, not leftover footage from fact 1. Terms are de-duplicated across the episode (both the search phrases and the resulting clip URLs), because near-identical facts otherwise all resolve to the same "person typing on laptop" shot. Search terms must name a *filmable scene* — concrete objects, people doing things, real places. Abstract prompts ("technology concept", "innovation") return generic blue circuit-board filler, which is why the prompt bans them. `--footage-mode generic` restores the old behavior: one global `--video-terms` pool of satisfying B-roll (kinetic sand, slime, hydraulic press) with no relationship to the narration. Prefer `synced`; generic is a fallback for topics too abstract to film.
 7. **Numbered series title** (`Random But True Facts 2 👀`). Numbering aids channel-page binging and loyalty; it is **not** a discovery lever, since Shorts recommendation favors recent uploads. What converts a numbered series into subscribers is a consistent recognizable format, not the number.
 8. **Frame 1 is the thumbnail.** Custom Shorts thumbnails do not appear in the swipe feed — only in search/grid/shelf placements. Judge the opening frame on retention-after-view, not click appeal. The general thumbnail-legibility rules (≤3 visual elements, high contrast, readable at a glance, bold sans-serif text ≤4 words) still apply to that first frame — our karaoke caption design (3 words, Anton, black outline on white/yellow) already satisfies these by construction. One rule genuinely does not transfer: "a face with a shocked expression" boosts click-through in face-forward content, but this channel is deliberately faceless B-roll, so there is no face to add — don't force one in.
 9. **Trend-jacking is deliberately out of scope for now.** Tying facts to breaking news/trending topics is a plausible future format (discussed and shelved per the user), not something to build speculatively into this pipeline.
 10. **Cost model: keep it near zero.** Pexels footage, Gemini TTS, and local whisper are free or negligible; spend on Veo image-to-video clips only for hero shots. Cross-post the same file to TikTok and Reels — no extra generation cost.
+
+### Probe the stock library before rendering, not after
+
+**Always do this before an episode whose facts name specific animals, objects, places or historical periods.** A render takes about six minutes; a probe takes thirty seconds. Skipping it once cost five consecutive rejected renders of a single animals episode.
+
+For each fact whose subject might be rare, search Pexels directly, download the top result, extract one frame, and look at it:
+
+```python
+from app.services import material
+from app.models.schema import VideoAspect
+r = material.search_videos_pexels("wombat", minimum_duration=1, video_aspect=VideoAspect.portrait)
+material.save_video(video_url=r[0].url, save_dir="/tmp/probe")
+```
+
+Then `ffmpeg -ss 1 -i clip.mp4 -frames:v 1 out.jpg` (the binary lives under `.venv/lib/python3.11/site-packages/imageio_ffmpeg/binaries/`) and read the image. Pass every verified term to `--segment-terms` so the LLM cannot overwrite it.
+
+**Result counts prove nothing.** Pexels returns roughly 20 results for any query, including ones it has no real footage for — `wombat`, `sloth` and `animal digestion` all returned about 20. Only looking at frames distinguishes a real match from fuzzy filler. For the same reason, zero "black filler" warnings in the log is not evidence the footage is right.
+
+Three failure modes worth probing for specifically:
+
+- **A common word with a dominant other meaning.** `octopus` returns octopus *carpaccio* as often as the animal — a plate of food under a fact about octopus intelligence. Qualify it: `octopus underwater`.
+- **A species the library simply lacks.** No wording finds tree sloths; `sloth` returns sloth *bears* in a zoo. Either pick a different fact, use an adjacent subject the script already names (a fact comparing sloths to dolphins can legitimately show a dolphin), or generate the shot with Veo.
+- **A year or date in the query.** Stock is tagged by what is in the shot, never by when an event happened. Describe the period's look instead.
+
+When verifying the finished render, sample **every cut**, not one frame per segment. A segment of three cuts judged on its midpoint hides two thirds of what shipped — that mistake made a correct octopus segment look like a failure.
+
+### Shot pacing: what transfers from the 6-step transformation formula
+
+The widely-circulated 6-step viral formula (Declare → Assessment → Isolate → Process → Build → Reveal) was written for **transformation/restoration** videos, where one object visibly changes over 60 seconds. A facts compilation has no single object and no transformation, so most of it cannot be applied literally. The parts that genuinely transfer:
+
+- **Declare (0-3s) → the opening shot must be readable instantly.** This is the one step that transfers unchanged. The hook segment's search terms carry an extra constraint requiring a clean scene, single clear subject, strong lighting, uncluttered background — if the viewer spends half a second parsing the composition, the hook's words are already gone.
+- **Isolate → keep cuts short.** The formula's 1-1.5s rapid cuts are too fast here: each fact runs 6-11 seconds and the viewer needs long enough to connect picture to claim. `plan_cuts()` targets ~3s and splits each fact's window into equal cuts (typically 2-4), which keeps visual density high without making the footage unreadable. Equal splitting also structurally prevents the sub-second tail sliver that `plan_clip_duration()` fixes on the generic path.
+- **Reveal → close the loop.** The outro segment gets its own terms rather than trailing off on whatever clip was last, so the final seconds are deliberate.
+
+What does **not** transfer: Assessment (macro shots of calipers and measurement tools), Process (time-lapse of a chemical/mechanical change), and Build (reassembly with satisfying clicks) all presuppose a physical object being worked on. Do not fabricate a fake "measurement" or "before/after" beat for a facts video — there is nothing being transformed, and the mismatch reads as filler. The before/after retention trick at the end (viewers rewinding to re-check the change, pushing watch time past 100%) likewise has no equivalent here.
 
 ### Fallback: MoviePy captions without the overlay
 

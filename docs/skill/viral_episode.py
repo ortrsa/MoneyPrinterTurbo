@@ -25,8 +25,10 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
+import uuid
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -57,10 +59,15 @@ HUMANIZATION_NOTE = (
     "length instead of writing uniform-length sentences."
 )
 
+# 每条事实的词数上限直接决定成片长度：25 词一条大约 8-9 秒口播，六条就是
+# 50-60 秒；要压到 20 秒以内（增长指南 Rank 1 的硬指标）只能同时减少条数
+# 并把每条压到 14 词左右（约 4-5 秒）。所以词数必须可调，不能写死。
+DEFAULT_FACT_MAX_WORDS = 25
+
 FACT_PROMPT = (
     "Rewrite this fact as ONE or TWO short punchy sentences for a rapid-fire facts "
     "compilation video. Open directly with the surprising claim - no greeting, no "
-    "'did you know', no preamble, no filler words. Keep it under 25 words. "
+    "'did you know', no preamble, no filler words. Keep it under {max_words} words. "
     f"Never use any of these overused AI-writing phrases: {AI_TELL_BLOCKLIST}. "
     f"{HUMANIZATION_NOTE} "
     "Write in {language}."
@@ -191,6 +198,7 @@ def build_scripts(
     episode: int,
     outro: str | None = None,
     hook: str | None = None,
+    fact_max_words: int = DEFAULT_FACT_MAX_WORDS,
 ) -> dict:
     """调用项目内的 LLM 服务，把原始事实改写成口播稿并生成钩子。"""
     from app.services import llm
@@ -201,7 +209,9 @@ def build_scripts(
             video_subject=fact,
             language=language,
             paragraph_number=1,
-            video_script_prompt=FACT_PROMPT.format(language=language),
+            video_script_prompt=FACT_PROMPT.format(
+                language=language, max_words=fact_max_words
+            ),
         ).strip()
         logger.info(f"fact: {line}")
         tells = find_ai_tells(line)
@@ -235,6 +245,182 @@ def build_scripts(
 
     resolved_outro = outro or DEFAULT_OUTRO.format(next_episode=episode + 1)
     return {"hook": hook, "facts": fact_lines, "outro": resolved_outro}
+
+
+# 每段单独出搜索词。关键约束是"可被素材库搜到"——LLM 很容易写出
+# "artificial intelligence concept"这种在图库里只会返回蓝色电路板抽象画面的词，
+# 所以这里强制要求写成"能被拍下来的具体场景"。
+SEGMENT_TERMS_PROMPT = (
+    "You are choosing stock-footage search terms for ONE line of a narrated video.\n"
+    'Line: "{text}"\n\n'
+    "Return exactly 3 search terms, comma-separated.\n"
+    "Rules:\n"
+    "- If the line names a specific animal, species, object or place, the FIRST "
+    "term must be that noun ON ITS OWN, with no describing words. Stock search "
+    "dilutes a rare keyword when it is padded out: 'wombat' returns wombats, "
+    "'wombat walking in grass' returns grass. Make the other two terms wider, so "
+    "there is still usable footage if the bare noun finds nothing.\n"
+    "- Otherwise each term is 2-4 plain English words naming a scene that could "
+    "actually be filmed: concrete objects, people doing something, or real places.\n"
+    "- No abstract concept words ('innovation', 'future', 'technology concept', "
+    "'data abstract') - stock sites return generic blue circuit-board filler for those.\n"
+    "- If the line is abstract, pick the closest literal scene a viewer would "
+    "connect to it. Example: a line about voice cloning -> 'person speaking microphone'.\n"
+    "- Never put a year or a date in a term. Stock libraries do not tag footage "
+    "by the year an event happened, so '1956 summer workshop' matches nothing and "
+    "falls back to generic filler. Describe how the period looked instead: "
+    "'vintage lecture hall', 'retro computer room'.\n"
+    "- No brand names, no on-screen text requests, no camera directions.\n"
+    "Return ONLY the comma-separated terms, nothing else."
+)
+
+# 开场 3 秒对应研究里的 Declare 阶段：画面必须一眼看懂，不能让观众先花
+# 半秒去解析构图。所以钩子这一段额外要求单一主体、干净背景。
+HOOK_TERMS_EXTRA = (
+    " This is the opening shot, so every term must describe a CLEAN scene with a "
+    "single clear subject, strong lighting and an uncluttered background."
+)
+
+
+# 句尾误判的常见来源：这些缩写后面的点不是句号。
+_ABBREVIATIONS = frozenset(
+    "mr. mrs. ms. dr. prof. st. jr. sr. vs. etc. fig. no. approx. inc. ltd. dept.".split()
+)
+
+
+def _ends_with_abbreviation(text: str) -> bool:
+    """判断一段文字是不是停在缩写上（因而不该在这里断句）。"""
+    match = re.search(r"(\S+)\s*$", text)
+    if not match:
+        return False
+    token = match.group(1)
+    if token.lower() in _ABBREVIATIONS:
+        return True
+    # 首字母缩写，如 "U.S."、"A.I."：结尾是"单个字母 + 点"
+    return bool(re.search(r"(?:^|\W)[A-Za-z]\.$", token))
+
+
+def format_caption_paragraphs(caption: str) -> str:
+    """
+    每句之间空一行。
+
+    LLM 返回的是一整块文字，在 YouTube 描述框里会挤成一堵墙，观众不会读。
+    每条事实各占一段之后才扫得动。
+
+    断句先要求"句号 + 空格 + 大写字母"，这样 "0.4" 这类小数不会被切开；
+    但这条规则挡不住 "U.S. Constitution"——本集脚本里就有这个词。所以切完
+    之后再把停在缩写上的碎片并回去。Python 的 lookbehind 要求定长，
+    没法在正则里直接排除长度不一的缩写，只能事后合并。
+    """
+    parts = re.split(r"(?<=[.!?])\s+(?=[A-Z])", caption.strip())
+
+    merged: list[str] = []
+    for part in parts:
+        part = part.strip()
+        if not part:
+            continue
+        if merged and _ends_with_abbreviation(merged[-1]):
+            merged[-1] = f"{merged[-1]} {part}"
+        else:
+            merged.append(part)
+    return "\n\n".join(merged)
+
+
+def generate_segment_terms(
+    segments: list[str],
+    language: str,
+    overrides: dict[int, list[str]] | None = None,
+) -> list[list[str]]:
+    """为每段口播各生成一组素材搜索词。"""
+    from app.services import llm
+
+    overrides = overrides or {}
+    all_terms: list[list[str]] = []
+    used: list[str] = []
+    for index, text in enumerate(segments):
+        # 有些主题图库就是没有对得上的素材（树懒），或者同名词会命中完全
+        # 不同的东西（"octopus" 会返回章鱼料理）。这类段落靠改 prompt 是
+        # 治不好的，只能人工把关键词钉死，所以这里允许按段覆盖。
+        if index in overrides:
+            terms = overrides[index]
+            logger.info(f"segment {index} terms (override): {terms}")
+            all_terms.append(terms)
+            used.extend(terms)
+            continue
+
+        prompt = SEGMENT_TERMS_PROMPT.format(text=text)
+        if index == 0:
+            prompt += HOOK_TERMS_EXTRA
+        if used:
+            # 同一集里各条事实主题相近时，模型很容易每段都给出"person typing laptop"。
+            # 把已用过的词回传，强制它换一个角度，避免整条视频看起来都是同一个画面。
+            #
+            # 但"不要重复"绝不能把主体本身挤掉。之前钩子用了 wombat，这条
+            # 禁令就让讲袋熊肠道的那一段改用 "cubical feces"，图库回给了
+            # 一排方形写字楼。所以这里只约束陪衬镜头，并明确说明主体名词
+            # 该重复就重复。
+            prompt += (
+                "\nThese terms already appear earlier in this same video. Do not "
+                "repeat them AS SUPPORTING SHOTS, and do not return near-identical "
+                "wording for them: " + "; ".join(used) + "\n"
+                "This does NOT apply to the subject itself. If this line is about "
+                "the same animal, object or place as an earlier line, the first "
+                "term must still be that noun, even though it repeats. Showing the "
+                "right subject twice is correct; switching to a different subject "
+                "to avoid repeating a word is wrong."
+            )
+        raw = llm.generate_script(
+            video_subject=text,
+            language=language,
+            paragraph_number=1,
+            video_script_prompt=prompt,
+        ).strip()
+
+        terms = [t.strip(" .\"'") for t in raw.replace("\n", ",").split(",")]
+        terms = [t for t in terms if t and len(t.split()) <= 6][:3]
+        if not terms:
+            # LLM 偶尔会返回一整句话；退回用这段口播的前几个词去搜，
+            # 至少还和当前主题相关，比落回全局通用素材好。
+            terms = [" ".join(text.split()[:4])]
+        logger.info(f"segment {index} terms: {terms}")
+        all_terms.append(terms)
+        used.extend(terms)
+    return all_terms
+
+
+def generate_audio_only(
+    script_text: str,
+    subject: str,
+    voice_name: str,
+    task_id: str,
+    root: Path,
+    threads: int,
+) -> Path:
+    """
+    只跑到音频阶段，返回 audio.mp3 路径。
+
+    画面要对齐口播就必须先有真实音频：每段的起止时间来自 whisper，
+    而不是按字数估算。mpt_agent.py 固定 `--stop-at video`，所以这里直接调 cli.py。
+    """
+    command = [
+        "uv", "run", "--no-project", "--python", "3.11", "python", "cli.py",
+        "--task-id", task_id,
+        "--video-subject", subject,
+        "--video-script", script_text,
+        "--voice-name", voice_name,
+        "--n-threads", str(threads),
+        "--no-subtitle-enabled",
+        "--stop-at", "audio",
+    ]
+    result = run(command, cwd=root)
+    if result.returncode != 0:
+        tail = (result.stdout or "") + (result.stderr or "")
+        raise RuntimeError("audio generation failed:\n" + tail[-2000:])
+
+    audio_path = root / "storage" / "tasks" / task_id / "audio.mp3"
+    if not audio_path.is_file():
+        raise RuntimeError(f"audio stage finished but {audio_path} is missing")
+    return audio_path
 
 
 def generate_base_video(
@@ -282,6 +468,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--language", default="en-US")
     parser.add_argument("--voice-name", default="gemini:Puck-Male")
     parser.add_argument("--fact-count", type=int, default=DEFAULT_FACT_COUNT)
+    parser.add_argument(
+        "--fact-max-words",
+        type=int,
+        default=DEFAULT_FACT_MAX_WORDS,
+        help=(
+            "每条事实口播的词数上限，直接决定成片长度。25 词约 8-9 秒一条；"
+            "要做 20 秒以内的短版本，配合 --fact-count 3 用 14 左右。"
+        ),
+    )
     parser.add_argument("--root", type=Path, default=PROJECT_ROOT)
     parser.add_argument(
         "--video-terms",
@@ -302,6 +497,26 @@ def main(argv: list[str] | None = None) -> int:
         "--hook",
         default=None,
         help="开场钩子；不传则由 LLM 生成。内容日历里逐集写好钩子可避免开头雷同。",
+    )
+    parser.add_argument(
+        "--footage-mode",
+        choices=("synced", "generic"),
+        default="synced",
+        help=(
+            "synced：每段口播单独出搜索词、单独取材，画面精确铺在该段时间窗里，"
+            "讲到第 N 条事实时画面就是第 N 条的内容（默认）。"
+            "generic：旧行为，用 --video-terms 的全局素材池，画面与口播无关。"
+        ),
+    )
+    parser.add_argument(
+        "--segment-terms",
+        default=None,
+        help=(
+            "按段钉死素材搜索词，JSON 对象：段序号 -> 逗号分隔的关键词。"
+            "段序号 0 是钩子，1..N 是每条事实，最后一段是结尾。"
+            "用于图库确实没有对应素材、或同名词会命中别的东西的段落"
+            '（例："{\\"5\\": \\"octopus underwater,coral reef\\"}"）。'
+        ),
     )
     parser.add_argument("--highlight-color", default="#FFE500")
     parser.add_argument("--words-per-caption", type=int, default=3)
@@ -336,6 +551,16 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="只生成脚本和元数据，不渲染视频",
     )
+    parser.add_argument(
+        "--pinned-comment",
+        default=None,
+        help="发布后建议置顶的评论文案，随成片一起发去 Telegram。不传则跳过这一项。",
+    )
+    parser.add_argument(
+        "--no-telegram",
+        action="store_true",
+        help="渲染成功后不自动发去 Telegram（默认会发；需要先在 config.toml 配 [telegram]）。",
+    )
     args = parser.parse_args(argv)
 
     skill_dir = Path(__file__).resolve().parent
@@ -354,9 +579,29 @@ def main(argv: list[str] | None = None) -> int:
         episode=args.episode,
         outro=args.outro,
         hook=args.hook,
+        fact_max_words=args.fact_max_words,
     )
     spoken_segments = [parts["hook"], *parts["facts"], parts["outro"]]
     script_text = " ".join(spoken_segments)
+
+    # 覆盖表在这里就校验：写错段序号是很容易犯的错，等跑完 TTS 再报错
+    # 会白白浪费一次语音生成。
+    term_overrides: dict[int, list[str]] = {}
+    if args.segment_terms:
+        for key, value in json.loads(args.segment_terms).items():
+            parsed = [t.strip() for t in value.split(",") if t.strip()]
+            if not parsed:
+                parser.error(f"--segment-terms entry {key!r} has no usable terms")
+            term_overrides[int(key)] = parsed
+        out_of_range = sorted(
+            i for i in term_overrides if not 0 <= i < len(spoken_segments)
+        )
+        if out_of_range:
+            parser.error(
+                f"--segment-terms index out of range: {out_of_range}; "
+                f"this episode has segments 0..{len(spoken_segments) - 1} "
+                f"(0 = hook, {len(spoken_segments) - 1} = outro)"
+            )
 
     from app.services import llm
 
@@ -366,6 +611,7 @@ def main(argv: list[str] | None = None) -> int:
         language="en",
         platform="youtube_shorts",
     )
+    metadata["caption"] = format_caption_paragraphs(metadata["caption"])
     if args.standalone and not args.title:
         # 独立单条视频：保留 LLM 自由生成的标题，并打分记录，方便发布前决定
         # 要不要再改一版。7/9 只是启发式门槛，不阻断生成。
@@ -384,32 +630,80 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"script": script_text, "metadata": metadata}, indent=2, ensure_ascii=False))
         return 0
 
-    video_path = generate_base_video(
-        script_text=script_text,
-        subject=f"{args.series_name} {args.episode}",
-        voice_name=args.voice_name,
-        video_terms=args.video_terms,
-        root=args.root,
-        skill_dir=skill_dir,
-        threads=args.threads,
-    )
-    task_dir = video_path.parent
-    audio_path = task_dir / "audio.mp3"
+    def transcribe(audio_file: Path):
+        """从音频反解逐词时间轴，并把字幕文字换回脚本原文。"""
+        raw_words = viral.transcribe_word_timings(
+            str(audio_file), model_size=args.whisper_model
+        )
+        if not raw_words:
+            raise RuntimeError("no word timings produced; cannot build overlay")
+        total = max(word.end for word in raw_words)
+        # 字幕文字取自脚本原文，Whisper 只负责提供时间：避免识别错误或
+        # `[Music]` 这类非语音标注被直接烧进画面
+        return viral.align_script_to_words(script_text, raw_words), total
 
-    raw_words = viral.transcribe_word_timings(
-        str(audio_path), model_size=args.whisper_model
-    )
-    if not raw_words:
-        raise RuntimeError("no word timings produced; cannot build overlay")
-    duration = max(word.end for word in raw_words)
-    # 字幕文字取自脚本原文，Whisper 只负责提供时间：避免识别错误或
-    # `[Music]` 这类非语音标注被直接烧进画面
-    words = viral.align_script_to_words(script_text, raw_words)
+    segment_terms: list[list[str]] | None = None
+    if args.footage_mode == "synced":
+        # 先出音频 -> 反解每段时间窗 -> 每段按自己的主题取材，
+        # 保证讲到第 N 条时画面就是第 N 条的画面。
+        from app.services import topic_footage
+
+        task_id = str(uuid.uuid4())
+        audio_path = generate_audio_only(
+            script_text=script_text,
+            subject=f"{args.series_name} {args.episode}",
+            voice_name=args.voice_name,
+            task_id=task_id,
+            root=args.root,
+            threads=args.threads,
+        )
+        task_dir = audio_path.parent
+        words, duration = transcribe(audio_path)
+
+        all_segments = viral.align_facts_to_words(
+            spoken_segments, words, total_duration=duration
+        )
+        segment_terms = generate_segment_terms(
+            spoken_segments, language=args.language, overrides=term_overrides
+        )
+        plans = [
+            topic_footage.SegmentPlan(
+                index=i,
+                text=text,
+                start=seg.start,
+                end=seg.end,
+                terms=terms,
+            )
+            for i, (text, seg, terms) in enumerate(
+                zip(spoken_segments, all_segments, segment_terms)
+            )
+        ]
+        video_path = Path(
+            topic_footage.build_synced_footage(
+                plans=plans,
+                audio_file=str(audio_path),
+                output_path=str(task_dir / "combined-synced.mp4"),
+                task_id=task_id,
+                threads=args.threads,
+            )
+        )
+    else:
+        video_path = generate_base_video(
+            script_text=script_text,
+            subject=f"{args.series_name} {args.episode}",
+            voice_name=args.voice_name,
+            video_terms=args.video_terms,
+            root=args.root,
+            skill_dir=skill_dir,
+            threads=args.threads,
+        )
+        task_dir = video_path.parent
+        words, duration = transcribe(task_dir / "audio.mp3")
+        all_segments = viral.align_facts_to_words(
+            spoken_segments, words, total_duration=duration
+        )
 
     # 钩子和结尾不计入"第 N 条事实"，所以先把它们一起参与对齐，再只取中间的事实区间
-    all_segments = viral.align_facts_to_words(
-        spoken_segments, words, total_duration=duration
-    )
     fact_segments = all_segments[1:-1] if len(all_segments) >= 3 else all_segments
     fact_segments = [
         viral.FactSegment(index=i + 1, start=s.start, end=s.end)
@@ -439,9 +733,16 @@ def main(argv: list[str] | None = None) -> int:
         "video_file": str(output_path),
         "duration_seconds": round(duration, 2),
         "fact_count": len(fact_segments),
+        "footage_mode": args.footage_mode,
         "script": script_text,
         # 保留分段与区间，便于只重跑叠加层而不必重新渲染底片
         "segments": spoken_segments,
+        # 记录每段实际用的搜索词，方便事后核对"画面为什么配成这样"
+        "segment_terms": segment_terms if args.footage_mode == "synced" else None,
+        "segment_timings": [
+            {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
+            for i, s in enumerate(all_segments)
+        ],
         "fact_timings": [
             {"index": s.index, "start": round(s.start, 2), "end": round(s.end, 2)}
             for s in fact_segments
@@ -453,6 +754,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     print("VIRAL_RESULT")
     print(json.dumps(result, indent=2, ensure_ascii=False))
+
+    if not args.no_telegram:
+        from send_to_telegram import send_episode
+
+        send_episode(result, root=args.root, pinned_comment=args.pinned_comment)
+
     return 0
 
 
