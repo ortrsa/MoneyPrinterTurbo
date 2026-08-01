@@ -477,3 +477,88 @@ monetisation.
 - `generate_social_metadata` still only emits 3 flat hashtags; Facts 10 used a
   hand-written 3-tier set instead (§2e). The Rank 7 code fix itself is still
   undone.
+
+## 9. Sourcing stories from other people's posts — what is and isn't ours
+
+Story leads increasingly come from Facebook pages like *עובדות לא חשובות*. The
+line that matters:
+
+- **Facts and events are not copyrightable.** Who shot Franz Ferdinand, in what
+  order the assassins failed, what a court found — nobody owns those.
+- **The specific wording of someone's post is.** Copyright attaches automatically
+  the moment someone writes original text, and it does **not** depend on the
+  author being named, being an official page, or being identifiable. "It's just
+  some anonymous person in a group" changes only how enforceable it is, not
+  whether copying is legitimate.
+- **Images attached to a post are separately owned** (a news photo credited to
+  NBC stays NBC's). Never reuse them; source footage independently.
+
+**The workflow this implies, and it is the same one already used for facts:**
+treat the post as a *topic lead* only, re-verify the claims against independent
+sources, then write the narration from scratch. `story_episode.py --source-note`
+records where the lead came from in `story-result.json` so it can be traced
+later. Re-verification is not just legal hygiene — posts like these are often
+wrong on details, so it is a quality step too.
+
+## 10. Story format (`story_episode.py`) — added 2026-08-01
+
+A second, parallel flow to `viral_episode.py`, for narrative true stories rather
+than fact lists. Nothing about the list format changed; both scripts coexist.
+
+**Differences that matter, and why:**
+
+| | list format | story format |
+|---|---|---|
+| length | 50–60s (6 facts) | 30–90s, set by `--target-seconds` |
+| counter | `N/6` shown | **off** — a counter tells the viewer "3 left", which deflates narrative tension |
+| progress bar | on | on (it says "nearly there", which helps retention) |
+| segments | independent facts | hook → escalating beats → reveal, each beat ending on an open loop |
+| title | metadata only | **2-line on-screen banner**, 2 keywords recoloured (guide Rank 5) |
+
+**Three interpretation calls, stated openly:**
+
+1. **30–90s over the guide's "≤20 seconds".** Set by the channel owner. A
+   narrative cannot land a turn in 20s — the hook never gets paid off. The §2d
+   length experiment therefore says nothing about this format.
+2. **The 6-phase Declare/Assessment/Isolate/Process/Build/Reveal structure was
+   written for restoration videos** (measuring rust with a caliper). Only
+   *Declare* → hook and *Reveal* → loop-closure transfer; the middle is replaced
+   with narrative escalation. Pretending the rest maps would have produced
+   nonsense for a story about an assassination.
+3. **"2-line title on a pure black background" is built as a persistent top
+   banner, not an opening black card.** A black card would burn exactly the
+   first 2 seconds the same guide calls decisive. A banner gives instant context
+   without costing the hook.
+
+**Three bugs found while building it, all fixed, all worth remembering:**
+
+- **`video_script_prompt` is capped at 2000 characters** (`MAX_SCRIPT_PROMPT_LENGTH`).
+  A story pasted into the prompt fills it, so the output-format instructions got
+  silently truncated away and the model returned prose. Long prompts must go via
+  `custom_system_prompt` (cap 8000), which *also* replaces the default system
+  prompt — necessary here, because the default one forbids "any formatting",
+  fighting the required `HOOK:/BEAT:/REVEAL:` labels.
+- **`llm.format_response()` reflows the reply**, so labels can arrive glued into
+  one line (`...found him.BEAT: Six young men...`). Parse by regex on the labels,
+  never by `splitlines()`. Same function also strips anything in parentheses
+  (`re.sub(r"\(.*\)", "")`, greedy) — worth knowing before writing narration
+  that relies on them.
+- **`refine_hook()` must not be reused here.** It takes the first fact as
+  context, so on a story it reliably rewrites the hook into a restatement of
+  beat 1, and its own prompt has no rule against scene-setting. It twice turned
+  a strong hook into background exposition — once replacing *"An archduke
+  survived a grenade, only for a wrong turn to get him killed"* with *"Six young
+  men lined a Sarajevo street to kill an empire's heir"*, which both wasted the
+  opening and duplicated the next segment's footage. The story prompt's own hook
+  rules are stricter; its output is used unrefined, with a similarity check left
+  in as a warning only.
+
+**Known limits, unresolved:**
+
+- The model undershoots the word budget (a 75s target produced ~60s). A warning
+  fires above 20% deviation; there is no retry loop.
+- **Historical stories are a footage problem waiting to happen.** Pexels has
+  nothing for "Sarajevo 1914", and §6 already documents that years in queries
+  match nothing. Expect to pin `--segment-terms` with *atmospheric* rather than
+  literal shots (period-looking streets, old cars, rivers), or to generate
+  hero shots. This has not been tested on a real render yet.
