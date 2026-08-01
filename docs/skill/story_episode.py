@@ -84,6 +84,16 @@ REVEAL: <one or two sentences>
    motives that are not there. If the source marks something as uncertain, keep
    it uncertain rather than flattening it into a fact.
 6. Plain spoken language, short sentences, contractions where natural.
+7. Write for someone whose English is basic. A large share of the audience are
+   not native speakers, and narration moves too fast to stop and work a word out
+   - one unknown word costs the viewer the sentence around it, and in the hook it
+   costs the whole video. Use the everyday word every time: "future emperor" or
+   "royal heir" not "archduke", "cars" not "motorcade", "failed" not "botched",
+   "poison" not specific compound names, "killer" not "assailant". Titles,
+   ranks and period vocabulary are the usual offenders - if a word would not
+   appear in an ordinary conversation, replace it or explain it in the same
+   breath. Keep real proper names (people, cities); it is the vocabulary around
+   them that must be simple.
 7. Never use these overused AI-writing phrases: {blocklist}
 8. {humanization}
 9. Write the narration in {language}.
