@@ -1,0 +1,37 @@
+Topic lead from a Telegram submission (fact-checked independently before use; do not
+copy wording, only the underlying facts, and do not imply anything not verified):
+
+In 1910, Alfa Romeo was founded in Milan, Italy. Decades later, a talented driver
+named Enzo Ferrari raced for Alfa Romeo and in 1929 founded Scuderia Ferrari, which
+became Alfa Romeo's racing division. In 1938 Alfa Romeo absorbed the racing team
+in-house as Alfa Corse, sidelining Enzo Ferrari; disagreements over this and over
+creative control led him to leave in 1939. He went on to found his own company,
+which became Ferrari as it is known today (first Ferrari-badged car in 1947).
+
+Later, tractor manufacturer Ferruccio Lamborghini bought several Ferraris and was
+unhappy with the clutch, which he found harsh and prone to failure. According to
+the origin story Lamborghini's own company still tells (and which is widely
+reported, e.g. by Car and Driver), when he raised this directly with Enzo Ferrari,
+Ferrari dismissed the complaint and told him to stick to building tractors. This
+snub is said to have pushed Ferruccio Lamborghini to build sports cars himself,
+founding Automobili Lamborghini in 1963. Note for the script: frame this
+specifically as "the story Lamborghini itself tells" rather than as an
+independently verified transcript of the conversation -- no primary source records
+the exact exchange, similar to how the Mercedes-Benz naming story was handled by
+citing the company's own account rather than presenting it as flatly proven.
+
+Lamborghini's sports cars gained traction, helped significantly by a brilliant
+engineer, Horacio Pagani, who joined in 1983 as head of the composites department
+and pushed hard for advanced carbon-fiber construction (notably the Countach
+Evoluzione prototype). Lamborghini's owners at the time did not give him the
+freedom or budget he wanted to build out a proper carbon-fiber division.
+Disagreements over this led Pagani to leave Lamborghini in 1988 and eventually
+found his own company, Pagani Automobili (est. 1992), which is the hypercar maker
+known today for extreme use of carbon fiber.
+
+Narrative shape for the script: this is a chain of the same story repeating --
+each time a founder is dismissed or denied by the company he helped build, he
+walks away and starts a rival that becomes just as legendary. Alfa Romeo's loss
+became Ferrari. Ferrari's insult became Lamborghini. Lamborghini's refusal became
+Pagani. The reveal/payoff should land on this pattern explicitly as the callback,
+not just list the four companies.
