@@ -556,6 +556,15 @@ beat order by hand and re-lock with `--from-dry-run`; the model is reliable at
 producing *material* and unreliable at ordering it. Check specifically that the
 hook withholds something and that the reveal actually lands the best fact.
 
+**A probed-and-rejected term can still end up pinned — check the pin list
+against the rejections.** `classic car hood ornament` was probed for Story 2,
+looked at, and rejected on sight: it returns the Rolls-Royce Spirit of Ecstasy,
+a winged figure, not a Mercedes star. It was then pinned anyway for the outro
+segment, where the narration says "that hood star" — so the one line asking the
+viewer to picture a Mercedes star showed a Rolls-Royce instead. Probing only
+helps if the rejections are carried forward into the pin list; write the
+rejected terms down rather than keeping them in your head.
+
 **Titles are a monetisation decision, not just a hook decision.** Story 2's
 generated title was "How a Jewish girl's name ended up on Nazi fighter planes" —
 accurate, and the strongest possible hook, but YouTube limits ads on war and
