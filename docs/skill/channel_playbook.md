@@ -544,6 +544,35 @@ than a repeat. `story_episode.py` now warns when adjacent segments share a
 primary term; the de-dup logic itself was left alone because it is shared with
 the list flow.
 
+**The model puts the payoff in the hook and then has nothing to reveal.** On
+Story 2 (Mercedes) the generated hook was "Mercedes-Benz was named after a Jewish
+girl whose grandfather was a famous rabbi" — both reveals spent in the opening
+two seconds. It also produced a beat that was a rhetorical question about
+something two earlier beats had already answered, and dropped the single most
+striking fact (the grandfather's name was Adolf) entirely. This is the recurring
+failure of the format: the prompt asks for the most shocking element up front,
+and the model reads that as "state the conclusion". Expect to restructure the
+beat order by hand and re-lock with `--from-dry-run`; the model is reliable at
+producing *material* and unreliable at ordering it. Check specifically that the
+hook withholds something and that the reveal actually lands the best fact.
+
+**Titles are a monetisation decision, not just a hook decision.** Story 2's
+generated title was "How a Jewish girl's name ended up on Nazi fighter planes" —
+accurate, and the strongest possible hook, but YouTube limits ads on war and
+Nazi-related content even when it is historical and factual. Since the channel's
+stated goal is monetisation, the shipped title was "The Girl Behind the Mercedes
+Name": curiosity-driven, no flag words, with the wartime facts still stated
+plainly in the narration. Flag this trade-off to the owner rather than silently
+picking either side.
+
+**Sensitive topics: cite what the subject documents about itself.** Story 2's
+wartime claims are all sourced from Mercedes-Benz Group's own corporate history
+pages, which is stated in the narration ("Mercedes-Benz documents all of it
+today"). That turns a potential accusation into a citation and is the right
+default whenever a story implicates a named, living organisation. The source
+file also carried an explicit instruction not to imply the naming was a trick or
+a cover-up, and not to editorialise about the modern company.
+
 **Copyright, since the source is other people's posts** (asked and answered
 2026-08-01): facts and historical events are not copyrightable, but the specific
 wording of a post is — regardless of whether the author is anonymous, posting in
