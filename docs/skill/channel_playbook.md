@@ -626,87 +626,69 @@ before rendering.
   hand-written 3-tier set instead (§2e). The Rank 7 code fix itself is still
   undone.
 
-## 9. Sourcing stories from other people's posts — what is and isn't ours
 
-Story leads increasingly come from Facebook pages like *עובדות לא חשובות*. The
-line that matters:
+## 9. Telegram delivery, and picking this project back up in a fresh session
 
-- **Facts and events are not copyrightable.** Who shot Franz Ferdinand, in what
-  order the assassins failed, what a court found — nobody owns those.
-- **The specific wording of someone's post is.** Copyright attaches automatically
-  the moment someone writes original text, and it does **not** depend on the
-  author being named, being an official page, or being identifiable. "It's just
-  some anonymous person in a group" changes only how enforceable it is, not
-  whether copying is legitimate.
-- **Images attached to a post are separately owned** (a news photo credited to
-  NBC stays NBC's). Never reuse them; source footage independently.
+**Deliverables now go to Telegram automatically, not just to the chat.** Both
+`viral_episode.py` and `story_episode.py` send the finished upload kit to a
+Telegram bot as soon as a real (non-`--dry-run`) render finishes — see SKILL.md
+8a for the mechanics. Setup already done, nothing to redo:
 
-**The workflow this implies, and it is the same one already used for facts:**
-treat the post as a *topic lead* only, re-verify the claims against independent
-sources, then write the narration from scratch. `story_episode.py --source-note`
-records where the lead came from in `story-result.json` so it can be traced
-later. Re-verification is not just legal hygiene — posts like these are often
-wrong on details, so it is a quality step too.
+- Bot created via @BotFather, `bot_token` and `chat_id` live in `config.toml`'s
+  `[telegram]` section. `config.toml` is gitignored, so **a fresh clone or a
+  fresh session in this same checkout still has it** — nothing needs
+  re-entering unless the repo is re-cloned from scratch, in which case ask the
+  channel owner for the token again rather than creating a second bot.
+- Five messages per delivery: video, then title / caption(+`#`hashtags at the
+  end, the YouTube description convention) / plain-text comma-separated tags
+  (no `#`, matching YouTube Studio's actual Tags field — deliberately different
+  formatting from the caption's hashtags, both were explicitly requested) /
+  pinned-comment. Each field sends as a "label:" message followed by a
+  content-only message, so a phone user can long-press-copy just the content.
+- Pass `--pinned-comment "..."` to either script when one exists — the
+  pipeline does not generate this field on its own, matching the existing rule
+  that a pinned comment must be written fresh per episode, never reused.
 
-## 10. Story format (`story_episode.py`) — added 2026-08-01
+**Inbound side exists but is intentionally not scheduled.** The channel owner
+can message the bot with a topic or a story lead (plain text, or a forwarded
+post with its own source links). `docs/skill/check_telegram_inbox.py` polls for
+new messages since the last check and returns them as JSON, exactly once each —
+state persists to `storage/telegram_state.json` (gitignored, runtime state) and
+is written *before* any downstream processing, so a crash mid-build loses a
+message rather than ever re-triggering it. Verified live: two real messages
+sent back-to-back both came back in one call, in order, and a second
+consecutive call correctly returned empty.
 
-A second, parallel flow to `viral_episode.py`, for narrative true stories rather
-than fact lists. Nothing about the list format changed; both scripts coexist.
+**A scheduled Routine (3x/day, 9/13/20 Israel time) was built and then
+deliberately not activated** — `create_trigger` failed repeatedly with
+`MCP error -32003: MCP tool call requires approval` even after the owner
+approved a UI prompt each time, so the routine was never actually created. The
+owner then asked to hold off on automatic checks entirely: **checks happen only
+when explicitly requested**, in this same conversation. If automatic scheduling
+comes up again, the exact prompt and cron expression (`0 6,10,17 * * *`, UTC,
+anchored to Israel Daylight Time — needs a 1-hour shift after Israel's clocks
+change back, ~late October) are preserved in this session's history and can be
+reconstructed; the manual alternative is creating the routine directly at
+`claude.ai/code/routines` with that same content.
 
-**Differences that matter, and why:**
+**When asked to check manually:** run `check_telegram_inbox.py`, and for every
+message in `new_messages`, run the *full* process this file and SKILL.md
+document — fact-check independently (even when the message already carries
+source links, per §7a's copyright section: verify anyway, and never reuse an
+attached image), choose list vs. story format by the content's shape, lock a
+story script with `--from-dry-run` before rendering, probe and pin footage,
+verify the rendered output frame-by-frame, and write a fresh pinned comment.
+Two real messages arrived during testing (an Alfa Romeo → Ferrari →
+Lamborghini → Pagani lineage story, and a world pizza-toppings list) and were
+marked read by the idempotency test *without* being built — they will not
+resurface on their own; building them requires being asked again with their
+content, or re-sending them to the bot.
 
-| | list format | story format |
-|---|---|---|
-| length | 50–60s (6 facts) | 30–90s, set by `--target-seconds` |
-| counter | `N/6` shown | **off** — a counter tells the viewer "3 left", which deflates narrative tension |
-| progress bar | on | on (it says "nearly there", which helps retention) |
-| segments | independent facts | hook → escalating beats → reveal, each beat ending on an open loop |
-| title | metadata only | **2-line on-screen banner**, 2 keywords recoloured (guide Rank 5) |
-
-**Three interpretation calls, stated openly:**
-
-1. **30–90s over the guide's "≤20 seconds".** Set by the channel owner. A
-   narrative cannot land a turn in 20s — the hook never gets paid off. The §2d
-   length experiment therefore says nothing about this format.
-2. **The 6-phase Declare/Assessment/Isolate/Process/Build/Reveal structure was
-   written for restoration videos** (measuring rust with a caliper). Only
-   *Declare* → hook and *Reveal* → loop-closure transfer; the middle is replaced
-   with narrative escalation. Pretending the rest maps would have produced
-   nonsense for a story about an assassination.
-3. **"2-line title on a pure black background" is built as a persistent top
-   banner, not an opening black card.** A black card would burn exactly the
-   first 2 seconds the same guide calls decisive. A banner gives instant context
-   without costing the hook.
-
-**Three bugs found while building it, all fixed, all worth remembering:**
-
-- **`video_script_prompt` is capped at 2000 characters** (`MAX_SCRIPT_PROMPT_LENGTH`).
-  A story pasted into the prompt fills it, so the output-format instructions got
-  silently truncated away and the model returned prose. Long prompts must go via
-  `custom_system_prompt` (cap 8000), which *also* replaces the default system
-  prompt — necessary here, because the default one forbids "any formatting",
-  fighting the required `HOOK:/BEAT:/REVEAL:` labels.
-- **`llm.format_response()` reflows the reply**, so labels can arrive glued into
-  one line (`...found him.BEAT: Six young men...`). Parse by regex on the labels,
-  never by `splitlines()`. Same function also strips anything in parentheses
-  (`re.sub(r"\(.*\)", "")`, greedy) — worth knowing before writing narration
-  that relies on them.
-- **`refine_hook()` must not be reused here.** It takes the first fact as
-  context, so on a story it reliably rewrites the hook into a restatement of
-  beat 1, and its own prompt has no rule against scene-setting. It twice turned
-  a strong hook into background exposition — once replacing *"An archduke
-  survived a grenade, only for a wrong turn to get him killed"* with *"Six young
-  men lined a Sarajevo street to kill an empire's heir"*, which both wasted the
-  opening and duplicated the next segment's footage. The story prompt's own hook
-  rules are stricter; its output is used unrefined, with a similarity check left
-  in as a warning only.
-
-**Known limits, unresolved:**
-
-- The model undershoots the word budget (a 75s target produced ~60s). A warning
-  fires above 20% deviation; there is no retry loop.
-- **Historical stories are a footage problem waiting to happen.** Pexels has
-  nothing for "Sarajevo 1914", and §6 already documents that years in queries
-  match nothing. Expect to pin `--segment-terms` with *atmospheric* rather than
-  literal shots (period-looking streets, old cars, rivers), or to generate
-  hero shots. This has not been tested on a real render yet.
+**For a fresh session picking this project up:** read this file and
+`SKILL.md` in full before doing anything — they hold the format guide, the
+measured numbers, the production traps already paid for, and now the delivery
+mechanics. The short version: two build flows exist (`viral_episode.py` for
+fact lists, `story_episode.py` for narrative stories, see §7a), both fact-check
+before rendering and verify footage frame-by-frame after, both now deliver to
+Telegram automatically, and Telegram inbound is available but must be
+triggered manually, not on a schedule.
