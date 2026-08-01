@@ -73,16 +73,19 @@ FACT_PROMPT = (
     "Write in {language}."
 )
 
-# 三种经过验证的开场钩子结构，取代原本笼统的"写一句吸引人的开场"——
-# 给模型具体的句式模板，比只说"要有悬念"更容易稳定产出好结果。
+# 频道主 2026-08-01 反馈（Facts 11 之后）：开场钩子应当以问题形式对着观众提问，
+# 不必每次都用 "did you know"，但每次都要是某种提问句式，而不是陈述句。
+# 之前"三选一句式模板"里明确禁止 did you know 的做法已被推翻——保留"具体
+# 好奇缺口、不要空泛吊胃口"这条硬约束，但外层结构换成提问。
 HOOK_PROMPT = (
     "Write a single opening hook sentence, at most 12 words, for a short video that "
-    "lists {count} surprising facts. Use ONE of these three structures, whichever "
-    "fits best: "
-    "(1) Prediction + stakes - 'This is the [thing] that [consequence]'; "
-    "(2) Before/after compression - 'What used to take [X] now just [Y]'; "
-    "(3) A specific curiosity gap that promises a real payoff, not a vague tease. "
-    "Do not greet the viewer. Do not use 'did you know'. "
+    "lists {count} surprising facts. Phrase it as a QUESTION addressed directly to the "
+    "viewer - it must read as a question, not a flat statement. Vary the exact "
+    "question form across episodes rather than always using the same one, for example: "
+    "'Did you know...?', 'Ever wonder why...?', 'What if I told you...?', "
+    "'Guess what...?', or another natural question opener - but always a question. "
+    "The question must still name a specific curiosity gap with a real payoff, not a "
+    "vague tease. Do not greet the viewer. "
     f"Never use any of these overused AI-writing phrases: {AI_TELL_BLOCKLIST}. "
     f"{HUMANIZATION_NOTE} "
     "Return only the sentence, in {language}."
@@ -170,8 +173,9 @@ HOOK_CRITIQUE_PROMPT = (
     "Hook: \"{hook}\"\n"
     "Fact this hook is teasing: \"{first_fact}\"\n"
     "If the hook already survives all five, return it completely unchanged. "
-    "If not, return an improved version, still at most 12 words, still no greeting "
-    "and no 'did you know'. Return ONLY the final hook sentence, nothing else."
+    "If not, return an improved version, still at most 12 words, still phrased as a "
+    "QUESTION addressed to the viewer (not a flat statement), still no greeting. "
+    "Return ONLY the final hook sentence, nothing else."
 )
 
 

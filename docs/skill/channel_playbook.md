@@ -331,6 +331,28 @@ across 8-10 videos, not per video.
 
 ## 5. Strategy decisions
 
+**Hooks must be phrased as a question to the viewer, not a flat statement**
+(channel owner feedback, 2026-08-01, after watching Facts 11 — "the opening
+isn't good, it should start with something like 'did you know' or a
+question-style opener; not always literally 'did you know', but every time
+some form of question"). This **reverses** an earlier rule in this same
+document and in `SKILL.md` that explicitly banned "did you know" and required
+a flat declarative opener (e.g. Facts 11's actual hook: "Frogs use their own
+eyeballs to swallow food.") — that rule is now wrong per direct owner
+feedback and has been replaced. `viral_episode.py`'s `HOOK_PROMPT` and
+`HOOK_CRITIQUE_PROMPT` (used by `refine_hook()`) were both updated to require
+a question form, varying the exact phrasing across episodes rather than
+reusing the same one ("Did you know...?", "Ever wonder why...?", "What if I
+told you...?", "Guess what...?", etc.) while still keeping the older,
+still-valid constraint: the question must name a specific curiosity gap with
+a real payoff, not a vague tease. **Not yet applied to `story_episode.py`**
+(its `STORY_SYSTEM_PROMPT` still explicitly bans "did you know" and expects a
+statement-style shock-opener, e.g. "An archduke survived a grenade, only for
+a wrong turn to get him killed.") — the owner's feedback followed a list-format
+video, and a narrative hook's job (state the story's most shocking beat) may
+not translate cleanly to question form. Revisit if the owner gives the same
+feedback on a story-format episode; do not assume it carries over silently.
+
 **One theme per episode — already in place, keep it.** All six facts share a
 subject so each builds on the last.
 
