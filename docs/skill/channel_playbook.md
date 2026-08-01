@@ -279,6 +279,23 @@ enabling billing on the Gemini API key is the only way around it, same
 constraint already hit once today for image generation (see the pizza
 episode's Picsart/Nano-Banana credit conversation).
 
+**With Gemini TTS quota exhausted, the fallback of passing a plain
+`--voice-name` (e.g. `en-US-AriaNeural`) to route around `gemini:`-prefixed
+voices to `edge_tts` was tried and also failed in this remote session** —
+`edge_tts stream timed out after 30s`, three retries, all timed out. This is
+the exact WebSocket-blocked-in-some-sandboxes limitation SKILL.md's Viral
+Episode Pipeline section already warns about (Edge TTS's `WordBoundary` needs
+a WebSocket some sandboxes block) — now confirmed to apply to *this*
+environment specifically, not just a theoretical caveat. **Net effect: with
+Gemini's daily TTS quota gone, there was no working TTS path left in this
+session at all** — not just Gemini, but also its documented fallback. If this
+happens again: check whether the *current* remote environment blocks
+`edge_tts`'s WebSocket before assuming the voice-name workaround will save a
+render; it may not, and the two failures compound to a hard stop for new
+narration until either Gemini quota resets, billing is enabled, or a
+different environment (e.g. the user's own machine, which is what this
+skill's `mpt_agent.py` path targets by design) is used instead.
+
 No retention/view numbers yet.
 
 ## 3. What this data supports
