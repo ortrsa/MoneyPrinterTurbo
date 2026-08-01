@@ -43,6 +43,17 @@ There is no guaranteed-viral setting, but these defaults measurably improve rete
 > arrive. Note the guide targets **≤20s and ≥70% stayed-to-watch**, which the
 > current 6-fact/50-60s format does not meet — do not build a long episode on
 > autopilot without checking that decision first.
+>
+> **Two flows exist. Pick the right one before writing anything:**
+> - **List format** — `viral_episode.py`. N unrelated facts on one theme, `N/6`
+>   counter, ~55s. Everything below describes this flow.
+> - **Story format** — `story_episode.py`. One true story told as escalating
+>   beats, 30–90s, no counter, with a burned-in 2-line title banner. Built for
+>   narrative leads (a historical event, a true-crime case). See
+>   [`channel_playbook.md`](channel_playbook.md) §7a for its rules, its two
+>   known traps (`refine_hook` must not be used; scripts must be locked with
+>   `--from-dry-run` before rendering or the fact-check is void), and the
+>   copyright workflow when the lead comes from someone else's post.
 
 0. **Research a proven topic before writing facts — do not invent from scratch.** Per the growth guide's Rank 3 (9.0/10), the highest-leverage step happens before a single fact is drafted: find a topic with a demonstrated track record in the niche and remake *that topic*, not a topic invented cold.
    - Search recently-active channels in the niche (e.g. "animal facts shorts channel viral") for ones with a visibly strong ratio of views to subscriber count or video count — that ratio is the signal a channel found something that works, not the channel's absolute size.

@@ -452,6 +452,100 @@ templated uploads sit exactly in the profile YouTube scrutinises under its
 inauthentic / mass-produced content policy — a real risk when the goal is
 monetisation.
 
+## 7a. The story format — a second flow, added 2026-08-01
+
+A parallel content format, requested by the channel owner and built as
+`docs/skill/story_episode.py`. It does **not** replace the list format; both
+flows coexist and neither touches the other's code path.
+
+**What it is.** One true story, 30–90 seconds, told as escalating beats instead
+of N unrelated facts. Source stories come from wherever (the owner's example was
+a Facebook page, "עובדות לא חשובות"), used strictly as a *topic lead*.
+
+**Structural differences from `viral_episode.py`, and why:**
+
+| | list format | story format |
+|---|---|---|
+| counter | `N/6` | **off** — "3/6" mid-story tells the viewer how much is left and dismantles the suspense |
+| progress bar | on | on — it says "nearly there", which helps retention |
+| length | ~55s fixed by 6 facts | 30–90s, set by how much the story can carry |
+| segments | independent facts | beats, each ending on an open loop |
+| title | none burned in | **2-line banner, 2 keywords in pink** (guide Rank 5) |
+
+**On the guide's ≤20s rule:** deliberately not applied here. A narrative needs
+room to set up and pay off a turn; at 20s the hook never gets cashed. The owner
+specified 30–90s and that governs this flow. §2d's length experiment covers the
+list format only.
+
+**On the guide's 6-phase Declare/Assessment/Isolate/Process/Build/Reveal
+structure:** it was written for restoration/transformation videos and mostly
+does not transfer. "Assessment" with digital calipers has no analogue in the
+assassination of Franz Ferdinand. Only two phases map cleanly — **Declare → the
+hook**, and **Reveal → the payoff plus a callback to the opening image** (the
+callback is the part worth keeping; it drives rewatches). The middle phases were
+replaced with narrative escalation.
+
+**The title banner is a persistent top band, not an opening card.** The guide
+says "2 lines on a pure black background"; a black card at the head of the video
+would burn the first 2 seconds, which the same guide calls the single most
+important metric. A persistent band gives instant context without costing the
+hook.
+
+**Two bugs found while building it, both worth remembering:**
+
+- **`refine_hook()` is actively harmful in narrative context.** Built for the
+  list format, it takes the first fact as context and reliably rewrites the hook
+  into a restatement of it — and its own prompt carries no rule against
+  scene-setting. It twice replaced a strong hook ("An archduke survived a
+  grenade, only for a wrong turn to get him killed") with background exposition
+  that duplicated beat 1, which also meant the same sentence got footage twice.
+  It is not called in this flow. Tuning the similarity threshold would have
+  papered over a step that was systematically wrong for this format.
+- **A regenerated script invalidates its own fact-check.** The narration is
+  re-rolled on every run, so the text that gets rendered was never the text that
+  was verified. `--from-dry-run` locks an approved script and renders exactly
+  that. Verify-then-render does not hold together without it.
+
+**Measured narration speed** (script words ÷ final duration):
+
+| episode | words | seconds | words/sec |
+|---|---|---|---|
+| Facts 7 (list) | 152 | 57.14 | 2.66 |
+| Facts 10 (list) | 145 | 54.12 | 2.68 |
+| Story 1 (narrative) | 135 | 44.74 | **3.02** |
+
+Narrative runs ~13% faster than list content — a list pauses between facts, a
+story is one continuous line. `WORDS_PER_SECOND` is set to 2.9 for this flow.
+Note the model does not hit the word budget exactly: a 75s target produced a 45s
+video, so `--target-seconds` steers rather than sets, and the script warns when
+the gap exceeds 20%.
+
+**Footage for historical stories works, but only atmospherically.** There is no
+Pexels footage of Sarajevo in 1914, and per §6 a year in a query returns
+nothing. What worked for Story 1 was evocative rather than literal: an empty
+cobblestone European street, a vintage convertible, a shallow rocky river (for
+the assassin who jumped into 10cm of water), old film strips for the hook and
+outro, a war memorial for the payoff. All nine segments verified frame-by-frame
+after render. Pin these with `--segment-terms`; the LLM will not find them.
+
+**Copyright, since the source is other people's posts** (asked and answered
+2026-08-01): facts and historical events are not copyrightable, but the specific
+wording of a post is — regardless of whether the author is anonymous, posting in
+a group, or unaffiliated with any organisation. Anonymity makes it unenforceable
+in practice, not permissible. The workflow is therefore: use the post as a topic
+lead, re-verify the facts against independent sources, and write the narration
+from scratch. `--source-note` records the lead in `story-result.json`. Images
+attached to such posts (Story 1's lead carried an NBC News photo) are separately
+protected and must not be reused.
+
+**Re-verification is not optional, and it caught a real error on the first
+try.** The generated narration for Story 1 described Princip as "hungry" outside
+the delicatessen — nodding at the widely repeated story that he was buying a
+sandwich, which is a documented myth. Fixed by stating the correction explicitly
+in the source file rather than deleting the claim (same technique as §6's
+elephant fact), then grepping the locked script for `sandwich|hungry|food|eating`
+before rendering.
+
 ## 8. Open items
 
 - Five unpublished week-1 videos still carry the caption-overlap bug (~2.3s of
