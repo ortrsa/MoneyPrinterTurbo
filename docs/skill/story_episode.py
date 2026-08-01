@@ -305,9 +305,11 @@ def inject_title_banner(
     直接改字符串而不是改 `viral.build_ass()`，是为了完全不动清单流程那条路径。
     """
     font_size = int(video_height * 0.030)
-    band_top = int(video_height * 0.072)
+    # 黑条贴死画面顶端：它是"常驻语境条"，悬在半空反而像一层浮窗，
+    # 顶到边缘才读起来像视频本身的一部分（进度条已挪到底部，不再占这块位置）。
+    band_top = 0
     line_gap = int(font_size * 1.30)
-    band_height = line_gap * 2 + int(font_size * 0.75)
+    band_height = line_gap * 2
 
     style = (
         f"Style: TitleBar,Anton,{font_size},&H00FFFFFF&,&H00FFFFFF&,&H00000000&,"
@@ -319,7 +321,8 @@ def inject_title_banner(
         f"{{\\an7\\pos(0,{band_top})\\1c&H000000&\\alpha&H20&\\p1}}"
         f"m 0 0 l {video_width} 0 l {video_width} {band_height} l 0 {band_height}{{\\p0}}"
     )
-    y1 = band_top + int(font_size * 0.85)
+    # 两行在黑条内垂直居中
+    y1 = band_top + band_height // 2 - line_gap // 2
     y2 = y1 + line_gap
     text1 = _colorize(line1.upper(), keys, key_color)
     text2 = _colorize(line2.upper(), keys, key_color)
@@ -341,6 +344,48 @@ def inject_title_banner(
             out.append(style)
         elif line.startswith("Format: Layer"):
             out.extend([band, ev1, ev2])
+    return "\n".join(out) + "\n"
+
+
+def move_progress_bar_to_bottom(
+    ass_text: str, video_height: int = 1920, margin_frac: float = 0.045
+) -> str:
+    """
+    把进度条从画面顶部挪到底部。
+
+    `viral.build_ass()` 把进度条画在顶部，紧挨着 `N/6` 计数器——那是清单流程的
+    布局。故事流程没有计数器，顶部要留给常驻标题黑条，两个东西叠在一起会互相
+    打架。改字符串而不是改 `build_ass()`，同样是为了不动清单流程那条路径。
+
+    只重写 BarTrack / BarFill 两行里的 y 坐标：x、宽度、以及 `\\t()` 里的动画
+    时间都保持原样，所以进度条的走法完全不变，只是位置换了。
+    """
+    out: list[str] = []
+    for line in ass_text.splitlines():
+        is_bar = line.startswith("Dialogue:") and (
+            ",BarTrack," in line or ",BarFill," in line
+        )
+        if not is_bar:
+            out.append(line)
+            continue
+
+        pos = re.search(r"\\pos\(\d+,(\d+)\)", line)
+        if not pos:
+            out.append(line)
+            continue
+        old_y = int(pos.group(1))
+        # 条的厚度从 clip 的上下沿推出来；BarTrack 没有 clip，就回退到默认值
+        clip = re.search(r"\\clip\(\d+,(\d+),\d+,(\d+)\)", line)
+        thickness = int(clip.group(2)) - int(clip.group(1)) if clip else 11
+        new_y = video_height - int(video_height * margin_frac) - thickness
+
+        line = re.sub(rf"(\\pos\(\d+,){old_y}(\))", rf"\g<1>{new_y}\g<2>", line)
+        line = re.sub(
+            rf"(\\clip\(\d+,){old_y}(,\d+,){old_y + thickness}(\))",
+            rf"\g<1>{new_y}\g<2>{new_y + thickness}\g<3>",
+            line,
+        )
+        out.append(line)
     return "\n".join(out) + "\n"
 
 
@@ -604,6 +649,7 @@ def main(argv: list[str] | None = None) -> int:
         show_counter=False,
         show_progress_bar=True,
     )
+    ass_text = move_progress_bar_to_bottom(ass_text)
     if not args.no_title_banner:
         ass_text = inject_title_banner(
             ass_text,
