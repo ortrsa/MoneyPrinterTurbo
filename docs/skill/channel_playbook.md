@@ -218,6 +218,67 @@ here, or isn't wired into `refine_hook`'s own gate the way it is in
 **Worth checking `viral.py`'s `refine_hook` similarity gate against
 `_too_similar()`'s threshold** — this may be a real bug, not a one-off.
 
+**Channel owner feedback after publishing the 3-fact/25.7s cut: it didn't
+work, revert to the standard 6-fact recipe.** Rebuilt as 6 facts (added: eyes
+on top of the head letting a frog see while submerged, the drinking-patch
+skin-absorption fact, and the "a group of frogs is an army" collective noun).
+Also tightened the third-eyelid fact's wording — the first draft implied frogs
+"hunt" underwater with it, but frogs mainly catch prey via tongue-flick at the
+water's edge or on land. **So the 25-30s/open-on-image experiment from §5 is
+inconclusive from one data point** — do not treat this single owner reaction
+as a verdict on short-form vs. long-form generally; it may have been this
+specific cut, topic, or hook rather than duration itself.
+
+**A stock-footage pool can contain a bad clip that recurs across every query,
+not just a specific search term.** A third real Pexels clip for this
+account's frog coverage — a frog barely visible under thick pond algae —
+surfaced in the `frog eye close up` pool at the 3rd-candidate position
+(`probe_footage.py --per-term 2` only shows the top 2, so it was invisible
+during probing). It then showed up for **two different segments** despite
+using different search terms, because `download_segment_materials` pulls 3
+clips per segment and both segments' term happened to include it in their
+pool. Probing more candidates (`--per-term 3`) would have caught this, but
+even then — this account's frog coverage is genuinely only 3 clips total, one
+of them weak, and no search-term rewording avoids it since it appears in
+nearly every frog query's top-3. Accepted as a minor, known limitation rather
+than blocking further (2 brief cuts out of 55s), same class of issue as the
+sloth/wombat gaps.
+
+**A caption anomaly is not automatically a whisper bug — check the render's
+own logged script before diagnosing, not an earlier dry-run's.** The 6-fact
+render's fact 6 ended in the awkwardly-phrased "...goes by that fierce
+military title." The word "title." burned into the caption looked exactly
+like the `condition_on_previous_text` hallucination class already documented
+above (a plausible-sounding word substituting for real speech at a segment
+boundary). It was diagnosed as exactly that, "fixed" by hand-editing the
+`.ass` overlay to replace it with reconstructed words ("unit in the wild")
+matching a *different, earlier* generation of fact 6 seen in that episode's
+own dry-run log — and re-burned locally via `viral.burn_overlay`'s ffmpeg
+command (no TTS needed, since `combined-synced.mp4` + `overlay.ass` +
+`audio.mp3` all survive in the task dir). Caught before delivery by grep-ing
+this specific render's own `fact:` log lines and `viral-result.json`, which
+both confirmed "title." was the model's actual chosen wording, correctly
+transcribed — not a transcription error. The edit was reverted before
+sending. **Net lesson: local ASS re-burn (no API calls) is a legitimate,
+fast way to patch a genuine caption bug without a full re-render — but verify
+the anomaly against that exact render's own script log first, since every run
+regenerates fresh text and an earlier run's wording is not evidence of what
+this run's audio actually says.**
+
+**Gemini's free-tier TTS quota (`gemini-2.5-flash-tts`) hard-caps at 10
+requests/day and was exhausted mid-session** after repeated re-renders across
+Facts 11's two format attempts plus the Ferrari and pizza episodes earlier the
+same day. `RESOURCE_EXHAUSTED` on `generate_content_free_tier_requests`,
+`GenerateRequestsPerDayPerProjectPerModel-FreeTier`, quota value 10. The
+API's `retryDelay` field said 49s, which is misleading for a *daily* quota —
+do not trust it as an actual reset time. **This blocks any further new
+narration generation for the rest of the day** (existing renders can still be
+locally re-burned/re-encoded/compressed without hitting this). Flag it to the
+user early if the day's work involves more than a handful of full renders;
+enabling billing on the Gemini API key is the only way around it, same
+constraint already hit once today for image generation (see the pizza
+episode's Picsart/Nano-Banana credit conversation).
+
 No retention/view numbers yet.
 
 ## 3. What this data supports
