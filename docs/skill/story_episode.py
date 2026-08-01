@@ -382,6 +382,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--whisper-model", default="base.en")
     parser.add_argument("--threads", type=int, default=ve.os.cpu_count() or 4)
     parser.add_argument("--dry-run", action="store_true", help="只出脚本和元数据，不渲染")
+    parser.add_argument(
+        "--from-dry-run",
+        type=Path,
+        default=None,
+        help=(
+            "读取一次 --dry-run 的 JSON 输出，直接用里面的脚本/标题/元数据渲染，"
+            "跳过全部 LLM 生成。脚本每次生成都不一样，所以'先人工核对事实、再渲染'"
+            "必须靠它才成立——否则渲染出来的是另一版没被核对过的文本。"
+        ),
+    )
     args = parser.parse_args(argv)
 
     if not MIN_SECONDS <= args.target_seconds <= MAX_SECONDS:
@@ -390,8 +400,20 @@ def main(argv: list[str] | None = None) -> int:
             f"(got {args.target_seconds})"
         )
 
+    locked: dict | None = None
+    if args.from_dry_run:
+        locked = json.loads(args.from_dry_run.read_text(encoding="utf-8"))
+        missing = [
+            k for k in ("segments", "title_card", "metadata") if k not in locked
+        ]
+        if missing:
+            parser.error(f"{args.from_dry_run} is missing keys: {missing}")
+        if args.dry_run:
+            parser.error("--from-dry-run and --dry-run are mutually exclusive")
+        logger.info(f"using the locked script from {args.from_dry_run}")
+
     story = args.story_file.read_text(encoding="utf-8").strip()
-    if not story:
+    if not story and not locked:
         parser.error(f"{args.story_file} is empty")
 
     beats = beats_for_duration(args.target_seconds)
@@ -400,16 +422,20 @@ def main(argv: list[str] | None = None) -> int:
         f"{beats} beats, ~{int(args.target_seconds * WORDS_PER_SECOND)} words"
     )
 
-    parts = build_story_script(
-        story=story,
-        language=args.language,
-        target_seconds=args.target_seconds,
-        outro=args.outro,
-        hook=args.hook,
-    )
-    spoken_segments = [parts["hook"], *parts["beats"], parts["reveal"]]
-    if parts["outro"]:
-        spoken_segments.append(parts["outro"])
+    if locked:
+        spoken_segments = list(locked["segments"])
+        parts = {"beats": spoken_segments[1:-1]}
+    else:
+        parts = build_story_script(
+            story=story,
+            language=args.language,
+            target_seconds=args.target_seconds,
+            outro=args.outro,
+            hook=args.hook,
+        )
+        spoken_segments = [parts["hook"], *parts["beats"], parts["reveal"]]
+        if parts["outro"]:
+            spoken_segments.append(parts["outro"])
     script_text = " ".join(spoken_segments)
     word_count = len(script_text.split())
     estimated = word_count / WORDS_PER_SECOND
@@ -438,31 +464,35 @@ def main(argv: list[str] | None = None) -> int:
                 f"segments 0..{len(spoken_segments) - 1}"
             )
 
-    from app.services import llm
+    if locked:
+        metadata = dict(locked["metadata"])
+        title_card = dict(locked["title_card"])
+    else:
+        from app.services import llm
 
-    metadata = llm.generate_social_metadata(
-        video_subject="a true story",
-        video_script=script_text,
-        language="en",
-        platform="youtube_shorts",
-    )
-    metadata["caption"] = ve.format_caption_paragraphs(metadata["caption"])
+        metadata = llm.generate_social_metadata(
+            video_subject="a true story",
+            video_script=script_text,
+            language="en",
+            platform="youtube_shorts",
+        )
+        metadata["caption"] = ve.format_caption_paragraphs(metadata["caption"])
+
+        title_raw = llm.generate_script(
+            video_subject="on-screen title",
+            language=args.language,
+            paragraph_number=1,
+            video_script_prompt=(
+                "Write the 2-line title now. Return only the LINE1, LINE2, KEY1 and "
+                "KEY2 lines."
+            ),
+            custom_system_prompt=TITLE_SYSTEM_PROMPT.format(
+                script=script_text, language=args.language
+            ),
+        )
+        title_card = parse_title_response(title_raw)
     if args.title:
         metadata["title"] = args.title
-
-    title_raw = llm.generate_script(
-        video_subject="on-screen title",
-        language=args.language,
-        paragraph_number=1,
-        video_script_prompt=(
-            "Write the 2-line title now. Return only the LINE1, LINE2, KEY1 and "
-            "KEY2 lines."
-        ),
-        custom_system_prompt=TITLE_SYSTEM_PROMPT.format(
-            script=script_text, language=args.language
-        ),
-    )
-    title_card = parse_title_response(title_raw)
     logger.info(f"title card: {title_card}")
 
     if args.dry_run:
