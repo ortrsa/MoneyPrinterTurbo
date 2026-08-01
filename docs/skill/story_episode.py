@@ -65,6 +65,7 @@ HOOK: <one sentence, at most 14 words>
 BEAT: <one or two sentences>
 ... exactly {beats} BEAT lines in total ...
 REVEAL: <one or two sentences>
+OUTRO: <one sentence, the closing call to action>
 
 ## Rules that decide whether this video works
 1. Total narration must be about {word_budget} words. This sets the video length,
@@ -83,6 +84,15 @@ REVEAL: <one or two sentences>
 5. Keep every claim faithful to the source below. Never invent numbers, names or
    motives that are not there. If the source marks something as uncertain, keep
    it uncertain rather than flattening it into a fact.
+4b. The OUTRO must be written for THIS story and no other. Name something
+   concrete from it - the object, the person, the number the viewer just heard -
+   so it could not be pasted onto a different video. A closing line reused across
+   episodes makes a series feel machine-made and wastes the one moment a viewer
+   is most likely to subscribe. Asking for a follow or a comment is fine and
+   allowed; what gets demoted is content-free filler like "subscribe if you
+   agree". Pick whichever of follow / comment the story invites: a claim the
+   viewer can test or argue with earns a comment ask, a story that obviously has
+   sequels earns a follow ask.
 6. Plain spoken language, short sentences, contractions where natural.
 7. Write for someone whose English is basic. A large share of the audience are
    not native speakers, and narration moves too fast to stop and work a word out
@@ -150,7 +160,7 @@ def beats_for_duration(target_seconds: int) -> int:
 # "...found him.BEAT: Six young men..."。靠 splitlines() 解析必然失败，
 # 用标签本身做边界则两种情况都能吃下。
 _STORY_LABEL_RE = re.compile(
-    r"(HOOK|BEAT|REVEAL)\s*:\s*(.*?)(?=(?:HOOK|BEAT|REVEAL)\s*:|$)",
+    r"(HOOK|BEAT|REVEAL|OUTRO)\s*:\s*(.*?)(?=(?:HOOK|BEAT|REVEAL|OUTRO)\s*:|$)",
     re.IGNORECASE | re.DOTALL,
 )
 _TITLE_LABEL_RE = re.compile(
@@ -163,6 +173,7 @@ def parse_story_response(raw: str) -> dict:
     """把 LLM 返回的 HOOK/BEAT/REVEAL 解析成结构化的节拍。"""
     hook = ""
     reveal = ""
+    outro = ""
     beats: list[str] = []
     for label, text in _STORY_LABEL_RE.findall(raw):
         text = text.strip().strip('"').strip()
@@ -173,13 +184,15 @@ def parse_story_response(raw: str) -> dict:
             hook = text
         elif label == "BEAT":
             beats.append(text)
+        elif label == "OUTRO":
+            outro = text
         else:
             reveal = text
     if not hook or not beats or not reveal:
         raise RuntimeError(
             "could not parse HOOK/BEAT/REVEAL from the model output:\n" + raw[:1500]
         )
-    return {"hook": hook, "beats": beats, "reveal": reveal}
+    return {"hook": hook, "beats": beats, "reveal": reveal, "outro": outro}
 
 
 def parse_title_response(raw: str) -> dict:
@@ -260,7 +273,22 @@ def build_story_script(
         if tells:
             logger.warning(f"AI-tell phrase slipped through: {tells} in: {text}")
 
-    parsed["outro"] = (outro or "").strip()
+    # 结尾 CTA 现在由模型按当集内容单独写（prompt 规则 4b）。只有显式传了
+    # --outro 才覆盖它——固定文案会让系列显得是机器批量产的，而这恰好是整条
+    # 视频里最可能转化订阅的一句话。实测教训：前两集都手动传了同一句
+    # "Follow for more true stories that sound made up."，一眼就看出是模板。
+    if outro and outro.strip():
+        parsed["outro"] = outro.strip()
+        logger.info(f"outro (provided): {parsed['outro']}")
+    else:
+        parsed["outro"] = parsed.get("outro", "").strip()
+        if parsed["outro"]:
+            logger.info(f"outro (written for this story): {parsed['outro']}")
+        else:
+            logger.warning(
+                "the model returned no OUTRO line; this episode will end without a "
+                "call to action. Re-run or pass --outro."
+            )
     return parsed
 
 
