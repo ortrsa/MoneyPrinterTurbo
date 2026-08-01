@@ -528,6 +528,22 @@ the assassin who jumped into 10cm of water), old film strips for the hook and
 outro, a war memorial for the payoff. All nine segments verified frame-by-frame
 after render. Pin these with `--segment-terms`; the LLM will not find them.
 
+**Two adjacent segments sharing a primary term replay the identical clip.** The
+first pinned term is exempt from cross-segment URL de-dup (§6) so that a subject
+appearing in consecutive lines still gets the right footage — but the cost is
+that the *same clip* restarts mid-scene, which reads as a stutter. On Story 1
+segments 2 and 3 both pinned `vintage car`, and the same Mercedes played twice,
+spotted immediately by the channel owner. This is common in narrative, where
+consecutive beats often concern the same car or person.
+
+The fix that works is **one clip slowed to fill the merged window**, not two
+plays: take the first segment's cut, apply `setpts=<merged_window/clip_len>*PTS`,
+and splice it across both windows (Story 1: 3.94s of footage stretched by 2.081
+to cover 10.34–18.54, i.e. 0.48x). Slow motion also suits a tension beat better
+than a repeat. `story_episode.py` now warns when adjacent segments share a
+primary term; the de-dup logic itself was left alone because it is shared with
+the list flow.
+
 **Copyright, since the source is other people's posts** (asked and answered
 2026-08-01): facts and historical events are not copyrightable, but the specific
 wording of a post is — regardless of whether the author is anonymous, posting in

@@ -550,6 +550,18 @@ def main(argv: list[str] | None = None) -> int:
     segment_terms = ve.generate_segment_terms(
         spoken_segments, language=args.language, overrides=term_overrides
     )
+    # 相邻两段用同一个主词时，画面会**原样重播同一个片段**：主词按设计豁免
+    # 跨段 URL 去重（好让同一主体连续出现两段时还能拍对东西），代价就是重播。
+    # 观众看到的是"这段视频卡了"。故事流程里这种情况很常见——连续两拍都在讲
+    # 同一辆车、同一个人。修法是把那一个片段放慢铺满两段的合并时间窗，而不是
+    # 让它播两遍。这里只告警，因为改去重逻辑会同时影响清单流程那条路径。
+    for i in range(len(segment_terms) - 1):
+        if segment_terms[i] and segment_terms[i][0] == segment_terms[i + 1][0]:
+            logger.warning(
+                f"segments {i} and {i + 1} share the primary term "
+                f"{segment_terms[i][0]!r}, so the same clip will play twice in a "
+                "row. Consider slowing one clip to cover both windows instead."
+            )
     plans = [
         topic_footage.SegmentPlan(
             index=i, text=text, start=seg.start, end=seg.end, terms=terms
