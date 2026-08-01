@@ -94,6 +94,10 @@ REVEAL: <one or two sentences>
    appear in an ordinary conversation, replace it or explain it in the same
    breath. Keep real proper names (people, cities); it is the vocabulary around
    them that must be simple.
+8. Write years as digits - "1914", never "nineteen fourteen". The script text is
+   what gets burned on screen as captions, and a digit year is read at a glance
+   while a spelled-out one has to be decoded. This is about the written form
+   only; the voice still says it normally.
 7. Never use these overused AI-writing phrases: {blocklist}
 8. {humanization}
 9. Write the narration in {language}.
