@@ -348,6 +348,59 @@ across 8-10 videos, not per video.
 
 ## 5. Strategy decisions
 
+**Three-criteria niche/episode-selection framework, adopted 2026-08-02**
+(channel owner supplied it from an external source, with a timestamped
+breakdown, and asked to fix episodes 13+ if the current slate didn't already
+satisfy it — full CSV lives at `docs/skill/plans/content_calendar_ep12_18.csv`,
+per-episode assessment in its `criteria_fit` column):
+
+1. **Universal Relatability** — content must be instantly understood by
+   anyone on Earth, no prior knowledge or language required (food, animals,
+   cleaning/restoration are the framework's own named examples).
+2. **Emotional Hook / Absurdity** — the viewer's reaction is "why would they
+   put this much effort into something so small" — a creator visibly
+   over-investing psychic effort on an everyday goal.
+3. **Completion Compulsion** — a clear statement in the first second that
+   creates a commitment to see the outcome, driving retention toward 80%+ on
+   60s Shorts.
+
+**Honest fit assessment, not uniform compliance — two of the three criteria
+behave very differently for this channel:**
+
+- **#1 is already satisfied.** Ocean, food, dogs and everyday objects are
+  all inside the framework's own named categories; no change needed here.
+- **#2 is structurally unreachable for the facts format, and this document
+  says so rather than faking it.** The criterion describes a creator
+  visibly toiling on screen; this is faceless stock-footage narration, with
+  no creator to display effort. `SKILL.md`'s Shot Pacing section already
+  reached the same conclusion independently, unprompted by this framework
+  ("do not fabricate a fake before/after for a facts video — the mismatch
+  reads as filler"). **The story format is the one place it transfers**,
+  because the absurd effort can belong to the *subject* rather than a
+  creator — Inky the octopus mounting a patient escape for the simple goal
+  of reaching the sea is exactly this shape. Ep 14 (Inky) is flagged in the
+  CSV as the single best-fit episode across the whole slate, hitting all
+  three criteria at once where the facts episodes hit at most two. This is
+  a real argument for a higher story ratio than the 3:1 originally proposed
+  two sections below — but do not flip on an untested framework alone; it's
+  a hypothesis to weigh against ep 14's actual retention once published,
+  same evidentiary bar as everything else in this section.
+- **#3 is the real, fixable gap — and plausibly explains the 33% retention
+  already logged in §3.** A 6-fact list with independent facts and a hook
+  that spends the best fact immediately hands the viewer full value by
+  fact 1; leaving early costs them nothing. Fixed in the CSV for eps 13, 16
+  and 18 by restructuring (not reformatting): the hook now names a payoff
+  without revealing it, and the single most surprising fact is moved to the
+  final slot so it closes the loop the hook opened (ocean → brine pools;
+  dogs → Chaser's 1,000-word vocabulary; objects → the fuel-gauge arrow,
+  which is also the strongest comment-bait in the batch because it's
+  immediately self-verifiable). Ep 12 shipped before this rule existed and
+  is deliberately left as-is in the CSV as the **control** — compare its
+  retention against 13/16/18 to see whether the restructure actually moves
+  the number, since ep 13 also changes topic at the same time and so isn't
+  a clean isolated test on its own; ep 16 (dogs, no topic change) is the
+  cleaner second data point.
+
 **Blending story episodes into the facts-only channel: roughly 1 story per
 4 videos, animal-subject stories first** (channel owner request, 2026-08-01
 — "most videos up to 11 are animal facts, I want to start mixing in stories
