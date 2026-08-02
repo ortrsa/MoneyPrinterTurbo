@@ -697,10 +697,17 @@ Please note that you must use English for generating video search terms; Chinese
 # 过长内容后调用方还需要二次裁剪。
 SOCIAL_PLATFORMS = {
     "tiktok": {"title_max": 100, "caption_max": 2200, "hashtag_count": 5},
-    "youtube_shorts": {"title_max": 100, "caption_max": 5000, "hashtag_count": 3},
+    # 12 = 4 post-specific + 4 niche-specific + 4 broad-viral, the 3-tier tag
+    # formula from docs/skill/shorts_growth_guide.md Rank 7 ("9-12 tags total,
+    # split three ways"). See build_social_metadata_prompt's tier_instruction.
+    "youtube_shorts": {"title_max": 100, "caption_max": 5000, "hashtag_count": 12},
     "instagram_reels": {"title_max": 125, "caption_max": 2200, "hashtag_count": 8},
     "facebook_reels": {"title_max": 125, "caption_max": 2200, "hashtag_count": 5},
 }
+# Platforms whose hashtag_count is large enough to actually fill the 3-tier
+# formula (post-specific / niche-specific / broad-viral) rather than just a
+# handful of flat tags. Below this, tiering would force padding with filler.
+HASHTAG_TIER_MIN_COUNT = 9
 DEFAULT_SOCIAL_PLATFORM = "tiktok"
 DEFAULT_SOCIAL_LANGUAGE = "auto"
 MAX_SOCIAL_SUBJECT_LENGTH = 500
@@ -725,6 +732,10 @@ DEFAULT_SOCIAL_HASHTAGS = [
     "#reels",
     "#creator",
     "#content",
+    "#facts",
+    "#didyouknow",
+    "#explore",
+    "#foryou",
 ]
 
 
@@ -825,6 +836,19 @@ def build_social_metadata_prompt(
     label = SOCIAL_PLATFORM_LABELS.get(platform, platform)
     language_instruction = _social_language_instruction(language)
 
+    tier_instruction = ""
+    if spec["hashtag_count"] >= HASHTAG_TIER_MIN_COUNT:
+        tier_instruction = (
+            " Split them into three roughly equal tiers of 3-4 tags each, in "
+            "this order: (a) POST-SPECIFIC - name the exact content of THIS "
+            "video (e.g. #dungbeetlefacts, #inkytheoctopus), not a generic "
+            "topic; (b) NICHE-SPECIFIC - the broader category this video "
+            "belongs to (e.g. #animals, #ocean, #sciencefacts); (c) BROAD "
+            "VIRAL - mass-reach discovery tags (e.g. #shorts, #viral, #fyp). "
+            "Do not put two tags from the same tier next to each other more "
+            "than twice in a row."
+        )
+
     prompt = f"""
 # Role: Short-Video Social Media Copywriter
 
@@ -836,7 +860,7 @@ Write engaging publishing metadata for a short video that will be posted on {lab
 2. The JSON must contain exactly these keys: "title", "caption", "hashtags".
 3. "title": a catchy hook, at most {spec["title_max"]} characters. Prefer a specific claim over a vague tease.
 4. "caption": an engaging description, at most {spec["caption_max"]} characters. Do not put hashtags inside the caption. End on an actionable command that names something specific from THIS script - a detail, object or claim a viewer could only know from watching. Follow the shape "Follow/Comment + <specific thing from this video>", but write your own wording; do not reuse a stock closing line. Never end on a generic bait question like "What do you think?" or "Let us know!", and never on a closer that would fit any other video.
-5. "hashtags": a JSON array of exactly {spec["hashtag_count"]} strings. Each must start with "#", contain no spaces, and be relevant to the topic and to {label}.
+5. "hashtags": a JSON array of exactly {spec["hashtag_count"]} strings. Each must start with "#", contain no spaces, and be relevant to the topic and to {label}.{tier_instruction}
 6. {language_instruction}
 7. Do not use these overused AI-writing tells anywhere in the output: "here's the thing", "let's dive in", "game-changer", "revolutionary", "unlock", "unleash", "in today's fast-paced world", "it's important to note", "in conclusion", "leverage", "delve", "boasts", "testament to", "elevate", "navigate" (as a metaphor), "tapestry". Do not open the caption with "Did you know".
 

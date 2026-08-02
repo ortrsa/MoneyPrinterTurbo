@@ -126,9 +126,17 @@ Don't invent topics from scratch. Use content with a demonstrated track record.
 2. **Niche-specific (3–4)** — the category: `#animals`, `#science`, `#nature`
 3. **Broad viral (3–4)** — mass reach: `#viral`, `#shorts`, `#fyp`
 
-> We currently generate **3 hashtags** plus a separate 5-item SEO tag string —
-> under half the recommended count, and not tiered. Straightforward pipeline
-> change in `generate_social_metadata`.
+> **Implemented 2026-08-02.** `generate_social_metadata(platform="youtube_shorts")`
+> now returns 12 hashtags (was 3), and the prompt explicitly instructs the
+> 3-tier split above. Verified live: a test call returned
+> `#challengerdeep #deepoceanfacts #abyssalzone #deepseafacts` (post-specific),
+> `#oceanography #marinebiology #sciencefacts #ocean` (niche), `#shorts #viral
+> #trending #exploration` (broad) — 12 tags, all three tiers present. Both
+> `viral_episode.py` and `story_episode.py` already call this function with no
+> other changes needed, so every episode built from now on gets this
+> automatically. `send_to_telegram.py` already forwarded the full hashtag list
+> to both the caption and the separate YouTube "Tags" field, so nothing there
+> needed to change either — see `SKILL.md` 8c.
 
 ## Rank 8 — The 48-hour delete-and-reupload fix · 6.5/10
 

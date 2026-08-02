@@ -169,9 +169,10 @@ Upload kit used:
 - Title: `Random But True Facts 10 👀`
 - Hashtags: `#batfacts #vampirebats #tequilabat #animalfacts #wildlife #nature
   #shorts #viral #fyp` — first episode using the guide's Rank 7 three-tier
-  structure (post-specific / niche / broad), applied by hand at publish time.
-  `generate_social_metadata` itself still only emits 3 flat tags; that code
-  fix is still open (§8).
+  structure (post-specific / niche / broad), applied by hand at publish time
+  because `generate_social_metadata` itself only emitted 3 flat tags then.
+  **That code fix landed 2026-08-02** (see §5 below) — every episode built
+  from now on gets 12 tiered tags automatically, no more hand-editing needed.
 - Pinned comment posted: "Bet you're never looking at a margarita the same way
   again 🦇🍹 Which animal should Random But True cover next — drop it below."
 
@@ -382,6 +383,42 @@ you nothing. Until reach recovers, judge changes on the channel-level number
 across 8-10 videos, not per video.
 
 ## 5. Strategy decisions
+
+**3-tier hashtag formula, implemented in code 2026-08-02** (owner restated the
+guide's Rank 7 rule verbatim and asked to make sure the pipeline actually uses
+it, not just documents it as a gap):
+
+> Using the correct tag structure helps YouTube feed your short to the exact
+> audience most likely to watch it through to the end. Apply 9 to 12 total
+> tags split into three categories: (1) Post-Specific Tags (3-4) — describe
+> the exact video content; (2) Niche-Specific Tags (3-4) — broad category
+> tags; (3) Broad Viral Tags (3-4) — mass-reach tags.
+
+This had been sitting in `shorts_growth_guide.md` as Rank 7 (7.0/10) since the
+guide research pass, flagged as a gap: the pipeline only emitted 3 flat,
+untiered hashtags, and Facts 10 worked around it with a hand-written tag list
+at publish time rather than a pipeline fix. Implemented for real this time in
+`app/services/llm.py`:
+- `SOCIAL_PLATFORMS["youtube_shorts"]["hashtag_count"]` raised from 3 to 12
+  (4+4+4 tiers). Other platforms' entries (`tiktok`, `instagram_reels`,
+  `facebook_reels`) left untouched — this channel only publishes to YouTube
+  Shorts, no reason to change behavior nobody uses.
+- `build_social_metadata_prompt` now appends an explicit tier instruction
+  (post-specific / niche-specific / broad-viral, in that order, 3-4 each)
+  whenever a platform's `hashtag_count >= HASHTAG_TIER_MIN_COUNT` (9) — kept
+  conditional so low-count platforms don't get forced into padding 3-5 tags
+  into three artificial buckets.
+- `DEFAULT_SOCIAL_HASHTAGS` (the no-LLM fallback) extended from 8 to 12 items
+  so the fallback path also satisfies the new count; it stays generic/flat
+  since the fallback has no per-episode topic to draw post-specific tags from.
+
+Verified live (see `shorts_growth_guide.md` Rank 7 for the exact output).
+Both `viral_episode.py` and `story_episode.py` already call
+`generate_social_metadata(platform="youtube_shorts")`, and
+`send_to_telegram.py` already forwards the full hashtag list to both the
+caption and YouTube Studio's separate "Tags" field — so this took effect for
+every future episode with no other file changes. Past episodes already
+published are not being retroactively re-tagged.
 
 **Three-criteria niche/episode-selection framework, adopted 2026-08-02**
 (channel owner supplied it from an external source, with a timestamped
@@ -932,9 +969,8 @@ before rendering.
   sloth hero shot for Facts 4's dolphin-substitution gap (§6, two variants
   given), and two bat-variety shots for Facts 10 (a two-bats-roosting close-up,
   a bumblebee-bat-scale shot). Splice in via the §6 technique once received.
-- `generate_social_metadata` still only emits 3 flat hashtags; Facts 10 used a
-  hand-written 3-tier set instead (§2e). The Rank 7 code fix itself is still
-  undone.
+- ~~`generate_social_metadata` still only emits 3 flat hashtags~~ **Fixed
+  2026-08-02** — now emits 12 tiered tags for `youtube_shorts`. See §5.
 
 
 ## 9. Telegram delivery, and picking this project back up in a fresh session
