@@ -384,6 +384,30 @@ across 8-10 videos, not per video.
 
 ## 5. Strategy decisions
 
+**Two follow-up fixes to the hashtag work, same day (2026-08-02):**
+
+1. **Caption gets only 3 hashtags, not all 12.** After the 3-tier fix below
+   shipped, the owner asked for episodes 12/13's tags refreshed. Sending the
+   full 12-tag list appended to the caption was wrong — Rank 5 already says
+   "3 subtle hashtags in the description," and 12 there reads as spam. Fixed
+   in `send_to_telegram.py`: added `CAPTION_HASHTAG_COUNT = 3`;
+   `build_caption_with_hashtags` now slices `hashtags[:3]` instead of the
+   full list. The full 9-12 still go, unabridged, to the separate "tags:"
+   Telegram message meant for YouTube Studio's Tags field — that field is
+   supposed to hold all of them, only the caption needed trimming.
+2. **Manual/ad-hoc Telegram sends must follow the same one-thing-per-message
+   rule the pipeline already uses, no exceptions.** The manual delivery of
+   ep12/ep13's refreshed tags crammed intro text + the `#`-caption version +
+   the plain-Tags-field version into a single message per episode. Owner:
+   "why I ask you to send separate messages in Telegram because I need to
+   copy it... if you send all in one message, it's very hard hard for me to
+   copy." `send_to_telegram.py`'s `send_labelled_field` already does this
+   correctly (label message, then content-only message) for scripted
+   deliveries — the mistake was only in a hand-rolled `curl` send that didn't
+   reuse that pattern. Documented as a hard rule in `SKILL.md` 8d so it isn't
+   repeated: every copyable thing sent by hand gets its own label message and
+   its own content message, never bundled with anything else.
+
 **3-tier hashtag formula, implemented in code 2026-08-02** (owner restated the
 guide's Rank 7 rule verbatim and asked to make sure the pipeline actually uses
 it, not just documents it as a gap):

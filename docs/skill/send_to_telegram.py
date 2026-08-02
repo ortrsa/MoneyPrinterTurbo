@@ -37,6 +37,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 TELEGRAM_API = "https://api.telegram.org/bot{token}/{method}"
 
+# shorts_growth_guide.md Rank 5: hashtags belong in the description, but only
+# a handful — too many there reads as spammy. The full 9-12 tier-formula set
+# (Rank 7) belongs in YouTube Studio's separate "Tags" field, not the caption.
+CAPTION_HASHTAG_COUNT = 3
+
 # 每个字段先发一条"标签"消息，再发一条"内容"消息——这样在手机上长按复制时,
 # 只会选中要复制的正文，不会把 "title:" 这几个字也带进剪贴板。
 LABELS = {
@@ -103,16 +108,22 @@ def send_labelled_field(token: str, chat_id: str, key: str, value: str) -> None:
 
 def build_caption_with_hashtags(caption: str, hashtags: list[str]) -> str:
     """
-    把 hashtags 接在文案末尾。
+    把 hashtags 接在文案末尾——但只取前 `CAPTION_HASHTAG_COUNT` 个。
 
     这是 YouTube 描述框的标准写法（SKILL.md 里也是这么说的：标签放描述末尾，
     不放标题），漏了这步等于 hashtags 白生成——上一次人工发送就漏了这个,
     所以这里把它做成脚本的默认行为而不是需要记住的步骤。
+
+    完整的 9-12 个分层标签（post-specific/niche/broad）属于 YouTube Studio
+    的 Tags 输入框，不属于描述——描述里塞 12 个 # 号看起来像垃圾信息。
+    `hashtags` 列表已经按 tier 顺序排列（post-specific 在前），所以直接取
+    前几个就是"当集专属"的标签，不是随手挑的。
     """
     caption = caption.rstrip()
     if not hashtags:
         return caption
-    tag_line = " ".join(h if h.startswith("#") else f"#{h}" for h in hashtags)
+    selected = hashtags[:CAPTION_HASHTAG_COUNT]
+    tag_line = " ".join(h if h.startswith("#") else f"#{h}" for h in selected)
     return f"{caption}\n\n{tag_line}"
 
 
@@ -140,9 +151,9 @@ def send_upload_kit(
     发视频 + 四段各自"标签+内容"的字段。
 
     hashtags 出现两次，这是有意的，不是重复劳动：一次接在 caption 末尾
-    （YouTube 描述框的标准写法），一次单独一条方便只复制标签贴到别处
-    （比如 TikTok/Reels 的标签框，或者评论区）。只接在 caption 里、不单独
-    发，第一次上线时就被指出漏了这个。
+    （只取前 `CAPTION_HASHTAG_COUNT` 个，YouTube 描述框不适合塞满全部标签），
+    一次是完整的 9-12 个，单独一条方便直接复制粘贴进 YouTube Studio 的
+    Tags 输入框。只接在 caption 里、不单独发，第一次上线时就被指出漏了这个。
     """
     send_video(token, chat_id, video)
     send_labelled_field(token, chat_id, "title", title)
