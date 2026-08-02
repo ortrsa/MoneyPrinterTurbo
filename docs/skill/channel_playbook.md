@@ -348,6 +348,47 @@ across 8-10 videos, not per video.
 
 ## 5. Strategy decisions
 
+**Blending story episodes into the facts-only channel: roughly 1 story per
+4 videos, animal-subject stories first** (channel owner request, 2026-08-01
+— "most videos up to 11 are animal facts, I want to start mixing in stories
+like the one we built, but not too sharp a transition; what should the next
+videos be, and how do I combine story-format with the 6-fact format"). The
+channel has been 100% animal facts through Facts 11; the one story episode
+built so far (Ferrari/Lamborghini/Pagani, §7a) was a separate one-off under
+its own series name ("Rival Origins"), not folded into this channel's
+rhythm. Decision:
+
+- **Facts stay the dominant format — do not alternate 1:1.** §3/§5 already
+  established that topic-scattering plausibly explains the channel's original
+  zero-subscriber problem (unpredictable next-video content gives nothing to
+  subscribe to). A story every ~4th video keeps facts as the channel's clear
+  identity while still introducing variety. Re-evaluate the ratio once a few
+  stories have retention data — this is a starting point, not a fixed rule.
+- **The first 1-2 story episodes should be animal/nature-subject stories,
+  not a subject-matter jump like Ferrari/Lamborghini.** Introduce one
+  variable at a time: format changes (list → narrative) without also
+  changing topic domain, so it reads as a natural extension of "surprising
+  animal facts" rather than a second, unrelated show. Candidates identified
+  so far, both real and already escalating in structure: **Inky the
+  octopus's 2016 tank escape** (ties back to octopus from Facts 4) and **the
+  coelacanth's 1938 rediscovery** after being presumed extinct for 65 million
+  years. Only branch into non-animal story subjects (Ferrari etc.) after the
+  animal-subject bridge episodes are out and the format itself is validated
+  with the audience.
+- **Brand stories under the same "Random But True" identity going forward**
+  (e.g. `Random But True: Inky's Escape`) instead of a separate series name,
+  so it reads as the same channel occasionally changing gears rather than a
+  spin-off. The already-published Ferrari video keeps its "Rival Origins"
+  title as-is (already shipped); this naming convention applies to stories
+  built from here on. The already-built Ferrari/Lamborghini/Pagani episode
+  should still get used — slot it in as a story once the animal-subject
+  bridge story(s) have run, not wasted.
+- **Proposed next slate** (subject to the channel owner's actual picks):
+  Facts 12 (animal strength comparisons — unused §5a category), Facts 13
+  (dog breed temperament rankings — unused angle, dog itself used in Facts
+  5), first bridge story (Inky or coelacanth), Facts 14, second story
+  (the existing Ferrari/Lamborghini/Pagani episode).
+
 **Hooks must be phrased as a question to the viewer, not a flat statement**
 (channel owner feedback, 2026-08-01, after watching Facts 11 — "the opening
 isn't good, it should start with something like 'did you know' or a
