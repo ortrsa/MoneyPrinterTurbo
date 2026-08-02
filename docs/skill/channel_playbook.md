@@ -608,6 +608,35 @@ Full detail in `SKILL.md`; the short version:
   result is a *sea turtle* in the primary slot and shipped the turtle again, even
   though `common cuttlefish` (the verified one) was right there in position two.
   Same mistake twice, once in Facts 7 and again in Facts 8.
+- **A thin stock library causes visible ping-pong, not just a wrong species.**
+  Facts 12's dung-beetle opener (segments 0+1, same "dung beetle" search term)
+  and its gorilla closer (segments 6+7, same "gorilla" term) each only had 2
+  real matching clips in this account's tier. The renderer fills each
+  segment's time window by cycling `clip_paths[cut_index % len(clip_paths)]`
+  starting over from index 0 in every segment — so two adjacent segments
+  sharing the same term pool visibly flip A→B→A→B→A. The owner caught this
+  immediately as "back to the first video, then the second, then back
+  again," even without knowing the mechanism. Fix: give adjacent segments
+  that cover the same subject *different* search terms so their candidate
+  pools (and therefore their cut order) differ, and prefer terms whose own
+  top-2/3 results are each real matches — probe several phrasings
+  (`probe_footage.py --per-term 4`+) until you find ones that don't surface
+  the same bad/irrelevant clip (e.g. "dung beetle" and "scarab beetle" both
+  ranked a market-crate-of-harvested-insects clip at position 1; "black
+  beetle macro" and "ground beetle" did not).
+- **A footage-only bug in an already-delivered episode does not require a
+  full re-render.** `viral_episode.py` has no `--from-dry-run` lock (facts
+  format), so a full re-run re-calls the LLM for every fact's wording and
+  burns a fresh TTS quota slot — overkill and risky (wording drift) for a
+  pure b-roll fix. Instead reuse the task dir's existing `audio.mp3` and
+  `overlay.ass` untouched: rebuild `SegmentPlan`s from the saved
+  `viral-result.json`'s `segments`/`segment_timings`, override only the
+  broken segments' `terms`, call `topic_footage.build_synced_footage(...)`
+  with the *same* `task_id` (so it reuses cached downloads) to get a new
+  `combined-synced.mp4`, then re-burn the untouched `overlay.ass` with
+  `viral.burn_overlay(...)` to a new `final-viral.mp4`. Zero TTS/LLM calls,
+  captions stay perfectly aligned since the audio never changed. Used this
+  to fix Facts 12 in ~3 minutes instead of a ~6-minute full re-render.
 - **Fact-check claims with real web search before rendering, not after — and
   when a correction is needed, verify the actual spoken script, not just the
   generated caption/description.** On Facts 5, "elephants are the only mammal
