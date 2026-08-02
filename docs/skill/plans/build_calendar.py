@@ -93,7 +93,7 @@ ROWS = [
         "series": "Random But True",
         "title": "Random But True Facts 13 \U0001f440",
         "format": "facts", "topic": "ocean / deep sea (FIRST topic shift)",
-        "status": "ready to build",
+        "status": "BUILT + DELIVERED to Telegram 2026-08-02 -- see storage/tasks/f7b3c284-f3c8-4a8a-93f4-fb2fc909abda/",
         "hook_line_spoken": "What if the strangest thing in the ocean isn't even alive?",
         "outro_line_spoken": "Comment if you had any idea the sea has its own lakes down there.",
         "cta_type": "COMMENT",
@@ -109,18 +109,20 @@ ROWS = [
             "And the strangest thing down there is not alive at all: there are lakes at the bottom of the sea. Brine pools are so dense with salt that they do not mix with the water above them, so they have their own shorelines, their own waves, and their own surface that a submarine can float on. THIS IS THE PAYOFF FACT the hook promised -- it must stay LAST, and the wording should explicitly close the loop on 'not a creature'.",
         ]),
         "segment_terms": (
-            '{"0": "deep ocean underwater dark", "1": "deep ocean underwater dark", '
-            '"2": "deep ocean underwater dark", "3": "bioluminescent glowing jellyfish", '
+            '{"0": "deep ocean underwater dark", "1": "deep sea trench dark blue", '
+            '"2": "whale underwater", "3": "bioluminescent glowing jellyfish", '
             '"4": "underwater volcano vent", "5": "underwater cave diving", '
-            '"6": "whale underwater", "7": "ocean waves aerial"}'
+            '"6": "ocean waves aerial drone", "7": "deep ocean underwater dark"}'
         ),
         "footage_status": (
-            "PROBED 2026-08-02. deep ocean dark=excellent (divers in dark blue crevasse). "
-            "bioluminescent jellyfish=excellent (glowing pink jelly on black). "
-            "underwater volcano vent=good (rocky underwater ridge + rising bubbles, "
-            "reads well as the mid-ocean ridge). "
-            "underwater cave diving + whale + ocean waves aerial = NOT yet eyeballed, probe before render. "
-            "Ocean is rated 'excellent' coverage in playbook section 5, lowest-risk topic in this batch."
+            "PROBED + RENDERED + verified frame-by-frame 2026-08-02. Known good. "
+            "Fixed two bugs from the draft mapping before rendering: segments 0/1/2 all shared "
+            "'deep ocean underwater dark' (adjacent-repeat risk), and the payoff fact (brine pools, "
+            "segment 6) was mapped to 'whale underwater' -- a visual non-sequitur. Diversified 0-2 and "
+            "reassigned segment 6 to 'ocean waves aerial drone' (echoes the fact's own 'coastlines and "
+            "waves' language). 'underwater brine pool lake' as a literal search term was probed and "
+            "REJECTED -- Pexels only returns generic aquarium footage for it, no real brine pools exist "
+            "in this account's library."
         ),
         "sources": (
             "NOAA Ocean Exploration (>80% unmapped/unexplored); "

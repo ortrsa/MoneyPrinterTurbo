@@ -298,6 +298,41 @@ skill's `mpt_agent.py` path targets by design) is used instead.
 
 No retention/view numbers yet.
 
+## 2g. Random But True Facts 13 (ocean) — published 2026-08-02, results pending
+
+Built from the ep12-18 content calendar (§5, three-criteria framework),
+question-form hook per the diversity fix below: "What if the strangest thing
+in the ocean isn't even alive?" 6 facts, completion-compulsion structure —
+the brine-pool/underwater-lake fact (the single most surprising one) held for
+last, with the hook and outro both referencing it so leaving early costs the
+viewer the payoff.
+
+Two footage-mapping bugs caught and fixed before rendering (source:
+`docs/skill/plans/build_calendar.py`'s draft `segment_terms`, not yet
+probed):
+- Segments 0/1/2 (hook + facts 1/2) all shared the identical term "deep ocean
+  underwater dark" — adjacent-repeat stutter risk. Diversified to "deep ocean
+  underwater dark" / "deep sea trench dark blue" / "whale underwater".
+- The payoff fact (brine pools) was mapped to "whale underwater" — a visual
+  non-sequitur for a fact about underwater lakes/shorelines. Reassigned to
+  "ocean waves aerial drone", which echoes the fact's own "coastlines and
+  waves" language.
+- Probed and **rejected** "underwater brine pool lake" as a search term
+  outright — Pexels returns generic aquarium content, not real brine pools.
+  Same class of gap as sloths/wombats/glass-frogs: some real phenomena simply
+  have no matching stock footage in this account's tier, and the fix is to
+  pick a search term for the *visual echo* of the fact rather than a literal
+  (and unfilmable) match.
+
+Render was 58.78s / 52.2MB, over Telegram's 50MB limit — compressed locally
+via ffmpeg (`-c:v libx264 -b:v 5500k -maxrate 6000k -bufsize 10000k -preset
+medium -c:a aac -b:a 128k`) to 36.3MB, one frame re-verified post-compression
+to confirm no visible quality loss. Delivered via `send_to_telegram.py` plus
+the script sent as a separate Telegram text message, per the established
+two-message pattern.
+
+No retention/view numbers yet.
+
 ## 3. What this data supports
 
 **Retention is the bottleneck, not reach or titles.** 33.1% against commonly
