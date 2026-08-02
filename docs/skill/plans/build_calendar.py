@@ -94,7 +94,7 @@ ROWS = [
         "title": "Random But True Facts 13 \U0001f440",
         "format": "facts", "topic": "ocean / deep sea (FIRST topic shift)",
         "status": "ready to build",
-        "hook_line_spoken": "Did you know the strangest thing in the ocean isn't a creature?",
+        "hook_line_spoken": "What if the strangest thing in the ocean isn't even alive?",
         "outro_line_spoken": "Comment if you had any idea the sea has its own lakes down there.",
         "cta_type": "COMMENT",
         # 顺序是刻意排的：把最"这也行？"的一条（海底盐湖）放到**最后**，钩子只
@@ -241,7 +241,7 @@ ROWS = [
         "title": "Random But True Facts 16 \U0001f440",
         "format": "facts", "topic": "dogs (return to animals)",
         "status": "ready to build",
-        "hook_line_spoken": "Did you know one dog understood more words than a toddler?",
+        "hook_line_spoken": "Ever met a dog that understood more words than a toddler?",
         "outro_line_spoken": "Comment your dog's breed and whether it could ever pull off Chaser's thousand words.",
         "cta_type": "COMMENT",
         # 同样按 Completion Compulsion 排序：钩子只说"有只狗认识的词比幼儿还多"，
@@ -332,7 +332,7 @@ ROWS = [
         "title": "Random But True Facts 18 \U0001f440",
         "format": "facts", "topic": "everyday objects",
         "status": "ready to build",
-        "hook_line_spoken": "Did you know your car has been hiding a clue you've never noticed?",
+        "hook_line_spoken": "Guess what your dashboard has been hiding this whole time?",
         "outro_line_spoken": "Comment if you're going out to check that little arrow right now.",
         "cta_type": "COMMENT",
         # 最后一条（油箱箭头）是全批最强的一条：观众能立刻站起来去自己车上验证。
