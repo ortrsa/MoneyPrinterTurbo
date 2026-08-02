@@ -383,11 +383,27 @@ rhythm. Decision:
   built from here on. The already-built Ferrari/Lamborghini/Pagani episode
   should still get used — slot it in as a story once the animal-subject
   bridge story(s) have run, not wasted.
-- **Proposed next slate** (subject to the channel owner's actual picks):
-  Facts 12 (animal strength comparisons — unused §5a category), Facts 13
-  (dog breed temperament rankings — unused angle, dog itself used in Facts
-  5), first bridge story (Inky or coelacanth), Facts 14, second story
-  (the existing Ferrari/Lamborghini/Pagani episode).
+- **Superseded by the 2026-08-01 follow-up below: topic (not just format)
+  should diversify too.** The channel owner's next message clarified that
+  "all the facts are still about animals, I want to vary that too" — so
+  topic rotation within the numbered Facts series is now part of the plan,
+  not just interleaving story episodes. Revised slate, changing only one
+  variable (format or topic) per step so no single transition is sharp:
+
+  | # | type | topic | why here |
+  |---|---|---|---|
+  | 12 | Facts | animal strength comparisons | still animals, keeps momentum |
+  | 13 | Facts | **ocean/deep sea facts** | first topic shift — gentlest bridge, sea creatures are still "animals" but a new environment |
+  | 14 | Story | **Inky the octopus's escape** | continues straight from ep.13's ocean theme; story format debuts on an already-primed topic |
+  | 15 | Facts | **food** (rebrand the already-built pizza episode, §2 pending) | first fully non-animal topic, already produced |
+  | 16 | Facts | dog breed temperament | back to animals — not a one-way departure |
+  | 17 | Story | Ferrari/Lamborghini/Pagani | second story, format + topic diversification both established by now |
+  | 18 | Facts | everyday objects or money/prices | continue the §5 topic shortlist |
+
+  **This is a hypothesis, not proven** — animals are the only topic with any
+  retention data on this channel (§3). Facts 13 and 15 are the next real data
+  points on whether non-animal topics hold up here, same evidentiary status
+  as the other untested items in this section.
 
 **Hooks must be phrased as a question to the viewer, not a flat statement**
 (channel owner feedback, 2026-08-01, after watching Facts 11 — "the opening
