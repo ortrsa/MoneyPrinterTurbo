@@ -417,8 +417,11 @@ Both `viral_episode.py` and `story_episode.py` already call
 `generate_social_metadata(platform="youtube_shorts")`, and
 `send_to_telegram.py` already forwards the full hashtag list to both the
 caption and YouTube Studio's separate "Tags" field — so this took effect for
-every future episode with no other file changes. Past episodes already
-published are not being retroactively re-tagged.
+every future episode with no other file changes. Owner asked for episodes 12
+and 13's tags specifically regenerated and sent to Telegram right after this
+landed, so those two already-published episodes got new 12-tag sets too
+(their `viral-result.json` `metadata.hashtags` were updated to match); no
+other already-published episode has been retroactively re-tagged.
 
 **Three-criteria niche/episode-selection framework, adopted 2026-08-02**
 (channel owner supplied it from an external source, with a timestamped
