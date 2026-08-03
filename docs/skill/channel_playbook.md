@@ -384,6 +384,78 @@ across 8-10 videos, not per video.
 
 ## 5. Strategy decisions
 
+**THE DAILY ROUTINE, adopted 2026-08-03.** The owner set a fixed operating
+rhythm and asked for it to run on scheduled wake-ups. Three Routines now
+exist (created via `create_trigger`, fresh session per firing — which is why
+every one of their prompts starts by reading these docs; **nothing may live
+only in a session's memory**):
+
+| Israel time | UTC cron | Job |
+|---|---|---|
+| 09:00 | `0 6 * * *` | Build the day's TWO episodes, send both + full upload kits to Telegram, ask for approval. **Uploads nothing.** |
+| 13:00 | `0 10 * * *` | Check Telegram inbox. Apply corrections if any; schedule both (16:30 + 22:30) if approved; nudge and stop if no reply. |
+| 20:00 | `0 17 * * *` | Evening report: the week's schedule, real performance numbers, honest conclusions, and a revised plan if the calendar is running dry. |
+
+Owner's words: "אתה קם ב 9 בבוקר כל יום ושולח לי לטלגרם 2 סרטונים שעתידים
+להתפרסם ב 16:30 וב 22:30 (לאחר אישור שלי) ואת ריט העלאה... בערב באזור 20:00
+כל יום אתה שולח לי את הלוז המעודכן לכל השבוע... המטרה שלנו ביחד היא להביא
+לערוץ יוטיוב הכי מוצלח שאפשר."
+
+Why 13:00 and not later: it leaves 3.5 hours before the 16:30 slot, so a
+correction can actually be rebuilt and re-sent rather than rushed. **An
+unapproved video is never uploaded, even if the slot is about to pass** —
+missing a slot is recoverable, publishing something the owner didn't approve
+is not.
+
+**⚠️ CRON IS UTC AND DOES NOT FOLLOW ISRAELI DST.** These three expressions
+are correct for IDT (UTC+3, ~late March to late October). When Israel falls
+back to IST (UTC+2) in late October, **every job will fire one hour late in
+local terms** (09:00 becomes 10:00). Fix then by shifting each cron back an
+hour (`0 7`, `0 11`, `0 18`) via `update_trigger` — do not delete and
+recreate, that loses the run history.
+
+**Both publish slots are genuinely well-placed for a US audience**, checked
+rather than assumed: 16:30 IDT = 09:30 ET / 06:30 PT, and 22:30 IDT = 15:30
+ET / 12:30 PT. Both sit inside the guide's Rank 6 window (06:00-22:00 US
+time), which the old Israel-anchored calendar did not. This resolves the
+"calendar needs re-anchoring to US hours" gap flagged in
+`shorts_growth_guide.md` Rank 6.
+
+**THE UPLOAD-FLOW RULE — sequencing is deliberate, never random.** Owner:
+"אנחנו נעלה גם עובדות בפורמט של ה 6 עובדות וגם סיפורים אבל צריך שתהיה זרימה
+בין העלאות ולא להעלות בצורה רנדומלית." Concrete and checkable:
+
+1. **Stories run roughly 1 in every 4-5 uploads, never back-to-back.** The
+   6-fact format is the channel's identity and its measured performer;
+   stories are the change of pace, not the new default. Revisit this ratio
+   once the first stories have real retention data — not before.
+2. **Never two consecutive uploads from the same topic category.** Rotate
+   across animals / ocean / food / everyday objects / cars / people.
+3. **The two same-day slots must differ on at least one axis** — format or
+   category. Two animal-facts episodes on the same day is exactly the
+   "random" feel the owner is asking to avoid.
+4. **Check `episode_log.csv`'s `key_subjects` column before finalising a
+   topic.** Never reuse a specific subject (a species, a brand, a person)
+   that appeared in the last 5 episodes. This is the whole reason that
+   column exists.
+
+**Known constraint at adoption time: 2 videos/day burns the calendar in ~2
+days.** After the Ferrari story publishes, only 4 episodes remain (14 Inky,
+15 pizza, 16 dogs, 18 objects) — and 14 is deliberately on hold pending
+Ferrari's numbers, while 15 is flagged weak-as-built. That is roughly two
+days of runway against a plan that consumes two per day. The §7 "propose a
+new plan at ≤2 remaining" threshold is therefore already effectively met;
+a fresh slate of topics and story leads is needed immediately, not later.
+
+**Standing risk, already documented in §7, now directly live:** fully
+automated daily templated uploads sit in the profile YouTube scrutinises
+under its inauthentic / mass-produced content policy — a real risk given
+monetisation is the goal. Two mitigations are structurally in place: every
+single upload passes through the owner's explicit approval (nothing
+publishes unreviewed), and topics/hooks are varied by the flow rule above
+rather than templated. Worth revisiting if the channel ever gets a policy
+warning.
+
 **Story-format sequencing, decided 2026-08-03** (owner: "I have all the video
 I want till 13. Now let's update our videos plan and think about the stories
 part — I still didn't upload the stories"):
