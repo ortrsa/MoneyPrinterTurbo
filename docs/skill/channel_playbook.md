@@ -1073,6 +1073,24 @@ before rendering.
   lesson in §5. Verifying a *competitor's* outlier video's public view count
   (§5a's original ask) is still a separate, simpler task (just a YouTube
   Data API key, no OAuth) — not set up, raise it separately if still wanted.
+- **Upload capability added 2026-08-03.** Owner asked whether the pipeline
+  could publish directly instead of them uploading by hand — "only after I
+  confirm them and the upload kit." Added `docs/skill/youtube/upload_video.py`
+  (see `SKILL.md` 8e for the full rule) and a `youtube.upload` scope to
+  `authorize_local.py`'s `SCOPES`. **The existing `token.json` predates this
+  scope** — the owner needs to re-run `authorize_local.py` locally (one more
+  browser consent, same as the first time) and send back the new token
+  before any upload can actually succeed; the old read-only token will 403
+  on `videos.insert` until then. Asked the owner to decide public-immediately
+  vs. private/unlisted-staging as the upload default (a real, hard-to-reverse
+  judgment call, not something to decide unilaterally) — **they chose public
+  immediately**, matching their manual workflow exactly. The `--confirm`
+  flag is the only safety rail after that; it is a discipline mechanism for
+  future sessions reading this file, not a technical guarantee, since
+  whichever agent constructs the command is also the one that would pass it
+  — the real requirement is still: never invoke this script without the
+  owner's explicit go-ahead on that specific video, stated in that
+  conversation.
 - **Facts 10 (bats) published 2026-07-31** — awaiting first-hours numbers
   (§2e). It's a long-format (54.1s/6-fact) episode, so its retention reads as
   another data point on the still-unresolved §2d length question, not just its

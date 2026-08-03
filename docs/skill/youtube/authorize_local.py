@@ -25,6 +25,10 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 SCOPES = [
     "https://www.googleapis.com/auth/yt-analytics.readonly",
     "https://www.googleapis.com/auth/youtube.readonly",
+    # Upload scope - only needed if you want the pipeline to publish videos
+    # on your behalf (via upload_video.py). Covers videos.insert and
+    # thumbnails.set for videos owned by this channel.
+    "https://www.googleapis.com/auth/youtube.upload",
 ]
 
 HERE = Path(__file__).parent
