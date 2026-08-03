@@ -201,7 +201,12 @@ ROWS = [
         "series": "Random But True",
         "title": "Random But True Facts 15 \U0001f440",
         "format": "facts", "topic": "food (FIRST fully non-animal)",
-        "status": "ALREADY BUILT -- re-title and publish",
+        "status": (
+            "DROPPED 2026-08-03 by owner decision -- do NOT publish. Weak as built "
+            "(5 facts not 6; hook spends the banana-pizza surprise immediately so there "
+            "is no completion compulsion). The food TOPIC is still worth doing, but it "
+            "needs a full rebuild with 6 facts and a withheld payoff, not a patch."
+        ),
         "hook_line_spoken": "Did you know Sweden's best-selling pizza is topped with banana and curry?",
         "outro_line_spoken": "Tell us which of these five you'd actually order -- we're guessing it's not the banana one.",
         "cta_type": "COMMENT",
@@ -249,24 +254,33 @@ ROWS = [
         # 同样按 Completion Compulsion 排序：钩子只说"有只狗认识的词比幼儿还多"，
         # 不说是谁、多少，答案（Chaser，一千多个词）压到第六条。
         "fact_topics": "|".join([
-            "Basenjis do not bark. The shape of their larynx is different, so instead of barking they make a strange yodelling sound owners call a baroo.",
-            "Chow Chows and Shar-Peis have blue-black tongues instead of pink ones. Nobody is entirely sure why, and they are the only dog breeds that have it.",
+            "Basenjis do not bark. The shape of their larynx is different, so instead of barking, they yodel. Owners call the sound a baroo. Use the plain word 'yodel' -- the LLM mangled it into 'yodering' when the source said 'yodelling sound'.",
+            "REPLACED the original chow-chow/blue-black-tongue fact, which had NO usable footage (see footage_status): Every dog's nose print is unique, with its own pattern of ridges and creases, like a human fingerprint. The Canadian Kennel Club accepted nose prints as official dog ID for decades. Keep this PAST tense -- 1938 until 1992, then microchips replaced them.",
             "Dalmatians are born completely white. Their spots only start appearing after about two weeks, and keep developing for months.",
             "Newfoundlands have webbed feet and a water-resistant coat, and were bred specifically to haul drowning people out of the sea. Some are still trained as rescue dogs today.",
             "Greyhounds can hit around 45 miles an hour, making them the fastest dogs on Earth and, over short distances, faster than a racehorse.",
             "And the dog from the opening: a border collie named Chaser learned the names of over a thousand individual objects and could fetch each one by name -- a bigger tested vocabulary than a typical toddler, and the largest ever measured in a non-human animal. THIS IS THE PAYOFF FACT the hook promised -- keep it LAST and open it by explicitly calling back to the hook.",
         ]),
         "segment_terms": (
-            '{"0": "dog close up portrait", "1": "basenji dog", "2": "dalmatian dog", '
-            '"3": "greyhound running fast", "4": "border collie herding", '
-            '"5": "chow chow dog", "6": "newfoundland dog swimming", "7": "dog close up portrait"}'
+            '{"0": "dog looking at camera", "1": "basenji dog", "2": "dog nose close up", '
+            '"3": "dalmatian dog", "4": "newfoundland dog swimming", '
+            '"5": "greyhound running fast", "6": "border collie", "7": "dog looking at camera"}'
         ),
         "footage_status": (
-            "PARTIALLY PROBED 2026-08-02. dalmatian=excellent (spotted dog shaking off water). "
-            "greyhound + border collie NOT yet eyeballed. "
-            "basenji / chow chow / newfoundland are BREED-SPECIFIC and therefore the highest-risk terms in "
-            "this episode -- Pexels rarely distinguishes breeds. Probe all three before render; "
-            "fall back to generic dog footage rather than showing an obviously wrong breed."
+            "FULLY PROBED + RENDERED 2026-08-03. Two bugs in the original draft mapping were "
+            "found and fixed before rendering: (a) the terms were MISALIGNED with the fact order "
+            "(segment 2 said 'dalmatian dog' but fact 2 was the chow chow), same class of bug as ep13; "
+            "(b) the hook term 'dog close up portrait' returned the SAME nose-macro clip as the "
+            "nose-print fact, which would have spent that reveal early and shown it three times -- "
+            "swapped to 'dog looking at camera' (dog making direct eye contact, a strong hook shot). "
+            "CHOW CHOW HAS NO USABLE FOOTAGE: 'chow chow dog'/'chow chow' return Pomeranians and "
+            "Shiba Inus, and 'dog tongue close up' returns a PINK tongue, which would have directly "
+            "contradicted a narration line about blue-black tongues. That fact was replaced entirely "
+            "(see fact_topics) rather than shipped with contradicting footage. Breed substitutions "
+            "knowingly accepted: basenji->Shiba Inu (visually close: reddish-tan, upright ears, "
+            "curled tail), newfoundland->golden retrievers swimming (breed wrong, water-rescue theme "
+            "right), greyhound->generic dog running at speed. Real border collie and real dalmatian "
+            "confirmed."
         ),
         "sources": (
             "Basenji larynx: AKC breed standard; Chaser: Pilley & Reid 2011 Behavioural Processes; "
