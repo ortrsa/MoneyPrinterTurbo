@@ -1,0 +1,72 @@
+STORY LEAD — The D-Day crossword panic of 1944
+Supplied by the channel owner 2026-08-03. Independently fact-checked against
+en.wikipedia.org/wiki/D-Day_Daily_Telegraph_crossword_security_alarm and
+veteransbreakfastclub.org. ONE CORRECTION TO THE SUBMITTED VERSION — see below.
+
+WHAT HAPPENED
+In the weeks before the Normandy landings ("Operation Overlord"), top-secret
+codewords started appearing as answers in the Daily Telegraph's daily crossword.
+156,000 troops were about to cross the Channel and the whole plan depended on the
+Germans not knowing where or when.
+
+The words, in order:
+  2 May 1944   -- UTAH     (clued "One of the U.S.") -- codename of the beach
+                            assigned to the US 4th Infantry Division
+  22 May 1944  -- OMAHA    (clued "Red Indian on the Missouri") -- the beach
+                            assigned to the US 1st Infantry Division
+  27 May 1944  -- OVERLORD -- the codename of the entire invasion
+  30 May 1944  -- MULBERRY -- the floating artificial harbours to be towed
+                            across the Channel
+  1 June 1944  -- NEPTUNE  (clued "Britannia and he hold to the same thing")
+                            -- the naval assault phase. Five days before D-Day.
+
+*** CORRECTION to the owner's submitted list: the 2 May word was UTAH, not
+Overlord. OVERLORD appeared once, on 27 May -- not twice. Do not repeat the
+"Overlord appeared twice" version; it is wrong and the real sequence is better
+anyway, because it escalates: a beach, another beach, then the name of the whole
+invasion. ***
+
+MI5 was convinced this was a Nazi spy ring signalling the invasion plan. They
+pulled in the crossword's compiler, Leonard Dawe -- a 54-year-old schoolmaster,
+headmaster of the Strand School. They searched his home and his office and
+interrogated him at length. They found nothing, believed he was innocent, and
+let him go. The mystery stayed open for forty years.
+
+THE REVEAL (1984)
+A former pupil, Ronald French -- 14 years old at the time -- finally explained
+it. The Strand School had been evacuated to Effingham in Surrey, right next to a
+huge camp of American and Canadian troops staging for the invasion. The boys
+hung around the camp, befriended the soldiers, and heard them talking freely,
+codewords included.
+
+Dawe compiled the crosswords at his home in Leatherhead, and had a time-saving
+habit: he would call boys into his study and have them fill the blank grid with
+whatever words they liked, then write clues to fit afterwards. The boys handed
+him words they had picked up from the soldiers. Dawe wrote clues for them with
+no idea what they meant.
+
+After his interrogation Dawe worked out what had happened, called French in, and
+told him never to speak about it to anyone. As far as is known he never told the
+investigators either.
+
+NARRATIVE SHAPE
+Open on the image of the thing found, not the explanation: a newspaper crossword,
+and the most secret word of the war sitting in it as an answer. Escalate through
+the codewords in date order -- the escalation IS the tension, because they get
+closer and closer to D-Day (the last one lands five days before). Then the arrest
+of a schoolmaster. WITHHOLD the answer: the payoff is that it took forty years,
+and that the leak ran backwards from what everyone assumed -- not a spy sending
+information out, but schoolboys carrying it in, from soldiers who talked too
+freely near a school. Close on Dawe telling the boy to keep quiet.
+
+A GOOD DETAIL WORTH KEEPING (the owner raised it and it is sharp): as espionage
+the theory never made sense. A newspaper is how you send a signal OUT to agents
+in the field, not how an agent reports IN. And a bare codeword with no
+explanation tells the Germans nothing useful anyway. The panic was real; the
+theory behind it was never coherent.
+
+FOOTAGE NOTE: this is a period/abstract topic, so expect the usual stock gap.
+Filmable angles: newspaper close-ups, crossword grid and pencil, vintage
+typewriter, WWII landing craft / troops archive-style clips, coastline, old
+schoolroom. Do NOT search for any year ("1944 crossword" returns nothing) --
+that is a documented failure mode in the playbook.
