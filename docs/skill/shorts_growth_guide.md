@@ -35,6 +35,67 @@ swipe before watching, distribution stops immediately.
 > abandoning the 6-fact structure, the `N/6` counter, and the progress bar as
 > currently designed. See "What this means for our format" below.
 
+## Rank 1b — The first-3-seconds construction formula · 9.5/10
+
+*Source: owner-supplied tips, 2026-08-03. Formula: [Fast On-Screen Motion] +
+[Bold Center Text] + [No-Pause Opening Line] = hard to swipe away.*
+
+Same underlying metric as Rank 1 (view-vs-swipe in the first seconds), but
+concrete construction rules instead of a target percentage. Checked each
+claim against the actual code before writing anything down here — some of
+this we already do, one piece is a real gap, one conflicts with an existing
+rule and is **not** adopted silently.
+
+**Already compliant, verified in `app/services/viral.py`:**
+- **Dynamic word-highlight captions in yellow** — the guide's "words light
+  up... yellow or green keeps the viewer's eyes locked in" is exactly
+  `highlight_color: str = "#FFE500"` (a yellow), already the default.
+- **Dead-center text placement, not bottom or right** — `caption_y_frac =
+  0.5` and `\pos(video_width // 2, ...)` put captions dead center both axes.
+  The guide's warned-against zones (bottom = YouTube's own captions/UI,
+  right = Like/Share buttons) are already avoided by construction, not
+  by luck.
+
+**Real, unverified gap:** the guide's "Hook Text" (a distinct 3-5 word
+summary card, separate from the flowing spoken captions) is **only built
+for the story format** (`story_episode.py`'s 2-line title card, matches
+Rank 5). `viral_episode.py` (facts format — the channel's main output) has
+no equivalent; the hook's on-screen text is just the same word-by-word
+karaoke captions used for every other line. Worth testing a short static
+title card for facts episodes too, not yet built.
+
+**Real, unverified claim — needs checking, not assumed either way:** no
+silence-trimming step was found in `viral_episode.py`'s audio pipeline.
+`segment_timings[0].start` always reads `0.0`, but that is a property of how
+segments get assigned, not confirmation the TTS audio itself has zero
+lead-in silence before the first word. Worth a direct check (load
+`audio.mp3` from a recent task dir, look at the waveform/silence before the
+first detected word) before either claiming compliance or building a trim
+step.
+
+**Not adopted — conflicts with an existing explicit rule, flagging instead
+of silently overriding:** the guide's negativity-bias/imperative hook
+templates ("Stop doing X if you want Y," "The biggest mistake people make
+with X") are statements, not questions. The channel owner explicitly ruled
+hooks must be phrased as a question (`HOOK_PROMPT` in `viral_episode.py`,
+logged in this file and `channel_playbook.md` §5) after multiple "Did you
+know" episodes shipped. These two rules are incompatible as written. If the
+owner wants to test a negativity-bias angle, it would need to be phrased as
+a question-form variant of the template (e.g. "Are you making the biggest
+mistake with X?") rather than adopting the imperative form outright — this
+is a topic/hook decision reserved for the owner per §7's division of labor,
+not something to change unilaterally.
+
+**Not adopted — real structural change, needs the owner's decision:** the
+seamless-loop technique (last line grammatically continues into the first
+line, so a re-watch reads as one continuous sentence and can push measured
+retention past 100%) is a genuinely new, non-conflicting idea, but it
+changes what the outro *is* — currently every outro is a FOLLOW/COMMENT/BOTH
+CTA (see `channel_playbook.md` §5's outro rotation), and a loop-closing line
+can't simultaneously be a CTA in the way we currently write one. Worth
+testing on one episode as an explicit experiment, not a silent default
+change to `OUTRO`/hook generation.
+
 ## Rank 2 — Account warm-up and human verification · 9.5/10
 
 *Sources: Kellan Henneberry, Dan the Creator*
@@ -161,26 +222,35 @@ flat.
 
 ## What this means for our format
 
-The guide and our own measurements agree on the diagnosis — retention in the
-first seconds is everything — and disagree on almost nothing except **how long a
-video should be**. That single number forces the biggest decision.
+**Updated 2026-08-03 — this section was written before the test it called
+for existed. It now does; the answer changed the conclusion.**
 
-**Sub-20s is incompatible with the current episode design.** At 20 seconds you
-get roughly 3 facts, not 6, which retires the `N/6` counter and the progress bar
-in their present form. Against that: our own numbers are trending up *within* the
-long format (36.4% → 40% → 51.6%), so the long format is not disproven — it is
-merely still short of the 70% target after three attempts.
+The guide and our own early measurements agreed on the diagnosis — retention
+in the first seconds is everything — but the guide's central claim was that
+*length itself* is the retention constraint, sub-20s vs. our 52-62s format.
+That was untested when this section was first written (see the superseded
+text in git history if needed). It has since actually been tested:
 
-The honest read is that we have never tested short. Every retention figure we
-own comes from 52–62s videos. The guide's central claim is that length itself is
-the constraint, and we have no data contradicting it because we have never tried.
+**Real result (real YouTube Analytics data, not estimated): long format
+(6-fact, ~52-58s) beat short format (3-fact, ~25s) on both retention AND
+raw views.** Long format averaged 45.8% stayed-to-watch / 724 views across 9
+videos; short format (Facts 8 + Facts 9, the two episodes actually built at
+~25s) averaged 41.4% / 275 views. Short format's sample is thin (n=2), so
+this isn't the last word, but it's a real, clear-gap result — not a hunch —
+and it points the opposite direction from the guide's central claim.
 
-**Recommended: test it rather than assume.** Build the same topic twice — one
-6-fact ~55s cut, one 3-fact ~18s cut — publish a day apart, compare
-stayed-to-watch. That answers in 48 hours what argument cannot, and it is the one
-experiment whose result changes everything downstream.
+**Conclusion: keep the 6-fact/50s+ format as the default.** Do not re-run
+the sub-20s experiment without a new, specific reason — the original
+"maybe length is the whole problem" hypothesis this section existed to test
+has been tested and did not hold up for this channel. The guide's other
+points (first-3-seconds construction, hashtag tiers, posting cadence, etc.)
+remain independently useful regardless of this one disagreement — see Rank
+1b above for the parts of "the first seconds matter" that don't depend on
+total video length.
 
 Caveat on measurement, carried over from the playbook: our recent videos land
-387–867 views, which is enough for a stayed-to-watch percentage to mean
-something, but a variant that gets seeded badly can still produce noise. Prefer a
-clear gap (say 51% vs 70%) over a narrow one before concluding.
+387–1400+ views, which is enough for a stayed-to-watch percentage to mean
+something, but a variant that gets seeded badly can still produce noise. The
+45.8% vs 41.4% gap here is real but not huge — keep growing the sample
+(`docs/skill/youtube/fetch_channel_analytics.py`) rather than treating this
+as fully settled after one comparison.
