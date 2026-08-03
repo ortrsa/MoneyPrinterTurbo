@@ -1091,6 +1091,20 @@ before rendering.
   — the real requirement is still: never invoke this script without the
   owner's explicit go-ahead on that specific video, stated in that
   conversation.
+- **Two upload-flow details caught from the owner's own screenshots of their
+  manual process, same day.** They pointed out they always do two more things
+  when uploading by hand: answer Yes on the "Was AI used..." disclosure
+  screen, and set a "Related video" link to the previous episode. Checked
+  both against the actual API before implementing either — did not assume:
+  (1) `status.containsSyntheticMedia` is a real field, added to the Data API
+  in October 2024, confirmed via web search; wired into `upload_video.py`,
+  defaulted `true` since every video here has AI TTS narration, matching how
+  the owner already answers that screen. (2) Studio's "Related video" field
+  — could not confirm any public Data API exposure for it at all; rather
+  than guess a field name and risk a silent no-op or a failed upload, left
+  it unimplemented and documented as a manual post-upload step. **If this
+  becomes annoying enough to matter, look again before assuming it's
+  impossible** — this was one search pass, not exhaustive.
 - **Facts 10 (bats) published 2026-07-31** — awaiting first-hours numbers
   (§2e). It's a long-format (54.1s/6-fact) episode, so its retention reads as
   another data point on the still-unresolved §2d length question, not just its

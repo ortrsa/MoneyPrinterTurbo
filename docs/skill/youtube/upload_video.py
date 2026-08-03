@@ -22,6 +22,16 @@ Uploads as public by default - this matches exactly what happens when the
 owner uploads manually and hits Publish (their explicit choice, 2026-08-03:
 "public immediately" over a private/unlisted staging step). Pass
 --privacy unlisted/private to override for a specific video if ever wanted.
+
+Also sets status.containsSyntheticMedia = true by default (the "Yes" answer
+on Studio's "How this content was made" AI-disclosure screen) since every
+video here uses AI (TTS) narration - matches how the owner already answers
+that screen manually. Pass --no-synthetic-media-disclosure to override.
+
+NOT supported here: Studio's "Related video" field (linking a Short to a
+previous episode for cross-promotion) - could not confirm this is exposed
+by the public Data API at all, so it is not faked. Add it manually in
+Studio after upload if wanted, same as before.
 """
 from __future__ import annotations
 
@@ -76,6 +86,7 @@ def upload_video(
     privacy_status: str,
     category_id: str,
     made_for_kids: bool,
+    contains_synthetic_media: bool,
 ) -> dict:
     """Resumable upload: one POST to open the session, one PUT with the bytes.
 
@@ -95,6 +106,7 @@ def upload_video(
         "status": {
             "privacyStatus": privacy_status,
             "selfDeclaredMadeForKids": made_for_kids,
+            "containsSyntheticMedia": contains_synthetic_media,
         },
     }
     size = video_path.stat().st_size
@@ -144,6 +156,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--category-id", default=DEFAULT_CATEGORY_ID)
     parser.add_argument("--made-for-kids", action="store_true")
     parser.add_argument(
+        "--no-synthetic-media-disclosure",
+        dest="synthetic_media",
+        action="store_false",
+        default=True,
+        help=(
+            "every video here uses AI (TTS) narration, so the "
+            "'How this content was made' AI disclosure is on (Yes) by "
+            "default, matching how the owner answers it manually. Only pass "
+            "this if a specific upload genuinely has none."
+        ),
+    )
+    parser.add_argument(
         "--confirm",
         action="store_true",
         required=True,
@@ -189,6 +213,7 @@ def main(argv: list[str] | None = None) -> int:
         privacy_status=args.privacy,
         category_id=args.category_id,
         made_for_kids=args.made_for_kids,
+        contains_synthetic_media=args.synthetic_media,
     )
     video_id = response.get("id")
     print(f"uploaded: https://youtube.com/shorts/{video_id}")
