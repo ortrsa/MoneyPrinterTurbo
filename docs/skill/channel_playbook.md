@@ -983,11 +983,26 @@ before rendering.
   Veo would provide a real sloth for roughly one clip's cost.
 - Content calendar still built around the old five-topic mix. Rebuilding it
   around the §5 shortlist has not been done.
-- **No YouTube Data API access from this pipeline.** §5a's outlier-topic research
-  had to rely on secondhand web summaries instead of real per-video view counts.
-  A read-only Data API key (or the user manually sorting a channel's Shorts by
-  "Popular") would let future topic research verify an actual outlier instead of
-  a reported channel average.
+- **YouTube Analytics access — setup in progress, 2026-08-03.** §5a's
+  outlier-topic research had to rely on secondhand web summaries instead of
+  real per-video view counts; this is the fix. `docs/skill/youtube/` (all
+  gitignored except the two scripts) now holds: `client_secret.json` (the
+  owner's Google Cloud OAuth client, "Desktop app" type, YouTube Analytics
+  API + YouTube Reporting API enabled), `authorize_local.py` (one-time
+  interactive step — **must run on the owner's own machine**, this remote
+  session has no browser to complete the OAuth consent screen), and
+  `fetch_channel_analytics.py` (the actual query tool, headless, pure
+  `requests` — no new project dependency — mints a fresh access token from
+  the refresh token on every run). **Blocked on `token.json`**: the owner
+  needs to run `authorize_local.py` locally and send back the resulting
+  file before `fetch_channel_analytics.py` can be used. Once unblocked, it
+  prints top videos by views for a date range with real
+  views/averageViewDuration/averageViewPercentage — replaces the guesswork
+  in §5a and gives a real answer to the still-unresolved §2d length
+  question. Note: this only covers the *owner's own channel's* private
+  analytics (needs OAuth); verifying a *competitor's* outlier video's public
+  view count is a separate, much simpler ask (just a YouTube Data API key,
+  no OAuth) — not set up, raise it separately if still wanted.
 - **Facts 10 (bats) published 2026-07-31** — awaiting first-hours numbers
   (§2e). It's a long-format (54.1s/6-fact) episode, so its retention reads as
   another data point on the still-unresolved §2d length question, not just its

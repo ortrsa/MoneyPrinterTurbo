@@ -2,6 +2,8 @@
 /config.toml
 /config.toml.bak
 /storage/
+/docs/skill/youtube/client_secret.json
+/docs/skill/youtube/token.json
 /.agent-logs/
 /.idea/
 /app/services/__pycache__
