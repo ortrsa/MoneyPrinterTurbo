@@ -417,6 +417,21 @@ Analytics API's ~24-48h processing lag (see the lesson below), expect
 Ferrari's real retention to be readable roughly 1-2 days after the owner
 uploads it to YouTube.
 
+**Update, same day: uploaded via the API rather than manually, and
+scheduled rather than published immediately.** Owner asked for scheduled
+upload support and to schedule this specific video for 16:30 Israel time.
+Added `--publish-at` to `upload_video.py` (RFC3339 UTC timestamp) — checked
+the actual API requirement before implementing rather than assuming:
+`status.publishAt` requires `privacyStatus: private` at upload time, and
+YouTube itself flips the video to public at that timestamp, confirmed via
+search, not guessed. The script forces `privacy_status` to `"private"`
+whenever `--publish-at` is set, regardless of what `--privacy` says.
+Uploaded with `--publish-at 2026-08-03T13:30:00Z` (16:30 IDT, confirmed
+Israel is UTC+3 in August and that this was still ~8 hours in the future at
+upload time) — video id `glOoMgY_--c`, currently private, will auto-publish
+at that timestamp. First video this channel has ever uploaded through the
+API instead of by hand.
+
 **Real YouTube Analytics access landed 2026-08-03** — `docs/skill/youtube/`
 (setup detailed in §8) finally replaced the stale manual-screenshot numbers
 in §2 with a live per-video pull. First real read, 14 videos, 28/90-day

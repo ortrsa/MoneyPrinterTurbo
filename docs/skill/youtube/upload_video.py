@@ -23,6 +23,12 @@ owner uploads manually and hits Publish (their explicit choice, 2026-08-03:
 "public immediately" over a private/unlisted staging step). Pass
 --privacy unlisted/private to override for a specific video if ever wanted.
 
+Pass --publish-at <RFC3339 UTC timestamp> to schedule instead (e.g.
+--publish-at 2026-08-03T13:30:00Z). This uploads as private and lets
+YouTube itself flip it to public at that exact time - confirmed real API
+behavior (status.publishAt, requires privacyStatus=private), not guessed.
+--privacy is ignored when --publish-at is set.
+
 Also sets status.containsSyntheticMedia = true by default (the "Yes" answer
 on Studio's "How this content was made" AI-disclosure screen) since every
 video here uses AI (TTS) narration - matches how the owner already answers
@@ -87,6 +93,7 @@ def upload_video(
     category_id: str,
     made_for_kids: bool,
     contains_synthetic_media: bool,
+    publish_at: str | None = None,
 ) -> dict:
     """Resumable upload: one POST to open the session, one PUT with the bytes.
 
@@ -95,7 +102,21 @@ def upload_video(
     reliability ever becomes an issue, the resumable session's Location URL
     supports querying/resuming progress via Content-Range, not implemented
     here to keep this simple for now.
+
+    publish_at (RFC3339/ISO8601 UTC, e.g. "2026-08-03T13:30:00Z") schedules
+    the video instead of publishing immediately. The API requires
+    privacyStatus=private for a scheduled video - YouTube itself flips it to
+    public at publish_at - so privacy_status is forced to "private" whenever
+    publish_at is set, regardless of what was requested.
     """
+    status: dict = {
+        "privacyStatus": "private" if publish_at else privacy_status,
+        "selfDeclaredMadeForKids": made_for_kids,
+        "containsSyntheticMedia": contains_synthetic_media,
+    }
+    if publish_at:
+        status["publishAt"] = publish_at
+
     metadata = {
         "snippet": {
             "title": title,
@@ -103,11 +124,7 @@ def upload_video(
             "tags": tags,
             "categoryId": category_id,
         },
-        "status": {
-            "privacyStatus": privacy_status,
-            "selfDeclaredMadeForKids": made_for_kids,
-            "containsSyntheticMedia": contains_synthetic_media,
-        },
+        "status": status,
     }
     size = video_path.stat().st_size
     init_resp = requests.post(
@@ -152,6 +169,16 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--privacy", choices=["public", "unlisted", "private"], default="public"
+    )
+    parser.add_argument(
+        "--publish-at",
+        default=None,
+        help=(
+            "RFC3339 UTC timestamp, e.g. 2026-08-03T13:30:00Z. Schedules the "
+            "video instead of publishing immediately - forces privacyStatus "
+            "to private (required by the API) regardless of --privacy; "
+            "YouTube itself flips it public at this timestamp."
+        ),
     )
     parser.add_argument("--category-id", default=DEFAULT_CATEGORY_ID)
     parser.add_argument("--made-for-kids", action="store_true")
@@ -201,7 +228,10 @@ def main(argv: list[str] | None = None) -> int:
 
     print(f"uploading {video_path} ({video_path.stat().st_size / 1024 / 1024:.1f} MiB)")
     print(f"title: {title}")
-    print(f"privacy: {args.privacy}")
+    if args.publish_at:
+        print(f"scheduled for: {args.publish_at} (uploads as private until then)")
+    else:
+        print(f"privacy: {args.privacy}")
 
     access_token = get_access_token()
     response = upload_video(
@@ -214,9 +244,13 @@ def main(argv: list[str] | None = None) -> int:
         category_id=args.category_id,
         made_for_kids=args.made_for_kids,
         contains_synthetic_media=args.synthetic_media,
+        publish_at=args.publish_at,
     )
     video_id = response.get("id")
-    print(f"uploaded: https://youtube.com/shorts/{video_id}")
+    if args.publish_at:
+        print(f"uploaded as private, scheduled to publish at {args.publish_at}: https://youtube.com/shorts/{video_id}")
+    else:
+        print(f"uploaded: https://youtube.com/shorts/{video_id}")
     return 0
 
 
