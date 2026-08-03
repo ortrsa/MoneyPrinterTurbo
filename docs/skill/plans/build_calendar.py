@@ -287,7 +287,14 @@ ROWS = [
         "series": "Random But True",
         "title": "Random But True: The Insult That Built Lamborghini",
         "format": "STORY (story_episode.py)", "topic": "cars / true story",
-        "status": "ALREADY BUILT -- re-title and publish",
+        "status": (
+            "RE-TITLED + RE-TAGGED + DELIVERED to Telegram 2026-08-03 -- see "
+            "storage/tasks/70c8a157-61e3-44de-b8a8-7b00e6872b09/. PRIORITY: "
+            "upload this NEXT regardless of its '17' slot -- it is the "
+            "channel's first story upload and there is zero real retention "
+            "data on the story format yet. Do not build/upload Inky (the "
+            "second story) until this one's numbers are in."
+        ),
         "hook_line_spoken": "(already rendered: 'An angry tractor maker started a luxury car company just to spite Ferrari.')",
         "outro_line_spoken": "Drop a comment if you'd walk away from a giant like Ferrari just to build your own.",
         "cta_type": "COMMENT",

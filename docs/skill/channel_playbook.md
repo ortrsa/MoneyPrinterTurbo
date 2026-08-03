@@ -384,6 +384,39 @@ across 8-10 videos, not per video.
 
 ## 5. Strategy decisions
 
+**Story-format sequencing, decided 2026-08-03** (owner: "I have all the video
+I want till 13. Now let's update our videos plan and think about the stories
+part — I still didn't upload the stories"):
+
+Facts 1-13 are all confirmed live on the channel (per the owner's Studio
+screenshot). The Ferrari/Lamborghini/Pagani story episode, by contrast, was
+fully built back on 2026-08-01 but **never actually uploaded** — meaning the
+channel has zero real retention data on the story format at all, despite the
+three-criteria framework (§5) predicting stories should score higher on
+completion compulsion than facts lists. That's a hypothesis no episode has
+tested yet.
+
+Fixed and re-delivered it same-day: retitled to the branded
+`Random But True: The Insult That Built Lamborghini` (was still under the
+old "Rival Origins" working title), regenerated hashtags through the now-live
+3-tier formula (was still on the old 3-flat-tag output), compressed
+52.86MB→33.4MB for Telegram's limit, verified frames post-compression, wrote
+a fresh pinned comment, delivered with script as a separate message.
+
+**Decision: upload this NEXT, ahead of anything still in the Facts 14+
+build queue, regardless of its "episode 17" slot in the calendar CSV.** It
+costs nothing to prioritize — it's already fully rendered — and it's the
+only way to get a real data point on whether stories actually outperform
+facts lists for this channel, rather than continuing to guess from the
+framework's reasoning alone. **Do not build or upload Inky (the second
+planned story, was ep14) until Ferrari's real numbers are in** — building a
+second unproven-format episode before the first one reports back would
+repeat the same mistake as the original 3-fact-format experiment (shipped
+before checking whether short format worked, had to be reverted). Given the
+Analytics API's ~24-48h processing lag (see the lesson below), expect
+Ferrari's real retention to be readable roughly 1-2 days after the owner
+uploads it to YouTube.
+
 **Real YouTube Analytics access landed 2026-08-03** — `docs/skill/youtube/`
 (setup detailed in §8) finally replaced the stale manual-screenshot numbers
 in §2 with a live per-video pull. First real read, 14 videos, 28/90-day
