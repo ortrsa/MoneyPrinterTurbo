@@ -85,7 +85,17 @@ def fetch_titles(access_token: str, video_ids: list[str]) -> dict[str, str]:
         headers={"Authorization": f"Bearer {access_token}"},
         timeout=30,
     )
-    resp.raise_for_status()
+    if not resp.ok:
+        # Title lookup uses the YouTube Data API v3, a separate API from
+        # Analytics/Reporting - it may not be enabled on the project yet.
+        # Don't let a missing "nice to have" kill the actual numbers.
+        print(
+            f"warning: title lookup failed ({resp.status_code}): {resp.text[:200]} "
+            "- showing video IDs instead. Enable 'YouTube Data API v3' in "
+            "Google Cloud Console to get titles.",
+            file=sys.stderr,
+        )
+        return {}
     return {item["id"]: item["snippet"]["title"] for item in resp.json().get("items", [])}
 
 
