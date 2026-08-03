@@ -384,6 +384,47 @@ across 8-10 videos, not per video.
 
 ## 5. Strategy decisions
 
+**Real YouTube Analytics access landed 2026-08-03** — `docs/skill/youtube/`
+(setup detailed in §8) finally replaced the stale manual-screenshot numbers
+in §2 with a live per-video pull. First real read, 14 videos, 28/90-day
+windows identical (i.e. this is literally every video published so far):
+
+- **Facts 4** (wombat/otter/cow/crow/octopus/dolphin) is the standout: 81.6%
+  average-view-percentage, far above everything else. Worth studying what's
+  different about its hook/pacing/footage.
+- **AI Unfiltered is confirmed the weakest topic**, not just suspected: 131,
+  34, and 11 views across its three episodes. Deprioritize AI topics.
+- **The long-vs-short length question (§2d, previously unresolved) has a
+  real-data answer now, though the short-format sample is thin (n=2):**
+  long format (6-fact, ~52-58s) averaged 45.8% retention / 724 views across
+  9 videos; short format (3-fact, ~25s) averaged 41.4% retention / 275 views
+  across Facts 8 and 9. Long format wins on both axes. This matches the
+  owner's own qualitative call after the 3-fact experiment ("the recipe
+  didn't work, revert to 6") — now with numbers behind it. Keep 6-fact/50s+
+  as the default.
+- **Facts 8 vs Facts 9 is a same-format natural experiment**: identical
+  3-fact/~25s format, but Facts 8 (axolotl/mantis shrimp/cuttlefish) got 23
+  views while Facts 9 (hedgehog/peacock/seahorse) got 527. Confirms topic
+  choice, not format, drove that gap.
+
+**Lesson learned the same session — do not misread Analytics API processing
+lag as "not uploaded."** The initial pull showed no data at all for Facts
+11, 12, 13, or the Ferrari story episode, which was reported to the owner as
+"these may not be uploaded yet." Owner corrected this with a YouTube Studio
+screenshot: 11/12/13 are live and performing well (Facts 12: **1K views in
+10 hours**, notably faster than anything else in the dataset took days to
+reach). The real cause: **the YouTube Analytics API does not populate a
+video's row until roughly a day or more after upload** — Facts 11/12/13 were
+all under 24h old at pull time. Studio's own view/like/comment counts are
+visible immediately; the Analytics API's per-video breakdown (views,
+averageViewPercentage, averageViewDuration) is what lags. **Before reporting
+a video as "missing/not published" based on an Analytics API pull, check its
+upload age first** — anything under ~24-48h old may simply not have
+propagated yet, distinct from actually not existing. Facts 1, 2, 7, and the
+Ferrari/Lamborghini story episode are still unconfirmed either way (they
+predate the lag window, so if published they should have appeared) — owner
+is checking further down the Studio content list.
+
 **Two follow-up fixes to the hashtag work, same day (2026-08-02):**
 
 1. **Caption gets only 3 hashtags, not all 12.** After the 3-tier fix below
@@ -983,26 +1024,22 @@ before rendering.
   Veo would provide a real sloth for roughly one clip's cost.
 - Content calendar still built around the old five-topic mix. Rebuilding it
   around the §5 shortlist has not been done.
-- **YouTube Analytics access — setup in progress, 2026-08-03.** §5a's
-  outlier-topic research had to rely on secondhand web summaries instead of
-  real per-video view counts; this is the fix. `docs/skill/youtube/` (all
-  gitignored except the two scripts) now holds: `client_secret.json` (the
-  owner's Google Cloud OAuth client, "Desktop app" type, YouTube Analytics
-  API + YouTube Reporting API enabled), `authorize_local.py` (one-time
-  interactive step — **must run on the owner's own machine**, this remote
-  session has no browser to complete the OAuth consent screen), and
-  `fetch_channel_analytics.py` (the actual query tool, headless, pure
-  `requests` — no new project dependency — mints a fresh access token from
-  the refresh token on every run). **Blocked on `token.json`**: the owner
-  needs to run `authorize_local.py` locally and send back the resulting
-  file before `fetch_channel_analytics.py` can be used. Once unblocked, it
-  prints top videos by views for a date range with real
-  views/averageViewDuration/averageViewPercentage — replaces the guesswork
-  in §5a and gives a real answer to the still-unresolved §2d length
-  question. Note: this only covers the *owner's own channel's* private
-  analytics (needs OAuth); verifying a *competitor's* outlier video's public
-  view count is a separate, much simpler ask (just a YouTube Data API key,
-  no OAuth) — not set up, raise it separately if still wanted.
+- ~~YouTube Analytics access — setup in progress~~ **Live as of 2026-08-03.**
+  `docs/skill/youtube/` (all gitignored except the two `.py` scripts) holds
+  `client_secret.json` + `token.json` (owner completed the one-time local
+  OAuth authorization) and `fetch_channel_analytics.py`, which is fully
+  headless from here on — mints a fresh access token from the refresh token
+  on every run, no more manual steps. Also needed **YouTube Data API v3**
+  enabled (separate from Analytics/Reporting) for title lookups, since the
+  Analytics report only returns video IDs — that's enabled now too. First
+  real read's findings are in §5 above. Two things worth remembering for
+  next time: (1) title lookup failing is a *soft* failure in the script (see
+  §6) so the numbers still print even if Data API v3 ever gets disabled
+  again; (2) **do not read "missing from an Analytics API pull" as "not
+  published"** without checking upload age first — see the processing-lag
+  lesson in §5. Verifying a *competitor's* outlier video's public view count
+  (§5a's original ask) is still a separate, simpler task (just a YouTube
+  Data API key, no OAuth) — not set up, raise it separately if still wanted.
 - **Facts 10 (bats) published 2026-07-31** — awaiting first-hours numbers
   (§2e). It's a long-format (54.1s/6-fact) episode, so its retention reads as
   another data point on the still-unresolved §2d length question, not just its
