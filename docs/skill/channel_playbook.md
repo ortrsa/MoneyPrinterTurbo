@@ -386,15 +386,50 @@ across 8-10 videos, not per video.
 
 **THE DAILY ROUTINE, adopted 2026-08-03.** The owner set a fixed operating
 rhythm and asked for it to run on scheduled wake-ups. Three Routines now
-exist (created via `create_trigger`, fresh session per firing — which is why
-every one of their prompts starts by reading these docs; **nothing may live
-only in a session's memory**):
+exist (created via `create_trigger`, **bound to the persistent session** —
+see the failure below for why that is not optional). Their prompts still
+begin by re-reading these docs, because context gets compacted:
 
 | Israel time | UTC cron | Job |
 |---|---|---|
 | 09:00 | `0 6 * * *` | Build the day's TWO episodes, send both + full upload kits to Telegram, ask for approval. **Uploads nothing.** |
 | 13:00 | `0 10 * * *` | Check Telegram inbox. Apply corrections if any; schedule both (16:30 + 22:30) if approved; nudge and stop if no reply. |
 | 20:00 | `0 17 * * *` | Evening report: the week's schedule, real performance numbers, honest conclusions, and a revised plan if the calendar is running dry. |
+
+**FAILURE — the first 13:00 firing did nothing, 2026-08-03. Root cause: the
+Routines were created with `create_new_session_on_fire: true`.** The fired
+session came up with `/home/user` empty — no repo, no clone anywhere on
+disk. It correctly refused to act and reported clearly, and took no
+irreversible action, but the whole job was a no-op.
+
+**The deeper reason fresh-session mode can never work for this channel, and
+the thing to actually remember:** even if the repo *had* cloned, the job
+would still have failed, because **every credential this pipeline needs is
+gitignored by design** — `config.toml` (Gemini + Pexels keys, Telegram bot
+token and chat_id), `docs/skill/youtube/client_secret.json`, and
+`docs/skill/youtube/token.json`. A fresh clone reaches none of them, and
+they cannot be recovered from git. So a fresh-session Routine could not
+generate a script, fetch footage, message Telegram, or upload — it could
+only read the docs. The mode was chosen for "robustness against this
+session dying", which had the trade-off exactly backwards: it traded a
+*possible* future failure for a *guaranteed* immediate one.
+
+Fixed same day by deleting all three and recreating them **session-bound**
+(the default mode — omit `create_new_session_on_fire`), so each firing
+resumes this session, which holds both the repo and the gitignored
+credentials. Cost of the fix: session-bound Routines cannot carry
+completion push-notifications (the server rejects `notifications` for
+them). That is an acceptable loss — every job's real deliverable goes to
+Telegram anyway, which is the channel the owner actually reads.
+
+**Generalised rule: a scheduled job that needs credentials must run
+somewhere those credentials already exist.** Before choosing fresh-session
+mode for anything here, check what the job needs to touch; if the answer
+includes any gitignored file, fresh-session is wrong. Today's two already
+scheduled uploads were unaffected — `status.publishAt` lives on YouTube's
+servers, so once a video is scheduled it publishes regardless of whether
+any session is alive (verified via the API after the fix, both still
+private with correct publishAt timestamps).
 
 Owner's words: "אתה קם ב 9 בבוקר כל יום ושולח לי לטלגרם 2 סרטונים שעתידים
 להתפרסם ב 16:30 וב 22:30 (לאחר אישור שלי) ואת ריט העלאה... בערב באזור 20:00
