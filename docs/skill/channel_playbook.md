@@ -384,6 +384,65 @@ across 8-10 videos, not per video.
 
 ## 5. Strategy decisions
 
+**Evening report 2026-08-03 — two measurement findings that change how to
+read this channel.** First successful firing of the session-bound routine.
+
+**FINDING 1: the Analytics API is not just lagged, it is FROZEN between
+finalised days — do not use it for anything recent.** The 20:00 pull
+returned byte-identical numbers to the 09:00 pull: all 14 videos, same view
+counts, eleven hours apart. Not one view moved on a live channel, which is
+impossible. The Analytics API serves finalised daily snapshots, so "last 28
+days ending today" really means "through roughly two days ago". **For
+anything published in the last ~48h, use the Data API's
+`videos.list?part=statistics` instead** — that returns live view/like/comment
+counts (it is what Studio shows). The evening report now pulls both: Data
+API for current counts, Analytics API for retention on older videos. Getting
+this wrong would mean reporting a day-old episode as having zero traction
+when it actually had a thousand views.
+
+**FINDING 2: like-rate is a usable same-day proxy for retention, which the
+Analytics API cannot give us for two days.** Ranking every episode by
+likes/views lines up strikingly well with the retention we do have:
+
+| episode | views | likes | like-rate | known retention |
+|---|---|---|---|---|
+| Facts 4 | 1,161 | 43 | **3.70%** | **81.6%** (best ever) |
+| Facts 6 | 903 | 28 | 3.10% | 42.2% |
+| Facts 5 | 1,029 | 26 | 2.53% | 42.2% |
+| Ferrari (story) | 518 | 12 | 2.32% | pending |
+| Facts 13 ocean | 599 | 13 | 2.17% | pending |
+| Facts 10 bats | 916 | 18 | 1.96% | 52.0% |
+| Facts 11 frogs | 866 | 16 | 1.85% | pending |
+| Facts 12 strength | 1,123 | 19 | 1.69% | pending |
+| Facts 9 (short) | 586 | 3 | **0.51%** | 48.4% |
+| Facts 8 (short) | 26 | 0 | 0% | 34.4% |
+
+Facts 4 tops both lists; the short-format episodes sit at the bottom of
+both. Treat like-rate as a leading indicator to act on the same day, then
+confirm with real retention when it lands — **but do not treat it as
+proven**: n is small and Facts 10 (1.96% like-rate, 52.0% retention) already
+sits out of order versus Facts 5 and 6. It is a hint, not a law.
+
+**Reach and resonance are not the same thing, and views alone mislead.**
+Facts 12 took the most views of the week (1,123) *and* the worst like-rate of
+the batch (1.69%). Judging it on views would have marked it the week's
+winner; on engagement it is the weakest recent episode.
+
+**Not concluded, deliberately: whether the ocean topic shift hurt.** Facts 13
+(599) vs Facts 12 (1,123) invites blaming the move off animals — but they
+published at 18:10 and 22:00, different slots, so time-of-day is an
+unresolved confound. Ep16 (dogs, i.e. back to animals, in the same 22:30
+slot as ocean) is the cleaner comparison; read it tomorrow before drawing
+any topic conclusion.
+
+**First-story verdict is NOT in yet.** Ferrari at 518 views in 3.6h is the
+fastest start measurable here, but Shorts front-load views so an early-hours
+pace always flatters against an older video's lifetime average. Comparing
+144 views/hour (Ferrari, 3.6h) to 49/hour (Facts 12, 23h) is not
+like-for-like. Wait for the 24h mark before deciding anything about the
+story format — and specifically before building Inky.
+
+
 **THE DAILY ROUTINE, adopted 2026-08-03.** The owner set a fixed operating
 rhythm and asked for it to run on scheduled wake-ups. Three Routines now
 exist (created via `create_trigger`, **bound to the persistent session** —
