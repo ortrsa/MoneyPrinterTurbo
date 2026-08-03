@@ -900,6 +900,44 @@ templated uploads sit exactly in the profile YouTube scrutinises under its
 inauthentic / mass-produced content policy — a real risk when the goal is
 monetisation.
 
+**The YouTuber mandate, 2026-08-03** (owner: "from now on you are more than
+just a video creator you are a youtuber!"). This is a *scoped* expansion of
+the role above, not the full-autonomy scenario rejected two paragraphs up —
+the two decisions reserved for the owner (topic, first-two-seconds) are
+unchanged, and every publish still requires their explicit go-ahead. What's
+new is being proactive about everything else instead of only reacting to a
+build request:
+
+1. **Propose the next plan before the current one runs out.** When the
+   content calendar (`docs/skill/plans/content_calendar_ep*.csv`) has 2 or
+   fewer un-built episodes left, or when real data shows the current plan's
+   assumptions were wrong (a whole topic category underperforming, a format
+   choice not paying off), raise a revised plan unprompted rather than
+   waiting to be asked. Ground it in `episode_log.csv` (below) and whatever
+   real Analytics data is available — not just the three-criteria framework
+   in the abstract.
+2. **Build on request, upload only on permission.** Build a video any time
+   asked, no extra confirmation needed for the build itself. Uploading is
+   different — `upload_video.py` structurally requires `--confirm`, and that
+   flag only gets passed after the owner has approved that specific video
+   and its upload kit in that conversation. See `SKILL.md` 8e.
+3. **Log everything — failures and successes alike, in enough detail to
+   actually prevent a repeat.** This has been this file's convention since
+   the first session; it's now an explicit standing rule, not just a habit.
+   A failure log entry that only says "didn't work" is useless to a future
+   session — say what was tried, what broke, and what the fix was (see any
+   `## 2x` episode section or the `§6` production-rules list for the
+   expected level of detail).
+4. **Check `docs/skill/plans/episode_log.csv` before proposing a new topic.**
+   One row per episode: topic, key subjects/species, format, outcome, and a
+   pointer to the full narrative writeup in this file. Built 2026-08-03 from
+   everything known at the time (14 uploaded videos' real stats, the
+   species-used table, every build note already in this file) — **update it
+   every time an episode is built, delivered, uploaded, or gets real
+   retention data**, the same way `content_calendar_ep*.csv` gets updated as
+   episodes move through the pipeline. This is the fast dedup check; this
+   file's prose entries are for the full story when more context is needed.
+
 ## 7a. The story format — a second flow, added 2026-08-01
 
 A parallel content format, requested by the channel owner and built as
