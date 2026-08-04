@@ -1376,6 +1376,19 @@ would burn the first 2 seconds, which the same guide calls the single most
 important metric. A persistent band gives instant context without costing the
 hook.
 
+**Title banner and progress bar position, corrected 2026-08-04 (owner feedback on
+the dollar/valley episode):** commit `61a9c69` (2026-08-01) had pinned the title
+band flush to `y=0` and the progress bar to a 4.5%-from-bottom margin. On an
+actual phone the band flush to the top edge sits under the status bar/notch and
+the app's own top overlay, and the bar that close to the bottom sits under
+YT Studio's UI chrome — both were confirmed hidden in a screenshot the owner
+sent. Reverted the title band to its original offset (`band_top =
+video_height * 0.072`, the position used before that commit) and increased the
+progress-bar bottom margin from `0.045` to `0.085` in
+`docs/skill/story_episode.py`'s `inject_title_banner()` /
+`move_progress_bar_to_bottom()`. Applies to future renders only — do not
+re-render or replace already-published videos over this.
+
 **Two bugs found while building it, both worth remembering:**
 
 - **`refine_hook()` is actively harmful in narrative context.** Built for the

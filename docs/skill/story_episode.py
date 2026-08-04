@@ -333,11 +333,11 @@ def inject_title_banner(
     直接改字符串而不是改 `viral.build_ass()`，是为了完全不动清单流程那条路径。
     """
     font_size = int(video_height * 0.030)
-    # 黑条贴死画面顶端：它是"常驻语境条"，悬在半空反而像一层浮窗，
-    # 顶到边缘才读起来像视频本身的一部分（进度条已挪到底部，不再占这块位置）。
-    band_top = 0
+    # 黑条贴死顶端会被手机状态栏/YT Studio 顶部 UI 挡住（owner 反馈，
+    # 2026-08-04）——挪回原来悬空一点的位置。
+    band_top = int(video_height * 0.072)
     line_gap = int(font_size * 1.30)
-    band_height = line_gap * 2
+    band_height = line_gap * 2 + int(font_size * 0.75)
 
     style = (
         f"Style: TitleBar,Anton,{font_size},&H00FFFFFF&,&H00FFFFFF&,&H00000000&,"
@@ -349,8 +349,7 @@ def inject_title_banner(
         f"{{\\an7\\pos(0,{band_top})\\1c&H000000&\\alpha&H20&\\p1}}"
         f"m 0 0 l {video_width} 0 l {video_width} {band_height} l 0 {band_height}{{\\p0}}"
     )
-    # 两行在黑条内垂直居中
-    y1 = band_top + band_height // 2 - line_gap // 2
+    y1 = band_top + int(font_size * 0.85)
     y2 = y1 + line_gap
     text1 = _colorize(line1.upper(), keys, key_color)
     text2 = _colorize(line2.upper(), keys, key_color)
@@ -376,7 +375,7 @@ def inject_title_banner(
 
 
 def move_progress_bar_to_bottom(
-    ass_text: str, video_height: int = 1920, margin_frac: float = 0.045
+    ass_text: str, video_height: int = 1920, margin_frac: float = 0.085
 ) -> str:
     """
     把进度条从画面顶部挪到底部。
