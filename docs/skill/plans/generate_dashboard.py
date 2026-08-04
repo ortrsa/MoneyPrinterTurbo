@@ -504,9 +504,16 @@ CSS = """
   .ep-card {
     display: grid; grid-template-columns: 88px 1fr auto; gap: 12px; align-items: center;
     background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    padding: 10px 12px 12px; text-decoration: none; color: inherit; position: relative; overflow: hidden;
+    padding: 10px 12px 12px; color: inherit; position: relative; overflow: hidden;
   }
   .ep-card:hover { border-color: color-mix(in srgb, var(--yellow) 40%, var(--border)); }
+  .card-link { position: absolute; inset: 0; z-index: 1; }
+  .watch {
+    position: relative; z-index: 2; text-decoration: none;
+    font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 800;
+    padding: 1px 7px; border-radius: 999px; background: var(--surface-2); color: var(--muted);
+  }
+  .watch:hover { color: var(--yellow); }
   .thumb, .thumb-ph { width: 88px; height: 50px; border-radius: 6px; object-fit: cover; display: block; }
   .thumb-ph {
     background: linear-gradient(135deg, var(--surface-2), var(--border));
@@ -640,16 +647,20 @@ def build_html(
                 f'<div class="ep-views">{r["views"]:,}</div>'
                 f'<div class="ep-likes">{r["likes"]} likes</div>{pill}'
             )
+        studio = f"https://studio.youtube.com/video/{esc(r['id'])}/analytics/tab-overview/period-default"
         cards += f"""
-        <a class="ep-card" href="https://www.youtube.com/shorts/{esc(r["id"])}" target="_blank" rel="noopener">
+        <div class="ep-card">
+          <a class="card-link" href="{studio}" target="_blank" rel="noopener"
+             aria-label="Open ep {esc(r["ep"])} in YouTube Studio analytics"></a>
           {thumb}
           <div class="ep-main">
             <div class="ep-title"><span class="num">Ep {esc(r["ep"])}</span> · {esc(r["topic"])}</div>
-            <div class="ep-meta">{fmt_chip}<span class="age">{fmt_age(r["published"], now)}</span></div>
+            <div class="ep-meta">{fmt_chip}<span class="age">{fmt_age(r["published"], now)}</span>
+              <a class="watch" href="https://www.youtube.com/shorts/{esc(r["id"])}" target="_blank" rel="noopener">▶ watch</a></div>
           </div>
           <div class="ep-nums">{nums}</div>
           <span class="bar-rail"><i style="width:{pct}%"></i></span>
-        </a>"""
+        </div>"""
 
     open_lis = "".join(
         f'<li><span class="tag">on hold</span> ep {esc(i.get("episode", "?"))} — {esc(i.get("topic", ""))}</li>'
@@ -718,7 +729,8 @@ def build_html(
 
   <footer>
     Retention pills: green ≥55% · amber 40–54% · red &lt;40% · “pending” = Analytics hasn't finalised it yet (~2 days).
-    Yellow bar under each card = views relative to the channel's top video. Cards link to the video.
+    Yellow bar under each card = views relative to the channel's top video. Clicking a card opens that video's
+    YouTube Studio analytics (channel owner only); “▶ watch” opens the public video.
     Regenerated nightly at 20:00 by the evening-report job — same URL every night.
   </footer>
 </div>
