@@ -424,12 +424,20 @@ def generate_audio_only(
 
     画面要对齐口播就必须先有真实音频：每段的起止时间来自 whisper，
     而不是按字数估算。mpt_agent.py 固定 `--stop-at video`，所以这里直接调 cli.py。
+
+    必须显式传 `--video-terms`：`task.py` 只在 video_terms 为空时才去调
+    `llm.generate_terms()`，而这里 `--stop-at audio` 根本不会下载素材，
+    这些词自始至终没人用（synced 模式下每段的搜索词是另外单独生成的）。
+    不传的话，一次纯粹多余的 LLM 调用就能让整个渲染失败 —— 2026-08-04
+    Gemini 文本模型 503 期间就是这样卡住的：脚本已经手写好、TTS 也是好的，
+    却倒在一个结果被丢弃的搜索词调用上。
     """
     command = [
         "uv", "run", "--no-project", "--python", "3.11", "python", "cli.py",
         "--task-id", task_id,
         "--video-subject", subject,
         "--video-script", script_text,
+        "--video-terms", subject,
         "--voice-name", voice_name,
         "--n-threads", str(threads),
         "--no-subtitle-enabled",
