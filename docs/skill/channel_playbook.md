@@ -1058,6 +1058,70 @@ digest with an ask for topics; if none arrive before 09:00, do fresh
 outlier-topic research (SKILL.md step 0 method) rather than block the
 build on a reply.
 
+## 5c. Retention-first self-improvement log (adopted 2026-08-04)
+
+Owner instruction, verbatim: "when you send me a summary, also take notes
+for yourself to improve for the next videos... always self improve, it's
+very important to notice the retention not only the views." Views measure
+reach; retention measures whether the episode itself is good — a video can
+lead the week on views (algorithm placement, luck, time of day) while
+quietly being the weakest thing on the channel by retention, and vice
+versa. **Every entry here must end in a concrete action for the next
+build, not just an observation** — "X happened" is not a lesson, "next
+time do Y because X happened" is.
+
+**Process:** the 20:00 job appends an entry whenever a video's retention
+newly finalises (crosses from "pending" to a real number). The 09:00 job
+reads this section before picking topics/structure and applies at least
+one open action if one is live. Entries close out (marked RESOLVED) once
+a later episode actually tests the hypothesis.
+
+**Backfilled entries, 2026-08-04, from confirmed Analytics API data
+(averageViewPercentage; small-n outliers like the 12-view 129% and the
+4-5 view pre-branding test uploads are excluded as noise, not signal):**
+
+1. **Ep 4 (81.6%) vs ep 5 / ep 6 (42.2% each) — same format, same "animal
+   ensemble" topic category, ~2x retention gap, still not fully
+   explained.** Ep 4's hook opens on a concrete strange image stated
+   plainly ("wombats produce cube-shaped droppings, and scientists needed
+   years to explain it") rather than a question. This is already the
+   basis of the production rule in §6 below ("open on the strange image,
+   not a sentence describing it") — so the *hook-shape* hypothesis is
+   captured and supposedly in use. **Open action:** the last several
+   episodes (16, 17, 18, 19) all use question-form or statement-form hooks
+   inconsistently without logging *why* — starting now, log each episode's
+   hook shape (question vs strange-image-statement) next to its retention
+   in this table once data lands, so this 2-episode comparison can finally
+   grow into a real sample instead of staying anecdotal.
+2. **Ep 10 bats (50%) vs ep 11 frog (38%) — both built after the
+   three-criteria completion-compulsion restructure, same execution
+   approach, 12-point gap.** The restructure alone is not sufficient;
+   something about the species/topic itself still moves the number. Ep
+   11's footage was logged at build time as the weakest-coverage batch on
+   file ("generic pond/tree frog footage only — glass frog, wood frog,
+   poison dart frog have no real Pexels coverage"), while bats had punchier
+   individual facts (vampire bat / tequila). **Open action:** rate footage
+   specificity 1-5 per episode BEFORE render (not just "probed / not
+   probed" pass-fail) and log that rating here against the eventual
+   retention — testing whether generic/stock-feeling footage measurably
+   costs retention independent of the fact content itself.
+3. **AI Unfiltered (32-35% avg across 3 episodes) confirmed as the
+   channel's weakest category — RESOLVED, action already taken:**
+   deprioritized since the finding, no AI-topic episode has since been
+   queued. Keep it deprioritized; this is a closed loop, not an open one.
+4. **Sample size discipline:** every comparison above is n=1 or n=2 per
+   side. Treat all open actions as hypotheses being tested across future
+   episodes, not settled rules — do not silently start treating "open on
+   the strange image" as proven just because it is repeated often; it
+   still only has ep 4 as direct support.
+
+**Pending, watch for retention landing:** eps 12/13/16/18 (facts) and 17/19
+(stories) all still show "pending" as of tonight — each is a real data
+point for the open hypotheses above the moment Analytics finalises it
+(~48h after publish). Ep 17 in particular is the channel's first-ever
+story-format retention number; log it here the moment it lands, not just
+in the evening Telegram digest.
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
