@@ -12,6 +12,34 @@ from app.config import config
 from app.models.llm_provider import DEFAULT_LLM_PROVIDER_ID, get_llm_provider
 
 _max_retries = 5
+
+# 主力 Gemini 模型 503（"experiencing high demand"）时，这一次运行临时改用的模型。
+# 只在进程内生效，绝不写回 config.toml —— 频道主的规则是：默认永远先试配置里的
+# 主力模型，降级只救当前这一次；如果降级反复发生，去问他，不要一直无声凑合。
+GEMINI_FALLBACK_MODEL = "gemini-3.1-flash-lite"
+LLM_FALLBACK_LOG = "storage/llm_fallback.log"
+
+
+def _is_model_overloaded(err: Exception) -> bool:
+    """区分"模型过载"(503, 换个模型就好) 和"配额用尽"(429, 换模型也没用)。"""
+    text = str(err)
+    return "503" in text or "UNAVAILABLE" in text.upper()
+
+
+def _record_llm_fallback(primary: str, fallback: str, err: Exception) -> None:
+    """把降级事件按天记一行，供每日例行任务判断"是不是又降级了"。"""
+    import datetime
+    import os
+
+    try:
+        os.makedirs(os.path.dirname(LLM_FALLBACK_LOG), exist_ok=True)
+        stamp = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
+        with open(LLM_FALLBACK_LOG, "a", encoding="utf-8") as f:
+            f.write(f"{stamp}\t{primary} -> {fallback}\t{str(err)[:160]}\n")
+    except Exception as log_err:  # 记录失败绝不能拖垮正在跑的渲染
+        logger.warning(f"could not record llm fallback: {log_err}")
+
+
 MIN_SCRIPT_PARAGRAPH_NUMBER = 1
 MAX_SCRIPT_PARAGRAPH_NUMBER = 10
 MAX_SCRIPT_PROMPT_LENGTH = 2000
@@ -261,18 +289,38 @@ def _generate_response(prompt: str) -> str:
                 ],
             )
 
-            try:
+            def _call_gemini(model_id: str):
                 # 新版 google-genai 通过统一 Client 暴露模型服务。上下文管理器
                 # 会在请求结束后关闭底层 HTTP 连接，避免频繁生成时积累连接资源。
                 with genai.Client(
                     api_key=api_key,
                     http_options=http_options,
                 ) as client:
-                    response = client.models.generate_content(
-                        model=model_name,
+                    return client.models.generate_content(
+                        model=model_id,
                         contents=prompt,
                         config=generation_config,
                     )
+
+            try:
+                try:
+                    response = _call_gemini(model_name)
+                except Exception as primary_error:
+                    # 503 UNAVAILABLE 是"这个模型正忙"，不是 key 的问题，也不是配额
+                    # （配额是 429 RESOURCE_EXHAUSTED）。2026-08-04 主力模型
+                    # gemini-3.5-flash-lite 连续几小时 503，而同一把 key 换个模型
+                    # 立刻就能用。频道主的要求：默认始终用配置里的模型，只在这一次
+                    # 运行里临时降级，绝不把降级写回 config.toml —— 下一次照旧先试
+                    # 主力模型。降级会记到 storage/llm_fallback.log，让每天的例行
+                    # 任务能发现"又降级了"并去问频道主，而不是无声地一直凑合。
+                    if not _is_model_overloaded(primary_error) or model_name == GEMINI_FALLBACK_MODEL:
+                        raise
+                    logger.warning(
+                        f"gemini model {model_name} is overloaded (503); falling back to "
+                        f"{GEMINI_FALLBACK_MODEL} for THIS RUN ONLY (config unchanged)"
+                    )
+                    _record_llm_fallback(model_name, GEMINI_FALLBACK_MODEL, primary_error)
+                    response = _call_gemini(GEMINI_FALLBACK_MODEL)
                 generated_text = response.text
             except (AttributeError, IndexError, ValueError) as e:
                 logger.warning(f"gemini returned invalid response content: {str(e)}")
