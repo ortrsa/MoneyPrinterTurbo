@@ -1041,6 +1041,23 @@ the questions a creator actually asks, not just a numbers list:
   anywhere else mints a new URL and silently breaks the owner's bookmark
   (the trigger prompt now hardcodes both the path and the URL).
 
+**2026-08-04 20:00 report.** Ep 18 published on time (16:30 IDT, 633 views
+21h in). Ep 19 (dollar story) queued for 22:30 tonight — first video to go
+through the new direct-publish-at-slot-time flow end to end. Ep 12 still
+leads the week (1,138 views). Ep 17's retention (the story-format go/no-go
+data point) is still "pending" at 28h — Analytics needs ~48h to finalise,
+so no call on Inky yet; check again tomorrow evening.
+
+**Facts-topic calendar is now exhausted.** `content_calendar_ep12_18.csv`
+covered episodes 12-18; all are built. The §5a outlier-research candidate
+list (dog, strength, bat, frog, sloth) is also now fully used — every one
+of those has shipped. Story-side runway is fine (2 fact-checked leads ready:
+D-Day crossword, moa bird), but there is currently no next FACTS topic
+queued for the 09:00 build. Flagged to the owner in tonight's Telegram
+digest with an ask for topics; if none arrive before 09:00, do fresh
+outlier-topic research (SKILL.md step 0 method) rather than block the
+build on a reply.
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
