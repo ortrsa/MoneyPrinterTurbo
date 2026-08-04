@@ -488,17 +488,39 @@ like-for-like. Wait for the 24h mark before deciding anything about the
 story format — and specifically before building Inky.
 
 
-**THE DAILY ROUTINE, adopted 2026-08-03.** The owner set a fixed operating
-rhythm and asked for it to run on scheduled wake-ups. Three Routines now
-exist (created via `create_trigger`, **bound to the persistent session** —
-see the failure below for why that is not optional). Their prompts still
-begin by re-reading these docs, because context gets compacted:
+**THE DAILY ROUTINE, adopted 2026-08-03, architecture updated 2026-08-04.**
+The owner set a fixed operating rhythm and asked for it to run on scheduled
+wake-ups. Five Routines now exist (created via `create_trigger`, **bound to
+the persistent session** — see the failure below for why that is not
+optional). Their prompts still begin by re-reading these docs, because
+context gets compacted:
 
 | Israel time | UTC cron | Job |
 |---|---|---|
 | 09:00 | `0 6 * * *` | Build the day's TWO episodes, send both + full upload kits to Telegram, ask for approval. **Uploads nothing.** |
-| 13:00 | `0 10 * * *` | Check Telegram inbox. Apply corrections if any; schedule both (16:30 + 22:30) if approved; nudge and stop if no reply. |
-| 20:00 | `0 17 * * *` | Evening report: the week's schedule, real performance numbers, honest conclusions, and a revised plan if the calendar is running dry. |
+| 13:00 | `0 10 * * *` | Check Telegram inbox. Apply corrections if any; **record approval** into `storage/todays_uploads.json` if approved; nudge and stop if no reply. **Uploads nothing** (changed 2026-08-04, see below). |
+| 16:30 | `30 13 * * *` | Read `storage/todays_uploads.json` — if the 16:30 slot is approved and not yet published, upload it live as public **right now**. Otherwise skip and notify. |
+| 22:30 | `30 19 * * *` | Same as 16:30, for the 22:30 slot. |
+| 20:00 | `0 17 * * *` | Generate + publish `docs/skill/plans/generate_dashboard.py`'s HTML dashboard (same URL every night), send one short Telegram digest pointing at it plus the key takeaway, log conclusions to this file, revise the plan if the calendar is running dry. |
+
+**Direct-publish-at-slot-time, not `--publish-at` scheduling (owner
+request, 2026-08-04):** "I'm still thinking we should post in the same time
+we want it. Not a scheduled post." Until this point, 13:00 called
+`upload_video.py --publish-at <UTC time>`, which uploads immediately as
+`private` and lets YouTube itself flip it public at the given timestamp —
+technically correct, but not what the owner pictured when they said "upload
+at 16:30." Replaced with real wall-clock publishing: 13:00 now only writes
+approval state (`storage/todays_uploads.json`, gitignored via `/storage/`,
+one day's data — `{"date", "slots": {"16:30": {"approved", "result_json",
+"episode", "published"}, "22:30": {...}}}`), and two new Routines fire at
+the literal slot times and upload with `--confirm --privacy public` (no
+`--publish-at`) only if that slot is approved for today and not already
+published. The hard rule carries over unchanged: no slot is ever uploaded
+without the owner's prior explicit approval of that exact rendered
+version — the two new jobs check `approved: true` before doing anything,
+and skip with a Telegram notice otherwise. `upload_video.py --publish-at`
+itself was not removed — still there for genuine one-off scheduling, just
+no longer what the daily Routines use.
 
 **FAILURE — the first 13:00 firing did nothing, 2026-08-03. Root cause: the
 Routines were created with `create_new_session_on_fire: true`.** The fired
@@ -546,12 +568,12 @@ unapproved video is never uploaded, even if the slot is about to pass** —
 missing a slot is recoverable, publishing something the owner didn't approve
 is not.
 
-**⚠️ CRON IS UTC AND DOES NOT FOLLOW ISRAELI DST.** These three expressions
+**⚠️ CRON IS UTC AND DOES NOT FOLLOW ISRAELI DST.** These five expressions
 are correct for IDT (UTC+3, ~late March to late October). When Israel falls
 back to IST (UTC+2) in late October, **every job will fire one hour late in
-local terms** (09:00 becomes 10:00). Fix then by shifting each cron back an
-hour (`0 7`, `0 11`, `0 18`) via `update_trigger` — do not delete and
-recreate, that loses the run history.
+local terms** (09:00 becomes 10:00, 16:30 becomes 17:30, etc). Fix then by
+shifting each cron back an hour (`0 7`, `0 11`, `30 14`, `30 20`, `0 18`) via
+`update_trigger` — do not delete and recreate, that loses the run history.
 
 **Both publish slots are genuinely well-placed for a US audience**, checked
 rather than assumed: 16:30 IDT = 09:30 ET / 06:30 PT, and 22:30 IDT = 15:30
@@ -948,6 +970,41 @@ repeat with a new angle, not virgin territory; bat and frog are unused.
 either the user checking a channel's Shorts tab sorted by "Popular" in a
 browser, or wiring a YouTube Data API key into this pipeline. Say so rather than
 treating a blog-post summary as equivalent.
+
+## 5b. Evening report redesign — dashboard (adopted 2026-08-04)
+
+Owner: "the report you send, it's a lot of text. Maybe we can do something
+nicer like HTML or suggest something else. I don't know" — left the concrete
+design open. Built `docs/skill/plans/generate_dashboard.py`: pulls live
+Data API view/like counts + Analytics API retention, merges with a
+hand-maintained `EPISODE_META` dict (video_id → episode/topic/format — the
+API has no way to know what a video is *about*), writes one self-contained
+HTML file. Published via the `Artifact` tool to a stable URL, **redeployed
+to the same file path every night** so the owner bookmarks one link instead
+of getting a new one daily. The 20:00 job now sends one short Telegram
+message (link + 2-3 sentence takeaway) instead of four long messages.
+
+Three real bugs caught before shipping the first version, worth remembering
+because they're generic mistakes, not dashboard-specific ones:
+- `ROOT = Path(__file__).resolve().parents[2]` climbed to `docs/`, not the
+  repo root — off-by-one on the parent count is an easy silent failure
+  that still imports fine right up until a script two directories deeper
+  tries to reach a sibling package. Always count parents against the
+  actual file depth, don't assume.
+- The Analytics API's `reports` endpoint returns a 400 (not en empty
+  result) when `dimensions=video` is combined with more than one metric
+  and no `sort` param — but the code was doing `.get("rows", [])` on the
+  response without checking status first, so the 400 silently became "0
+  rows", which looked exactly like "nothing has finalised yet" instead of
+  "the query itself is malformed." Every retention pill showed "pending"
+  on the first run because of this alone. Lesson: `.raise_for_status()`
+  before trusting an empty collection means "no data" instead of "error."
+- The initial "best retention on file" hero stat surfaced 128.8% off a
+  12-view video — a real number, but statistical noise, not a signal
+  worth highlighting. Added a `views >= 100` floor before a video is
+  eligible for that specific highlight card (the full table still shows
+  every video's real retention regardless of view count — the floor is
+  only for what gets promoted to a hero stat).
 
 ## 6. Production rules learned the hard way
 
