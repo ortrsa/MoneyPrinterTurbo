@@ -203,8 +203,27 @@ def build_scripts(
     outro: str | None = None,
     hook: str | None = None,
     fact_max_words: int = DEFAULT_FACT_MAX_WORDS,
+    pre_written: bool = False,
 ) -> dict:
-    """调用项目内的 LLM 服务，把原始事实改写成口播稿并生成钩子。"""
+    """调用项目内的 LLM 服务，把原始事实改写成口播稿并生成钩子。
+
+    ``pre_written=True`` 时完全跳过 LLM：facts 文件里的每一行被当作最终口播稿
+    直接使用。这是 LLM provider 故障时的逃生通道 —— 2026-08-04 Gemini 的文本
+    模型持续返回 503（"high demand"），而 TTS 模型是好的，整条流水线本来只差
+    "把原始事实改写成一句口播" 这一步。有了这个开关，人工写好的稿子可以直接
+    进入 TTS/取材/字幕，不必等上游恢复。注意：此模式下 facts 文件必须写成
+    可以直接朗读的成品句子，不能再带 "keep this LAST" 之类给模型看的指示。
+    """
+    if pre_written:
+        fact_lines = [f.strip() for f in raw_facts if f.strip()]
+        for line in fact_lines:
+            logger.info(f"fact (pre-written, LLM skipped): {line}")
+        resolved_hook = (hook or "").strip()
+        if not resolved_hook:
+            raise SystemExit("--pre-written requires --hook (no LLM available to write one)")
+        resolved_outro = outro or DEFAULT_OUTRO.format(next_episode=episode + 1)
+        return {"hook": resolved_hook, "facts": fact_lines, "outro": resolved_outro}
+
     from app.services import llm
 
     fact_lines = []
@@ -556,6 +575,16 @@ def main(argv: list[str] | None = None) -> int:
         help="只生成脚本和元数据，不渲染视频",
     )
     parser.add_argument(
+        "--pre-written",
+        action="store_true",
+        help=(
+            "跳过 LLM 改写：facts 文件的每一行直接当作最终口播稿。"
+            "LLM provider 故障（例如 Gemini 文本模型返回 503）时的逃生通道，"
+            "TTS 正常就仍然能出片。必须同时传 --hook。"
+            "此模式下 facts 文件要写成可直接朗读的成品句子。"
+        ),
+    )
+    parser.add_argument(
         "--pinned-comment",
         default=None,
         help="发布后建议置顶的评论文案，随成片一起发去 Telegram。不传则跳过这一项。",
@@ -584,6 +613,7 @@ def main(argv: list[str] | None = None) -> int:
         outro=args.outro,
         hook=args.hook,
         fact_max_words=args.fact_max_words,
+        pre_written=args.pre_written,
     )
     spoken_segments = [parts["hook"], *parts["facts"], parts["outro"]]
     script_text = " ".join(spoken_segments)
