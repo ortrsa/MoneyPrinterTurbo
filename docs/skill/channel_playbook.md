@@ -384,6 +384,51 @@ across 8-10 videos, not per video.
 
 ## 5. Strategy decisions
 
+**LLM PROVIDER OUTAGE, 2026-08-04 — survived, and the fixes are permanent.**
+Gemini returned `503 UNAVAILABLE` ("experiencing high demand") for hours.
+Three separate lessons came out of it, all worth keeping:
+
+**1. A 503 is MODEL-specific, not key-specific. Change the model, not the
+key.** The owner supplied a fresh API key mid-outage; it produced byte-identical
+errors, because the overload is on the model. Diagnostic that actually works:
+list the models the key can reach (`GET /v1beta/models`) and test candidates
+until one returns 200. `gemini-3.5-flash-lite` was dead while
+`gemini-3.1-flash-lite`, `gemini-flash-latest` and `gemini-3-flash-preview` all
+answered instantly. Fix was one line in `config.toml`. **Do not swap keys to
+chase a 503** — and note the old key reached those same working models, so the
+key swap would have achieved nothing. (Separately: `gemini-2.0-flash` returns
+429 RESOURCE_EXHAUSTED, a different failure — quota, not overload.)
+
+**2. `viral_episode.py` was making an LLM call whose result it threw away.**
+The audio stage shells out to `cli.py`, and `task.py` only skips
+`llm.generate_terms()` when `video_terms` is non-empty. In synced mode those
+terms are never used (each segment gets its own, and `--stop-at audio` never
+downloads footage) — but the call still happened, and during the outage it
+killed renders that were otherwise completely fine: script written, TTS
+working, footage pinned. Fixed by passing `--video-terms` explicitly in
+`generate_audio_only`. This removes one pointless round-trip from **every**
+render, outage or not.
+
+**3. `--pre-written` is the escape hatch when the text model is down but TTS
+is up.** Those are independent services and they fail independently — TTS was
+healthy the entire time. The flag makes `viral_episode.py` treat each line of
+the facts file as finished spoken copy and skip the LLM entirely. Facts 18 was
+built this way, hand-written end to end. **When using it, the facts file must
+contain readable finished sentences, not the usual model-directed notes like
+"keep this LAST".** Metadata also degrades in this mode
+(`generate_social_metadata` falls back to a heuristic that dumps the whole
+script into the caption), so title/caption/tags need hand-writing too.
+
+**Story-format test integrity, same day.** The dollar story first rendered at
+74.7s. Ferrari was 55.8s and nothing on this channel has been tested past 63s.
+Shipping it long would have confounded the very thing it exists to measure —
+whether stories outperform facts — so it was trimmed to 48.2s by cutting the
+one beat that merely restated an earlier point. **When an episode's purpose is
+to test variable X, do not let variable Y drift at the same time.** Also
+caught pre-render: the generated script called "thal" a *mountain pass* (it
+means *valley*), which was both wrong and a leak of the payoff one beat early.
+Both fixes locked with `--from-dry-run`.
+
 **Evening report 2026-08-03 — two measurement findings that change how to
 read this channel.** First successful firing of the session-bound routine.
 
