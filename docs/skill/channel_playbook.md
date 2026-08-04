@@ -1006,6 +1006,41 @@ because they're generic mistakes, not dashboard-specific ones:
   every video's real retention regardless of view count — the floor is
   only for what gets promoted to a hero stat).
 
+**v2, same day (owner: "make the dashboard 10X better").** Rebuilt around
+the questions a creator actually asks, not just a numbers list:
+- **Race chart** — cumulative views over each episode's *first 5 days*,
+  every line at the same age, newest episode in brand yellow, second
+  newest in pink, the pack in grey. This is the single most useful chart
+  on the page: it answers "is today's video tracking above or below the
+  pack at the same age" the moment it's opened. Windowed to 5 days on
+  purpose — a full-age axis flattened the decisive early curve into the
+  corner. Because Analytics dailies freeze ~2 days behind, each line's
+  final point is anchored to the LIVE Data-API count, so brand-new videos
+  still show an honest trajectory (a straight line to "now" when no
+  finalised days exist yet).
+- **Channel views-per-day area chart** with pink markers on upload days.
+- **Real thumbnails** inlined as base64 data URIs (the Artifact CSP blocks
+  `i.ytimg.com`; ~6.5KB each, ~140KB total, fine under the 16MB cap).
+  Private/queued videos 404 on the thumb endpoint → branded placeholder.
+- **Format scoreboard** (facts vs story vs facts-short): episode count,
+  median views, avg finalised retention, computed over the branded run
+  only — `pre`/`AI` uploads would skew the medians.
+- **Auto-computed takeaways** — leader of the week, retention record,
+  story-vs-facts-median check, subscriber-conversion note. All phrased
+  from the numbers; no adjective the data doesn't earn.
+- Episode rows are now phone-first cards (thumb / title / numbers) that
+  link to the video — no horizontal-scroll table at all.
+- **Verify rendering with Playwright, not headless `--screenshot`**: the
+  bare `chromium --headless --screenshot --window-size=430,...` flow laid
+  the page out at a wider default width and cropped, which looks exactly
+  like a horizontal-overflow bug. Playwright with a real 390px viewport
+  proved scrollWidth == clientWidth. Don't chase phantom overflow from
+  cropped screenshots.
+- The 20:00 job MUST regenerate to the exact same scratchpad path and
+  republish from it — the stable URL is bound to the file path; `--out`
+  anywhere else mints a new URL and silently breaks the owner's bookmark
+  (the trigger prompt now hardcodes both the path and the URL).
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
