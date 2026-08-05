@@ -37,6 +37,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from loguru import logger  # noqa: E402
 
 from app.services import viral  # noqa: E402
+from app.utils import utils as app_utils  # noqa: E402
 
 # 研究结论：50-60 秒档位在事实类短视频里平均表现最好，而完播率仍是核心指标。
 # 按 150-170 WPM 的口播语速，约 50 秒对应 125-140 个词，正好放得下 6 条事实。
@@ -63,6 +64,17 @@ HUMANIZATION_NOTE = (
 # 50-60 秒；要压到 20 秒以内（增长指南 Rank 1 的硬指标）只能同时减少条数
 # 并把每条压到 14 词左右（约 4-5 秒）。所以词数必须可调，不能写死。
 DEFAULT_FACT_MAX_WORDS = 25
+
+# 观众反馈（owner，2026-08-05）：整体节奏偏慢，希望旁白和字幕都快一点——
+# 但明确要求画面剪辑仍然要跟着口播走，不能让声音和画面脱节。这里选择在
+# 音频层面加速：Gemini TTS 本身不支持语速参数（voice.py 的 gemini_tts()
+# 文档写明 voice_rate "当前未使用"），所以唯一能调的地方是生成完音频之后
+# 用 ffmpeg atempo 整体提速。这个提速发生在 whisper 转录*之前*，所以逐词
+# 时间轴、字幕、以及各段落的镜头时间窗全部自动跟着音频一起变快，不需要在
+# 任何下游代码里单独处理——这正是"画面呼应口播"这条要求的自然结果。
+# 1.1 = 提速 10%："不要明显更快，只是感觉不要那么慢"（owner 原话），
+# 视频总时长会随之略微缩短，这是提速的直接后果，owner 已确认可以接受。
+DEFAULT_NARRATION_SPEED = 1.1
 
 FACT_PROMPT = (
     "Rewrite this fact as ONE or TWO short punchy sentences for a rapid-fire facts "
@@ -454,6 +466,43 @@ def parse_segment_clips(
     return overrides
 
 
+def _speed_up_audio(audio_path: Path, speed: float) -> None:
+    """用 ffmpeg atempo 原地提速一份音频（保持音高不变）。
+
+    必须在这里做，而不是在 TTS 那一层：当前默认语音 `gemini:Puck-Male` 走的
+    是 Gemini TTS，它的 `voice_rate` 参数在 `app/services/voice.py` 里明确标注
+    "当前未使用"——Gemini 的语音生成 API 本身不暴露语速控制。ffmpeg 的
+    atempo 滤镜工作在生成好的音频文件上，与具体用了哪个 TTS provider 无关。
+
+    atempo 单次调用只接受 [0.5, 2.0] 区间，超出范围需要串联多个 atempo——
+    这里的用途只是"感觉不要那么慢"的小幅提速，不会用到那个区间之外，
+    所以没有实现串联，避免了不必要的复杂度。
+    """
+    if speed == 1.0:
+        return
+    if not 0.5 <= speed <= 2.0:
+        raise ValueError(
+            f"narration speed {speed} outside ffmpeg atempo's single-filter "
+            "range [0.5, 2.0]"
+        )
+
+    sped_up_path = audio_path.with_name(audio_path.stem + "-sped-up.mp3")
+    command = [
+        app_utils.get_ffmpeg_binary(),
+        "-y",
+        "-i", str(audio_path),
+        "-filter:a", f"atempo={speed}",
+        "-vn",
+        str(sped_up_path),
+    ]
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"narration speed-up failed:\n{result.stdout}\n{result.stderr}"
+        )
+    sped_up_path.replace(audio_path)
+
+
 def generate_audio_only(
     script_text: str,
     subject: str,
@@ -461,6 +510,7 @@ def generate_audio_only(
     task_id: str,
     root: Path,
     threads: int,
+    narration_speed: float = DEFAULT_NARRATION_SPEED,
 ) -> Path:
     """
     只跑到音频阶段，返回 audio.mp3 路径。
@@ -474,6 +524,11 @@ def generate_audio_only(
     不传的话，一次纯粹多余的 LLM 调用就能让整个渲染失败 —— 2026-08-04
     Gemini 文本模型 503 期间就是这样卡住的：脚本已经手写好、TTS 也是好的，
     却倒在一个结果被丢弃的搜索词调用上。
+
+    `narration_speed` 在这里、也就是 whisper 转录*之前*生效：调用方后续会
+    对这份（可能已提速的）音频重新跑一次转录来拿逐词时间轴，所以字幕和
+    每段画面的时间窗会自动落在提速后的音频上，不需要在任何下游逻辑里
+    单独换算——两条路径共用同一份真实时间轴。
     """
     command = [
         "uv", "run", "--no-project", "--python", "3.11", "python", "cli.py",
@@ -494,6 +549,8 @@ def generate_audio_only(
     audio_path = root / "storage" / "tasks" / task_id / "audio.mp3"
     if not audio_path.is_file():
         raise RuntimeError(f"audio stage finished but {audio_path} is missing")
+
+    _speed_up_audio(audio_path, narration_speed)
     return audio_path
 
 
@@ -542,6 +599,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--language", default="en-US")
     parser.add_argument("--voice-name", default="gemini:Puck-Male")
     parser.add_argument("--fact-count", type=int, default=DEFAULT_FACT_COUNT)
+    parser.add_argument(
+        "--narration-speed",
+        type=float,
+        default=DEFAULT_NARRATION_SPEED,
+        help=(
+            "旁白整体提速倍数（ffmpeg atempo，音高不变），在 whisper 转录之前"
+            "生效，所以字幕和每段画面的时间窗会自动跟着变快，不需要额外处理。"
+            f"默认 {DEFAULT_NARRATION_SPEED}（owner 2026-08-05 反馈：整体感觉"
+            "偏慢，但不要明显更快）。传 1.0 关闭。仅对 --footage-mode synced "
+            "生效——generic 模式走 mpt_agent.py 自己的音视频流程，不经过这里。"
+        ),
+    )
     parser.add_argument(
         "--fact-max-words",
         type=int,
@@ -756,6 +825,7 @@ def main(argv: list[str] | None = None) -> int:
             task_id=task_id,
             root=args.root,
             threads=args.threads,
+            narration_speed=args.narration_speed,
         )
         task_dir = audio_path.parent
         words, duration = transcribe(audio_path)
@@ -843,6 +913,9 @@ def main(argv: list[str] | None = None) -> int:
         # 记进成片元数据，因为"这一集哪几段是生成的画面"事后必须能查——
         # 上传时的 AI 披露、以及回头判断留存变化时都要用到。
         "ai_generated_segments": sorted(clip_overrides) if clip_overrides else [],
+        # 提速倍数决定了这份成片的实际口播速度，和留存数据放在一起才能
+        # 判断"更快的节奏"这个假设有没有用——只看时长看不出这个。
+        "narration_speed": args.narration_speed if args.footage_mode == "synced" else 1.0,
         "segment_timings": [
             {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
             for i, s in enumerate(all_segments)

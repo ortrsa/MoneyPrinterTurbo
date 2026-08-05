@@ -482,6 +482,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--words-per-caption", type=int, default=3)
     parser.add_argument("--whisper-model", default="base.en")
     parser.add_argument("--threads", type=int, default=ve.os.cpu_count() or 4)
+    parser.add_argument(
+        "--narration-speed",
+        type=float,
+        default=ve.DEFAULT_NARRATION_SPEED,
+        help=(
+            "旁白整体提速倍数，见 viral_episode.py 同名参数的说明——"
+            "在 whisper 转录之前生效，字幕和镜头时间窗自动跟着变快。"
+        ),
+    )
     parser.add_argument("--dry-run", action="store_true", help="只出脚本和元数据，不渲染")
     parser.add_argument(
         "--from-dry-run",
@@ -635,6 +644,7 @@ def main(argv: list[str] | None = None) -> int:
         task_id=task_id,
         root=args.root,
         threads=args.threads,
+        narration_speed=args.narration_speed,
     )
     task_dir = audio_path.parent
 
@@ -737,6 +747,7 @@ def main(argv: list[str] | None = None) -> int:
         # 事后必须能查这一集哪几段是生成画面：上传时的 AI 披露要用，
         # 回头解释留存变化时也要用。
         "ai_generated_segments": sorted(clip_overrides) if clip_overrides else [],
+        "narration_speed": args.narration_speed,
         "segment_timings": [
             {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
             for i, s in enumerate(all_segments)
