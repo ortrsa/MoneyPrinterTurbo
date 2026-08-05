@@ -78,7 +78,7 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 # renames and retires these model IDs on its own schedule, and a rename should
 # be a one-line config edit, not a code change.
 DEFAULT_IMAGE_MODEL = "gemini-2.5-flash-image"
-DEFAULT_VIDEO_MODEL = "veo-3.1-generate-preview"
+DEFAULT_VIDEO_MODEL = "veo-3.1-fast-generate-001"
 DEFAULT_LOCATION = "us-central1"
 DEFAULT_DURATION = 8
 DEFAULT_ASPECT = "9:16"
