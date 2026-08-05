@@ -19,6 +19,89 @@ saying so is more useful than sounding confident.
 
 ---
 
+## 0. State as of 2026-08-06 00:19 Israel — read this first
+
+A pinned summary for picking up a fresh session fast. Full rationale for every
+line here is in the dated sections below and in `SKILL.md`; this is only the
+"what's true right now" digest.
+
+**Live/pending right now:**
+- Ep20 (Facts 20, human body) is **published, public**, video id `MsvTGDudZ-U`.
+  Its live YouTube title reads "Random But True Facts 19 👀" — a mislabel from
+  a manual upload the owner did outside this session while tonight's automated
+  16:30 job was blocked; source render metadata correctly says "Facts 20".
+  **Owner was asked and explicitly declined the fix — do not "correct" this
+  title on your own initiative.**
+- Ep21 (D-Day crossword, Version B — see §7a and §7b) is **uploaded**,
+  video id `S_zjnvbzZXw`, scheduled via YouTube's own
+  `publishAt` for `2026-08-05T22:30:00Z` = **01:30 Israel time 2026-08-06**.
+  On track, no action needed once that time passes — just confirm it actually
+  flipped public if asked to check.
+- `storage/todays_uploads.json` is **stale** for both slots (still reads
+  `published: false`) because these uploads happened outside the automated
+  16:30/22:30 jobs. Don't trust that file for tonight without cross-checking
+  the YouTube Data API directly, the way this was confirmed.
+
+**New capabilities added this session, both need conscious use, neither is
+automatic yet:**
+- **`docs/skill/ai-footage-fill/`** — generates a single AI B-roll clip
+  (nano-banana first frame + Veo animation) for the one segment per episode
+  where Pexels genuinely has nothing usable. Splices in via `--segment-clips`
+  on either episode script. Credentials are live and working: Google Cloud
+  project `ringed-rune-503816-b8`, OAuth token at `docs/skill/veo/token.json`
+  (not a service-account key — the owner's choice, see the skill's own
+  SKILL.md for the setup path). Image model is `gemini-2.5-flash-image`
+  — the whole Gemini 3.x image tier ("Nano Banana 2" and siblings) 404s on
+  this project despite being listed, confirmed by direct testing, not a
+  guess. Video model is `veo-3.1-fast-generate-001`. **Not wired into the
+  daily 09:00 flow** — the owner said keep the skill but don't default to
+  using it until they say otherwise. First real (non-demo) use was ep21
+  tonight: owner reviewed an all-Pexels cut against an AI-improved cut side
+  by side and picked the AI-improved one.
+- **`--narration-speed`** (default `1.1`) on both episode scripts — ~10%
+  faster narration per owner feedback that pacing feels slow. Implemented as
+  an ffmpeg atempo pass on the rendered audio, run *before* whisper
+  transcription, so captions and every segment's footage window inherit the
+  speed-up automatically — cut-to-cut rhythm is unchanged, the whole timeline
+  just scales down slightly. This IS the new default for every future build,
+  no flag needed. Gemini TTS (the actual voice in use) has no native rate
+  control, which is why this had to happen at the audio-file level.
+
+**Immediate open decision — tomorrow's 09:00 build:**
+The last 6 episodes ran story/facts/story/facts/story (ep17-21), a 50% story
+rate against the ~1-in-4-5 target. **Both of tomorrow's slots should be facts,
+not story**, to correct that. No specific facts topic has been picked yet —
+that's fresh outlier research at build time per usual, unless the owner
+supplies one first.
+
+**The moa story (§7a) is script-locked and demo-verified, but NOT currently
+rendered as a file** — the demo render itself was cleaned up after the owner
+reviewed it, only the AI clip survives. Re-rendering is fast (script,
+fact-check, footage terms and the AI clip are all already done, nothing to
+redo) — from repo root:
+```
+uv run python docs/skill/story_episode.py \
+  --story-file docs/skill/story_moa_lead.txt --episode <real_number> \
+  --series-name "Random But True" \
+  --title "Random But True: The Bird With No Wings At All" \
+  --target-seconds 58 \
+  --from-dry-run docs/skill/plans/locked_scripts/moa_locked.json \
+  --segment-terms '{"0": "extinct bird forest", "1": "new zealand fern forest", "2": "misty forest floor mysterious", "3": "emu close up", "4": "coastline aerial forest ocean", "5": "forest fire burning", "6": "extinct bird forest", "7": "new zealand fern forest"}' \
+  --segment-clips '{"0": "storage/ai_clips/moa_test.mp4", "6": "storage/ai_clips/moa_test.mp4"}' \
+  --threads 4
+```
+Swap in the real episode number when it's actually story's turn next — the
+`<real_number>` above is a placeholder, not the number to log it under.
+**Caveat:** `storage/` is gitignored (same as every credential), so
+`storage/ai_clips/moa_test.mp4` only survives if this exact environment
+persists across sessions, not on a genuinely fresh clone. If that file is
+missing when this is next needed, the locked script above is still valid —
+just regenerate the one clip per `docs/skill/ai-footage-fill/SKILL.md`
+(~$3, ~2 minutes) using the exact moa prompt logged in §7b below, then
+re-run the render command above once it exists again.
+
+---
+
 ## 1. Channel
 
 - Handle `@RBTfacts`, name "Random But True". Faceless narrated facts, 9:16.
@@ -1521,6 +1604,67 @@ sandwich, which is a documented myth. Fixed by stating the correction explicitly
 in the source file rather than deleting the claim (same technique as §6's
 elephant fact), then grepping the locked script for `sandwich|hungry|food|eating`
 before rendering.
+
+## 7b. ai-footage-fill in practice — prompts and results, 2026-08-05
+
+`docs/skill/ai-footage-fill/` (own SKILL.md has the judgement rules and
+credential setup). This section is the practical log: what was actually
+generated, what the prompts were, and how each one turned out — so a repeat
+need for similar footage (another extinct animal, another period-costume
+shot) can start from a known-good prompt instead of guessing from zero.
+
+**Backend confirmed working:** Google Cloud project `ringed-rune-503816-b8`,
+OAuth token at `docs/skill/veo/token.json` (the owner's choice over a
+service-account key — mirrors the already-familiar
+`docs/skill/youtube/authorize_local.py` flow). `gemini-2.5-flash-image` for
+the first frame, `veo-3.1-fast-generate-001` for the 8s animation. Verify any
+time with `uv run python docs/skill/ai-footage-fill/scripts/generate_ai_clip.py --probe`.
+
+**Model note, checked directly rather than assumed:** the entire Gemini 3.x
+image tier — `gemini-3.1-flash-image` ("Nano Banana 2"),
+`gemini-3.1-flash-image-preview`, `gemini-3.1-flash-lite-image` ("Nano Banana
+2 Lite"), `gemini-3-pro-image` ("Nano Banana Pro") — all show up in
+`models.list()` for this project but every one 404s on an actual call. Listed
+is not the same as enabled. Re-probe after requesting access if this matters
+later; don't re-try the same four names expecting a different result without
+that.
+
+**Three clips generated so far, all verified frame-by-frame before use:**
+
+1. **Moa** (`storage/ai_clips/moa_test.mp4`, ~$3.24, for the moa story's hook
+   + reveal-callback, §7a) — prompt: *"a moa, a huge flightless bird with
+   shaggy brown feathers and no wings at all, standing still in dense misty
+   New Zealand forest at dawn, low camera angle looking up, soft light
+   through tree ferns"*. First try, no re-roll needed. Clean across 5 sampled
+   frames spanning the full 8s, no morphing or extra limbs.
+2. **1940s schoolboy** (`storage/ai_clips/schoolboy_1944.mp4`, ~$3.24, ep21's
+   reveal segment) — prompt: *"a young boy about 13 years old wearing a 1940s
+   British school uniform, grey tweed blazer, flat cap, white collared shirt,
+   standing in an old stone school corridor with tall arched windows, soft
+   natural light, black and white vintage photograph style, period-accurate
+   1940s England, no modern objects"*. Replaced a Pexels clip of a modern kid
+   in a modern library that evoked nothing about 1944. First try.
+3. **1944 crossword** (`storage/ai_clips/crossword_1944.mp4`, ~$3.24, ep21's
+   hook + callback) — prompt: *"a close-up of hands filling in a vintage
+   1940s newspaper crossword puzzle grid with a pencil, black and white,
+   English newsprint texture, period-accurate World War Two era style, soft
+   window light, no legible text visible, shallow depth of field"*. Replaced
+   a real Pexels crossword clip that had readable Spanish headline text in
+   frame — the AI version's whole point was legible-English-or-no-text,
+   which "no legible text visible" in the prompt achieved directly. First
+   try.
+
+**Pattern worth naming:** all three succeeded on the first attempt once the
+prompt named a concrete subject, a specific camera framing, and explicit
+lighting/style words — the same discipline the Pexels search-term rules
+already ask for (§6, "must name a filmable scene"). None needed a second
+image-only pass before animating. Small sample (n=3), but zero re-rolls out
+of three is worth recording as a data point for how much prompt iteration to
+budget next time.
+
+**Cost so far:** ~$0.12 across 3 first-frame images (image-only iteration is
+cheap, use it) + ~$9.72 across 3 full 8s animations ≈ **$9.84 total**, all
+against the owner's Google Cloud trial credit.
 
 ## 8. Open items
 
