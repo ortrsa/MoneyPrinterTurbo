@@ -1129,6 +1129,23 @@ specificity 1-5 per segment before delivery per item 2 (avg ~4.6/5 — see
 `episode_log.csv` row 20 for the per-segment breakdown). Both are now real
 data points waiting on retention to land, not just logged intentions.
 
+**2026-08-05 owner feedback — pacing feels slow, not dramatically, but noticeably.**
+Verbatim: today's viewers are impatient; the video's own footage-cut pace should
+stay exactly as-is (cuts must keep following the speech, don't decouple them),
+but narration and captions should run a bit faster. Implemented as a ~10%
+narration speed-up (`--narration-speed`, default `1.1`, in both
+`viral_episode.py` and `story_episode.py` — see their commit for why this had
+to happen at the audio-file level via ffmpeg rather than through Gemini TTS's
+own rate control, which the code confirms is not implemented for that
+provider). Because the speed-up runs before whisper transcription, captions and
+every segment's footage window inherit it automatically — the cut-to-cut rhythm
+is unchanged, only the whole timeline scales down a little, exactly matching
+what the owner asked for. This is now the default for every future build, no
+extra flag needed. `narration_speed` is recorded in each render's result JSON
+so a later retention comparison can actually test whether the faster pace
+helped — treat "did pacing move retention" as a new §5c-style hypothesis once
+a few episodes at 1.1x have real numbers.
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
