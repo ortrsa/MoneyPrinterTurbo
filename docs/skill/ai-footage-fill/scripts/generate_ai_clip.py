@@ -77,6 +77,10 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 # Defaults are deliberately overridable from config.toml and the CLI: Google
 # renames and retires these model IDs on its own schedule, and a rename should
 # be a one-line config edit, not a code change.
+# gemini-3.1-flash-image and its -preview sibling both appear in
+# models.list() for this project but 404 when actually called (checked
+# 2026-08-05) - listed is not the same as enabled. 2.5 is the newest image
+# model that is actually callable; revisit when 3.1 opens up.
 DEFAULT_IMAGE_MODEL = "gemini-2.5-flash-image"
 DEFAULT_VIDEO_MODEL = "veo-3.1-fast-generate-001"
 DEFAULT_LOCATION = "us-central1"
