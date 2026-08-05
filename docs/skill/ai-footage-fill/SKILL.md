@@ -94,6 +94,8 @@ animate is the cheaper order of operations.
 
 ### Setup for `agent-platform` (needed for video)
 
+Steps 1-3 are the same regardless of which credential form is used below:
+
 1. Create or pick a project at <https://console.cloud.google.com/agent-platform>
    and attach a **billing account**. Note the **project ID**, not the display
    name.
@@ -101,17 +103,42 @@ animate is the cheaper order of operations.
 3. Confirm model access. Veo is gated per-project on some accounts; if it is not
    granted this surfaces later as `PERMISSION_DENIED` or `404` on the model
    name, not as an auth error.
+
+Then pick **one** of two credential forms — the script checks for an OAuth
+token first, falling back to a service-account key, so either is sufficient and
+having both is not necessary:
+
+**A. OAuth token** (mirrors the `docs/skill/youtube/authorize_local.py` flow
+already used for YouTube — familiar if that one is set up):
+
+4. In the same project, go to APIs & Services → Credentials → Create
+   Credentials → OAuth client ID → Application type **Desktop app**, and
+   download the JSON.
+5. On your own machine (not the remote session — it has no browser to complete
+   Google's consent screen): `pip install google-auth-oauthlib`, put the
+   downloaded file next to `docs/skill/veo/authorize_local.py` as
+   `client_secret.json`, and run `python authorize_local.py`. It opens a
+   browser, you click Allow, and it writes `token.json`.
+6. Send that `token.json` back to be placed at `docs/skill/veo/token.json`
+   (gitignored — it is a billable credential and must never be committed).
+   The Google account used in step 5 needs the **Vertex AI User** role (or
+   Owner/Editor) on the project.
+
+**B. Service-account key** (no browser needed, but a second identity to manage):
+
 4. Create a **service account**, grant it the **Vertex AI User** role, download
    a **JSON key**.
-5. Put the key at `docs/skill/veo/service_account.json` (gitignored — it is a
-   billable credential and must never be committed), and add to `config.toml`:
+5. Put the key at `docs/skill/veo/service_account.json` (gitignored, same
+   reason as above).
 
-   ```toml
-   [google_ai]
-   backend = "agent-platform"
-   project = "your-project-id"
-   location = "us-central1"
-   ```
+Either way, add to `config.toml`:
+
+```toml
+[google_ai]
+backend = "agent-platform"
+project = "your-project-id"
+location = "us-central1"
+```
 
 ### Setup for `api-key` (free, images only)
 

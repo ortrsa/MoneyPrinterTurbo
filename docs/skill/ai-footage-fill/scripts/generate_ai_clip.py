@@ -21,7 +21,12 @@ AUTH. Two backends, because they have different costs and different ceilings:
                   agent-platform. This is Vertex AI under its 2026 name - the
                   SDK still takes vertexai=True and the API is unchanged, only
                   the branding moved. Needs a project with billing enabled and
-                  a service-account key. This is the backend that can run Veo.
+                  a credential: either an OAuth token (docs/skill/veo/token.json,
+                  produced by docs/skill/veo/authorize_local.py - run locally,
+                  see SKILL.md) or a service-account key
+                  (docs/skill/veo/service_account.json). Either is enough; the
+                  OAuth token is tried first. This is the backend that can run
+                  Veo.
 
   api-key         The Gemini Developer API, with a key from aistudio.google.com.
                   Simpler, and its free tier covers image generation - so the
@@ -67,7 +72,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parents[4]
 
 # Defaults are deliberately overridable from config.toml and the CLI: Google
 # renames and retires these model IDs on its own schedule, and a rename should
@@ -128,6 +133,7 @@ def load_ai_config(overrides: dict) -> dict:
         "service_account_file": section.get(
             "service_account_file", "docs/skill/veo/service_account.json"
         ),
+        "token_file": section.get("token_file", "docs/skill/veo/token.json"),
         "api_key": section.get("api_key"),
         "image_model": section.get("image_model", DEFAULT_IMAGE_MODEL),
         "video_model": section.get("video_model", DEFAULT_VIDEO_MODEL),
@@ -167,8 +173,6 @@ def build_client(config: dict):
             )
         return genai.Client(api_key=config["api_key"])
 
-    from google.oauth2 import service_account
-
     if not config.get("project"):
         raise SystemExit(
             "No Google Cloud project configured.\n"
@@ -179,28 +183,7 @@ def build_client(config: dict):
             f'  location = "{DEFAULT_LOCATION}"\n'
         )
 
-    key_path = Path(config["service_account_file"])
-    if not key_path.is_absolute():
-        key_path = REPO_ROOT / key_path
-    if not key_path.exists():
-        raise SystemExit(
-            f"Service-account key not found at {key_path}.\n"
-            "See docs/skill/ai-footage-fill/SKILL.md ('Credential setup') for how to\n"
-            "create one. The YouTube token.json cannot be used here - it carries\n"
-            "YouTube scopes, not cloud-platform."
-        )
-
-    try:
-        credentials = service_account.Credentials.from_service_account_file(
-            str(key_path),
-            scopes=["https://www.googleapis.com/auth/cloud-platform"],
-        )
-    except Exception as exc:
-        raise SystemExit(
-            f"Could not read the service-account key at {key_path}: {exc}\n"
-            "It should be the JSON key file downloaded from Google Cloud, kept "
-            "verbatim."
-        ) from exc
+    credentials = _load_agent_platform_credentials(config)
 
     # vertexai=True is still correct after the Agent Platform rename: the
     # console branding changed, the SDK flag and the API did not.
@@ -212,13 +195,79 @@ def build_client(config: dict):
     )
 
 
+def _resolve(path_str: str) -> Path:
+    path = Path(path_str)
+    return path if path.is_absolute() else REPO_ROOT / path
+
+
+def _load_agent_platform_credentials(config: dict):
+    """Load whichever credential is on disk: OAuth user token, or a
+    service-account key. Two forms, one purpose - both end up as a
+    google.auth Credentials object and the caller does not need to care
+    which kind it got.
+
+    OAuth is checked first because it is the path this channel's owner
+    chose (it mirrors the YouTube authorize_local.py flow they already
+    know), but either works interchangeably.
+    """
+    token_path = _resolve(config["token_file"])
+    if token_path.exists():
+        from google.oauth2.credentials import Credentials as UserCredentials
+
+        try:
+            return UserCredentials.from_authorized_user_file(
+                str(token_path),
+                scopes=["https://www.googleapis.com/auth/cloud-platform"],
+            )
+        except Exception as exc:
+            raise SystemExit(
+                f"Could not read the OAuth token at {token_path}: {exc}\n"
+                "It should be the token.json produced by "
+                "docs/skill/veo/authorize_local.py, kept verbatim - it carries "
+                "its own client_id/client_secret, nothing else needs to travel "
+                "with it."
+            ) from exc
+
+    key_path = _resolve(config["service_account_file"])
+    if key_path.exists():
+        from google.oauth2 import service_account
+
+        try:
+            return service_account.Credentials.from_service_account_file(
+                str(key_path),
+                scopes=["https://www.googleapis.com/auth/cloud-platform"],
+            )
+        except Exception as exc:
+            raise SystemExit(
+                f"Could not read the service-account key at {key_path}: {exc}\n"
+                "It should be the JSON key file downloaded from Google Cloud, "
+                "kept verbatim."
+            ) from exc
+
+    raise SystemExit(
+        f"No credential found for the agent-platform backend.\n"
+        f"Checked for an OAuth token at {token_path}\n"
+        f"and a service-account key at {key_path}\n\n"
+        "See docs/skill/ai-footage-fill/SKILL.md ('Credential setup') for how to "
+        "get either one. The YouTube token.json cannot be used here - it carries "
+        "YouTube scopes, not cloud-platform."
+    )
+
+
 def probe(config: dict) -> int:
     """Verify credentials reach the backend without generating anything."""
     print(f"backend        {config['backend']}")
     if config["backend"] == "agent-platform":
         print(f"  project      {config['project']}")
         print(f"  location     {config['location']}")
-        print(f"  key file     {config['service_account_file']}")
+        token_path = _resolve(config["token_file"])
+        key_path = _resolve(config["service_account_file"])
+        if token_path.exists():
+            print(f"  credential   OAuth token at {token_path}")
+        elif key_path.exists():
+            print(f"  credential   service-account key at {key_path}")
+        else:
+            print(f"  credential   NONE FOUND (checked {token_path} and {key_path})")
     else:
         key = config.get("api_key") or ""
         print(f"  api key      {'set (' + key[:6] + '...)' if key else 'MISSING'}")
