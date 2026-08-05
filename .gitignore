@@ -4,6 +4,9 @@
 /storage/
 /docs/skill/youtube/client_secret.json
 /docs/skill/youtube/token.json
+# Vertex service-account key: a billable credential, never commit it
+/docs/skill/veo/service_account.json
+/docs/skill/veo/*.json
 /.agent-logs/
 /.idea/
 /app/services/__pycache__

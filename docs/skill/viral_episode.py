@@ -411,6 +411,49 @@ def generate_segment_terms(
     return all_terms
 
 
+def parse_segment_clips(
+    raw: str | None, segment_count: int, parser: argparse.ArgumentParser
+) -> dict[int, list[str]]:
+    """解析 --segment-clips：段序号 -> 本地视频文件列表。
+
+    命中的段完全跳过图库，直接用这些文件（见
+    `app/services/topic_footage.build_synced_footage` 的 clip_overrides）。
+    存在的意义是给"图库真的没有这个东西"的段落补位，目前的补位来源是
+    docs/skill/ai-footage-fill 生成的镜头。
+
+    路径在这里就检查存在性：渲染要跑六分钟，等到那时候才发现路径拼错了，
+    代价是白等一次渲染——和 --segment-terms 在这里就校验段序号是同一个道理。
+    """
+    if not raw:
+        return {}
+
+    overrides: dict[int, list[str]] = {}
+    for key, value in json.loads(raw).items():
+        paths = [value] if isinstance(value, str) else list(value)
+        resolved: list[str] = []
+        for path in paths:
+            candidate = Path(path)
+            if not candidate.is_absolute():
+                candidate = PROJECT_ROOT / candidate
+            if not candidate.exists():
+                parser.error(f"--segment-clips: no such file: {candidate}")
+            resolved.append(str(candidate))
+        if not resolved:
+            parser.error(f"--segment-clips entry {key!r} has no usable paths")
+        overrides[int(key)] = resolved
+
+    out_of_range = sorted(i for i in overrides if not 0 <= i < segment_count)
+    if out_of_range:
+        parser.error(
+            f"--segment-clips index out of range: {out_of_range}; "
+            f"this episode has segments 0..{segment_count - 1} "
+            f"(0 = hook, {segment_count - 1} = outro)"
+        )
+    for index, paths in sorted(overrides.items()):
+        logger.info(f"segment {index}: overridden with {len(paths)} local clip(s)")
+    return overrides
+
+
 def generate_audio_only(
     script_text: str,
     subject: str,
@@ -549,6 +592,17 @@ def main(argv: list[str] | None = None) -> int:
             '（例："{\\"5\\": \\"octopus underwater,coral reef\\"}"）。'
         ),
     )
+    parser.add_argument(
+        "--segment-clips",
+        default=None,
+        help=(
+            "按段钉死本地视频文件，JSON 对象：段序号 -> 文件路径（或路径数组）。"
+            "命中的段完全跳过图库下载，直接用这个文件，且作为一个连续镜头铺满该段。"
+            "用于图库真的没有这个东西的段落——绝种动物、特定年代的场景、"
+            "物理上不存在的画面。补位镜头用 docs/skill/ai-footage-fill 生成"
+            '（例："{\\"3\\": \\"storage/ai_clips/moa.mp4\\"}"）。'
+        ),
+    )
     parser.add_argument("--highlight-color", default="#FFE500")
     parser.add_argument("--words-per-caption", type=int, default=3)
     parser.add_argument("--whisper-model", default="base.en")
@@ -645,6 +699,10 @@ def main(argv: list[str] | None = None) -> int:
                 f"(0 = hook, {len(spoken_segments) - 1} = outro)"
             )
 
+    clip_overrides = parse_segment_clips(
+        args.segment_clips, len(spoken_segments), parser
+    )
+
     from app.services import llm
 
     metadata = llm.generate_social_metadata(
@@ -727,6 +785,7 @@ def main(argv: list[str] | None = None) -> int:
                 output_path=str(task_dir / "combined-synced.mp4"),
                 task_id=task_id,
                 threads=args.threads,
+                clip_overrides=clip_overrides,
             )
         )
     else:
@@ -781,6 +840,9 @@ def main(argv: list[str] | None = None) -> int:
         "segments": spoken_segments,
         # 记录每段实际用的搜索词，方便事后核对"画面为什么配成这样"
         "segment_terms": segment_terms if args.footage_mode == "synced" else None,
+        # 记进成片元数据，因为"这一集哪几段是生成的画面"事后必须能查——
+        # 上传时的 AI 披露、以及回头判断留存变化时都要用到。
+        "ai_generated_segments": sorted(clip_overrides) if clip_overrides else [],
         "segment_timings": [
             {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
             for i, s in enumerate(all_segments)

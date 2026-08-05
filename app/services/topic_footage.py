@@ -167,6 +167,57 @@ def download_segment_materials(
     return paths
 
 
+def _build_override_clips(
+    plan: SegmentPlan,
+    clip_paths: list[str],
+    video_width: int,
+    video_height: int,
+    stack,
+) -> list:
+    """把"人工指定的本地素材"铺满这一段，作为一个连续镜头而不是多个快切。
+
+    和 `_build_segment_clips` 的两点关键差别，都是因为这里的素材是为这一段
+    专门准备的（目前的来源是 AI 生成的补位镜头，见 docs/skill/ai-footage-fill）：
+
+    1. **不切碎**。库存素材要切成 3 秒左右的快切是因为一条素材本身和这句话
+       只是"大致相关"，快切能提高信息密度。而专门生成的镜头本来就是照着这
+       句话拍的，把一个连续 8 秒镜头切成三段再各自随机取偏移，只会得到同一
+       个镜头的三次跳切，看起来像穿帮。
+    2. **从第 0 秒开始，不随机取偏移**。这类素材的首帧是先单独画好、单独审过
+       的——随机偏移会把这个唯一被审过的画面直接扔掉。
+    """
+    if plan.duration <= 0 or not clip_paths:
+        return []
+
+    share = plan.duration / len(clip_paths)
+    built = []
+    for path in clip_paths:
+        try:
+            source = stack.enter_context(VideoFileClip(path))
+        except Exception as exc:
+            logger.error(f"segment {plan.index}: cannot open override {path}: {exc}")
+            continue
+
+        available = source.duration or 0.0
+        if available <= 0:
+            continue
+
+        if available >= share:
+            piece = source.subclipped(0, share)
+        else:
+            # 素材比时间窗短：整段放慢铺满，而不是留黑或者回头去补库存素材，
+            # 后者会让这一段一半是生成画面一半是库存画面，风格直接撕开。
+            piece = source.with_speed_scaled(final_duration=share)
+        built.append(_fit_clip(piece, video_width, video_height))
+
+    if built:
+        logger.info(
+            f"segment {plan.index}: using {len(built)} override clip(s), "
+            f"continuous, no stock footage downloaded"
+        )
+    return built
+
+
 def _build_segment_clips(
     plan: SegmentPlan,
     clip_paths: list[str],
@@ -221,12 +272,19 @@ def build_synced_footage(
     source: str = "pexels",
     threads: int = 2,
     seed: int | None = None,
+    clip_overrides: dict[int, list[str]] | None = None,
 ) -> str:
     """
     按段取材并合成底片（含旁白音轨，不含字幕叠加层）。
 
     每一段的画面严格落在该段口播的时间窗内，所以"第 N 条事实"讲到时，
     屏幕上就是第 N 条对应的画面。
+
+    ``clip_overrides``：段序号 -> 本地视频路径列表。命中的段完全跳过图库下载，
+    直接用给定的文件（见 `_build_override_clips`）。这是给"图库确实没有这个东西"
+    的段落留的逃生口——绝种动物、特定年代的场景、物理上不存在的画面——这些段
+    再怎么换搜索词也只会返回泛泛的填充素材，或者干脆和旁白自相矛盾。
+    整集仍然以图库素材为主，这里只补个别段。
     """
     aspect = VideoAspect(video_aspect)
     video_width, video_height = aspect.to_resolution()
@@ -238,22 +296,33 @@ def build_synced_footage(
         ordered_clips = []
         # 跨段共享，避免同一个素材在不同事实里重复出现
         seen_urls: set[str] = set()
+        overrides = clip_overrides or {}
         for plan in plans:
-            clip_paths = download_segment_materials(
-                plan,
-                task_id=task_id,
-                video_aspect=aspect,
-                source=source,
-                seen_urls=seen_urls,
-            )
-            segment_clips = _build_segment_clips(
-                plan,
-                clip_paths,
-                video_width=video_width,
-                video_height=video_height,
-                stack=stack,
-                rng=rng,
-            )
+            override_paths = overrides.get(plan.index)
+            if override_paths:
+                segment_clips = _build_override_clips(
+                    plan,
+                    override_paths,
+                    video_width=video_width,
+                    video_height=video_height,
+                    stack=stack,
+                )
+            else:
+                clip_paths = download_segment_materials(
+                    plan,
+                    task_id=task_id,
+                    video_aspect=aspect,
+                    source=source,
+                    seen_urls=seen_urls,
+                )
+                segment_clips = _build_segment_clips(
+                    plan,
+                    clip_paths,
+                    video_width=video_width,
+                    video_height=video_height,
+                    stack=stack,
+                    rng=rng,
+                )
             logger.info(
                 f"segment {plan.index}: {plan.start:.2f}s-{plan.end:.2f}s "
                 f"({plan.duration:.2f}s) -> {len(segment_clips)} cuts"

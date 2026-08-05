@@ -465,6 +465,17 @@ def main(argv: list[str] | None = None) -> int:
             "历史类故事几乎一定要用它——图库没有 1914 年的萨拉热窝。"
         ),
     )
+    parser.add_argument(
+        "--segment-clips",
+        default=None,
+        help=(
+            "按段钉死本地视频文件，JSON 对象：段序号 -> 文件路径（或路径数组）。"
+            "命中的段跳过图库，直接用该文件作为一个连续镜头。故事流程尤其用得上："
+            "换搜索词解决不了'图库没有那个年代'，这时补位镜头用 "
+            "docs/skill/ai-footage-fill 生成"
+            '（例："{\\"4\\": \\"storage/ai_clips/crossword_1944.mp4\\"}"）。'
+        ),
+    )
     parser.add_argument("--highlight-color", default="#FFE500", help="字幕逐词高亮色")
     parser.add_argument("--title-key-color", default="#FF2D6F", help="标题关键词的亮色")
     parser.add_argument("--no-title-banner", action="store_true", help="不烧顶部两行标题")
@@ -563,6 +574,10 @@ def main(argv: list[str] | None = None) -> int:
                 f"--segment-terms index out of range: {bad}; this story has "
                 f"segments 0..{len(spoken_segments) - 1}"
             )
+
+    clip_overrides = ve.parse_segment_clips(
+        args.segment_clips, len(spoken_segments), parser
+    )
 
     if locked:
         metadata = dict(locked["metadata"])
@@ -673,6 +688,7 @@ def main(argv: list[str] | None = None) -> int:
             output_path=str(task_dir / "combined-synced.mp4"),
             task_id=task_id,
             threads=args.threads,
+            clip_overrides=clip_overrides,
         )
     )
 
@@ -718,6 +734,9 @@ def main(argv: list[str] | None = None) -> int:
         "script": script_text,
         "segments": spoken_segments,
         "segment_terms": segment_terms,
+        # 事后必须能查这一集哪几段是生成画面：上传时的 AI 披露要用，
+        # 回头解释留存变化时也要用。
+        "ai_generated_segments": sorted(clip_overrides) if clip_overrides else [],
         "segment_timings": [
             {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
             for i, s in enumerate(all_segments)
