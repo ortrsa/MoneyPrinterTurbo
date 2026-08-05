@@ -1122,6 +1122,13 @@ point for the open hypotheses above the moment Analytics finalises it
 story-format retention number; log it here the moment it lands, not just
 in the evening Telegram digest.
 
+**2026-08-05 09:00 build — both open actions applied.** Ep 20 (human body
+facts) used a deliberate strange-image-statement hook (not a question) to
+grow the ep4-vs-ep5/6 comparison in item 1 above, and rated footage
+specificity 1-5 per segment before delivery per item 2 (avg ~4.6/5 — see
+`episode_log.csv` row 20 for the per-segment breakdown). Both are now real
+data points waiting on retention to land, not just logged intentions.
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
