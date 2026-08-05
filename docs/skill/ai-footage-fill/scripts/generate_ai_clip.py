@@ -15,9 +15,26 @@ names something the stock library genuinely does not have (an extinct animal, a
 period scene, a physical impossibility) and every probed term returns filler or
 something that contradicts the narration. See SKILL.md for the judgement call.
 
-AUTH. Vertex AI only, via a service-account key - not the YouTube OAuth token,
-which carries YouTube scopes and cannot reach Vertex no matter how it is passed.
-Config lives in config.toml under [vertex]; the key file itself is gitignored.
+AUTH. Two backends, because they have different costs and different ceilings:
+
+  agent-platform  Google Cloud, the console at console.cloud.google.com/
+                  agent-platform. This is Vertex AI under its 2026 name - the
+                  SDK still takes vertexai=True and the API is unchanged, only
+                  the branding moved. Needs a project with billing enabled and
+                  a service-account key. This is the backend that can run Veo.
+
+  api-key         The Gemini Developer API, with a key from aistudio.google.com.
+                  Simpler, and its free tier covers image generation - so the
+                  prompt-to-first-frame loop can be iterated at no cost. It does
+                  NOT cover Veo: video generation is paid-tier only, and a free
+                  key will be refused at the animate step.
+
+Neither can use the YouTube OAuth token: that carries YouTube scopes and reaches
+neither backend, no matter how it is passed.
+
+Config lives in config.toml under [google_ai] (the older [vertex] section is
+still read, for anything written before the rename). Credentials never come from
+the command line - they would end up in shell history and in the process list.
 
 Usage::
 
@@ -82,22 +99,36 @@ glyphs and it collides with our burned-in captions anyway), graphic injury, and
 anything that reads as a news or documentary clip of a real event."""
 
 
-def load_vertex_config(overrides: dict) -> dict:
-    """Merge config.toml [vertex] with CLI overrides; CLI wins."""
+def load_ai_config(overrides: dict) -> dict:
+    """Merge config.toml [google_ai] with CLI overrides; CLI wins.
+
+    [vertex] is still read as a fallback so config written before the 2026
+    rename keeps working - the section moved, the meaning did not.
+    """
     import tomllib
 
     config_path = REPO_ROOT / "config.toml"
     section: dict = {}
     if config_path.exists():
         with open(config_path, "rb") as handle:
-            section = tomllib.load(handle).get("vertex", {}) or {}
+            parsed = tomllib.load(handle)
+            section = parsed.get("google_ai") or parsed.get("vertex") or {}
+
+    # Infer the backend from whichever credential is actually present, so the
+    # common case needs no explicit setting: a project implies Agent Platform,
+    # a bare API key implies the Developer API.
+    backend = section.get("backend")
+    if not backend:
+        backend = "agent-platform" if section.get("project") else "api-key"
 
     merged = {
+        "backend": backend,
         "project": section.get("project"),
         "location": section.get("location", DEFAULT_LOCATION),
         "service_account_file": section.get(
             "service_account_file", "docs/skill/veo/service_account.json"
         ),
+        "api_key": section.get("api_key"),
         "image_model": section.get("image_model", DEFAULT_IMAGE_MODEL),
         "video_model": section.get("video_model", DEFAULT_VIDEO_MODEL),
     }
@@ -108,19 +139,42 @@ def load_vertex_config(overrides: dict) -> dict:
 
 
 def build_client(config: dict):
-    """Authenticate to Vertex with the service-account key.
+    """Authenticate to whichever backend is configured.
 
     Every failure here is a setup problem with a specific fix, so each one says
     what to do rather than surfacing a raw library traceback.
     """
     from google import genai
+
+    backend = config["backend"]
+    if backend not in ("agent-platform", "api-key"):
+        raise SystemExit(
+            f"Unknown backend {backend!r}. Use 'agent-platform' or 'api-key'."
+        )
+
+    if backend == "api-key":
+        if not config.get("api_key"):
+            raise SystemExit(
+                "No API key configured.\n"
+                "Get one from https://aistudio.google.com/apikey, then add to "
+                "config.toml:\n\n"
+                "  [google_ai]\n"
+                '  backend = "api-key"\n'
+                '  api_key = "..."\n\n'
+                "Note this backend can generate images on the free tier but NOT "
+                "video -\nVeo is paid-tier only. For video use the "
+                "agent-platform backend."
+            )
+        return genai.Client(api_key=config["api_key"])
+
     from google.oauth2 import service_account
 
     if not config.get("project"):
         raise SystemExit(
-            "No Vertex project configured.\n"
+            "No Google Cloud project configured.\n"
             "Add this to config.toml:\n\n"
-            "  [vertex]\n"
+            "  [google_ai]\n"
+            '  backend = "agent-platform"\n'
             '  project = "your-gcp-project-id"\n'
             f'  location = "{DEFAULT_LOCATION}"\n'
         )
@@ -148,6 +202,8 @@ def build_client(config: dict):
             "verbatim."
         ) from exc
 
+    # vertexai=True is still correct after the Agent Platform rename: the
+    # console branding changed, the SDK flag and the API did not.
     return genai.Client(
         vertexai=True,
         credentials=credentials,
@@ -157,28 +213,43 @@ def build_client(config: dict):
 
 
 def probe(config: dict) -> int:
-    """Verify credentials reach Vertex without generating anything."""
-    print("Vertex configuration")
-    print(f"  project        {config['project']}")
-    print(f"  location       {config['location']}")
-    print(f"  key file       {config['service_account_file']}")
-    print(f"  image model    {config['image_model']}")
-    print(f"  video model    {config['video_model']}")
+    """Verify credentials reach the backend without generating anything."""
+    print(f"backend        {config['backend']}")
+    if config["backend"] == "agent-platform":
+        print(f"  project      {config['project']}")
+        print(f"  location     {config['location']}")
+        print(f"  key file     {config['service_account_file']}")
+    else:
+        key = config.get("api_key") or ""
+        print(f"  api key      {'set (' + key[:6] + '...)' if key else 'MISSING'}")
+        print("  note         image generation only; Veo needs agent-platform")
+    print(f"  image model  {config['image_model']}")
+    print(f"  video model  {config['video_model']}")
     print()
 
     client = build_client(config)
     try:
         models = list(client.models.list())
     except Exception as exc:
-        print(f"FAILED to reach Vertex: {exc}\n", file=sys.stderr)
-        print(
-            "Common causes, in the order worth checking:\n"
-            "  - the Vertex AI API is not enabled on this project\n"
-            "  - the service account is missing the 'Vertex AI User' role\n"
-            "  - the project has no billing account attached\n"
-            "  - Veo / nano-banana access has not been granted for this project",
-            file=sys.stderr,
-        )
+        print(f"FAILED to reach the API: {exc}\n", file=sys.stderr)
+        if config["backend"] == "agent-platform":
+            print(
+                "Common causes, in the order worth checking:\n"
+                "  - the Vertex AI / Agent Platform API is not enabled on this "
+                "project\n"
+                "  - the service account is missing the 'Vertex AI User' role\n"
+                "  - the project has no billing account attached\n"
+                "  - Veo / nano-banana access has not been granted for this "
+                "project",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                "Common causes:\n"
+                "  - the API key is wrong, or was revoked\n"
+                "  - the key's project has not enabled the Generative Language API",
+                file=sys.stderr,
+            )
         return 1
 
     print(f"Authenticated. {len(models)} models visible to this project.")
@@ -321,8 +392,14 @@ def main(argv: list[str] | None = None) -> int:
         help="1080p or 720p. If Veo rejects 1080p for this aspect ratio, retry at 720p; "
         "the pipeline upscales to 1080x1920 either way.",
     )
-    parser.add_argument("--project", help="override config.toml [vertex] project")
-    parser.add_argument("--location", help="override config.toml [vertex] location")
+    parser.add_argument(
+        "--backend",
+        choices=["agent-platform", "api-key"],
+        help="agent-platform (Google Cloud, can run Veo) or api-key (AI Studio, "
+        "images only). Inferred from config.toml when omitted.",
+    )
+    parser.add_argument("--project", help="override config.toml [google_ai] project")
+    parser.add_argument("--location", help="override config.toml [google_ai] location")
     parser.add_argument("--image-model")
     parser.add_argument("--video-model")
     parser.add_argument(
@@ -348,8 +425,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    config = load_vertex_config(
+    config = load_ai_config(
         {
+            "backend": args.backend,
             "project": args.project,
             "location": args.location,
             "image_model": args.image_model,
@@ -362,6 +440,17 @@ def main(argv: list[str] | None = None) -> int:
 
     if not args.prompt or not args.out:
         parser.error("--prompt and --out are required (or use --probe)")
+
+    # Fail before the image is generated rather than after: on the api-key
+    # backend the image would succeed and only the animate step would be
+    # refused, which wastes a generation and reads like a bug.
+    if config["backend"] == "api-key" and not args.image_only:
+        parser.error(
+            "The api-key backend cannot generate video - Veo is paid-tier only.\n"
+            "Either add --image-only to iterate on the first frame for free, or "
+            "switch to\nthe agent-platform backend (Google Cloud project with "
+            "billing) for the full clip."
+        )
 
     est = APPROX_IMAGE_USD + (
         0 if args.image_only else APPROX_VIDEO_USD_PER_SECOND * args.duration

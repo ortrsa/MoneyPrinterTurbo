@@ -1,7 +1,7 @@
 ---
 name: ai-footage-fill
-description: Generate a single AI B-roll clip (nano-banana paints the first frame, Veo animates it, both via Google Vertex AI) to fill ONE segment of a Random But True episode where the Pexels stock library genuinely has no usable footage - extinct animals, specific historical periods, physically impossible shots. Use this after probe_footage.py has been run and its frames looked at, when every candidate search term returns generic filler or footage that contradicts the narration. Also use when the user asks to "generate a clip with AI", mentions Veo, nano-banana, Vertex video generation, or asks to fill a footage gap in an episode. This is a gap-filler for individual segments, NOT a footage source - the episode stays overwhelmingly Pexels.
-compatibility: Requires google-genai and google-auth (already installed), a Google Cloud project with Vertex AI enabled, and a service-account key. Cannot use the YouTube OAuth token.
+description: Generate a single AI B-roll clip (nano-banana paints the first frame, Veo animates it, via Google Cloud Agent Platform - the 2026 name for Vertex AI) to fill ONE segment of a Random But True episode where the Pexels stock library genuinely has no usable footage - extinct animals, specific historical periods, physically impossible shots. Use this after probe_footage.py has been run and its frames looked at, when every candidate search term returns generic filler or footage that contradicts the narration. Also use when the user asks to "generate a clip with AI", mentions Veo, nano-banana, Agent Platform, Vertex video generation, or asks to fill a footage gap in an episode. This is a gap-filler for individual segments, NOT a footage source - the episode stays overwhelmingly Pexels.
+compatibility: Requires google-genai and google-auth (already installed). Video needs a Google Cloud project with billing and a service-account key; image-only iteration also works with a free AI Studio API key. Cannot use the YouTube OAuth token.
 ---
 
 # AI footage fill
@@ -57,40 +57,82 @@ Each clip is roughly a few dollars. Cheap once, not cheap daily.
 ## Credential setup
 
 **The YouTube `token.json` cannot be used here.** It is a user OAuth token
-carrying YouTube scopes; Vertex needs Google Cloud credentials with the
-`cloud-platform` scope on a billing-enabled project. They are different
-identities against different APIs — there is no way to pass one as the other.
+carrying YouTube scopes; these APIs need entirely different credentials. There
+is no way to pass one as the other.
 
-One-time setup, done by the owner in a browser:
+### Naming, so the console does not look wrong
 
-1. Create (or pick) a project at <https://console.cloud.google.com/> and attach
-   a billing account. Note the **project ID** (not the display name).
-2. Enable the **Vertex AI API** for that project.
-3. Confirm access to the models. Veo in particular is gated per-project on some
-   accounts; if it is not available, that shows up later as `PERMISSION_DENIED`
-   or `404` on the model name, not as an auth error.
-4. Create a **service account**, grant it the **Vertex AI User** role, and
-   download a **JSON key**.
+At Cloud Next 2026 Google renamed **Vertex AI** to the **Gemini Enterprise Agent
+Platform**, and the console moved to
+<https://console.cloud.google.com/agent-platform>. Searching the console for
+"Vertex AI" now redirects there. The rename was branding only — the APIs, the
+SDKs, the billing and the IAM roles were carried over unchanged, which is why
+the code still passes `vertexai=True` and why the IAM role is still called
+**Vertex AI User**. Those are not stale references; they are what the platform
+still calls itself underneath.
+
+### Two backends, and which one you need
+
+| | `agent-platform` | `api-key` |
+|---|---|---|
+| where | Google Cloud, billing enabled | <https://aistudio.google.com/apikey> |
+| first frame (nano-banana) | yes | yes, free tier |
+| video (Veo) | **yes** | **no — paid tier only** |
+
+**Veo cannot be driven from a free API key.** Google's free Veo access is
+through the web UIs (Flow, the Gemini app) — watermarked, and not scriptable, so
+it cannot feed this pipeline. If the goal is a finished clip, the
+`agent-platform` backend with billing is the only route.
+
+Worth knowing: a **new Google Cloud account's $300 free trial credit does apply**
+to Agent Platform usage, Veo included. If that credit is unused, it covers a lot
+of 8-second clips at these prices.
+
+The `api-key` backend still earns its place: the prompt → first-frame loop is
+where most of the iteration happens, and doing that for free before paying to
+animate is the cheaper order of operations.
+
+### Setup for `agent-platform` (needed for video)
+
+1. Create or pick a project at <https://console.cloud.google.com/agent-platform>
+   and attach a **billing account**. Note the **project ID**, not the display
+   name.
+2. Enable the **Vertex AI API** (may be listed as Agent Platform) for it.
+3. Confirm model access. Veo is gated per-project on some accounts; if it is not
+   granted this surfaces later as `PERMISSION_DENIED` or `404` on the model
+   name, not as an auth error.
+4. Create a **service account**, grant it the **Vertex AI User** role, download
+   a **JSON key**.
 5. Put the key at `docs/skill/veo/service_account.json` (gitignored — it is a
-   credential and must never be committed), and add to `config.toml`:
+   billable credential and must never be committed), and add to `config.toml`:
 
    ```toml
-   [vertex]
+   [google_ai]
+   backend = "agent-platform"
    project = "your-project-id"
    location = "us-central1"
    ```
 
-6. Verify, which spends nothing:
+### Setup for `api-key` (free, images only)
 
-   ```bash
-   uv run python docs/skill/ai-footage-fill/scripts/generate_ai_clip.py --probe
-   ```
+```toml
+[google_ai]
+backend = "api-key"
+api_key = "..."
+```
 
-   It prints whether auth works and whether each model is visible to the
-   project. Fix anything it reports before building an episode around it.
+### Verify — spends nothing
 
-Model IDs live in `[vertex]` (`image_model`, `video_model`) precisely because
-Google renames and retires them; a rename should be a config edit.
+```bash
+uv run python docs/skill/ai-footage-fill/scripts/generate_ai_clip.py --probe
+```
+
+It reports whether auth works and whether each model is visible. Fix whatever it
+flags before building an episode around it.
+
+Model IDs live in `[google_ai]` (`image_model`, `video_model`) precisely because
+Google renames and retires them; a rename should be a config edit, not a code
+change. The older `[vertex]` section is still read as a fallback.
 
 ## Workflow
 
@@ -128,6 +170,10 @@ viewer judges in the instant the segment starts, and re-rolling an image is far
 cheaper than re-rolling a video. If the composition is wrong — subject too
 small, cluttered background, wrong species — fix the prompt and repeat here.
 Do not animate a frame you would not have accepted as a Pexels result.
+
+This stage runs on the free `api-key` backend, so the iteration that actually
+takes several attempts is the one that costs nothing. Add `--backend api-key` if
+config.toml defaults to `agent-platform`.
 
 ### 3. Animate it
 
@@ -200,6 +246,9 @@ it needs changing.
 - **`PERMISSION_DENIED` / `404` on the model name** — the project does not have
   access to that model. Auth is fine; entitlement is not. Request access, or set
   a different `video_model` in `config.toml`.
+- **Video refused on a free API key** — expected, not a bug: Veo is paid-tier
+  only. The script blocks this before generating the image so the refusal does
+  not arrive halfway through and look like a failure.
 - **Empty response, no error** — almost always a safety refusal, not an outage.
   Reread the prompt against the refusal list above.
 - **1080p rejected for 9:16** — retry with `--resolution 720p`. The pipeline
