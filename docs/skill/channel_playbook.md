@@ -1232,6 +1232,40 @@ point for the open hypotheses above the moment Analytics finalises it
 story-format retention number; log it here the moment it lands, not just
 in the evening Telegram digest.
 
+**2026-08-06 20:00 report — five episodes finalized at once (11, 12, 13, 16,
+17), and the clean completion-compulsion test finally lands.**
+
+- **Ep16 (dogs, 40.41%) vs ep12 (animal strength, 40.93%, the designated
+  CONTROL) is the clean, same-topic-category comparison the playbook has
+  been waiting for since 2026-08-02**: completion-compulsion restructure
+  (withheld payoff, hook that doesn't reveal it) with NO topic change, and
+  the two numbers are statistically indistinguishable (a 0.5-point gap).
+  **RESOLVED: the completion-compulsion restructure does not measurably
+  move retention by itself** — at least not on this comparison, against
+  the three-criteria framework's own prediction.
+- This reframes ep13's standout **59.68%** (ocean, also restructured,
+  second-best on the channel after ep4): since the *same* restructure
+  produced nothing on ep16, ep13's real driver was more likely the ocean
+  **topic** itself, not the structural fix. **Concrete action for the next
+  build: stop treating the completion-compulsion restructure as a
+  retention lever on its own — weight topic selection and novelty over
+  hook/payoff structure**, and don't expect a future restructured episode
+  to reproduce ep13's jump just because it's restructured.
+- **Ep17 (Ferrari/Lamborghini story) finalized at 48.45%** — the channel's
+  first-ever story-format retention number, **resolving the "first-story
+  verdict is NOT in yet" flag from §5**. 48.45% sits slightly above the
+  45.8% long-format facts average (§5) — a mild positive first signal for
+  the story format, but n=1; keep testing as ep19/ep21 land.
+- **Ep11 (frog, 40.38%) also finalized** — another mid-40s number,
+  consistent with the broader pattern that most non-ep4 episodes cluster
+  in the low-to-mid 40s regardless of hook shape or topic tweaks; ep4's
+  81.6% remains the channel's unexplained outlier.
+
+**Still pending as of tonight:** ep18 (everyday objects), ep19 (dollar
+story, right at the ~48h edge, likely finalizes tomorrow), ep20 (human
+body), ep21 (D-Day story), ep22 (pizza, published today). Log each the
+moment it lands.
+
 **2026-08-05 09:00 build — both open actions applied.** Ep 20 (human body
 facts) used a deliberate strange-image-statement hook (not a question) to
 grow the ep4-vs-ep5/6 comparison in item 1 above, and rated footage
