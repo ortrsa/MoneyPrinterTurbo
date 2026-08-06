@@ -67,12 +67,19 @@ automatic yet:**
   no flag needed. Gemini TTS (the actual voice in use) has no native rate
   control, which is why this had to happen at the audio-file level.
 
-**Immediate open decision — tomorrow's 09:00 build:**
-The last 6 episodes ran story/facts/story/facts/story (ep17-21), a 50% story
-rate against the ~1-in-4-5 target. **Both of tomorrow's slots should be facts,
-not story**, to correct that. No specific facts topic has been picked yet —
-that's fresh outlier research at build time per usual, unless the owner
-supplies one first.
+**2026-08-06 09:00 build — done, awaiting owner approval.** Built both of
+today's episodes as facts/facts (correcting the 50% story rate noted above):
+**ep22** (food — world pizza toppings, a rebuild of the dropped ep15 with a
+6th topping and a real completion-compulsion payoff) for the **16:30 slot**,
+and **ep23** (space facts, first time this topic) for the **22:30 slot** —
+fresh topic since both the calendar and the §5a outlier list are exhausted
+and the owner supplied nothing new. Full detail, including a real footage bug
+caught and fixed in ep22 (two splice attempts — the first used a
+misidentified file) and ep23's unusually clean frame-verification pass, is in
+`episode_log.csv` rows 22/23. Both delivered to Telegram with full upload
+kits, labelled by slot, scripts as separate messages, `result_json` paths
+noted. **Neither is approved yet — the 13:00 job needs the owner's reply
+before either can go live.**
 
 **The moa story (§7a) is script-locked and demo-verified, but NOT currently
 rendered as a file** — the demo render itself was cleaned up after the owner
@@ -1228,6 +1235,19 @@ extra flag needed. `narration_speed` is recorded in each render's result JSON
 so a later retention comparison can actually test whether the faster pace
 helped — treat "did pacing move retention" as a new §5c-style hypothesis once
 a few episodes at 1.1x have real numbers.
+
+**2026-08-06 09:00 build — both open actions applied again, plus a new
+observation.** Ep22 (pizza) and ep23 (space) both used question-form hooks
+(no deviation this time — ep20's one-off statement-form test stands as its
+own data point, not a new default) and both got footage specificity rated
+1-5 per segment before delivery (ep22 avg ~4.3/5, ep23 avg ~4.0/5 — see
+`episode_log.csv` rows 22/23 for the per-segment breakdown). **New
+observation worth tracking as its own hypothesis:** ep23's lower average
+wasn't a search failure — space has more segments that are structurally
+unphotographable (Venus, a neutron star) than a typical animal or food
+episode, so a topic's *ceiling* on this rating may vary by category. Don't
+read a sub-4.5 average as automatically weaker footage work without checking
+whether the topic itself caps it lower.
 
 ## 6. Production rules learned the hard way
 
