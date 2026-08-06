@@ -81,6 +81,26 @@ kits, labelled by slot, scripts as separate messages, `result_json` paths
 noted. **Neither is approved yet — the 13:00 job needs the owner's reply
 before either can go live.**
 
+**Same-morning correction — title numbers synced to what's actually live on
+YouTube.** Owner asked to sync video numbers to the real channel state.
+Pulled the actual upload playlist via the Data API (23 videos) rather than
+trusting this file: the highest "Facts N" title that actually exists live
+is **"Facts 19"** (ep20's mislabeled title — see above), and no video is
+titled "Facts 20" or "21" yet. Ep22/ep23's `metadata.title` (the field
+`upload_video.py` actually reads and uploads, not just the internal CSV
+episode key) were retitled to **"Facts 20"** and **"Facts 21"** so the real
+on-screen sequence continues 19→20→21 with no gap once approved — no
+re-render needed, the episode number was never burned into any video frame,
+only into the title/metadata. **The internal build-order episode key (22,
+23 in `episode_log.csv`) is intentionally left unchanged** — that's a
+durable ledger of build order including stories and dropped episodes, which
+has never matched the viewer-facing "Facts N" sub-sequence 1:1 (e.g. ep17
+and ep19 are stories with no "Facts N" title at all). **Going forward: before
+titling any new facts episode, check the actual live channel for the
+highest existing "Facts N" title rather than incrementing the internal
+episode key** — they can and will drift apart again after any manual-upload
+mislabel.
+
 **The moa story (§7a) is script-locked and demo-verified, but NOT currently
 rendered as a file** — the demo render itself was cleaned up after the owner
 reviewed it, only the AI clip survives. Re-rendering is fast (script,
