@@ -1357,6 +1357,33 @@ pacing. When an override clip is meaningfully shorter than its segment,
 prefer compositing it with a second real clip (concatenate to roughly the
 segment's duration) over relying on the built-in slowdown.
 
+**2026-08-07 — owner flagged ep21 (D-Day crossword) as underperforming;
+investigated, no fixable cause found, second data point for a real
+"unexplained flop" pattern.** 27 views after ~1.5 days live vs 600-1500+ for
+every other video published that same week, including both immediate
+siblings. Checked and ruled out: technical/metadata setup is identical in
+kind to well-performing STORY siblings (duration, privacy, embeddability,
+`#shorts` tag, category, description all normal). Retention data isn't
+available yet — too few views for Analytics to finalize a number, so the
+actual drop-off point can't be diagnosed from here. Impressions/CTR (the one
+metric that would distinguish "never shown" from "shown and swiped past") is
+YouTube Studio-only and not exposed by the public Analytics API — not
+checkable from this environment; the owner would need to check Studio
+directly for a real answer on that specific question. Compared opening-frame
+energy against the channel's only other severe outlier (Facts 8, 26 views) —
+inconclusive: Facts 8's thumbnail isn't obviously weaker than the
+well-performing Facts 9's, so "weak thumbnail" doesn't hold up as a clean
+discriminator across the two data points available. **This is now N=2 for
+"thoroughly-checked severe outlier, no findable technical or content
+cause"** — most consistent with the Shorts algorithm simply not
+distributing the video, which happens somewhat unpredictably and
+disconnected from production quality. Not yet enough data to act on (both
+outliers happen to be story/off-format-adjacent picks, but n=2 is too thin
+to blame format), but worth tracking rather than assuming every future flop
+has a fixable root cause — and worth checking Studio's impressions panel
+specifically the next time this happens, since that's the one diagnostic
+this environment can't reach on its own.
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
