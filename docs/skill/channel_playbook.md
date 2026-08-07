@@ -53,8 +53,11 @@ an outro that asks for the disagreement. Pass **`--counter-mode countdown`**
 narration says "number one"). The driver was a channel-level diagnosis, not a
 retention tweak: 15.5k views had produced **18 subscribers** (0.12%) and **10
 comments across 25 videos**. Full reasoning and the exact spec are in §5d.
-**Background music is also now on by default** (§5e) — one fixed track at a
-measured -18dB under the narration; `--no-bgm` opts out.
+**Transition SFX is on by default** (§5e) — a synthesised whoosh at every
+fact boundary, `--no-sfx` opts out. **Background music is opt-in, not
+default** — owner said explicitly not to put music on every video, so it
+only applies when a build passes `--bgm` (same measured -18dB level as
+before, just no longer automatic).
 
 **New capabilities added this session, both need conscious use, neither is
 automatic yet:**
@@ -1160,20 +1163,20 @@ two were the actual diagnosis and they are the actual scoreboard. Give it a
 real run of episodes before judging; a single ranked episode that lands at
 900 views proves nothing either way.
 
-## 5e. Background music (adopted 2026-08-07)
+## 5e. Background music and transition SFX (adopted 2026-08-07)
 
 Until 2026-08-07 every episode shipped with **a single audio stream:
 narration, no music, no effects** — verified by inspecting the actual
 rendered files, not assumed. `shorts_growth_guide.md` (Rank 4) had already
 flagged this as "a genuine, cheap gap" and it had gone unimplemented.
 
-`viral_episode.py` now mixes a music bed by default via
-`viral.mix_background_music()`. Mechanics worth knowing:
+**Background music — `--bgm`, OFF by default.** First shipped on-by-default,
+then the owner said explicitly not to put music on every video — so it is
+now opt-in per episode via `viral.mix_background_music()`. Mechanics worth
+knowing regardless of the default:
 
-- **It runs as its own ffmpeg pass after the caption burn, with `-c:v copy`.**
-  Only the audio is re-encoded, so it costs seconds and the video is
-  untouched. The intermediate `with-captions.mp4` is kept in the task dir on
-  purpose: if the volume is wrong you re-mix from that, you do not re-render.
+- **It runs as its own ffmpeg pass with `-c:v copy`.** Only the audio is
+  re-encoded, so it costs seconds and the video is untouched.
 - **The volume default is measured, not guessed.** The bundled tracks in
   `resource/songs/` are ~-20.0 LUFS and our narration is ~-20.5 LUFS — nearly
   identical loudness. So "pick a small-looking number" fails badly: the first
@@ -1184,46 +1187,77 @@ flagged this as "a genuine, cheap gap" and it had gone unimplemented.
   to narration-only (music never competes). **Re-measure with
   `ffmpeg -i <file> -af ebur128 -f null -` if the track library ever
   changes** — this number is only valid for ~-20 LUFS source music.
-- **One fixed track, not random per episode.** A random track each time makes
-  every episode sound like a different channel, which is the opposite of what
-  a 0.12% sub-conversion problem needs. `--bgm-file` changes it,
-  `--no-bgm` disables it.
-- `bgm_file` and `bgm_volume` are recorded in each render's result JSON, so
-  "did music help" is answerable later — same reasoning as `narration_speed`.
+- **One fixed track, not random per episode**, for when it is used — a
+  random track each time would make every episode that has music sound like
+  a different channel. `--bgm-file` changes it.
+- `bgm_file`/`bgm_volume` are recorded in each render's result JSON *only
+  when actually applied* (`None` if `--bgm` was never passed, or if the mix
+  failed and fell back) — so "did music help" stays honestly answerable
+  later, same reasoning as `narration_speed`.
 
-**Sound effects at transitions are still not implemented** — no suitable
-assets exist in the repo and synthesised ones risked sounding cheap. Music
-was the high-value, low-risk half of the guide's recommendation; SFX remain
-open.
+**Transition SFX — `--no-sfx` to disable, ON by default.** A short "whoosh"
+plays at the start of the hook→fact-1 transition and at every fact boundary
+after that (`viral.add_transition_sfx()`, timestamps taken from
+`fact_timings`). Unlike music, the owner asked for this outright, so it
+defaults on rather than needing to be opted into.
 
-**Music failure can never fail a render.** The mix is wrapped: if the track
-is missing or ffmpeg errors, it logs a warning and ships the narration-only
-cut as `final-viral.mp4`. This matters because adding the pass briefly made
-music load-bearing — a missing file killed a six-minute render that had
-already produced a perfectly good captioned video. Verified by running it
-against a nonexistent track. Note that `bgm_file`/`bgm_volume` in the result
-JSON record **what actually happened**, not what was asked for, so a
-fallback render is not later counted as a music sample.
+- **No usable asset existed anywhere in the repo or `Pexels`** (that catalog
+  is video only) for this, so `docs/skill/make_transition_sfx.py` synthesises
+  it — a numpy-generated swept-noise "whoosh" (`resource/sfx/whoosh.wav`) and
+  a lower "impact" alternative (`resource/sfx/impact.wav`), both committed as
+  ordinary tracked assets, not regenerated per render.
+- **The synthesis had two real bugs, both caught by measuring the actual
+  output, not by ear** (this environment cannot listen): the first envelope
+  peaked at 46ms while the frequency sweep was still down at ~470Hz, so the
+  loudest moment landed before the "whoosh" ever got interesting — fixed by
+  centering the envelope mid-sweep instead of at the start. Separately, the
+  overlap-add synthesis produced a full-scale spike in the very first
+  samples (edge frames have incomplete window coverage, so the normalization
+  divide blows them up) — fixed by padding the synthesis and cropping the
+  edges away. Re-measured after each fix (spectral centroid over time,
+  amplitude envelope) before trusting either one.
+- **Placement is via ffmpeg's `amix`/`adelay`/`asplit`**, one delayed copy of
+  the sfx per timestamp, `normalize=0` for the same reason as the music mix
+  (default normalization would quietly shrink the narration by 1/N of the
+  input count). Verified against a silent test video before ever touching a
+  real render: bursts of audio appear only in tight windows exactly at the
+  requested timestamps, silence everywhere else.
+- `sfx_file` is recorded in the result JSON when applied, `None` otherwise —
+  same "record what happened, not what was asked" rule as music.
+
+**Neither pass can fail a render.** Both are wrapped: if the file is missing
+or ffmpeg errors, it logs a warning and the pipeline falls through to the
+next stage (or to `final-viral.mp4` directly) rather than losing the whole
+render. This matters concretely — adding the music pass first shipped with
+this guard *missing*, and a missing track killed a six-minute render that
+had already produced a perfectly good captioned video. Verified for both
+passes by running each against a nonexistent file and confirming
+`final-viral.mp4` still gets produced.
+
+**Render order: captions → SFX → music**, each writing its own intermediate
+(`with-captions.mp4` → `with-sfx.mp4` → `final-viral.mp4`), so any single
+stage can be re-run or re-mixed from the previous file's output without
+re-rendering the base video.
 
 ## 5f. How to reverse the 2026-08-07 changes
 
-Both changes above are opt-out at runtime, so **reversing them needs no code
-edit and no re-render**:
+All three changes above are controlled by runtime flags, so **reversing any
+of them needs no code edit and no re-render**:
 
 | To undo | Do this |
 |---|---|
 | Ranked countdown | Just stop passing `--counter-mode countdown`. `progress` is still the built-in default, so the old `1/6…6/6` listicle needs no flag at all. |
-| Background music on one episode | `--no-bgm`. This restores the exact pre-2026-08-07 path: captions burn straight to `final-viral.mp4` with no second pass. |
-| Background music everywhere | Set `--no-bgm` in the build job, or flip `DEFAULT_BGM_FILE` / pass `--bgm-volume 0` in `viral_episode.py`. |
-| Just the volume | `--bgm-volume`, or re-mix from the task dir's `with-captions.mp4` — no re-render needed. |
+| Background music | Nothing to do — `--bgm` is opt-in, so a normal build already has no music. If one specific build passed `--bgm`, just don't pass it next time. |
+| Transition SFX on one episode | `--no-sfx`. Restores the pre-2026-08-07 audio path exactly: captions burn straight to `final-viral.mp4`, no further passes. |
+| Transition SFX everywhere | Set `--no-sfx` in the build job. |
+| Just a volume | `--bgm-volume` / `--sfx-volume`, or re-mix from the relevant intermediate file in the task dir — no re-render needed. |
 
-If the code itself has to go, the two behaviour-changing commits revert
-cleanly and were **tested doing so** (in a throwaway worktree, confirming the
-result is byte-identical to the pre-change state, with no conflicts):
-
-```
-git revert --no-edit a4e1a3e addf8f8   # music-failure guard, then the feature
-```
+If the code itself has to go, the behaviour-changing commits revert cleanly
+and were **tested doing so** (in a throwaway worktree, confirming the result
+is byte-identical to the pre-change state, with no conflicts) — check
+`git log` for the current commit hashes on this branch, the ones referenced
+in earlier drafts of this section were superseded by the opt-in flip and the
+SFX addition.
 
 Everything else from 2026-08-07 is documentation or log rows and carries no
 runtime behaviour.

@@ -138,11 +138,13 @@ uv run python docs/skill/viral_episode.py --facts-file facts.txt --episode 2 \
   --counter-mode countdown
 ```
 
-It generates hook + per-fact scripts, renders a subtitle-free base video, derives word-level timings with faster-whisper, burns an ASS overlay with karaoke captions, a fact counter and a progress bar, and mixes a background music bed. `--dry-run` prints the script and metadata without rendering. Add `--outro "<text>"` to override the default cliffhanger close.
+It generates hook + per-fact scripts, renders a subtitle-free base video, derives word-level timings with faster-whisper, burns an ASS overlay with karaoke captions, a fact counter and a progress bar, adds a transition whoosh at each fact boundary, and optionally mixes a background music bed. `--dry-run` prints the script and metadata without rendering. Add `--outro "<text>"` to override the default cliffhanger close.
 
 **`--counter-mode countdown` is required for the current ranked format** (item 0 under Episode Format, full spec in `channel_playbook.md` §5d) — it makes the counter read `#6 … #1` instead of `1/6 … 6/6`. Omitting it puts `6/6` on screen while the narration says "number one".
 
-**Background music is on by default** since 2026-08-07 (`channel_playbook.md` §5e). It mixes as a separate ffmpeg pass after the caption burn with `-c:v copy`, so it costs seconds and leaves the video untouched; the intermediate `with-captions.mp4` stays in the task dir so a bad volume can be re-mixed without re-rendering. `--bgm-volume` (default `0.12`, measured against ~-20 LUFS source music — **re-measure if the track library changes**), `--bgm-file` to swap tracks, `--no-bgm` to disable.
+**Transition SFX is on by default** since 2026-08-07 (`channel_playbook.md` §5e) — a synthesised whoosh (`resource/sfx/whoosh.wav`, made by `docs/skill/make_transition_sfx.py`, no external asset needed) plays at the hook→fact-1 cut and every fact boundary after it. Runs as its own `-c:v copy` ffmpeg pass; `--sfx-volume` (default `0.35`) to adjust, `--no-sfx` to disable, `--sfx-file` to swap the sound.
+
+**Background music is opt-in, not default** — pass `--bgm` to add it (owner 2026-08-07: don't put music on every video). When used: `--bgm-volume` (default `0.12`, measured against ~-20 LUFS source music — **re-measure if the track library changes**), `--bgm-file` to swap tracks. Both passes write their own intermediate file in the task dir (`with-captions.mp4` → `with-sfx.mp4` → `final-viral.mp4`) so a bad volume can be re-mixed from the right stage without re-rendering the base video.
 
 Design notes that matter if you modify it:
 

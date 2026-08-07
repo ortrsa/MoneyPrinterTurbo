@@ -83,6 +83,11 @@ DEFAULT_NARRATION_SPEED = 1.1
 # 曲会把这个作用直接抵消掉。
 DEFAULT_BGM_FILE = PROJECT_ROOT / "resource" / "songs" / "output000.mp3"
 
+# 转场音效：docs/skill/make_transition_sfx.py 合成的扫频音，不是下载素材——
+# 图库里没有音效，只有完整歌曲。默认用 whoosh（上扬）而不是 impact（低频撞击），
+# 因为"事实之间往前推进"比"砸下一拳"更贴这个频道的节奏。
+DEFAULT_SFX_FILE = PROJECT_ROOT / "resource" / "sfx" / "whoosh.wav"
+
 FACT_PROMPT = (
     "Rewrite this fact as ONE or TWO short punchy sentences for a rapid-fire facts "
     "compilation video. Open directly with the surprising claim - no greeting, no "
@@ -630,13 +635,21 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--bgm",
+        action="store_true",
+        help=(
+            "垫一条背景音乐在旁白下面。**默认关闭**（owner 2026-08-07 反馈："
+            "不要给所有视频都配乐）——这不是每集的默认行为，是要显式选用的一集。"
+        ),
+    )
+    parser.add_argument(
         "--bgm-file",
         type=Path,
         default=DEFAULT_BGM_FILE,
         help=(
-            "垫在旁白下面的背景音乐。默认固定用同一首，而不是每集随机换——"
-            "频道要的是可辨认的声音标识，随机会让每集听起来像不同的频道。"
-            f"默认 {DEFAULT_BGM_FILE.name}，换歌直接传别的路径"
+            "配合 --bgm 用。默认固定用同一首，而不是每集随机换——频道要的是"
+            f"可辨认的声音标识，随机会让每集听起来像不同的频道。默认 "
+            f"{DEFAULT_BGM_FILE.name}，换歌直接传别的路径"
             "（resource/songs/ 下有 29 首）。"
         ),
     )
@@ -651,9 +664,29 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
-        "--no-bgm",
+        "--no-sfx",
         action="store_true",
-        help="完全不加背景音乐，产出纯旁白成片（2026-08-07 之前的行为）。",
+        help=(
+            "不加转场音效。转场音效默认开启（owner 2026-08-07 要求）——"
+            "和背景音乐不同，这个是默认行为，这个开关只是留退路。"
+        ),
+    )
+    parser.add_argument(
+        "--sfx-file",
+        type=Path,
+        default=DEFAULT_SFX_FILE,
+        help=(
+            "每条事实开始时叠加的转场音效（含钩子结束、进入事实1）。默认 "
+            f"{DEFAULT_SFX_FILE.name}——扫频音效，仓库里没有现成素材，"
+            "用 docs/skill/make_transition_sfx.py 合成（无版权、可调参数、"
+            "长度和这个频道每 8 秒一次切换的节奏对得上）。"
+        ),
+    )
+    parser.add_argument(
+        "--sfx-volume",
+        type=float,
+        default=viral.DEFAULT_SFX_VOLUME,
+        help=f"转场音效音量倍数，默认 {viral.DEFAULT_SFX_VOLUME}。",
     )
     parser.add_argument(
         "--fact-max-words",
@@ -937,35 +970,51 @@ def main(argv: list[str] | None = None) -> int:
     ass_path.write_text(ass_text, encoding="utf-8")
 
     output_path = task_dir / "final-viral.mp4"
-    # 加了背景音乐时先烧字幕到中间文件，再单独走一趟只重编码音频的混音
-    # （视频流 copy）。分成两趟是为了留退路：音量不合适可以从 with-captions
-    # 重混，不用重渲整集。
-    bgm_enabled = not args.no_bgm
-    burn_target = task_dir / ("with-captions.mp4" if bgm_enabled else "final-viral.mp4")
+    # 字幕烧录 -> [转场音效] -> [背景音乐]，每一步都写到自己的中间文件，
+    # 都用 -c:v copy。这样任何一步音量不对都能从上一步的产物重跑，不用
+    # 重新渲染整集；也让每一步都能独立地"失败了就跳过"，不会把一次已经
+    # 成功的渲染拖垮——和 8a 里 Telegram 投递失败只记警告是同一条原则。
+    captions_path = task_dir / "with-captions.mp4"
     viral.burn_overlay(
         video_in=str(video_path),
         ass_file=str(ass_path),
-        video_out=str(burn_target),
+        video_out=str(captions_path),
         fonts_dir=str(PROJECT_ROOT / "resource" / "fonts"),
     )
+    current_path = captions_path
+
+    sfx_applied = False
+    if not args.no_sfx:
+        sfx_path = task_dir / "with-sfx.mp4"
+        try:
+            fact_starts = [s.start for s in fact_segments]
+            viral.add_transition_sfx(
+                video_in=str(current_path),
+                video_out=str(sfx_path),
+                sfx_file=str(args.sfx_file),
+                timestamps=fact_starts,
+                volume=args.sfx_volume,
+            )
+            current_path = sfx_path
+            sfx_applied = True
+        except Exception as exc:
+            logger.warning(f"transition sfx failed, skipping: {exc}")
+
     bgm_applied = False
-    if bgm_enabled:
-        # 音乐是锦上添花，不能让它把一次已经成功的渲染判成失败——和 8a 里
-        # Telegram 投递失败只记警告是同一条原则。混音失败（曲子丢了、路径写错、
-        # 音频流有问题）就退回到只有字幕的那一版，成片照常产出。
+    if args.bgm:
         try:
             viral.mix_background_music(
-                video_in=str(burn_target),
+                video_in=str(current_path),
                 video_out=str(output_path),
                 bgm_file=str(args.bgm_file),
                 volume=args.bgm_volume,
             )
             bgm_applied = True
         except Exception as exc:
-            logger.warning(
-                f"background music failed, shipping narration-only cut: {exc}"
-            )
-            shutil.copyfile(burn_target, output_path)
+            logger.warning(f"background music failed, skipping: {exc}")
+            shutil.copyfile(current_path, output_path)
+    elif current_path != output_path:
+        shutil.copyfile(current_path, output_path)
 
     result = {
         "episode": args.episode,
@@ -990,6 +1039,7 @@ def main(argv: list[str] | None = None) -> int:
         # 这里若照抄参数，事后就会把一支没有音乐的成片当成有音乐的样本来比较。
         "bgm_file": str(args.bgm_file) if bgm_applied else None,
         "bgm_volume": args.bgm_volume if bgm_applied else None,
+        "sfx_file": str(args.sfx_file) if sfx_applied else None,
         "segment_timings": [
             {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
             for i, s in enumerate(all_segments)

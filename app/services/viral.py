@@ -679,6 +679,78 @@ def mix_background_music(
     return video_out
 
 
+# 转场音效的音量。比音乐高不少——音乐是持续垫底的，而音效是零点几秒的一下，
+# 同样的响度感受下瞬态可以放得更响。0.35 实测能听见但不抢词。
+DEFAULT_SFX_VOLUME = 0.35
+
+
+def add_transition_sfx(
+    video_in: str,
+    video_out: str,
+    sfx_file: str,
+    timestamps: list[float],
+    volume: float = DEFAULT_SFX_VOLUME,
+) -> str:
+    """
+    在给定时间点上叠一层转场音效，视频流 copy，只重编码音频。
+
+    `timestamps` 是每条事实的起点（`fact_timings` 里的 start）。音效落在
+    切换的那一刻，用来标记"上一条讲完了"。第 0 秒不放——片头第一帧就"嗖"
+    一声，听起来像播放器出错，而不是转场。
+
+    做法是把音效用 `asplit` 复制 N 份，各自 `adelay` 到自己的时间点，再和
+    原音轨一起 `amix`。`normalize=0` 的理由和背景音乐那边一样：默认的归一化
+    会按输入路数把人声一起压小，路数越多压得越狠，这里有七八路，不关掉的话
+    旁白会直接小一半以上。
+    """
+    if not os.path.isfile(sfx_file):
+        raise RuntimeError(f"transition sfx file not found: {sfx_file}")
+
+    # 0 秒和重复的时间点都去掉：前者是片头不是转场，后者会在同一位置叠出
+    # 双倍音量的一声
+    points = sorted({round(t, 3) for t in timestamps if t > 0.05})
+    if not points:
+        raise RuntimeError("no usable transition timestamps")
+
+    ffmpeg = _ffmpeg_executable()
+    labels = [f"s{i}" for i in range(len(points))]
+    parts = [f"[1:a]asplit={len(points)}" + "".join(f"[r{i}]" for i in range(len(points)))]
+    for i, (point, label) in enumerate(zip(points, labels)):
+        ms = int(point * 1000)
+        parts.append(f"[r{i}]volume={volume},adelay={ms}|{ms}[{label}]")
+    mix_inputs = "[0:a]" + "".join(f"[{label}]" for label in labels)
+    parts.append(
+        f"{mix_inputs}amix=inputs={len(points) + 1}:duration=first:normalize=0[out]"
+    )
+    filter_complex = ";".join(parts)
+
+    command = [
+        ffmpeg,
+        "-y",
+        "-i", video_in,
+        "-i", sfx_file,
+        "-filter_complex", filter_complex,
+        "-map", "0:v",
+        "-map", "[out]",
+        "-c:v", "copy",
+        "-c:a", "aac",
+        "-b:a", "192k",
+        "-loglevel", "error",
+        video_out,
+    ]
+    logger.info(
+        f"adding {len(points)} transition sfx at {volume:g}: "
+        f"{os.path.basename(sfx_file)}"
+    )
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode != 0:
+        tail = (result.stderr or "").strip().splitlines()[-15:]
+        raise RuntimeError("failed to add transition sfx: " + " | ".join(tail))
+    if not os.path.exists(video_out) or os.path.getsize(video_out) == 0:
+        raise RuntimeError(f"sfx pass produced no output: {video_out}")
+    return video_out
+
+
 def burn_overlay(
     video_in: str,
     ass_file: str,
