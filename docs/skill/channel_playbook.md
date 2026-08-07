@@ -1196,6 +1196,54 @@ assets exist in the repo and synthesised ones risked sounding cheap. Music
 was the high-value, low-risk half of the guide's recommendation; SFX remain
 open.
 
+**Music failure can never fail a render.** The mix is wrapped: if the track
+is missing or ffmpeg errors, it logs a warning and ships the narration-only
+cut as `final-viral.mp4`. This matters because adding the pass briefly made
+music load-bearing — a missing file killed a six-minute render that had
+already produced a perfectly good captioned video. Verified by running it
+against a nonexistent track. Note that `bgm_file`/`bgm_volume` in the result
+JSON record **what actually happened**, not what was asked for, so a
+fallback render is not later counted as a music sample.
+
+## 5f. How to reverse the 2026-08-07 changes
+
+Both changes above are opt-out at runtime, so **reversing them needs no code
+edit and no re-render**:
+
+| To undo | Do this |
+|---|---|
+| Ranked countdown | Just stop passing `--counter-mode countdown`. `progress` is still the built-in default, so the old `1/6…6/6` listicle needs no flag at all. |
+| Background music on one episode | `--no-bgm`. This restores the exact pre-2026-08-07 path: captions burn straight to `final-viral.mp4` with no second pass. |
+| Background music everywhere | Set `--no-bgm` in the build job, or flip `DEFAULT_BGM_FILE` / pass `--bgm-volume 0` in `viral_episode.py`. |
+| Just the volume | `--bgm-volume`, or re-mix from the task dir's `with-captions.mp4` — no re-render needed. |
+
+If the code itself has to go, the two behaviour-changing commits revert
+cleanly and were **tested doing so** (in a throwaway worktree, confirming the
+result is byte-identical to the pre-change state, with no conflicts):
+
+```
+git revert --no-edit a4e1a3e addf8f8   # music-failure guard, then the feature
+```
+
+Everything else from 2026-08-07 is documentation or log rows and carries no
+runtime behaviour.
+
+**What is *not* reversible this way**, and is worth knowing before assuming a
+clean undo exists:
+- **Published videos.** `yfuSDGdpTw4` and `EtNhXZdSKZc` are live and public.
+  Undoing those means deleting or unlisting them in YouTube Studio; nothing
+  in this repo can do it.
+- **Approved-but-unpublished slots.** While the 16:30/22:30 Routines have not
+  yet fired, an approval can still be withdrawn by setting that slot's
+  `approved` to `false` in `storage/todays_uploads.json` (gitignored) — the
+  Routines re-read it at fire time. After they fire, it becomes the case
+  above.
+- **Overwritten render artifacts.** The splice-fix reruns overwrote each
+  episode's `final-viral.mp4` in place, so the pre-fix (defective) cuts are
+  gone. No loss in practice, but it means "compare against the original
+  render" is not available after a splice fix — copy it aside first if a
+  before/after is ever wanted.
+
 ## 5a. Outlier topic research (adopted 2026-07-30)
 
 Guide Rank 3 (9.0/10): stop inventing topics from scratch; find a niche channel's
