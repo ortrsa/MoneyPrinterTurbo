@@ -26,6 +26,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import uuid
@@ -939,20 +940,32 @@ def main(argv: list[str] | None = None) -> int:
     # 加了背景音乐时先烧字幕到中间文件，再单独走一趟只重编码音频的混音
     # （视频流 copy）。分成两趟是为了留退路：音量不合适可以从 with-captions
     # 重混，不用重渲整集。
-    burn_target = task_dir / ("with-captions.mp4" if not args.no_bgm else "final-viral.mp4")
+    bgm_enabled = not args.no_bgm
+    burn_target = task_dir / ("with-captions.mp4" if bgm_enabled else "final-viral.mp4")
     viral.burn_overlay(
         video_in=str(video_path),
         ass_file=str(ass_path),
         video_out=str(burn_target),
         fonts_dir=str(PROJECT_ROOT / "resource" / "fonts"),
     )
-    if not args.no_bgm:
-        viral.mix_background_music(
-            video_in=str(burn_target),
-            video_out=str(output_path),
-            bgm_file=str(args.bgm_file),
-            volume=args.bgm_volume,
-        )
+    bgm_applied = False
+    if bgm_enabled:
+        # 音乐是锦上添花，不能让它把一次已经成功的渲染判成失败——和 8a 里
+        # Telegram 投递失败只记警告是同一条原则。混音失败（曲子丢了、路径写错、
+        # 音频流有问题）就退回到只有字幕的那一版，成片照常产出。
+        try:
+            viral.mix_background_music(
+                video_in=str(burn_target),
+                video_out=str(output_path),
+                bgm_file=str(args.bgm_file),
+                volume=args.bgm_volume,
+            )
+            bgm_applied = True
+        except Exception as exc:
+            logger.warning(
+                f"background music failed, shipping narration-only cut: {exc}"
+            )
+            shutil.copyfile(burn_target, output_path)
 
     result = {
         "episode": args.episode,
@@ -973,8 +986,10 @@ def main(argv: list[str] | None = None) -> int:
         "narration_speed": args.narration_speed if args.footage_mode == "synced" else 1.0,
         # 和 narration_speed 同理：music 是 2026-08-07 才加的，"加音乐有没有
         # 用"这个问题只有在成片里记下了当时用的是哪首、多大声，之后才answerable。
-        "bgm_file": None if args.no_bgm else str(args.bgm_file),
-        "bgm_volume": None if args.no_bgm else args.bgm_volume,
+        # 记的是**实际结果**而不是命令行要求：混音失败会静默退回无音乐版本，
+        # 这里若照抄参数，事后就会把一支没有音乐的成片当成有音乐的样本来比较。
+        "bgm_file": str(args.bgm_file) if bgm_applied else None,
+        "bgm_volume": args.bgm_volume if bgm_applied else None,
         "segment_timings": [
             {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
             for i, s in enumerate(all_segments)
