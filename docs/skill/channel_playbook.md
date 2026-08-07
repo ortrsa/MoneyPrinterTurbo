@@ -45,6 +45,17 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
   ep24/ep25's current titles ("Facts 22"/"Facts 23") are correct as-is — no
   retitling needed before publish.
 
+**FORMAT CHANGE 2026-08-07 — read §5d before building anything.** The flat
+6-fact listicle is no longer the default. New facts episodes are
+**ranked countdowns**: #6 first, #1 last, with a deliberately arguable #1 and
+an outro that asks for the disagreement. Pass **`--counter-mode countdown`**
+(mandatory for this format — otherwise the screen shows `6/6` while the
+narration says "number one"). The driver was a channel-level diagnosis, not a
+retention tweak: 15.5k views had produced **18 subscribers** (0.12%) and **10
+comments across 25 videos**. Full reasoning and the exact spec are in §5d.
+**Background music is also now on by default** (§5e) — one fixed track at a
+measured -18dB under the narration; `--no-bgm` opts out.
+
 **New capabilities added this session, both need conscious use, neither is
 automatic yet:**
 - **`docs/skill/ai-footage-fill/`** — generates a single AI B-roll clip
@@ -1082,6 +1093,108 @@ never wombats or sloths.
    are statements *about* a fact ("Wombats produce cube-shaped droppings, and
    scientists needed years to explain it"). A close-up of the thing before a
    word is spoken is the stronger opening.
+
+## 5d. Ranked-countdown format (adopted 2026-08-07) — CURRENT DEFAULT
+
+**This replaces the flat 6-fact listicle as the default for new facts
+episodes.** Owner decision 2026-08-07, in response to the channel being stuck
+at a ~1000-view ceiling.
+
+**The diagnosis that drove it** (real numbers, pulled from the API that day):
+25 videos, ~15.5k total views, **18 subscribers** — a 0.12% view→sub
+conversion, against 0.5–2% for a healthy Shorts channel. And **10 comments
+across all 25 videos** (0.064%), despite every single episode ending in a
+"comment which fact surprised you" CTA. Likes were fine (2.0%), so the
+problem was never "the videos are bad" — it was that nothing gave anyone a
+reason to want *more*, and nothing gave anyone anything to *say*. The best
+video the channel has ever had is 1508 views; a Shorts breakout is 10k+.
+**Nothing has ever escaped the algorithm's initial test pool.** That is a
+channel-identity problem, not a per-video retention problem — which is why
+the fix is a format change and not another 5% retention tweak.
+
+Note what this diagnosis did *not* blame, because both were checked and
+cleared: length (already tested — the long format beat the short one on both
+retention and views, see "What this means for our format" in
+`shorts_growth_guide.md`; do not reopen it), and production quality (frame
+verification catches real defects, but polish was never the ceiling).
+
+**The format:**
+
+1. **Hook must promise the #1 and invite disagreement.** Not "what if X?" —
+   something closer to "these are the 6 <things>, ranked, and you're going to
+   argue about number one." The hook's job is now to set up a *contest*, not
+   just curiosity.
+2. **Six items, counted DOWN: #6 first, #1 last.** The strongest item goes
+   last, in the payoff position. This is the completion-compulsion structure
+   the channel already adopted, but with the viewer told *explicitly* how far
+   the payoff is.
+3. **#1 must be genuinely arguable** — a defensible pick that a reasonable
+   person could rank differently. A #1 nobody can dispute produces the same
+   zero comments we already have. This is the single most important line in
+   this section: the ranking is the engagement engine, and a ranking with an
+   obvious answer is not a ranking.
+4. **The outro asks for the disagreement, not a recall question.** "Tell me
+   what should have been number one" beats "comment which surprised you" —
+   the old CTA is measurably dead (10 comments / 25 videos).
+5. **Pass `--counter-mode countdown`.** The on-screen counter then reads
+   `#6 … #1` instead of `1/6 … 6/6`. This is mandatory for this format —
+   with the default `progress` mode the screen would show `6/6` while the
+   narration says "number one", and the two numbers visibly contradict.
+6. **The narration speaks the rank too** ("Number six: …", "And number
+   one: …"), not just the on-screen counter. It is deliberate redundancy,
+   not a mistake: a large share of Shorts viewing is sound-off (the counter
+   carries it) and a large share is screen-glanced-away (the voice carries
+   it). Write it with `--pre-written` so the rank wording survives verbatim
+   — an unconstrained LLM rewrite reliably drops or reorders the numbering,
+   which breaks the countdown against the counter.
+
+**Still true, unchanged:** all facts fact-checked independently before
+render, every segment frame-verified after render, payoff segment scrutinised
+hardest. The format changed; the verification bar did not.
+
+**What this is a test of.** The hypothesis is that a recognisable, repeatable
+format with built-in disagreement raises sub conversion and comments, and
+that those channel-level signals are what unlock distribution past ~1000.
+Track subs and comments per episode, not just views and retention — those
+two were the actual diagnosis and they are the actual scoreboard. Give it a
+real run of episodes before judging; a single ranked episode that lands at
+900 views proves nothing either way.
+
+## 5e. Background music (adopted 2026-08-07)
+
+Until 2026-08-07 every episode shipped with **a single audio stream:
+narration, no music, no effects** — verified by inspecting the actual
+rendered files, not assumed. `shorts_growth_guide.md` (Rank 4) had already
+flagged this as "a genuine, cheap gap" and it had gone unimplemented.
+
+`viral_episode.py` now mixes a music bed by default via
+`viral.mix_background_music()`. Mechanics worth knowing:
+
+- **It runs as its own ffmpeg pass after the caption burn, with `-c:v copy`.**
+  Only the audio is re-encoded, so it costs seconds and the video is
+  untouched. The intermediate `with-captions.mp4` is kept in the task dir on
+  purpose: if the volume is wrong you re-mix from that, you do not re-render.
+- **The volume default is measured, not guessed.** The bundled tracks in
+  `resource/songs/` are ~-20.0 LUFS and our narration is ~-20.5 LUFS — nearly
+  identical loudness. So "pick a small-looking number" fails badly: the first
+  attempt at `0.08` put the music around -42 LUFS, inaudible on a phone.
+  `0.12` (≈ -18dB) sits the music ~18dB under the narration, which measures
+  correctly: in a silent gap between sentences the level rises from -62dB to
+  -46dB (clearly present), and during speech the mixed level is *identical*
+  to narration-only (music never competes). **Re-measure with
+  `ffmpeg -i <file> -af ebur128 -f null -` if the track library ever
+  changes** — this number is only valid for ~-20 LUFS source music.
+- **One fixed track, not random per episode.** A random track each time makes
+  every episode sound like a different channel, which is the opposite of what
+  a 0.12% sub-conversion problem needs. `--bgm-file` changes it,
+  `--no-bgm` disables it.
+- `bgm_file` and `bgm_volume` are recorded in each render's result JSON, so
+  "did music help" is answerable later — same reasoning as `narration_speed`.
+
+**Sound effects at transitions are still not implemented** — no suitable
+assets exist in the repo and synthesised ones risked sounding cheap. Music
+was the high-value, low-risk half of the guide's recommendation; SFX remain
+open.
 
 ## 5a. Outlier topic research (adopted 2026-07-30)
 

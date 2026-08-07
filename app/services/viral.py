@@ -388,13 +388,26 @@ def _caption_events(
     return events
 
 
-def _counter_events(facts: list[FactSegment], total: int, style: str) -> list[str]:
-    """每条事实期间显示 `3/6` 计数器。"""
+def _counter_events(
+    facts: list[FactSegment], total: int, style: str, mode: str = "progress"
+) -> list[str]:
+    """
+    每条事实期间显示计数器。
+
+    `mode="progress"` → `3/6`，表示"看到哪儿了"。
+    `mode="countdown"` → `#4`，表示"排名第几"，用于倒数排行榜格式：
+    第一条讲的是第 6 名，最后一条才是第 1 名。观众看到 `#2` 就知道
+    真正的爆点还没出来，这比进度条更直接地制造"再撑一条"的动机。
+    """
     events = []
     for fact in facts:
         if fact.end <= fact.start:
             continue
-        text = f"{fact.index}/{total}"
+        if mode == "countdown":
+            # fact.index 是 1..N 的口播顺序，倒数榜里它对应的名次是反过来的
+            text = f"#{total - fact.index + 1}"
+        else:
+            text = f"{fact.index}/{total}"
         events.append(
             f"Dialogue: 0,{_ass_time(fact.start)},{_ass_time(fact.end)},{style},,0,0,0,,{text}"
         )
@@ -456,6 +469,7 @@ def build_ass(
     caption_y_frac: float = 0.5,
     show_counter: bool = True,
     show_progress_bar: bool = True,
+    counter_mode: str = "progress",
 ) -> str:
     """
     生成完整 ASS 文件内容。
@@ -508,7 +522,9 @@ def build_ass(
             fill_style="BarFill",
         )
     if show_counter and facts:
-        events += _counter_events(facts, total=len(facts), style="Counter")
+        events += _counter_events(
+            facts, total=len(facts), style="Counter", mode=counter_mode
+        )
 
     caption_events = _caption_events(
         chunks,
@@ -567,6 +583,100 @@ def _ffmpeg_executable() -> str:
         if not found:
             raise RuntimeError("ffmpeg not found; install it or add it to PATH")
         return found
+
+
+# 旁白必须始终压过音乐。这个值是量出来的，不是猜的：resource/songs 里的曲子
+# 实测约 -20.0 LUFS，而成片旁白约 -20.5 LUFS——两者响度几乎相同，所以"凭感觉
+# 取个小数"会直接把音乐调没（0.08 换算下来是 -22dB，音乐落到 -42 LUFS 左右，
+# 在手机上完全听不见）。0.12 ≈ -18.4dB，让音乐稳定坐在人声下方约 18dB：
+# 说话时是垫底的氛围，句子之间的空隙里才浮上来。
+#
+# 换新曲库时要重新量一次（`ffmpeg -i <file> -af ebur128 -f null -`），
+# 这个数字只对当前这批 -20 LUFS 的曲子成立。
+DEFAULT_BGM_VOLUME = 0.12
+
+# 结尾留出的淡出时间。硬切到静音会让最后一句 CTA 显得像是视频卡住了。
+DEFAULT_BGM_FADE_SECONDS = 2.0
+
+
+def probe_duration(media_file: str) -> float:
+    """读取媒体文件时长（秒）。取不到时返回 0.0，由调用方决定怎么兜底。"""
+    ffmpeg = _ffmpeg_executable()
+    result = subprocess.run(
+        [ffmpeg, "-i", media_file], capture_output=True, text=True
+    )
+    # ffmpeg 没有 -show_format，时长只能从 stderr 的 "Duration: HH:MM:SS.ss" 里取；
+    # 这里不额外依赖 ffprobe，因为 imageio-ffmpeg 只保证带 ffmpeg 二进制。
+    for line in (result.stderr or "").splitlines():
+        line = line.strip()
+        if not line.startswith("Duration:"):
+            continue
+        stamp = line.split("Duration:", 1)[1].split(",", 1)[0].strip()
+        try:
+            hours, minutes, seconds = stamp.split(":")
+            return int(hours) * 3600 + int(minutes) * 60 + float(seconds)
+        except ValueError:
+            return 0.0
+    return 0.0
+
+
+def mix_background_music(
+    video_in: str,
+    video_out: str,
+    bgm_file: str,
+    volume: float = DEFAULT_BGM_VOLUME,
+    fade_seconds: float = DEFAULT_BGM_FADE_SECONDS,
+) -> str:
+    """
+    在成片里垫一层背景音乐，**视频流直接 copy**，只重编码音频。
+
+    放在 `burn_overlay` 之后单独跑一趟，而不是塞进 `build_synced_footage`：
+    这一趟不碰视频流，几秒就结束，音量调错了可以从上一步的产物重来，不用
+    重新渲染整集。混在渲染里就没有这个退路了。
+
+    `amix` 默认会把各路输入按数量归一化（两路输入各降到一半），那样旁白会
+    平白小掉 6dB——所以显式 `normalize=0`，音乐已经在前面按 `volume` 压过了。
+    `duration=first` 让成片长度跟着旁白走，音乐长出来的部分直接截掉。
+    """
+    if not os.path.isfile(bgm_file):
+        raise RuntimeError(f"background music file not found: {bgm_file}")
+
+    ffmpeg = _ffmpeg_executable()
+    duration = probe_duration(video_in)
+    fade_start = max(0.0, duration - fade_seconds)
+
+    bgm_chain = f"volume={volume},afade=t=in:st=0:d=0.8"
+    if duration > 0:
+        bgm_chain += f",afade=t=out:st={fade_start:.2f}:d={fade_seconds:g}"
+    filter_complex = (
+        f"[1:a]{bgm_chain}[bg];"
+        f"[0:a][bg]amix=inputs=2:duration=first:normalize=0[out]"
+    )
+
+    command = [
+        ffmpeg,
+        "-y",
+        "-i", video_in,
+        "-i", bgm_file,
+        "-filter_complex", filter_complex,
+        "-map", "0:v",
+        "-map", "[out]",
+        "-c:v", "copy",
+        "-c:a", "aac",
+        "-b:a", "192k",
+        "-loglevel", "error",
+        video_out,
+    ]
+    logger.info(
+        f"mixing background music at {volume:g}: {os.path.basename(bgm_file)}"
+    )
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode != 0:
+        tail = (result.stderr or "").strip().splitlines()[-15:]
+        raise RuntimeError("failed to mix background music: " + " | ".join(tail))
+    if not os.path.exists(video_out) or os.path.getsize(video_out) == 0:
+        raise RuntimeError(f"bgm mix produced no output: {video_out}")
+    return video_out
 
 
 def burn_overlay(

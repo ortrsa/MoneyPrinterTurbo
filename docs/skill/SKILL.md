@@ -45,8 +45,12 @@ There is no guaranteed-viral setting, but these defaults measurably improve rete
 > autopilot without checking that decision first.
 >
 > **Two flows exist. Pick the right one before writing anything:**
-> - **List format** — `viral_episode.py`. N unrelated facts on one theme, `N/6`
->   counter, ~55s. Everything below describes this flow.
+> - **List format** — `viral_episode.py`. Six items on one theme, ~55s.
+>   **Since 2026-08-07 the default is a ranked countdown** (`#6 … #1` counter
+>   via `--counter-mode countdown`, arguable #1 last, outro asks for the
+>   disagreement) — see Episode Format item 0 and `channel_playbook.md` §5d.
+>   The old flat listicle with the `N/6` progress counter is what that
+>   replaced. Everything below describes this flow.
 > - **Story format** — `story_episode.py`. One true story told as escalating
 >   beats, 30–90s, no counter, with a burned-in 2-line title banner. Built for
 >   narrative leads (a historical event, a true-crime case). See
@@ -130,10 +134,15 @@ There is no guaranteed-viral setting, but these defaults measurably improve rete
 For this channel's facts episodes, prefer the one-shot pipeline over hand-assembling steps:
 
 ```bash
-uv run python docs/skill/viral_episode.py --facts-file facts.txt --episode 2
+uv run python docs/skill/viral_episode.py --facts-file facts.txt --episode 2 \
+  --counter-mode countdown
 ```
 
-It generates hook + per-fact scripts, renders a subtitle-free base video, derives word-level timings with faster-whisper, and burns an ASS overlay with karaoke captions, a fact counter and a progress bar. `--dry-run` prints the script and metadata without rendering. Add `--outro "<text>"` to override the default cliffhanger close.
+It generates hook + per-fact scripts, renders a subtitle-free base video, derives word-level timings with faster-whisper, burns an ASS overlay with karaoke captions, a fact counter and a progress bar, and mixes a background music bed. `--dry-run` prints the script and metadata without rendering. Add `--outro "<text>"` to override the default cliffhanger close.
+
+**`--counter-mode countdown` is required for the current ranked format** (item 0 under Episode Format, full spec in `channel_playbook.md` §5d) — it makes the counter read `#6 … #1` instead of `1/6 … 6/6`. Omitting it puts `6/6` on screen while the narration says "number one".
+
+**Background music is on by default** since 2026-08-07 (`channel_playbook.md` §5e). It mixes as a separate ffmpeg pass after the caption burn with `-c:v copy`, so it costs seconds and leaves the video untouched; the intermediate `with-captions.mp4` stays in the task dir so a bad volume can be re-mixed without re-rendering. `--bgm-volume` (default `0.12`, measured against ~-20 LUFS source music — **re-measure if the track library changes**), `--bgm-file` to swap tracks, `--no-bgm` to disable.
 
 Design notes that matter if you modify it:
 
@@ -146,6 +155,7 @@ Design notes that matter if you modify it:
 
 Modeled on BrainBlud (~596K subscribers, ~188M views) plus retention research. Where evidence is thin, this says so — do not present these as proven numbers to the user.
 
+0. **Ranked countdown is the current default format (owner decision 2026-08-07) — read `channel_playbook.md` §5d before writing any script.** New facts episodes are structured as a countdown: **#6 first, #1 last**, with a **deliberately arguable #1** and an outro that asks for the disagreement rather than a recall question. Pass **`--counter-mode countdown`** so the on-screen counter reads `#6 … #1`; with the default `progress` mode the screen would show `6/6` while the narration says "number one". The driver was a channel-level diagnosis — 15.5k views had converted to **18 subscribers** (0.12%) and **10 comments across 25 videos**, i.e. nothing gave viewers a reason to want more or anything to argue about. Items 1-10 below still apply within that structure.
 1. **6 facts, target 45-55s.** The 50-60s bucket shows the highest average views (~4.1M) at ~76% completion, and completion rate still beats duration in the ranking signal. At 150-170 WPM that is ~125-140 words, which fits 6 facts plus hook and outro. Note honestly: **no A/B data exists on 5 vs 7 vs 10 facts** — 6 is derived from the length target, not measured.
 2. **Hook in the first sentence, ≤12 words.** TikTok's own guidance: ~65% of viewers who watch 3 seconds watch 10+. Use Loewenstein's information-gap model — name a *specific* gap ("the third one still isn't explained"), never a vague tease, and make sure the payoff lands or the hook backfires.
 3. **Close on a direct but content-specific CTA** (see Shorts Virality Guidelines item 5 for the full rule). Asking for a follow or comment is allowed and is the strongest conversion moment in the video — what fails is a generic, reused line. Write a new one per episode, tie it to that episode's content, and rotate FOLLOW / COMMENT / BOTH. Keep it to one line: a long outro with no reason to stay is a documented drop-off cause.

@@ -76,6 +76,12 @@ DEFAULT_FACT_MAX_WORDS = 25
 # 视频总时长会随之略微缩短，这是提速的直接后果，owner 已确认可以接受。
 DEFAULT_NARRATION_SPEED = 1.1
 
+# 固定一首，不随机。频道到 2026-08-07 为止一直是纯旁白、零音乐——25 支视频
+# 15.5k 播放只换来 18 个订阅，其中一个原因就是听感上和其他几千个同类频道
+# 完全无法区分。固定曲子是为了建立"这个频道听起来是这样"的辨识度；随机换
+# 曲会把这个作用直接抵消掉。
+DEFAULT_BGM_FILE = PROJECT_ROOT / "resource" / "songs" / "output000.mp3"
+
 FACT_PROMPT = (
     "Rewrite this fact as ONE or TWO short punchy sentences for a rapid-fire facts "
     "compilation video. Open directly with the surprising claim - no greeting, no "
@@ -612,6 +618,43 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--counter-mode",
+        choices=["progress", "countdown"],
+        default="progress",
+        help=(
+            "屏幕角上计数器的形式。progress 显示 3/6（看到哪儿了）；"
+            "countdown 显示 #4（排名第几），配合倒数排行榜脚本用——"
+            "第一条讲第 6 名，最后一条才是第 1 名。倒数格式下必须用 countdown，"
+            "否则画面写着 6/6 而旁白在说'第一名'，两个数字互相打架。"
+        ),
+    )
+    parser.add_argument(
+        "--bgm-file",
+        type=Path,
+        default=DEFAULT_BGM_FILE,
+        help=(
+            "垫在旁白下面的背景音乐。默认固定用同一首，而不是每集随机换——"
+            "频道要的是可辨认的声音标识，随机会让每集听起来像不同的频道。"
+            f"默认 {DEFAULT_BGM_FILE.name}，换歌直接传别的路径"
+            "（resource/songs/ 下有 29 首）。"
+        ),
+    )
+    parser.add_argument(
+        "--bgm-volume",
+        type=float,
+        default=viral.DEFAULT_BGM_VOLUME,
+        help=(
+            f"背景音乐音量倍数，默认 {viral.DEFAULT_BGM_VOLUME}（≈ -18dB，"
+            "按当前曲库实测的 -20 LUFS 校准）。换了曲库要重新量，见 "
+            "app/services/viral.py 里 DEFAULT_BGM_VOLUME 的注释。"
+        ),
+    )
+    parser.add_argument(
+        "--no-bgm",
+        action="store_true",
+        help="完全不加背景音乐，产出纯旁白成片（2026-08-07 之前的行为）。",
+    )
+    parser.add_argument(
         "--fact-max-words",
         type=int,
         default=DEFAULT_FACT_MAX_WORDS,
@@ -887,17 +930,29 @@ def main(argv: list[str] | None = None) -> int:
         facts=fact_segments,
         highlight_color=args.highlight_color,
         words_per_caption=args.words_per_caption,
+        counter_mode=args.counter_mode,
     )
     ass_path = task_dir / "overlay.ass"
     ass_path.write_text(ass_text, encoding="utf-8")
 
     output_path = task_dir / "final-viral.mp4"
+    # 加了背景音乐时先烧字幕到中间文件，再单独走一趟只重编码音频的混音
+    # （视频流 copy）。分成两趟是为了留退路：音量不合适可以从 with-captions
+    # 重混，不用重渲整集。
+    burn_target = task_dir / ("with-captions.mp4" if not args.no_bgm else "final-viral.mp4")
     viral.burn_overlay(
         video_in=str(video_path),
         ass_file=str(ass_path),
-        video_out=str(output_path),
+        video_out=str(burn_target),
         fonts_dir=str(PROJECT_ROOT / "resource" / "fonts"),
     )
+    if not args.no_bgm:
+        viral.mix_background_music(
+            video_in=str(burn_target),
+            video_out=str(output_path),
+            bgm_file=str(args.bgm_file),
+            volume=args.bgm_volume,
+        )
 
     result = {
         "episode": args.episode,
@@ -916,6 +971,10 @@ def main(argv: list[str] | None = None) -> int:
         # 提速倍数决定了这份成片的实际口播速度，和留存数据放在一起才能
         # 判断"更快的节奏"这个假设有没有用——只看时长看不出这个。
         "narration_speed": args.narration_speed if args.footage_mode == "synced" else 1.0,
+        # 和 narration_speed 同理：music 是 2026-08-07 才加的，"加音乐有没有
+        # 用"这个问题只有在成片里记下了当时用的是哪首、多大声，之后才answerable。
+        "bgm_file": None if args.no_bgm else str(args.bgm_file),
+        "bgm_volume": None if args.no_bgm else args.bgm_volume,
         "segment_timings": [
             {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
             for i, s in enumerate(all_segments)
