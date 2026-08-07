@@ -19,7 +19,7 @@ saying so is more useful than sounding confident.
 
 ---
 
-## 0. State as of 2026-08-06 00:19 Israel — read this first
+## 0. State as of 2026-08-07 07:10 Israel — read this first
 
 A pinned summary for picking up a fresh session fast. Full rationale for every
 line here is in the dated sections below and in `SKILL.md`; this is only the
@@ -28,19 +28,21 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
 **Live/pending right now:**
 - Ep20 (Facts 20, human body) is **published, public**, video id `MsvTGDudZ-U`.
   Its live YouTube title reads "Random But True Facts 19 👀" — a mislabel from
-  a manual upload the owner did outside this session while tonight's automated
-  16:30 job was blocked; source render metadata correctly says "Facts 20".
-  **Owner was asked and explicitly declined the fix — do not "correct" this
-  title on your own initiative.**
-- Ep21 (D-Day crossword, Version B — see §7a and §7b) is **uploaded**,
-  video id `S_zjnvbzZXw`, scheduled via YouTube's own
-  `publishAt` for `2026-08-05T22:30:00Z` = **01:30 Israel time 2026-08-06**.
-  On track, no action needed once that time passes — just confirm it actually
-  flipped public if asked to check.
-- `storage/todays_uploads.json` is **stale** for both slots (still reads
-  `published: false`) because these uploads happened outside the automated
-  16:30/22:30 jobs. Don't trust that file for tonight without cross-checking
-  the YouTube Data API directly, the way this was confirmed.
+  a manual upload the owner did outside a session; owner declined the fix.
+- Ep21 (D-Day crossword) is **published, public**, video id `S_zjnvbzZXw`.
+- Ep22/build-key (pizza, retitled live to "Facts 20 👀") **published, public**,
+  video id `yfuSDGdpTw4`, 16:30 slot 2026-08-06.
+- Ep23/build-key (space facts, retitled live to "Facts 21 👀") **published,
+  public**, video id `EtNhXZdSKZc`, 22:30 slot 2026-08-06.
+- **Ep24 (big cats) and ep25 (weather phenomena)** — today's 09:00 build —
+  are **sent to Telegram, awaiting owner approval**. Both had real footage
+  defects caught by post-render frame verification (not by pre-render
+  probing) and fixed before delivery; full detail in `episode_log.csv` rows
+  24/25 and the dated §5c entry below. Their `metadata.title` currently reads
+  "Facts 22"/"Facts 23" — **re-check the live channel's highest "Facts N"
+  title before the next approval/publish job**, since the running sequence
+  should be 19→20→21→22→23 if ep22/ep23 above published cleanly under their
+  synced titles, but confirm via the Data API rather than assuming.
 
 **New capabilities added this session, both need conscious use, neither is
 automatic yet:**
@@ -67,19 +69,44 @@ automatic yet:**
   no flag needed. Gemini TTS (the actual voice in use) has no native rate
   control, which is why this had to happen at the audio-file level.
 
-**2026-08-06 09:00 build — done, awaiting owner approval.** Built both of
-today's episodes as facts/facts (correcting the 50% story rate noted above):
-**ep22** (food — world pizza toppings, a rebuild of the dropped ep15 with a
-6th topping and a real completion-compulsion payoff) for the **16:30 slot**,
-and **ep23** (space facts, first time this topic) for the **22:30 slot** —
-fresh topic since both the calendar and the §5a outlier list are exhausted
-and the owner supplied nothing new. Full detail, including a real footage bug
-caught and fixed in ep22 (two splice attempts — the first used a
-misidentified file) and ep23's unusually clean frame-verification pass, is in
-`episode_log.csv` rows 22/23. Both delivered to Telegram with full upload
-kits, labelled by slot, scripts as separate messages, `result_json` paths
-noted. **Neither is approved yet — the 13:00 job needs the owner's reply
-before either can go live.**
+**2026-08-06 09:00 build.** Built ep22 (pizza, 16:30) and ep23 (space facts,
+22:30). Both approved same day and published — see the live/pending bullets
+above for video ids. Full build detail, including a real footage bug caught
+and fixed in ep22 (two splice attempts — the first used a misidentified
+file) and ep23's unusually clean frame-verification pass, is in
+`episode_log.csv` rows 22/23.
+
+**2026-08-07 09:00 build — done, awaiting owner approval.** Built ep24 (big
+cats biology, first time this topic) for the **16:30 slot** and ep25
+(weather phenomena, first time this topic) for the **22:30 slot** — both
+fresh topics, calendar and §5a outlier list still exhausted. Both had real
+footage defects caught only by post-render frame-by-frame verification, not
+by pre-render probing, and both were fixed before the corrected version was
+delivered to Telegram (the pipeline's own auto-send fired on the first,
+still-defective render in both cases, same race condition as ep22 — a
+follow-up message explicitly superseded the earlier send each time). Ep24:
+the tiger-stripes segment had the tiger almost fully hidden behind
+foreground foliage; fixed via clip splice, re-verified clean, recompressed
+(53.2MB → 41.7MB). Ep25: the lightning segment was ~5s of near-solid black
+(a 3s override clip gets *slowed*, not looped, to fill the segment window —
+confirmed by reading `_build_override_clips` in `topic_footage.py`), fixed
+by compositing real storm atmosphere with the flash clip at natural speed;
+and the "Neptune and Uranus" payoff line was rendering recognizable Earth
+and then the Moon — no real ice-giant footage exists in the Pexels catalog
+under any tried term, so this was replaced with a stylized
+hand-holding-Earth-against-a-large-blue-sphere clip that reads as an
+explicit scale comparison rather than as wrong-but-confident Earth footage.
+Full detail in `episode_log.csv` rows 24/25. **Neither is approved yet — the
+next 13:00 job needs the owner's reply before either can go live.**
+
+**Reconfirmed this session: Pexels search-result ordering is not stable
+between calls of an identical query, even minutes apart** — this is now the
+second session in a row where a fresh re-search of the exact term used in a
+defective render returned a completely different top-3, none showing the
+defect, which would have produced a false all-clear. The only reliable check
+is extracting frames directly from the actual cached `vid-*.mp4` files
+already present in the specific task directory being fixed, never a fresh
+re-search assumed to still correspond by index.
 
 **Same-morning correction — title numbers synced to what's actually live on
 YouTube.** Owner asked to sync video numbers to the real channel state.
@@ -1302,6 +1329,30 @@ unphotographable (Venus, a neutron star) than a typical animal or food
 episode, so a topic's *ceiling* on this rating may vary by category. Don't
 read a sub-4.5 average as automatically weaker footage work without checking
 whether the topic itself caps it lower.
+
+**2026-08-07 09:00 build — both open actions applied again, plus the
+category-ceiling hypothesis gets a second, stronger data point.** Ep24 (big
+cats) and ep25 (weather) both used question-form hooks and both got footage
+specificity rated 1-5 per segment before delivery (ep24 avg ~4.3/5, ep25 avg
+~3.8/5 — see `episode_log.csv` rows 24/25). Ep25's average is the lowest of
+any facts episode built this session, and for the same structural reason
+flagged for ep23: hail and ice-giant planets are close to unphotographable
+as real stock footage (confirmed by exhausting 4-6 distinct search terms for
+each with zero genuine matches), not a search-effort problem. This is now
+two facts episodes in a row (ep23, ep25) where the category itself — not
+search quality — set the visible ceiling, which starts to look like a real
+pattern rather than one outlier: **topic categories built mostly from
+abstract/astronomical/extinct/rare subjects should be expected to average
+noticeably below 4.5/5 on this rating, and that alone should not trigger
+extra search effort past 4-6 well-chosen terms.** Also newly confirmed this
+build: a too-short `--segment-clips` override does not loop to fill its
+segment window, it gets *speed-scaled* (slowed down) by
+`_build_override_clips` in `topic_footage.py` — a 3s clip stretched across
+an 8s segment plays in slow motion with long near-black stretches before and
+after its one bright moment, which reads as dead air, not as intentional
+pacing. When an override clip is meaningfully shorter than its segment,
+prefer compositing it with a second real clip (concatenate to roughly the
+segment's duration) over relying on the built-in slowdown.
 
 ## 6. Production rules learned the hard way
 
