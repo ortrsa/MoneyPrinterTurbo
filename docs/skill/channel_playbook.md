@@ -1579,6 +1579,50 @@ has a fixable root cause — and worth checking Studio's impressions panel
 specifically the next time this happens, since that's the one diagnostic
 this environment can't reach on its own.
 
+**2026-08-07 20:00 report — two episodes finalize: ep19 (story) strengthens
+the story-format lead, ep18 (facts, 63.5s) becomes the first real data
+point for a length-hurts-retention hypothesis.**
+
+- **Ep19 (Dollar story, 55.2%) is the second story-format data point**,
+  alongside ep17 (Ferrari/Lamborghini, 48.45% at the time, now settled at
+  47.4% live — small downward drift as more data lands, not a new event).
+  Both story episodes now sit at or above the long-format facts baseline
+  (45.8%, §5), averaging ~51.3%. This reinforces rather than resolves the
+  "story format ≥ facts on retention" lead flagged after ep17 alone (n=1,
+  "keep testing") — n=2 with both points on the same side of the baseline
+  is a real trend, not proof, but it's now strong enough to act on.
+  **Concrete action: actively prioritize story format going forward rather
+  than treating it as an experiment still proving itself** — and since
+  story leads were the bottleneck, not format performance, source and
+  fact-check more of them (see the leads note below).
+- **Ep18 (everyday objects, 31.2%) is the second-worst finalized facts
+  retention on the channel** (only ep3's 35.9% and the true low-n outliers
+  are comparably weak) **and it is also the longest facts episode finalized
+  so far, at 63.5s** — the exact length ep19's own build log flagged as
+  "nothing on this channel has been tested past 63s" before trimming the
+  dollar story back to 48.2s specifically to avoid confounding the
+  story-format test with an untested length. Ep18 unintentionally *is* that
+  untested-length data point, and its retention is weak. This is n=1 and
+  everyday-objects-as-a-topic is a live confound (nothing here rules out
+  "this specific topic underperforms" instead of "63.5s underperforms"),
+  so this is a hypothesis, not a finding. **Concrete action: default facts
+  episodes back toward the established 50-58s core range rather than
+  letting them drift toward 63s+, and specifically watch ep23 (space
+  facts, 66.06s — the longest facts episode built, still pending) as the
+  next real test of this hypothesis** — if ep23 also lands low, that's two
+  independent long episodes both underperforming and worth treating as a
+  real length ceiling; if it lands normal, ep18's low number was more
+  likely the topic than the length.
+- **Story-lead correction: Inky (ep14, the octopus escape story) was never
+  actually blocked any more — it just wasn't re-checked.** It was
+  deliberately held 2026-08-03 "until the first story (ep17) has real
+  retention data in" — that condition was satisfied when ep17 finalized
+  (before tonight, see the 2026-08-06 log). So as of tonight there are
+  **two ready story leads, not one**: `story_moa_lead.txt` (fact-checked,
+  script-locked) and `docs/skill/story14_lead.txt` (Inky, fact-checked,
+  written, its hold condition already cleared). Both should be treated as
+  available for the next story slot, not just moa.
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
