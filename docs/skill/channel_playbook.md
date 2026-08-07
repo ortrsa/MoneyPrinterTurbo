@@ -35,14 +35,15 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
 - Ep23/build-key (space facts, retitled live to "Facts 21 👀") **published,
   public**, video id `EtNhXZdSKZc`, 22:30 slot 2026-08-06.
 - **Ep24 (big cats) and ep25 (weather phenomena)** — today's 09:00 build —
-  are **sent to Telegram, awaiting owner approval**. Both had real footage
-  defects caught by post-render frame verification (not by pre-render
-  probing) and fixed before delivery; full detail in `episode_log.csv` rows
-  24/25 and the dated §5c entry below. Their `metadata.title` currently reads
-  "Facts 22"/"Facts 23" — **re-check the live channel's highest "Facts N"
-  title before the next approval/publish job**, since the running sequence
-  should be 19→20→21→22→23 if ep22/ep23 above published cleanly under their
-  synced titles, but confirm via the Data API rather than assuming.
+  are **approved by the owner (2026-08-07), awaiting the 16:30/22:30 publish
+  jobs**. Both had real footage defects caught by post-render frame
+  verification (not by pre-render probing) and fixed before delivery; full
+  detail in `episode_log.csv` rows 24/25 and the dated §5c entry below.
+  `storage/todays_uploads.json` already records both as `approved: true`,
+  `published: false`, pointing at each episode's `result_json`. Live-title
+  check already done at approval time: highest live "Facts N" is 21, so
+  ep24/ep25's current titles ("Facts 22"/"Facts 23") are correct as-is — no
+  retitling needed before publish.
 
 **New capabilities added this session, both need conscious use, neither is
 automatic yet:**
@@ -96,8 +97,10 @@ and then the Moon — no real ice-giant footage exists in the Pexels catalog
 under any tried term, so this was replaced with a stylized
 hand-holding-Earth-against-a-large-blue-sphere clip that reads as an
 explicit scale comparison rather than as wrong-but-confident Earth footage.
-Full detail in `episode_log.csv` rows 24/25. **Neither is approved yet — the
-next 13:00 job needs the owner's reply before either can go live.**
+Full detail in `episode_log.csv` rows 24/25. **Both approved by the owner
+2026-08-07** ("שתיהם מאושרים") — confirmed live titles top out at "Facts 21"
+before recording approval, so ep24/ep25's current "Facts 22"/"Facts 23"
+titles need no retitling this time. Awaiting the 16:30/22:30 publish jobs.
 
 **Reconfirmed this session: Pexels search-result ordering is not stable
 between calls of an identical query, even minutes apart** — this is now the
