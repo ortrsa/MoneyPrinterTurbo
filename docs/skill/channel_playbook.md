@@ -90,25 +90,29 @@ an outro that asks for the disagreement. Pass **`--counter-mode countdown`**
 narration says "number one"). The driver was a channel-level diagnosis, not a
 retention tweak: 15.5k views had produced **18 subscribers** (0.12%) and **10
 comments across 25 videos**. Full reasoning and the exact spec are in §5d.
-**Transition SFX is on by default** (§5e) — a synthesised whoosh at every
-fact boundary, `--no-sfx` opts out. **Background music is opt-in, not
-default** — owner said explicitly not to put music on every video, so it
-only applies when a build passes `--bgm` (same measured -18dB level as
-before, just no longer automatic).
+**Transition SFX is opt-in, OFF by default** since 2026-08-08 (§5e) — pass
+`--sfx` to add it. **Background music is also opt-in** — `--bgm` (same
+measured -18dB level). Neither is a build's default behavior; both need to
+be asked for.
 
-**SFX FIX 2026-08-08 — read §5e's dated entry before touching the audio
-pipeline.** Owner: the transition sound was always identical and often felt
-disconnected from the cut. Fixed two things in `viral.add_transition_sfx()`:
-(1) `--sfx-file` now defaults to a **directory** of 4 distinct whoosh
-variants (`resource/sfx/transitions/`), randomized per transition with no
-back-to-back repeats — pass a single `.wav` file instead of a directory to
-force one sound everywhere again; (2) the sound now starts ~40% of its own
-duration **before** the cut instead of exactly on it, so it audibly spans
-both the outgoing and incoming shot instead of only belonging to the new
-one. Verified by measuring the actual output audio of a synthetic test
-render, not by ear (this environment still can't listen). Not yet applied to
-any real episode — next build to use `--sfx-file`'s new default should be
-the next 09:00 job.
+**SFX: tried, fixed twice, then dropped — read §5e's dated entries before
+touching the audio pipeline again.** It was on by default for one day
+(2026-08-07). Owner feedback that day: the transition sound was always
+identical and often felt disconnected from the cut. Fixed both problems in
+`viral.add_transition_sfx()` — a 4-variant pool instead of one fixed file
+(`resource/sfx/transitions/`, randomized with no back-to-back repeats), and
+placement shifted to start ~40% of the sound's own duration *before* the
+cut so it bridges the outgoing/incoming shot instead of stinging the new
+one. Verified by measuring actual output audio, not by ear. Applied to
+today's two live episodes retroactively (the code fix landed after they'd
+already been built, so they'd shipped with the old single-sound behavior —
+caught by the owner, re-fixed from the cached pre-SFX intermediate file, no
+full re-render needed). **Then, same day, the owner said it still didn't
+sound good and asked to drop it entirely.** `--sfx` is now opt-in (default
+off, argument renamed from `--no-sfx`) — the pool/bridging code stays in the
+repo, unused unless explicitly asked for again. Do not re-enable this by
+default without being asked; two real fix attempts already didn't clear the
+bar.
 
 **New capabilities added this session, both need conscious use, neither is
 automatic yet:**
@@ -1246,11 +1250,12 @@ knowing regardless of the default:
   failed and fell back) — so "did music help" stays honestly answerable
   later, same reasoning as `narration_speed`.
 
-**Transition SFX — `--no-sfx` to disable, ON by default.** A short "whoosh"
-plays at the start of the hook→fact-1 transition and at every fact boundary
-after that (`viral.add_transition_sfx()`, timestamps taken from
-`fact_timings`). Unlike music, the owner asked for this outright, so it
-defaults on rather than needing to be opted into.
+**Transition SFX — `--sfx` to enable, OFF by default (flipped 2026-08-08,
+see below).** A short "whoosh" plays at the start of the hook→fact-1
+transition and at every fact boundary after that (`viral.add_transition_sfx()`,
+timestamps taken from `fact_timings`). Briefly defaulted on (2026-08-07 only)
+because the owner asked for it outright then; after it didn't hold up even
+with fixes, it went back to opt-in like everything else in this section.
 
 - **No usable asset existed anywhere in the repo or `Pexels`** (that catalog
   is video only) for this, so `docs/skill/make_transition_sfx.py` synthesises
@@ -1344,6 +1349,32 @@ default.
 `.wav` path still works and forces that one sound everywhere, same as
 before 2026-08-08.
 
+**Same day, a few hours later — the fix worked, and the owner still didn't
+want it.** Both real bugs above (identical sound, unconnected placement)
+were confirmed fixed, and the fix was applied retroactively to both of that
+day's live episodes (§0's "SFX FIX" paragraph has the retroactive-apply
+story). The owner's next message: "תוריד את האפקטים של המעברים זה לא נשמע
+טוב" — remove the transition effects, it doesn't sound good. Read as a
+general call on the feature, not a one-off for those two videos (unlike the
+same message's second half, which *was* scoped to "the 2 videos" — see the
+BGM entry below). `viral_episode.py`'s CLI flag was renamed `--no-sfx` →
+`--sfx` and its default flipped to off, matching how `--bgm` already works —
+opt-in, not assumed. The pool/bridging code in `app/services/viral.py` is
+untouched and fully working; it's just not called unless `--sfx` is passed.
+**Do not re-enable this as a default without being asked again** — it went
+through a real fix cycle (not a guess-and-hope) and the owner still said no.
+If asked to revisit, the pool and bridging logic are ready to use as-is.
+
+**Same message, BGM half — scoped to "the 2 videos," not a default flip.**
+"עדיין אין מוזיקת רקע ל-2 הסרטונים" — there's still no background music for
+the 2 videos — reads as pointing at that day's two specific renders, not a
+request to make `--bgm` the default again (which would contradict the
+2026-08-07 "don't put music on every video" instruction, never reversed).
+Added music to both of that day's episodes on request; **`--bgm` stays
+opt-in, the pipeline default is unchanged.** If this reading turns out
+wrong, the fix is a one-line default flip, not a design change — flag it if
+the owner asks for music again on a day when they didn't explicitly say so.
+
 ## 5f. How to reverse the 2026-08-07 changes
 
 All three changes above are controlled by runtime flags, so **reversing any
@@ -1353,10 +1384,9 @@ of them needs no code edit and no re-render**:
 |---|---|
 | Ranked countdown | Just stop passing `--counter-mode countdown`. `progress` is still the built-in default, so the old `1/6…6/6` listicle needs no flag at all. |
 | Background music | Nothing to do — `--bgm` is opt-in, so a normal build already has no music. If one specific build passed `--bgm`, just don't pass it next time. |
-| Transition SFX on one episode | `--no-sfx`. Restores the pre-2026-08-07 audio path exactly: captions burn straight to `final-viral.mp4`, no further passes. |
-| Transition SFX everywhere | Set `--no-sfx` in the build job. |
-| SFX variety (2026-08-08) | Pass `--sfx-file resource/sfx/whoosh.wav` (a single file, not the `transitions/` directory) to force one sound everywhere again. |
-| SFX cut-bridging placement (2026-08-08) | Not exposed as a flag — pass `bridge_frac=0.0` to `viral.add_transition_sfx()` directly (code edit) to restore "starts exactly at the cut." No owner request for this yet; only the "always the same sound" half was asked to stay reversible via a flag. |
+| Transition SFX (as of 2026-08-08, `--sfx` is opt-in and OFF by default) | Nothing to do — a normal build already has no SFX. To add it back for a specific build, pass `--sfx` (the old `--no-sfx` flag no longer exists, it was renamed and its default flipped the same day it was added). |
+| SFX variety (2026-08-08, only matters if `--sfx` is passed) | Pass `--sfx-file resource/sfx/whoosh.wav` (a single file, not the `transitions/` directory) to force one sound everywhere again. |
+| SFX cut-bridging placement (2026-08-08, only matters if `--sfx` is passed) | Not exposed as a flag — pass `bridge_frac=0.0` to `viral.add_transition_sfx()` directly (code edit) to restore "starts exactly at the cut." No owner request for this yet; only the "always the same sound" half was asked to stay reversible via a flag. |
 | Just a volume | `--bgm-volume` / `--sfx-volume`, or re-mix from the relevant intermediate file in the task dir — no re-render needed. |
 
 If the code itself has to go, the behaviour-changing commits revert cleanly

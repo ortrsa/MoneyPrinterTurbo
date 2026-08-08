@@ -667,11 +667,14 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
-        "--no-sfx",
+        "--sfx",
         action="store_true",
         help=(
-            "不加转场音效。转场音效默认开启（owner 2026-08-07 要求）——"
-            "和背景音乐不同，这个是默认行为，这个开关只是留退路。"
+            "垫转场音效。**默认关闭**（owner 2026-08-08 反馈：即使换成 4 变体 + "
+            "跨切点摆放，效果还是不好听，直接不要了）——2026-08-07 曾经默认开启过一天，"
+            "现在和背景音乐一样改回显式选用，不是每集的默认行为。代码留着（`--sfx-file` "
+            "的变体池、`add_transition_sfx` 的跨切点摆放都还在），万一以后想法变了可以直接"
+            "重新打开，不用重写。"
         ),
     )
     parser.add_argument(
@@ -989,7 +992,7 @@ def main(argv: list[str] | None = None) -> int:
 
     sfx_applied = False
     sfx_pool: list[str] = []
-    if not args.no_sfx:
+    if args.sfx:
         sfx_path = task_dir / "with-sfx.mp4"
         try:
             # --sfx-file 既可以是一个目录（池子，每个转场随机挑一个且不与
