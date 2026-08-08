@@ -1404,6 +1404,18 @@ future build gets; hand-picking by analyzed mood is a nice-to-have worth
 doing again for a story or a tonally distinct episode, not required every
 time.
 
+**Gap closed same day: `story_episode.py` had no music support at all
+before this.** Adding music to the moa episode required a one-off Python
+script calling `viral.mix_background_music()` directly, because the story
+pipeline's CLI never had `--bgm`. Since the owner's instruction was "every
+video" needs varied music, not just facts-format ones, wired `--bgm` /
+`--bgm-file` / `--bgm-volume` into `story_episode.py` properly — same
+opt-in default, same random-track-per-render behavior, writes through a
+`with-captions.mp4` intermediate exactly like `viral_episode.py` so a
+failed mix can't kill an otherwise-good render. Stories still get no
+transition SFX and never did (no per-fact boundaries to hang a whoosh on,
+irrelevant to today's SFX removal either way).
+
 ## 5f. How to reverse the 2026-08-07 changes
 
 All three changes above are controlled by runtime flags, so **reversing any

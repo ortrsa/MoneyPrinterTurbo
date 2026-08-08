@@ -23,7 +23,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
 import re
+import shutil
 import uuid
 from pathlib import Path
 
@@ -503,6 +505,32 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     parser.add_argument(
+        "--bgm",
+        action="store_true",
+        help=(
+            "垫一条背景音乐在旁白下面。默认关闭，和 viral_episode.py 一致。"
+            "2026-08-08 之前 story_episode.py 完全没接这个——moa 那一集的配乐是"
+            "事后手写脚本单独跑 viral.mix_background_music() 补上的，现在接成"
+            "正式参数，不用再手动补。"
+        ),
+    )
+    parser.add_argument(
+        "--bgm-file",
+        type=Path,
+        default=None,
+        help=(
+            "配合 --bgm 用。不传则从 resource/songs/ 里随机挑一首（和 "
+            "viral_episode.py 同样的 2026-08-08 owner 要求：别老用同一首，按集换）。"
+            "换固定歌就显式传路径。"
+        ),
+    )
+    parser.add_argument(
+        "--bgm-volume",
+        type=float,
+        default=None,
+        help="背景音乐音量倍数，不传则用 app/services/viral.py 里 DEFAULT_BGM_VOLUME。",
+    )
+    parser.add_argument(
         "--pinned-comment",
         default=None,
         help="发布后建议置顶的评论文案，随成片一起发去 Telegram。不传则跳过这一项。",
@@ -726,12 +754,36 @@ def main(argv: list[str] | None = None) -> int:
     ass_path.write_text(ass_text, encoding="utf-8")
 
     output_path = task_dir / "final-story.mp4"
+    captions_path = task_dir / "with-captions.mp4"
     viral.burn_overlay(
         video_in=str(video_path),
         ass_file=str(ass_path),
-        video_out=str(output_path),
+        video_out=str(captions_path),
         fonts_dir=str(PROJECT_ROOT / "resource" / "fonts"),
     )
+
+    bgm_applied = False
+    bgm_file_used: Path | None = None
+    if args.bgm:
+        try:
+            bgm_file_used = args.bgm_file or random.choice(
+                sorted(ve.SONGS_DIR.glob("*.mp3"))
+            )
+            bgm_kwargs = {}
+            if args.bgm_volume is not None:
+                bgm_kwargs["volume"] = args.bgm_volume
+            viral.mix_background_music(
+                video_in=str(captions_path),
+                video_out=str(output_path),
+                bgm_file=str(bgm_file_used),
+                **bgm_kwargs,
+            )
+            bgm_applied = True
+        except Exception as exc:
+            logger.warning(f"background music failed, skipping: {exc}")
+            shutil.copyfile(captions_path, output_path)
+    else:
+        shutil.copyfile(captions_path, output_path)
 
     result = {
         "episode": args.episode,
@@ -748,6 +800,10 @@ def main(argv: list[str] | None = None) -> int:
         # 回头解释留存变化时也要用。
         "ai_generated_segments": sorted(clip_overrides) if clip_overrides else [],
         "narration_speed": args.narration_speed,
+        # 记的是实际结果不是命令行要求：混音失败会静默退回无音乐版本，
+        # 见 viral_episode.py 同名字段的注释，这里是同一条原则。
+        "bgm_file": str(bgm_file_used) if bgm_applied else None,
+        "bgm_volume": (args.bgm_volume if args.bgm_volume is not None else viral.DEFAULT_BGM_VOLUME) if bgm_applied else None,
         "segment_timings": [
             {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
             for i, s in enumerate(all_segments)
