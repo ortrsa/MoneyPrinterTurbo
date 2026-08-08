@@ -55,6 +55,17 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
   26/27. Slot assignment: ep27 (insects) → 16:30, ep26 (moa) → 22:30. Neither
   slot has been recorded into `storage/todays_uploads.json` yet — that's the
   13:00 job's job, once the owner approves.
+  **Same-morning follow-up on ep26:** owner flagged that both "New Zealand"
+  mentions (the mid-episode fact and the outro) showed generic fern-leaf
+  close-ups and felt repetitive/disconnected from the words. Generated a
+  third AI clip (Veo 3.1-fast) — a sweeping aerial shot over misty NZ
+  rainforest with mountains — and spliced it into both spots, replacing the
+  fern footage. `story-result.json`'s `video_file` was updated **in place**
+  to point at the corrected, recompressed render (46MB) since that field is
+  what `upload_video.py` actually reads — the corrected version was resent to
+  Telegram and is what should be approved, not the original send. Full
+  detail (prompt, verification, AI-segment count) in `episode_log.csv` row
+  26's updated outcome_note.
 
 **FORMAT CHANGE 2026-08-07 — read §5d before building anything.** The flat
 6-fact listicle is no longer the default. New facts episodes are
