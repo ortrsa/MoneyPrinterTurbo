@@ -41,7 +41,9 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
 - Ep25 (weather phenomena, "Facts 23 👀") **published, public**, video id
   `vo1w94hVmjY`, 22:30 slot 2026-08-07.
 - **Ep26 (moa story) and ep27 (insects, "Facts 24 👀")** — today's 2026-08-08
-  09:00 build — are **built and sent to Telegram, awaiting owner approval**.
+  09:00 build. Both **approved and published, public**: ep27 at the 16:30
+  slot, video id `ygEgNnja-2I`; ep26 at the 22:30 slot, video id
+  `m8MyE4SPKZ0`, published live by the automated 22:30 job.
   This is the first STORY built since ep21, applying the 2026-08-07 20:00
   report's concrete action (both prior stories now beat the facts baseline on
   retention — see §5c). Ep26 is the moa story, script locked since
@@ -81,6 +83,33 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
   landed — check whether anything built earlier that same session needs the
   same re-application, don't assume "the code is fixed" means "every
   already-sent file reflects it."**
+
+- **Ep28 (true crime, Ina Kenoyer $30M fake-inheritance poisoning)** — built
+  2026-08-08 from an owner-supplied lead (a Facebook repost linking to NBC
+  News), explicitly flagged as a high-priority viral build with specific
+  requirements: more than 3 AI clips combined with real Pexels footage,
+  30-45s, full hook/story-arc structure. **Sent to Telegram, awaiting owner
+  approval — has no assigned slot.** Independently fact-checked across 6
+  outlets before writing a fresh script (never copied the source post's own
+  wording) — see `docs/skill/story_kenoyer_lead.txt`. Locked via
+  `--from-dry-run` (`docs/skill/plans/locked_scripts/kenoyer_locked.json`).
+  4 AI-generated segments (hook, poison, hospital, reveal/twist) — above the
+  ai-footage-fill skill's normal 1-2 clip default, justified since the owner
+  explicitly asked for it — all deliberately symbolic/non-likeness (silhouette,
+  hands-only, empty corridor, empty envelope), since unlike the channel's
+  other true-crime-adjacent leads (decades/centuries old), this is a real,
+  recently-resolved case with a real convicted defendant and real named
+  victim. First render caught two real defects on frame verification, fixed
+  before delivery without touching the AI clips or the locked script: (1) the
+  Pexels term for the email/relationship beat ("person reading laptop
+  shocked") pulled a happy couple high-fiving at a laptop for its first cut —
+  wrong tone for a somber narration — swapped to "person reading email
+  serious concerned"; (2) the term for the outro/prison beat ("prison bars
+  hallway") pulled a **male** prisoner right on the "serving twenty five
+  years" line — Kenoyer, the convicted person, is a woman — swapped to
+  "woman prisoner orange jumpsuit cell", verified correct gender on
+  re-render. Final: 35.96s, 18.1MB (no compression needed). Full detail in
+  `episode_log.csv` row 28.
 
 **FORMAT CHANGE 2026-08-07 — read §5d before building anything.** The flat
 6-fact listicle is no longer the default. New facts episodes are
