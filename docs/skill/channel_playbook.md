@@ -1802,6 +1802,53 @@ point for a length-hurts-retention hypothesis.**
   written, its hold condition already cleared). Both should be treated as
   available for the next story slot, not just moa.
 
+**2026-08-08 20:00 report — two episodes finalize: ep20 undercuts the
+hook-shape hypothesis, ep21 turns the "unexplained flop" thread into a
+real finding.**
+
+- **Ep20 (human body, 35.28%) was a deliberate strange-image-statement
+  hook, built specifically to grow item 1's ep4-comparison.** Ep4 (also
+  statement-form) sits at 81.59% — the channel's outlier high. Ep20, same
+  hook shape, lands at 35.28%: third-worst finalized facts episode on the
+  channel, despite having the **highest footage-specificity rating logged
+  so far (~4.6/5)**. A 46-point spread between two statement-hook episodes
+  is bigger than most of the *cross-shape* comparisons this log has been
+  tracking. **Concrete action: stop attributing ep4's outlier status to its
+  hook shape** — ep20 is direct counter-evidence that "open on the strange
+  image" reliably lifts retention on its own. Whatever made ep4 exceptional
+  (topic, specific facts, luck) is still unexplained; pick hook shape for
+  variety and fit, not as a retention lever. Also worth flagging as a
+  second counter-data-point against "higher footage-specificity rating
+  predicts better retention" (item 2) — ep20's 4.6/5 did not protect it
+  from a below-average result. Both open actions stay open (n is still
+  small), but neither should be treated as validated just because the
+  channel keeps collecting the data.
+- **Ep21 (D-Day story, 82.83% retention on only 28 views) reframes last
+  night's "unexplained severe flop" entry with real evidence, not just
+  ruled-out technical causes.** The handful of people who actually saw it
+  watched **82.83% of it** — above ep4's 81.59% record, and far above the
+  ~46% facts baseline. Facts 8 (the channel's other severe outlier, also
+  28 views) finalized earlier at 51.88% — also at-or-above average. **Both
+  of the channel's severe-outlier flops now have above-average retention
+  among the tiny audience that saw them.** That is real, if thin (n=2,
+  each on a handful of views), evidence for "this is a distribution miss,
+  not a content miss" — content that bad would not hold attention this
+  well even for 28 people. **Concrete action: when a future episode flops
+  this hard, check retention as soon as it's available before spending more
+  effort second-guessing the episode's structure or facts** — on this
+  channel's evidence so far, a severe view-count flop with strong retention
+  among actual viewers means the algorithm didn't show it to people, not
+  that the video itself was bad.
+- **Ep13's retention drifted from 59.64% to 66.71%** as more Analytics data
+  landed — now the second-best finalized episode on the channel behind ep4.
+  Not a new data point (already logged), just noting the drift is larger
+  than the small day-to-day movement seen on other episodes; no action
+  needed.
+- **Length hypothesis still open:** ep23 (space, 66.06s — the longest facts
+  episode built) is still "pending" as of tonight, still the next real test
+  of whether ep18's weak 31.51%/63.5s result generalizes to length or was
+  specific to the everyday-objects topic. Watch tomorrow.
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
