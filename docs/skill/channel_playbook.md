@@ -19,7 +19,7 @@ saying so is more useful than sounding confident.
 
 ---
 
-## 0. State as of 2026-08-07 07:10 Israel — read this first
+## 0. State as of 2026-08-08 09:40 Israel — read this first
 
 A pinned summary for picking up a fresh session fast. Full rationale for every
 line here is in the dated sections below and in `SKILL.md`; this is only the
@@ -30,20 +30,31 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
   Its live YouTube title reads "Random But True Facts 19 👀" — a mislabel from
   a manual upload the owner did outside a session; owner declined the fix.
 - Ep21 (D-Day crossword) is **published, public**, video id `S_zjnvbzZXw`.
-- Ep22/build-key (pizza, retitled live to "Facts 20 👀") **published, public**,
-  video id `yfuSDGdpTw4`, 16:30 slot 2026-08-06.
-- Ep23/build-key (space facts, retitled live to "Facts 21 👀") **published,
-  public**, video id `EtNhXZdSKZc`, 22:30 slot 2026-08-06.
-- **Ep24 (big cats) and ep25 (weather phenomena)** — today's 09:00 build —
-  are **approved by the owner (2026-08-07), awaiting the 16:30/22:30 publish
-  jobs**. Both had real footage defects caught by post-render frame
-  verification (not by pre-render probing) and fixed before delivery; full
-  detail in `episode_log.csv` rows 24/25 and the dated §5c entry below.
-  `storage/todays_uploads.json` already records both as `approved: true`,
-  `published: false`, pointing at each episode's `result_json`. Live-title
-  check already done at approval time: highest live "Facts N" is 21, so
-  ep24/ep25's current titles ("Facts 22"/"Facts 23") are correct as-is — no
-  retitling needed before publish.
+  Flagged 2026-08-07 as underperforming (27 views); investigated, no fixable
+  cause found — see the dated §5c entry.
+- Ep22 (pizza, "Facts 20 👀") **published, public**, video id `yfuSDGdpTw4`,
+  16:30 slot 2026-08-06.
+- Ep23 (space facts, "Facts 21 👀") **published, public**, video id
+  `EtNhXZdSKZc`, 22:30 slot 2026-08-06.
+- Ep24 (big cats, "Facts 22 👀") **published, public**, video id
+  `DsoMMdBDb7Q`, 16:30 slot 2026-08-07.
+- Ep25 (weather phenomena, "Facts 23 👀") **published, public**, video id
+  `vo1w94hVmjY`, 22:30 slot 2026-08-07.
+- **Ep26 (moa story) and ep27 (insects, "Facts 24 👀")** — today's 2026-08-08
+  09:00 build — are **built and sent to Telegram, awaiting owner approval**.
+  This is the first STORY built since ep21, applying the 2026-08-07 20:00
+  report's concrete action (both prior stories now beat the facts baseline on
+  retention — see §5c). Ep26 is the moa story, script locked since
+  2026-08-03, first time actually rendered — cleanest frame-verification pass
+  of the session (avg footage specificity ~4.75/5), just ran long at 68.68s
+  (allowed for stories, 30-90s). Ep27 is the channel's first live
+  ranked-countdown episode, topic insects (fresh outlier research — calendar
+  and §5a list still exhausted), two footage bugs (empty-leaf hook cuts, a
+  mismatched crate-of-bugs shot) caught by frame verification and fixed via
+  clip-override splice before delivery. Full detail in `episode_log.csv` rows
+  26/27. Slot assignment: ep27 (insects) → 16:30, ep26 (moa) → 22:30. Neither
+  slot has been recorded into `storage/todays_uploads.json` yet — that's the
+  13:00 job's job, once the owner approves.
 
 **FORMAT CHANGE 2026-08-07 — read §5d before building anything.** The flat
 6-fact listicle is no longer the default. New facts episodes are
