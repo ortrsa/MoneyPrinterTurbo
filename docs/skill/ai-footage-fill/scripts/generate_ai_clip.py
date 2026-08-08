@@ -77,26 +77,27 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 # Defaults are deliberately overridable from config.toml and the CLI: Google
 # renames and retires these model IDs on its own schedule, and a rename should
 # be a one-line config edit, not a code change.
-# The entire Gemini 3.x image line - gemini-3.1-flash-image (aka "Nano
-# Banana 2"), gemini-3.1-flash-image-preview, gemini-3.1-flash-lite-image
-# ("Nano Banana 2 Lite"), and gemini-3-pro-image ("Nano Banana Pro") - all
-# appear in models.list() for this project but every one 404s when actually
-# called (checked 2026-08-05, re-checked 2026-08-08, same result both times).
-# Listed is not the same as enabled; this reads as a project-level
-# entitlement gap on Google's side, not a wrong model ID, since all four
-# names are otherwise correct and the pattern is identical across the whole
-# tier.
-#
-# owner 2026-08-08: configure 3.1 as the preferred model anyway, with an
-# automatic fallback to 2.5 (the newest model actually callable here) rather
-# than waiting for access before switching the default. This means nothing
-# breaks today, and the pipeline starts using 3.1 on its own the moment this
-# project's entitlements change - no code edit needed then, see
-# generate_first_frame()'s try/except and DEFAULT_IMAGE_MODEL_FALLBACK.
+# SOLVED 2026-08-08, was misdiagnosed on 2026-08-05: gemini-3.1-flash-image
+# ("Nano Banana 2") 404s at the regional Vertex location (us-central1) but
+# works fine at the "global" location. This was NOT a project entitlement
+# gap as first assumed - `models.list()` under `location="global"` shows
+# gemini-3.1-flash-image and nothing else in this tier; under
+# `location="us-central1"` the model is listed too (list doesn't distinguish
+# location the way calling it does) but every call 404s there. The fallback
+# model and Veo are the mirror image: both listed AND callable at
+# us-central1, NOT LISTED at all under "global". So the two models need two
+# different locations, not one shared client - see DEFAULT_IMAGE_LOCATION
+# and generate_first_frame()'s per-attempt client selection. Verified with a
+# real end-to-end call at location="global": returned a genuine PNG with
+# model_version confirming gemini-3.1-flash-image actually ran, not a
+# fallback in disguise.
 DEFAULT_IMAGE_MODEL = "gemini-3.1-flash-image"
 DEFAULT_IMAGE_MODEL_FALLBACK = "gemini-2.5-flash-image"
 DEFAULT_VIDEO_MODEL = "veo-3.1-fast-generate-001"
 DEFAULT_LOCATION = "us-central1"
+# Only the primary image model needs this; the fallback model and Veo stay
+# on DEFAULT_LOCATION, where they are the ones actually listed and working.
+DEFAULT_IMAGE_LOCATION = "global"
 DEFAULT_DURATION = 8
 DEFAULT_ASPECT = "9:16"
 DEFAULT_RESOLUTION = "1080p"
@@ -156,6 +157,10 @@ def load_ai_config(overrides: dict) -> dict:
         "image_model_fallback": section.get(
             "image_model_fallback", DEFAULT_IMAGE_MODEL_FALLBACK
         ),
+        # Only the primary image model needs a non-default location - see
+        # DEFAULT_IMAGE_LOCATION's comment. The fallback model and Veo use
+        # "location" above, unchanged.
+        "image_location": section.get("image_location", DEFAULT_IMAGE_LOCATION),
         "video_model": section.get("video_model", DEFAULT_VIDEO_MODEL),
     }
     for key, value in overrides.items():
@@ -164,8 +169,14 @@ def load_ai_config(overrides: dict) -> dict:
     return merged
 
 
-def build_client(config: dict):
+def build_client(config: dict, location: str | None = None):
     """Authenticate to whichever backend is configured.
+
+    ``location`` overrides ``config["location"]`` for this one client - used
+    to build a "global"-scoped client for the primary image model, whose
+    working location differs from everything else (see
+    DEFAULT_IMAGE_LOCATION). Ignored for the api-key backend, which has no
+    location concept (it's the Developer API, not Vertex).
 
     Every failure here is a setup problem with a specific fix, so each one says
     what to do rather than surfacing a raw library traceback.
@@ -211,7 +222,7 @@ def build_client(config: dict):
         vertexai=True,
         credentials=credentials,
         project=config["project"],
-        location=config["location"],
+        location=location or config["location"],
     )
 
 
@@ -279,7 +290,7 @@ def probe(config: dict) -> int:
     print(f"backend        {config['backend']}")
     if config["backend"] == "agent-platform":
         print(f"  project      {config['project']}")
-        print(f"  location     {config['location']}")
+        print(f"  location     {config['location']} (image model: {config['image_location']})")
         token_path = _resolve(config["token_file"])
         key_path = _resolve(config["service_account_file"])
         if token_path.exists():
@@ -321,24 +332,46 @@ def probe(config: dict) -> int:
             )
         return 1
 
-    print(f"Authenticated. {len(models)} models visible to this project.")
+    print(f"Authenticated. {len(models)} models visible to this project at location={config['location']}.")
 
-    # Reachability is not the same as entitlement: Veo in particular is often
-    # gated per-project, and finding that out now beats finding it out mid-build.
+    # Model visibility is location-scoped, not just project-scoped - the
+    # primary image model and everything else are listed (and callable) at
+    # different locations, confirmed 2026-08-08. So the fallback/video check
+    # uses this client (config["location"]); the primary image model gets
+    # its own client at image_location, since checking it here would give a
+    # false NOT LISTED even though it works fine at its real location.
     names = " ".join(getattr(m, "name", "") or "" for m in models)
     for label, model_id in (
-        ("image", config["image_model"]),
         ("image-fb", config["image_model_fallback"]),
         ("video", config["video_model"]),
     ):
         stem = model_id.split("/")[-1]
         mark = "visible" if stem in names else "NOT LISTED"
-        print(f"  {label:5} {stem:34} {mark}")
+        print(f"  {label:8} {stem:34} {mark}  (at {config['location']})")
+
+    image_location = config.get("image_location")
+    if config["backend"] == "agent-platform" and image_location:
+        image_client = build_client(config, location=image_location)
+        try:
+            image_models = list(image_client.models.list())
+            image_names = " ".join(getattr(m, "name", "") or "" for m in image_models)
+        except Exception as exc:
+            print(f"  image    FAILED to list models at {image_location}: {exc}")
+        else:
+            stem = config["image_model"].split("/")[-1]
+            mark = "visible" if stem in image_names else "NOT LISTED"
+            print(f"  {'image':8} {stem:34} {mark}  (at {image_location})")
+    else:
+        stem = config["image_model"].split("/")[-1]
+        mark = "visible" if stem in names else "NOT LISTED"
+        print(f"  {'image':8} {stem:34} {mark}  (at {config['location']})")
+
     print(
         "\n'NOT LISTED' is not always fatal - some models are callable without "
         "appearing\nin models.list() - but if generation later fails with a 404 "
         "or PERMISSION_DENIED,\nthis is the reason: request access for that model "
-        "on this project."
+        "on this project, or check\nwhether it needs a different location "
+        "(--image-model + image_location in config.toml)."
     )
     return 0
 
@@ -348,12 +381,13 @@ def generate_first_frame(
 ) -> tuple[bytes, str]:
     """Paint the opening frame with nano-banana.
 
-    Tries ``config["image_model"]`` first and falls back to
-    ``config["image_model_fallback"]`` on a 404/NOT_FOUND - the model is
-    listed but this project isn't entitled to call it (see the
-    DEFAULT_IMAGE_MODEL comment above). Any other error (safety refusal,
-    quota, auth) is not a fallback case and propagates as-is; silently
-    swallowing those would hide a real problem behind a model swap.
+    Tries ``config["image_model"]`` first, at ``config["image_location"]``
+    ("global" by default - see DEFAULT_IMAGE_LOCATION's comment for why this
+    model needs a different location than everything else), and falls back
+    to ``config["image_model_fallback"]`` at ``client``'s location on a
+    404/NOT_FOUND. Any other error (safety refusal, quota, auth) is not a
+    fallback case and propagates as-is; silently swallowing those would hide
+    a real problem behind a model swap.
 
     Returns ``(image_bytes, model_actually_used)`` - the caller records the
     real model in the sidecar JSON, not the one that was merely requested,
@@ -374,29 +408,36 @@ def generate_first_frame(
         image_config=types.ImageConfig(aspect_ratio=aspect),
     )
 
-    candidates = [config["image_model"]]
+    # Primary attempt uses its own client, scoped to image_location - this is
+    # the whole fix, the model 404s at the regular client's location.
+    # api-key backend has no location concept, so just reuse client there.
+    primary_client = client
+    image_location = config.get("image_location")
+    if config["backend"] == "agent-platform" and image_location:
+        primary_client = build_client(config, location=image_location)
+
     fallback = config.get("image_model_fallback")
+    attempts = [(config["image_model"], primary_client)]
     if fallback and fallback != config["image_model"]:
-        candidates.append(fallback)
+        attempts.append((fallback, client))
 
     response = None
     model_used = None
     last_404: Exception | None = None
-    for model in candidates:
+    for i, (model, model_client) in enumerate(attempts):
         try:
-            response = client.models.generate_content(
+            response = model_client.models.generate_content(
                 model=model, contents=image_prompt, config=gen_config
             )
             model_used = model
             break
         except errors.ClientError as exc:
             is_not_found = getattr(exc, "code", None) == 404 or "NOT_FOUND" in str(exc)
-            if not is_not_found or model is candidates[-1]:
+            if not is_not_found or i == len(attempts) - 1:
                 raise
             last_404 = exc
             print(
-                f"  {model} 404'd (not entitled on this project), "
-                f"falling back to {fallback}...",
+                f"  {model} 404'd, falling back to {attempts[i + 1][0]}...",
                 flush=True,
             )
 
@@ -509,8 +550,18 @@ def main(argv: list[str] | None = None) -> int:
         "images only). Inferred from config.toml when omitted.",
     )
     parser.add_argument("--project", help="override config.toml [google_ai] project")
-    parser.add_argument("--location", help="override config.toml [google_ai] location")
+    parser.add_argument(
+        "--location",
+        help="override config.toml [google_ai] location (used for the fallback "
+        "image model and Veo, not the primary image model - see --image-location)",
+    )
     parser.add_argument("--image-model")
+    parser.add_argument(
+        "--image-location",
+        help="Vertex location for the primary image model only (default "
+        f"{DEFAULT_IMAGE_LOCATION!r} - it 404s at the regular --location on this "
+        "project, see DEFAULT_IMAGE_LOCATION's comment)",
+    )
     parser.add_argument("--video-model")
     parser.add_argument(
         "--probe",
@@ -541,6 +592,7 @@ def main(argv: list[str] | None = None) -> int:
             "project": args.project,
             "location": args.location,
             "image_model": args.image_model,
+            "image_location": args.image_location,
             "video_model": args.video_model,
         }
     )
@@ -570,6 +622,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  out         {args.out}")
     print(
         f"  image model {config['image_model']}  ({args.aspect}, "
+        f"location: {config.get('image_location') or config['location']}, "
         f"fallback: {config['image_model_fallback']})"
     )
     if not args.image_only:

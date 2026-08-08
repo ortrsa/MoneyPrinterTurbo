@@ -122,19 +122,23 @@ automatic yet:**
   on either episode script. Credentials are live and working: Google Cloud
   project `ringed-rune-503816-b8`, OAuth token at `docs/skill/veo/token.json`
   (not a service-account key — the owner's choice, see the skill's own
-  SKILL.md for the setup path). **Image model default changed 2026-08-08:**
-  `gemini-3.1-flash-image` is now the preferred default (owner request),
-  with an automatic fallback to `gemini-2.5-flash-image` on a 404 — the
-  whole Gemini 3.x image tier ("Nano Banana 2" and siblings) still 404s on
-  this project despite being listed (re-confirmed 2026-08-08, same result
-  as 2026-08-05), so every real generation still lands on 2.5 today, but the
-  code will start using 3.1 on its own the moment this project's
-  entitlements change — no edit needed then. `generate_ai_clip.py`'s sidecar
-  JSON records the model that actually produced the image
-  (`image_model`) separately from the one that was requested
-  (`image_model_requested`), so this is honestly answerable later. Video
-  model is `veo-3.1-fast-generate-001`, unaffected — Veo was never the
-  broken piece. **Not wired into the
+  SKILL.md for the setup path). **Image model fixed 2026-08-08:**
+  `gemini-3.1-flash-image` ("Nano Banana 2") now actually works — the
+  earlier "404s on this project despite being listed" note (2026-08-05) was
+  a wrong diagnosis, not a real entitlement gap. The model 404s at the
+  regional Vertex location (`us-central1`) but works at `location="global"`;
+  the owner asked to retry it with that location and it succeeded.
+  `generate_ai_clip.py` now calls the primary image model through its own
+  client at `image_location` (default `"global"`), separate from the client
+  used for the fallback model and Veo (`location`, default `us-central1`) —
+  those two live at different Vertex locations on this project and always
+  did, `models.list()` just didn't surface that distinction clearly. Still
+  falls back to `gemini-2.5-flash-image` on an actual 404, in case
+  entitlements ever do change; sidecar JSON records which model really ran.
+  Verified end to end: a real call through the CLI produced a genuine
+  on-topic image with `gemini-3.1-flash-image`, no fallback needed. Video
+  model is `veo-3.1-fast-generate-001`, unaffected throughout — Veo was
+  never the broken piece. **Not wired into the
   daily 09:00 flow** — the owner said keep the skill but don't default to
   using it until they say otherwise. First real (non-demo) use was ep21
   tonight: owner reviewed an all-Pexels cut against an AI-improved cut side
@@ -2249,32 +2253,48 @@ service-account key — mirrors the already-familiar
 the first frame, `veo-3.1-fast-generate-001` for the 8s animation. Verify any
 time with `uv run python docs/skill/ai-footage-fill/scripts/generate_ai_clip.py --probe`.
 
-**Model note, checked directly rather than assumed:** the entire Gemini 3.x
-image tier — `gemini-3.1-flash-image` ("Nano Banana 2"),
+**Model note, checked directly rather than assumed — and the original
+diagnosis was WRONG, corrected 2026-08-08.** The entire Gemini 3.x image
+tier — `gemini-3.1-flash-image` ("Nano Banana 2"),
 `gemini-3.1-flash-image-preview`, `gemini-3.1-flash-lite-image` ("Nano Banana
-2 Lite"), `gemini-3-pro-image` ("Nano Banana Pro") — all show up in
-`models.list()` for this project but every one 404s on an actual call. Listed
-is not the same as enabled. Re-confirmed 2026-08-08 (owner asked to re-try
-`gemini-3.1-flash-image` directly) — identical 404, same error message, same
-model name, so this is a stable project-level entitlement gap, not a fluke.
+2 Lite"), `gemini-3-pro-image` ("Nano Banana Pro") — showed up in
+`models.list()` for this project at the regional location (`us-central1`)
+but every one 404'd on an actual call there, first observed 2026-08-05 and
+re-confirmed 2026-08-08. That was read as a project-level entitlement gap
+("listed but not enabled"). **It wasn't.** The owner asked to try the exact
+call with `location="global"` instead of `us-central1`, and it worked —
+`gemini-3.1-flash-image` returned a real image, `model_version` in the
+response confirming it actually ran. Checked properly afterward:
+`models.list()` under `location="global"` shows *only*
+`gemini-3.1-flash-image` from this project's available models; under
+`location="us-central1"` the model is listed too but 404s on every call.
+The fallback model and Veo are the exact mirror image — listed and working
+at `us-central1`, **not listed at all** under `"global"`. So this was never
+one location being right and one being wrong across the board; the primary
+image model and everything else simply live in different Vertex locations
+on this project, and a single shared client (one location) could only ever
+reach one side.
 
-**2026-08-08: `gemini-3.1-flash-image` is now the configured *default*
-anyway, with an automatic runtime fallback to `gemini-2.5-flash-image`.**
-Owner's call, after seeing the 404 twice: don't wait for access before
-switching the default, since a code-level fallback means nothing breaks
-today and the pipeline switches to 3.1 on its own the instant this
-project's entitlements change. `generate_first_frame()` in
-`generate_ai_clip.py` tries `image_model` first, catches a 404 specifically
-(any other error — safety refusal, quota, auth — still propagates, since
-those aren't an entitlement gap and shouldn't be silently papered over),
-and retries with `image_model_fallback`. The sidecar JSON's `image_model`
-field records whichever one actually produced the image; the originally
-requested one is kept in `image_model_requested` for comparison. Verified
-end to end with a throwaway prompt: `--image-only` printed the 404 on 3.1,
-fell back to 2.5, and wrote a real image. Re-probe after requesting access,
-or just try a real build — if entitlements have changed, it'll show up as
-`image_model` matching `image_model_requested` in a future sidecar with no
-action needed.
+**Fixed 2026-08-08 in `generate_ai_clip.py`:** `gemini-3.1-flash-image` is
+the default image model, called through its own client scoped to
+`image_location` (default `"global"`, `DEFAULT_IMAGE_LOCATION`), separate
+from the client used for `image_model_fallback` and Veo (`location`,
+default `us-central1`, `DEFAULT_LOCATION`). Falls back to
+`gemini-2.5-flash-image` at the regular location only on an actual
+404/NOT_FOUND (any other error — safety refusal, quota, auth — still
+propagates rather than being silently papered over by a model swap). The
+sidecar JSON's `image_model` field records whichever model actually
+produced the image; `image_model_requested` keeps the one that was asked
+for, so a real access change later would show up as the two fields
+matching. `--probe` now lists the primary image model against its own
+location instead of the shared one, so it stops incorrectly reporting a
+working model as unreachable. Verified end to end with a throwaway prompt:
+ran through the real CLI, no fallback message printed, `gemini-3.1-flash-image`
+succeeded on the first attempt, produced a genuine on-topic image.
+**Lesson for next time a "listed but 404s" model shows up: check location
+before concluding it's an entitlement gap** — `models.list()` does not
+reliably distinguish "visible at this location" from "visible project-wide,
+callable somewhere else."
 
 **Three clips generated so far, all verified frame-by-frame before use:**
 
