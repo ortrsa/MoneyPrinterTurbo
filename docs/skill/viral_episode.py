@@ -83,10 +83,13 @@ DEFAULT_NARRATION_SPEED = 1.1
 # 曲会把这个作用直接抵消掉。
 DEFAULT_BGM_FILE = PROJECT_ROOT / "resource" / "songs" / "output000.mp3"
 
-# 转场音效：docs/skill/make_transition_sfx.py 合成的扫频音，不是下载素材——
-# 图库里没有音效，只有完整歌曲。默认用 whoosh（上扬）而不是 impact（低频撞击），
-# 因为"事实之间往前推进"比"砸下一拳"更贴这个频道的节奏。
-DEFAULT_SFX_FILE = PROJECT_ROOT / "resource" / "sfx" / "whoosh.wav"
+# 转场音效池：docs/skill/make_transition_sfx.py 合成的一组扫频音变体（时长/
+# 音域/扫频方向各不相同），不是下载素材——图库里没有音效，只有完整歌曲。
+# 2026-08-08 从"单一 whoosh.wav"改成"一个目录"：owner 反馈每次都是同一个
+# 声音听着假。默认整个目录传给 `viral.add_transition_sfx`，每个转场点从池子
+# 里挑一个且不与上一个重复；传单个文件（而不是目录）仍然只用那一个，行为
+# 和改动前一样，留作需要固定单一音色时的退路。
+DEFAULT_SFX_DIR = PROJECT_ROOT / "resource" / "sfx" / "transitions"
 
 FACT_PROMPT = (
     "Rewrite this fact as ONE or TWO short punchy sentences for a rapid-fire facts "
@@ -674,12 +677,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--sfx-file",
         type=Path,
-        default=DEFAULT_SFX_FILE,
+        default=DEFAULT_SFX_DIR,
         help=(
-            "每条事实开始时叠加的转场音效（含钩子结束、进入事实1）。默认 "
-            f"{DEFAULT_SFX_FILE.name}——扫频音效，仓库里没有现成素材，"
-            "用 docs/skill/make_transition_sfx.py 合成（无版权、可调参数、"
-            "长度和这个频道每 8 秒一次切换的节奏对得上）。"
+            "每条事实开始时叠加的转场音效（含钩子结束、进入事实1）。默认指向"
+            f"一个目录（{DEFAULT_SFX_DIR.relative_to(PROJECT_ROOT)}/），目录下每个 "
+            ".wav 都是候选，每个转场点随机挑一个且不与上一个重复——扫频音效，"
+            "仓库里没有现成素材，用 docs/skill/make_transition_sfx.py 合成。"
+            "传单个文件而不是目录则退回旧行为：每次转场都用同一个文件。"
         ),
     )
     parser.add_argument(
@@ -984,14 +988,23 @@ def main(argv: list[str] | None = None) -> int:
     current_path = captions_path
 
     sfx_applied = False
+    sfx_pool: list[str] = []
     if not args.no_sfx:
         sfx_path = task_dir / "with-sfx.mp4"
         try:
+            # --sfx-file 既可以是一个目录（池子，每个转场随机挑一个且不与
+            # 上一个重复）也可以是单个文件（退回旧行为，每次都用它）
+            if args.sfx_file.is_dir():
+                sfx_pool = sorted(str(p) for p in args.sfx_file.glob("*.wav"))
+                if not sfx_pool:
+                    raise RuntimeError(f"no .wav files in {args.sfx_file}")
+            else:
+                sfx_pool = [str(args.sfx_file)]
             fact_starts = [s.start for s in fact_segments]
             viral.add_transition_sfx(
                 video_in=str(current_path),
                 video_out=str(sfx_path),
-                sfx_file=str(args.sfx_file),
+                sfx_files=sfx_pool,
                 timestamps=fact_starts,
                 volume=args.sfx_volume,
             )
@@ -1039,7 +1052,9 @@ def main(argv: list[str] | None = None) -> int:
         # 这里若照抄参数，事后就会把一支没有音乐的成片当成有音乐的样本来比较。
         "bgm_file": str(args.bgm_file) if bgm_applied else None,
         "bgm_volume": args.bgm_volume if bgm_applied else None,
-        "sfx_file": str(args.sfx_file) if sfx_applied else None,
+        # 记录实际可选的音效池（不是某一次转场具体挑中了哪个——那是随机的，
+        # 池子本身才是"这份成片用了什么声音"这个问题的可复核答案）
+        "sfx_files": sfx_pool if sfx_applied else None,
         "segment_timings": [
             {"index": i, "start": round(s.start, 2), "end": round(s.end, 2)}
             for i, s in enumerate(all_segments)

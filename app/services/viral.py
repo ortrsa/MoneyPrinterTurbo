@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import os
+import random
 import shutil
 import subprocess
 from dataclasses import dataclass
@@ -683,28 +684,53 @@ def mix_background_music(
 # 同样的响度感受下瞬态可以放得更响。0.35 实测能听见但不抢词。
 DEFAULT_SFX_VOLUME = 0.35
 
+# 音效相对切点提前起播的比例（乘以该条音效自己的时长）。owner 2026-08-08
+# 反馈"转场音效感觉和画面不连接"——旧版本把整段音效放在切点*之后*，声音只
+# 属于新镜头，跟"转场"这个词本身矛盾（转场应该衔接前后两个镜头，而不是给
+# 新镜头贴一个提示音）。0.4 意味着约 40% 的音效时长盖在上一镜头的尾巴上，
+# 60% 落在下一镜头的开头——声音横跨切点，才是真的在两个镜头之间"架桥"。
+DEFAULT_SFX_BRIDGE_FRAC = 0.4
+
 
 def add_transition_sfx(
     video_in: str,
     video_out: str,
-    sfx_file: str,
+    sfx_files: str | list[str],
     timestamps: list[float],
     volume: float = DEFAULT_SFX_VOLUME,
+    bridge_frac: float = DEFAULT_SFX_BRIDGE_FRAC,
+    seed: int | None = None,
 ) -> str:
     """
     在给定时间点上叠一层转场音效，视频流 copy，只重编码音频。
 
-    `timestamps` 是每条事实的起点（`fact_timings` 里的 start）。音效落在
-    切换的那一刻，用来标记"上一条讲完了"。第 0 秒不放——片头第一帧就"嗖"
-    一声，听起来像播放器出错，而不是转场。
+    `timestamps` 是每条事实的起点（`fact_timings` 里的 start）。第 0 秒不放
+    ——片头第一帧就"嗖"一声，听起来像播放器出错，而不是转场。
 
-    做法是把音效用 `asplit` 复制 N 份，各自 `adelay` 到自己的时间点，再和
-    原音轨一起 `amix`。`normalize=0` 的理由和背景音乐那边一样：默认的归一化
-    会按输入路数把人声一起压小，路数越多压得越狠，这里有七八路，不关掉的话
-    旁白会直接小一半以上。
+    两个改动都是 2026-08-08 owner 反馈之后加的（原话：每次都是同一个声音，
+    听着很假，而且经常和画面对不上；转场的声音应该衔接前后两个镜头）：
+
+    1. **`sfx_files` 接受一个或多个文件**，多于一个时每个转场点从池子里随机
+       挑一个，且不与上一个转场点重复（避免"随机"两次撞在一起，听感上又变
+       回了单一音效）。单文件调用（旧调用方式）行为不变——池子只有一个，
+       每次都用它，纯粹是变量名从单数变复数，不影响既有调用方。
+    2. **音效起点提前到切点之前**，而不是卡在切点上（见 `DEFAULT_SFX_BRIDGE_FRAC`
+       的注释）。这一条对单文件/多文件调用都生效。
+
+    做法是给每个转场点各开一路独立的 ffmpeg 输入（哪怕几个转场点挑中了同一个
+    文件也各开各的——转场数量通常只有 5-8 个，重复打开同一文件的开销可以
+    忽略，换来的是不同转场点可以各自 `adelay` 到不同起点，比"一个输入 +
+    asplit"更直接）。`amix` 的 `normalize=0` 理由和之前一样：默认归一化会
+    按输入路数把人声一起压小，这里有五六路以上，不关掉旁白会明显变小。
     """
-    if not os.path.isfile(sfx_file):
-        raise RuntimeError(f"transition sfx file not found: {sfx_file}")
+    if isinstance(sfx_files, str):
+        sfx_files = [sfx_files]
+    sfx_files = list(dict.fromkeys(sfx_files))  # 去重，保序
+    if not sfx_files:
+        raise RuntimeError("no transition sfx files given")
+    for f in sfx_files:
+        if not os.path.isfile(f):
+            raise RuntimeError(f"transition sfx file not found: {f}")
 
     # 0 秒和重复的时间点都去掉：前者是片头不是转场，后者会在同一位置叠出
     # 双倍音量的一声
@@ -712,15 +738,33 @@ def add_transition_sfx(
     if not points:
         raise RuntimeError("no usable transition timestamps")
 
+    durations = {f: probe_duration(f) for f in sfx_files}
+
+    rng = random.Random(seed)
+    assignments: list[str] = []
+    previous: str | None = None
+    for _ in points:
+        candidates = [f for f in sfx_files if f != previous] or sfx_files
+        choice = rng.choice(candidates)
+        assignments.append(choice)
+        previous = choice
+
     ffmpeg = _ffmpeg_executable()
-    labels = [f"s{i}" for i in range(len(points))]
-    parts = [f"[1:a]asplit={len(points)}" + "".join(f"[r{i}]" for i in range(len(points)))]
-    for i, (point, label) in enumerate(zip(points, labels)):
-        ms = int(point * 1000)
-        parts.append(f"[r{i}]volume={volume},adelay={ms}|{ms}[{label}]")
+    input_args: list[str] = []
+    labels: list[str] = []
+    parts: list[str] = []
+    for i, (point, sfx_file) in enumerate(zip(points, assignments)):
+        input_args.extend(["-i", sfx_file])
+        dur = durations.get(sfx_file) or 0.0
+        start = max(0.0, point - dur * bridge_frac)
+        ms = int(start * 1000)
+        label = f"s{i}"
+        parts.append(f"[{i + 1}:a]volume={volume},adelay={ms}|{ms}[{label}]")
+        labels.append(label)
+
     mix_inputs = "[0:a]" + "".join(f"[{label}]" for label in labels)
     parts.append(
-        f"{mix_inputs}amix=inputs={len(points) + 1}:duration=first:normalize=0[out]"
+        f"{mix_inputs}amix=inputs={len(labels) + 1}:duration=first:normalize=0[out]"
     )
     filter_complex = ";".join(parts)
 
@@ -728,7 +772,7 @@ def add_transition_sfx(
         ffmpeg,
         "-y",
         "-i", video_in,
-        "-i", sfx_file,
+        *input_args,
         "-filter_complex", filter_complex,
         "-map", "0:v",
         "-map", "[out]",
@@ -738,9 +782,12 @@ def add_transition_sfx(
         "-loglevel", "error",
         video_out,
     ]
+    detail = ", ".join(
+        f"{p:.2f}s→{os.path.basename(f)}" for p, f in zip(points, assignments)
+    )
     logger.info(
-        f"adding {len(points)} transition sfx at {volume:g}: "
-        f"{os.path.basename(sfx_file)}"
+        f"adding {len(points)} transition sfx at {volume:g}, "
+        f"bridging {bridge_frac * 100:.0f}% across each cut, pool={len(sfx_files)}: {detail}"
     )
     result = subprocess.run(command, capture_output=True, text=True)
     if result.returncode != 0:

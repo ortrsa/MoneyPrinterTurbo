@@ -70,6 +70,20 @@ default** — owner said explicitly not to put music on every video, so it
 only applies when a build passes `--bgm` (same measured -18dB level as
 before, just no longer automatic).
 
+**SFX FIX 2026-08-08 — read §5e's dated entry before touching the audio
+pipeline.** Owner: the transition sound was always identical and often felt
+disconnected from the cut. Fixed two things in `viral.add_transition_sfx()`:
+(1) `--sfx-file` now defaults to a **directory** of 4 distinct whoosh
+variants (`resource/sfx/transitions/`), randomized per transition with no
+back-to-back repeats — pass a single `.wav` file instead of a directory to
+force one sound everywhere again; (2) the sound now starts ~40% of its own
+duration **before** the cut instead of exactly on it, so it audibly spans
+both the outgoing and incoming shot instead of only belonging to the new
+one. Verified by measuring the actual output audio of a synthetic test
+render, not by ear (this environment still can't listen). Not yet applied to
+any real episode — next build to use `--sfx-file`'s new default should be
+the next 09:00 job.
+
 **New capabilities added this session, both need conscious use, neither is
 automatic yet:**
 - **`docs/skill/ai-footage-fill/`** — generates a single AI B-roll clip
@@ -1233,8 +1247,10 @@ defaults on rather than needing to be opted into.
   input count). Verified against a silent test video before ever touching a
   real render: bursts of audio appear only in tight windows exactly at the
   requested timestamps, silence everywhere else.
-- `sfx_file` is recorded in the result JSON when applied, `None` otherwise —
-  same "record what happened, not what was asked" rule as music.
+- `sfx_files` (the resolved pool, not the one file a given transition
+  happened to land on — that part is random) is recorded in the result JSON
+  when applied, `None` otherwise — same "record what happened, not what was
+  asked" rule as music.
 
 **Neither pass can fail a render.** Both are wrapped: if the file is missing
 or ffmpeg errors, it logs a warning and the pipeline falls through to the
@@ -1250,6 +1266,58 @@ passes by running each against a nonexistent file and confirming
 stage can be re-run or re-mixed from the previous file's output without
 re-rendering the base video.
 
+**2026-08-08 fix — the single fixed whoosh sounded artificial and didn't
+connect the two shots it sat between.** Owner, verbatim (Hebrew): "כל פעם יש
+אותו סאונד במעברים זה נשמע מלאכותי וגם הרבה פעמים הוא לא קשור. צריך שהסאונד
+במעבר יהיה מקשר בין הסרטון שלפני לסרטון שאחרי ולא כל פעם אותו הסאונד" — every
+transition used the exact same sound (felt artificial), and it often didn't
+read as connected to the footage; the transition sound should bridge the clip
+before and the clip after, not repeat identically every time. Two separate
+problems, two separate fixes, both in `viral.add_transition_sfx()`:
+
+1. **Same file every time → a 4-variant pool, randomized per transition.**
+   `docs/skill/make_transition_sfx.py` now also generates
+   `resource/sfx/transitions/{transition_1..4}.wav` — distinct duration
+   (0.35–0.55s), frequency range, and one with a **reversed (falling) sweep**
+   instead of just parameter jitter on the same gesture, so the variants are
+   audibly different in kind, not just in pitch. `add_transition_sfx()` takes
+   `sfx_files: str | list[str]`; with more than one file it picks a random
+   one per transition point that is never the same as the immediately
+   previous pick (plain `random.choice` alone would let two identical sounds
+   land back to back and undo the fix). A single-string call still behaves
+   exactly as before — this is additive, not a breaking change.
+2. **Sound started exactly at the cut, so it only ever belonged to the new
+   shot → placement now straddles the cut.** The old code `adelay`'d the sfx
+   to the timestamp itself, meaning the *entire* sound played after the cut —
+   sonically it was "a stinger glued onto the new segment," never touching
+   the outgoing footage, which is exactly what "not connected" describes.
+   Fixed by starting the sound `DEFAULT_SFX_BRIDGE_FRAC` (0.4, i.e. 40% of
+   that sound's own duration) **before** the timestamp, clamped to not go
+   negative. Roughly 40% of the sound now plays over the tail of the
+   outgoing clip and 60% over the head of the incoming one — it bridges both
+   sides of the cut instead of announcing only one of them. This placement
+   change applies unconditionally, including to single-file/backward-compat
+   calls.
+
+**Verified without playback, same method as the original synthesis bugs**:
+built a 24s silent test video, ran the new function against it with a 4-file
+pool and four timestamps, then measured the *actual output audio* (not just
+trusted the log) — energy onset in each transition window landed
+0.18–0.22s **before** its nominal cut point (confirms bridging), and the
+per-window spectral centroid trend confirmed genuinely different sounds
+landed at different points, including the reversed-sweep variant measuring
+as falling (centroid dropped from ~3.3kHz to ~0.8kHz) where the others rose.
+Also confirmed byte-for-byte: `resource/sfx/whoosh.wav` is unchanged by this
+change (same synthesis params/seed as before, still there for anyone forcing
+a single file), and a plain-string call to `add_transition_sfx()` still
+reuses one file every time — old behavior, not removed, just no longer the
+default.
+
+`viral_episode.py --sfx-file` now defaults to the pool **directory**
+(`resource/sfx/transitions/`) instead of one file; passing it a single
+`.wav` path still works and forces that one sound everywhere, same as
+before 2026-08-08.
+
 ## 5f. How to reverse the 2026-08-07 changes
 
 All three changes above are controlled by runtime flags, so **reversing any
@@ -1261,6 +1329,8 @@ of them needs no code edit and no re-render**:
 | Background music | Nothing to do — `--bgm` is opt-in, so a normal build already has no music. If one specific build passed `--bgm`, just don't pass it next time. |
 | Transition SFX on one episode | `--no-sfx`. Restores the pre-2026-08-07 audio path exactly: captions burn straight to `final-viral.mp4`, no further passes. |
 | Transition SFX everywhere | Set `--no-sfx` in the build job. |
+| SFX variety (2026-08-08) | Pass `--sfx-file resource/sfx/whoosh.wav` (a single file, not the `transitions/` directory) to force one sound everywhere again. |
+| SFX cut-bridging placement (2026-08-08) | Not exposed as a flag — pass `bridge_frac=0.0` to `viral.add_transition_sfx()` directly (code edit) to restore "starts exactly at the cut." No owner request for this yet; only the "always the same sound" half was asked to stay reversible via a flag. |
 | Just a volume | `--bgm-volume` / `--sfx-volume`, or re-mix from the relevant intermediate file in the task dir — no re-render needed. |
 
 If the code itself has to go, the behaviour-changing commits revert cleanly

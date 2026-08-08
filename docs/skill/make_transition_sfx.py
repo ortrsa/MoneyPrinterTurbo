@@ -49,6 +49,7 @@ def make_whoosh(
     f_start: float = 300.0,
     f_end: float = 5000.0,
     sample_rate: int = SAMPLE_RATE,
+    seed: int = 20260807,
 ):
     """
     扫频白噪声，做成"嗖"的一声转场。
@@ -57,6 +58,14 @@ def make_whoosh(
     `f_start` 扫到 `f_end`，再用重叠相加拼回时域。比在时域上串一堆固定
     截止频率的 ffmpeg 滤波器更可控——ffmpeg 的 `lowpass/bandpass` 的
     截止频率不接受随时间变化的表达式，想扫频得自己切段再拼，反而更绕。
+
+    `f_start > f_end` 合法——扫频公式是指数插值，方向反过来就是下降扫频，
+    听感上是完全不同的"落"而不是"起"，用来做变体音色而不是只调时长/音域。
+
+    `seed` 默认固定，所以不传参数时和这个文件历史上生成的 `whoosh.wav`
+    逐字节一致；生成变体音效时每个变体传不同的 seed，否则不同 duration/
+    频率参数下噪声底噪的相关性会让几个变体听起来像同一个声音的音量差异，
+    而不是真正不同的音色。
     """
     import numpy as np
 
@@ -68,7 +77,7 @@ def make_whoosh(
     # 直接冲到满幅，听上去就是一声"啪"，正好是转场音最不该有的东西。
     pad = frame
     total = n + 2 * pad
-    rng = np.random.default_rng(20260807)
+    rng = np.random.default_rng(seed)
     noise = rng.standard_normal(total)
 
     window = np.hanning(frame)
@@ -121,9 +130,33 @@ def make_impact(
     return body + click
 
 
+# 转场音效池，2026-08-08 加入——owner 反馈"每次都是同一个声音，听着很假，
+# 而且经常和画面对不上"。单一 whoosh.wav 的问题有两层：(1) 每一次转场都是
+# 逐字节相同的文件，听多了确实机械；(2) `add_transition_sfx` 把音效整段
+# 放在切点*之后*，声音只属于新镜头，不横跨切点，所以听感上是"贴了一个音效"
+# 而不是"这一下把上一镜头带进下一镜头"。这里只解决第(1)层——生成一组扫频
+# 参数各不相同、其中一条方向相反（下降扫频，听感上是"落"不是"起"）的变体，
+# 而不是同一参数抖一下随机数；第(2)层（跨切点摆放）在 `viral.py` 里改。
+#
+# 每个变体给不同的 seed，否则 duration/频率变了、底噪的随机种子仍然一样，
+# 几个"变体"听起来只是同一段噪声的滤波器差异，不是真正不同的音色。
+TRANSITION_VARIANTS: dict[str, dict] = {
+    "transition_1.wav": dict(duration=0.45, f_start=300.0, f_end=5000.0, seed=20260807),
+    "transition_2.wav": dict(duration=0.55, f_start=220.0, f_end=3200.0, seed=20260808),
+    "transition_3.wav": dict(duration=0.35, f_start=450.0, f_end=6500.0, seed=20260809),
+    "transition_4.wav": dict(duration=0.50, f_start=4200.0, f_end=350.0, seed=20260810),
+}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out-dir", type=Path, default=PROJECT_ROOT / "resource" / "sfx")
+    parser.add_argument(
+        "--variants-dir",
+        type=Path,
+        default=PROJECT_ROOT / "resource" / "sfx" / "transitions",
+        help="转场音效池的输出目录，默认 resource/sfx/transitions/。",
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -139,6 +172,11 @@ def main(argv: list[str] | None = None) -> int:
     ):
         path = args.out_dir / name
         _write_wav(path, samples)
+        made.append(path)
+
+    for name, params in TRANSITION_VARIANTS.items():
+        path = args.variants_dir / name
+        _write_wav(path, make_whoosh(**params))
         made.append(path)
 
     print("wrote:")
