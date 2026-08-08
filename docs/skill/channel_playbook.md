@@ -122,10 +122,19 @@ automatic yet:**
   on either episode script. Credentials are live and working: Google Cloud
   project `ringed-rune-503816-b8`, OAuth token at `docs/skill/veo/token.json`
   (not a service-account key — the owner's choice, see the skill's own
-  SKILL.md for the setup path). Image model is `gemini-2.5-flash-image`
-  — the whole Gemini 3.x image tier ("Nano Banana 2" and siblings) 404s on
-  this project despite being listed, confirmed by direct testing, not a
-  guess. Video model is `veo-3.1-fast-generate-001`. **Not wired into the
+  SKILL.md for the setup path). **Image model default changed 2026-08-08:**
+  `gemini-3.1-flash-image` is now the preferred default (owner request),
+  with an automatic fallback to `gemini-2.5-flash-image` on a 404 — the
+  whole Gemini 3.x image tier ("Nano Banana 2" and siblings) still 404s on
+  this project despite being listed (re-confirmed 2026-08-08, same result
+  as 2026-08-05), so every real generation still lands on 2.5 today, but the
+  code will start using 3.1 on its own the moment this project's
+  entitlements change — no edit needed then. `generate_ai_clip.py`'s sidecar
+  JSON records the model that actually produced the image
+  (`image_model`) separately from the one that was requested
+  (`image_model_requested`), so this is honestly answerable later. Video
+  model is `veo-3.1-fast-generate-001`, unaffected — Veo was never the
+  broken piece. **Not wired into the
   daily 09:00 flow** — the owner said keep the skill but don't default to
   using it until they say otherwise. First real (non-demo) use was ep21
   tonight: owner reviewed an all-Pexels cut against an AI-improved cut side
@@ -2245,9 +2254,27 @@ image tier — `gemini-3.1-flash-image` ("Nano Banana 2"),
 `gemini-3.1-flash-image-preview`, `gemini-3.1-flash-lite-image` ("Nano Banana
 2 Lite"), `gemini-3-pro-image` ("Nano Banana Pro") — all show up in
 `models.list()` for this project but every one 404s on an actual call. Listed
-is not the same as enabled. Re-probe after requesting access if this matters
-later; don't re-try the same four names expecting a different result without
-that.
+is not the same as enabled. Re-confirmed 2026-08-08 (owner asked to re-try
+`gemini-3.1-flash-image` directly) — identical 404, same error message, same
+model name, so this is a stable project-level entitlement gap, not a fluke.
+
+**2026-08-08: `gemini-3.1-flash-image` is now the configured *default*
+anyway, with an automatic runtime fallback to `gemini-2.5-flash-image`.**
+Owner's call, after seeing the 404 twice: don't wait for access before
+switching the default, since a code-level fallback means nothing breaks
+today and the pipeline switches to 3.1 on its own the instant this
+project's entitlements change. `generate_first_frame()` in
+`generate_ai_clip.py` tries `image_model` first, catches a 404 specifically
+(any other error — safety refusal, quota, auth — still propagates, since
+those aren't an entitlement gap and shouldn't be silently papered over),
+and retries with `image_model_fallback`. The sidecar JSON's `image_model`
+field records whichever one actually produced the image; the originally
+requested one is kept in `image_model_requested` for comparison. Verified
+end to end with a throwaway prompt: `--image-only` printed the 404 on 3.1,
+fell back to 2.5, and wrote a real image. Re-probe after requesting access,
+or just try a real build — if entitlements have changed, it'll show up as
+`image_model` matching `image_model_requested` in a future sidecar with no
+action needed.
 
 **Three clips generated so far, all verified frame-by-frame before use:**
 

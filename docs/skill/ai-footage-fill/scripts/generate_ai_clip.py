@@ -81,13 +81,20 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 # Banana 2"), gemini-3.1-flash-image-preview, gemini-3.1-flash-lite-image
 # ("Nano Banana 2 Lite"), and gemini-3-pro-image ("Nano Banana Pro") - all
 # appear in models.list() for this project but every one 404s when actually
-# called (checked 2026-08-05). Listed is not the same as enabled; this reads
-# as a project-level entitlement gap on Google's side, not a wrong model ID,
-# since all four names are otherwise correct and the pattern is identical
-# across the whole tier. 2.5 is the newest image model that is actually
-# callable here. Re-probe with --probe after requesting access, or if this
-# project's entitlements change.
-DEFAULT_IMAGE_MODEL = "gemini-2.5-flash-image"
+# called (checked 2026-08-05, re-checked 2026-08-08, same result both times).
+# Listed is not the same as enabled; this reads as a project-level
+# entitlement gap on Google's side, not a wrong model ID, since all four
+# names are otherwise correct and the pattern is identical across the whole
+# tier.
+#
+# owner 2026-08-08: configure 3.1 as the preferred model anyway, with an
+# automatic fallback to 2.5 (the newest model actually callable here) rather
+# than waiting for access before switching the default. This means nothing
+# breaks today, and the pipeline starts using 3.1 on its own the moment this
+# project's entitlements change - no code edit needed then, see
+# generate_first_frame()'s try/except and DEFAULT_IMAGE_MODEL_FALLBACK.
+DEFAULT_IMAGE_MODEL = "gemini-3.1-flash-image"
+DEFAULT_IMAGE_MODEL_FALLBACK = "gemini-2.5-flash-image"
 DEFAULT_VIDEO_MODEL = "veo-3.1-fast-generate-001"
 DEFAULT_LOCATION = "us-central1"
 DEFAULT_DURATION = 8
@@ -146,6 +153,9 @@ def load_ai_config(overrides: dict) -> dict:
         "token_file": section.get("token_file", "docs/skill/veo/token.json"),
         "api_key": section.get("api_key"),
         "image_model": section.get("image_model", DEFAULT_IMAGE_MODEL),
+        "image_model_fallback": section.get(
+            "image_model_fallback", DEFAULT_IMAGE_MODEL_FALLBACK
+        ),
         "video_model": section.get("video_model", DEFAULT_VIDEO_MODEL),
     }
     for key, value in overrides.items():
@@ -282,7 +292,7 @@ def probe(config: dict) -> int:
         key = config.get("api_key") or ""
         print(f"  api key      {'set (' + key[:6] + '...)' if key else 'MISSING'}")
         print("  note         image generation only; Veo needs agent-platform")
-    print(f"  image model  {config['image_model']}")
+    print(f"  image model  {config['image_model']} (fallback: {config['image_model_fallback']})")
     print(f"  video model  {config['video_model']}")
     print()
 
@@ -318,6 +328,7 @@ def probe(config: dict) -> int:
     names = " ".join(getattr(m, "name", "") or "" for m in models)
     for label, model_id in (
         ("image", config["image_model"]),
+        ("image-fb", config["image_model_fallback"]),
         ("video", config["video_model"]),
     ):
         stem = model_id.split("/")[-1]
@@ -332,9 +343,24 @@ def probe(config: dict) -> int:
     return 0
 
 
-def generate_first_frame(client, config: dict, prompt: str, aspect: str) -> bytes:
-    """Paint the opening frame with nano-banana."""
-    from google.genai import types
+def generate_first_frame(
+    client, config: dict, prompt: str, aspect: str
+) -> tuple[bytes, str]:
+    """Paint the opening frame with nano-banana.
+
+    Tries ``config["image_model"]`` first and falls back to
+    ``config["image_model_fallback"]`` on a 404/NOT_FOUND - the model is
+    listed but this project isn't entitled to call it (see the
+    DEFAULT_IMAGE_MODEL comment above). Any other error (safety refusal,
+    quota, auth) is not a fallback case and propagates as-is; silently
+    swallowing those would hide a real problem behind a model swap.
+
+    Returns ``(image_bytes, model_actually_used)`` - the caller records the
+    real model in the sidecar JSON, not the one that was merely requested,
+    same "record what happened" rule the rest of this codebase follows for
+    bgm/sfx fallbacks.
+    """
+    from google.genai import errors, types
 
     image_prompt = (
         f"{prompt}\n\n"
@@ -343,20 +369,45 @@ def generate_first_frame(client, config: dict, prompt: str, aspect: str) -> byte
         "photorealistic. No text, no words, no numbers, no watermarks, no logos."
     )
 
-    response = client.models.generate_content(
-        model=config["image_model"],
-        contents=image_prompt,
-        config=types.GenerateContentConfig(
-            response_modalities=["IMAGE"],
-            image_config=types.ImageConfig(aspect_ratio=aspect),
-        ),
+    gen_config = types.GenerateContentConfig(
+        response_modalities=["IMAGE"],
+        image_config=types.ImageConfig(aspect_ratio=aspect),
     )
+
+    candidates = [config["image_model"]]
+    fallback = config.get("image_model_fallback")
+    if fallback and fallback != config["image_model"]:
+        candidates.append(fallback)
+
+    response = None
+    model_used = None
+    last_404: Exception | None = None
+    for model in candidates:
+        try:
+            response = client.models.generate_content(
+                model=model, contents=image_prompt, config=gen_config
+            )
+            model_used = model
+            break
+        except errors.ClientError as exc:
+            is_not_found = getattr(exc, "code", None) == 404 or "NOT_FOUND" in str(exc)
+            if not is_not_found or model is candidates[-1]:
+                raise
+            last_404 = exc
+            print(
+                f"  {model} 404'd (not entitled on this project), "
+                f"falling back to {fallback}...",
+                flush=True,
+            )
+
+    if response is None:
+        raise last_404 or RuntimeError("no image model succeeded")
 
     for candidate in response.candidates or []:
         for part in (candidate.content.parts if candidate.content else []) or []:
             inline = getattr(part, "inline_data", None)
             if inline and inline.data:
-                return inline.data
+                return inline.data, model_used
 
     # A refusal comes back as an empty-but-successful response, which is
     # confusing unless it is named as a refusal.
@@ -517,7 +568,10 @@ def main(argv: list[str] | None = None) -> int:
     print("Plan")
     print(f"  prompt      {args.prompt}")
     print(f"  out         {args.out}")
-    print(f"  image model {config['image_model']}  ({args.aspect})")
+    print(
+        f"  image model {config['image_model']}  ({args.aspect}, "
+        f"fallback: {config['image_model_fallback']})"
+    )
     if not args.image_only:
         print(
             f"  video model {config['video_model']}  "
@@ -546,11 +600,15 @@ def main(argv: list[str] | None = None) -> int:
     image_path = out_path.with_suffix(".png")
 
     print("Painting first frame...", flush=True)
-    image_bytes = generate_first_frame(client, config, args.prompt, args.aspect)
+    image_bytes, image_model_used = generate_first_frame(
+        client, config, args.prompt, args.aspect
+    )
     image_path.write_bytes(image_bytes)
     print(f"  wrote {image_path} ({len(image_bytes) / 1024:.0f} KB)")
 
     if args.image_only:
+        if image_model_used != config["image_model"]:
+            print(f"  (used fallback model {image_model_used})")
         print("\nImage only. Look at it, then re-run without --image-only to animate.")
         return 0
 
@@ -566,16 +624,22 @@ def main(argv: list[str] | None = None) -> int:
     )
     out_path.write_bytes(video_bytes)
     print(f"  wrote {out_path} ({len(video_bytes) / 1024 / 1024:.1f} MB)")
+    if image_model_used != config["image_model"]:
+        print(f"  (image used fallback model {image_model_used})")
 
     # Provenance sits next to the clip because months later "is this shot real
-    # footage or generated?" has to be answerable from the file alone.
+    # footage or generated?" has to be answerable from the file alone. Records
+    # the model that actually produced the image, not just the one requested -
+    # same "record what happened, not what was asked" rule as the bgm/sfx
+    # fallbacks in app/services/viral.py.
     sidecar = out_path.with_suffix(".json")
     sidecar.write_text(
         json.dumps(
             {
                 "generated_at": datetime.now(timezone.utc).isoformat(),
                 "prompt": args.prompt,
-                "image_model": config["image_model"],
+                "image_model": image_model_used,
+                "image_model_requested": config["image_model"],
                 "video_model": config["video_model"],
                 "aspect": args.aspect,
                 "resolution": args.resolution,
