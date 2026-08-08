@@ -123,11 +123,24 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
   (`docs/skill/plans/locked_scripts/greatauk_locked.json`). Hook-twist: real
   penguins are Southern-Hemisphere-only, but the word "penguin" was coined
   first for a different bird — the Great Auk, extinct since 1844, which
-  actually lived in the North Atlantic near Greenland. 1 AI-generated clip
-  (the auk, zero surviving photography — same treatment as the moa episode),
-  reused across the reveal and payoff segments. Clean frame-verification
-  pass on the **first** render, no defects, no re-render needed. Final:
-  34.84s, 26.8MB. Full detail in `episode_log.csv` row 29.
+  actually lived in the North Atlantic near Greenland. Clean
+  frame-verification pass on the first render — no defects found by
+  eye-checking single frames — but this turned out to be a real gap in the
+  verification method, not a clean pass: 1 AI-generated clip (the auk, zero
+  surviving photography — same treatment as the moa episode) had been reused
+  across two **adjacent** segments (reveal at 15.2s, payoff at 21.8s), so
+  the same 8s clip visibly restarted from frame 0 right next to itself —
+  invisible when checking one still frame per segment, obvious in actual
+  playback. **Owner caught it** (repeat at 0:16/0:20). Fixed by generating a
+  second, visually distinct Great Auk clip (`greatauk_walk.mp4` — wider
+  tracking shot, different wave/rock composition) for the payoff segment
+  instead of reusing the reveal segment's clip. **Lesson: reusing one AI
+  clip across two segments only works when they're far apart in the
+  timeline (moa's hook-and-payoff-callback pattern) — adjacent or
+  near-adjacent segments need their own distinct clip, or the reuse reads as
+  a stutter/loop, not a callback.** Re-rendered, re-verified all 6 segments
+  including multiple timestamps across the 3/4 boundary. Final: 34.78s,
+  26.5MB. Full detail in `episode_log.csv` row 29.
 
 **FORMAT CHANGE 2026-08-07 — read §5d before building anything.** The flat
 6-fact listicle is no longer the default. New facts episodes are
