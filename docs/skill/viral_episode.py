@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import random
 import re
 import shutil
 import subprocess
@@ -77,11 +78,11 @@ DEFAULT_FACT_MAX_WORDS = 25
 # 视频总时长会随之略微缩短，这是提速的直接后果，owner 已确认可以接受。
 DEFAULT_NARRATION_SPEED = 1.1
 
-# 固定一首，不随机。频道到 2026-08-07 为止一直是纯旁白、零音乐——25 支视频
-# 15.5k 播放只换来 18 个订阅，其中一个原因就是听感上和其他几千个同类频道
-# 完全无法区分。固定曲子是为了建立"这个频道听起来是这样"的辨识度；随机换
-# 曲会把这个作用直接抵消掉。
-DEFAULT_BGM_FILE = PROJECT_ROOT / "resource" / "songs" / "output000.mp3"
+# 2026-08-07 曾经打算固定用一首建立辨识度；2026-08-08 owner 明确要求反过来
+# ——"别老用默认的那首，按集换"——不传 --bgm-file 时从整首曲库里随机挑，
+# 见下面 --bgm-file 的 default=None 处理。SONGS_DIR 只是曲库路径，不再指向
+# 某一首固定曲子。
+SONGS_DIR = PROJECT_ROOT / "resource" / "songs"
 
 # 转场音效池：docs/skill/make_transition_sfx.py 合成的一组扫频音变体（时长/
 # 音域/扫频方向各不相同），不是下载素材——图库里没有音效，只有完整歌曲。
@@ -648,12 +649,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--bgm-file",
         type=Path,
-        default=DEFAULT_BGM_FILE,
+        default=None,
         help=(
-            "配合 --bgm 用。默认固定用同一首，而不是每集随机换——频道要的是"
-            f"可辨认的声音标识，随机会让每集听起来像不同的频道。默认 "
-            f"{DEFAULT_BGM_FILE.name}，换歌直接传别的路径"
-            "（resource/songs/ 下有 29 首）。"
+            "配合 --bgm 用。不传则从 resource/songs/（29 首）里随机挑一首——"
+            "2026-08-08 owner 反馈明确要求不要每次都用同一首默认曲子，按集换。"
+            "换固定歌就显式传路径。"
         ),
     )
     parser.add_argument(
@@ -1017,12 +1017,19 @@ def main(argv: list[str] | None = None) -> int:
             logger.warning(f"transition sfx failed, skipping: {exc}")
 
     bgm_applied = False
+    bgm_file_used: Path | None = None
     if args.bgm:
         try:
+            # 不传 --bgm-file 就从整个曲库随机挑一首，而不是固定用一首——
+            # owner 2026-08-08 明确要求"别老用默认那首，按集换"，这条覆盖了
+            # 之前"固定一首建立辨识度"的旧结论（见 channel_playbook.md §5e）
+            bgm_file_used = args.bgm_file or random.choice(
+                sorted(SONGS_DIR.glob("*.mp3"))
+            )
             viral.mix_background_music(
                 video_in=str(current_path),
                 video_out=str(output_path),
-                bgm_file=str(args.bgm_file),
+                bgm_file=str(bgm_file_used),
                 volume=args.bgm_volume,
             )
             bgm_applied = True
@@ -1053,7 +1060,7 @@ def main(argv: list[str] | None = None) -> int:
         # 用"这个问题只有在成片里记下了当时用的是哪首、多大声，之后才answerable。
         # 记的是**实际结果**而不是命令行要求：混音失败会静默退回无音乐版本，
         # 这里若照抄参数，事后就会把一支没有音乐的成片当成有音乐的样本来比较。
-        "bgm_file": str(args.bgm_file) if bgm_applied else None,
+        "bgm_file": str(bgm_file_used) if bgm_applied else None,
         "bgm_volume": args.bgm_volume if bgm_applied else None,
         # 记录实际可选的音效池（不是某一次转场具体挑中了哪个——那是随机的，
         # 池子本身才是"这份成片用了什么声音"这个问题的可复核答案）

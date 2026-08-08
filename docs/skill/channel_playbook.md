@@ -1242,9 +1242,18 @@ knowing regardless of the default:
   to narration-only (music never competes). **Re-measure with
   `ffmpeg -i <file> -af ebur128 -f null -` if the track library ever
   changes** — this number is only valid for ~-20 LUFS source music.
-- **One fixed track, not random per episode**, for when it is used — a
-  random track each time would make every episode that has music sound like
-  a different channel. `--bgm-file` changes it.
+- **Reversed 2026-08-08: was one fixed track, now randomized per render.**
+  The original reasoning (a fixed track builds "this channel sounds like
+  this" identity, random would undo it) held for one day. Owner then said
+  explicitly not to stay fixed on the default track and to vary it per
+  video. `--bgm-file` with no value now picks uniformly at random from all
+  29 tracks in `resource/songs/` at render time (`SONGS_DIR` in
+  `viral_episode.py`); pass `--bgm-file <path>` to force one specific track
+  (e.g. for a deliberate mood match — see the same-day example below).
+  Verified the LUFS of a couple of newly-picked tracks lands close enough to
+  the original -19.8 LUFS default (-20.9, -21.1) that the existing `0.12`
+  calibration still holds without per-track re-tuning; re-measure if a
+  track's loudness ever looks like an outlier.
 - `bgm_file`/`bgm_volume` are recorded in each render's result JSON *only
   when actually applied* (`None` if `--bgm` was never passed, or if the mix
   failed and fell back) — so "did music help" stays honestly answerable
@@ -1370,10 +1379,30 @@ If asked to revisit, the pool and bridging logic are ready to use as-is.
 the 2 videos — reads as pointing at that day's two specific renders, not a
 request to make `--bgm` the default again (which would contradict the
 2026-08-07 "don't put music on every video" instruction, never reversed).
-Added music to both of that day's episodes on request; **`--bgm` stays
-opt-in, the pipeline default is unchanged.** If this reading turns out
-wrong, the fix is a one-line default flip, not a design change — flag it if
-the owner asks for music again on a day when they didn't explicitly say so.
+Added music to both of that day's episodes on request; **`--bgm` (whether
+music plays at all) stays opt-in, the pipeline default is unchanged.** If
+this reading turns out wrong, the fix is a one-line default flip, not a
+design change — flag it if the owner asks for music again on a day when
+they didn't explicitly say so.
+
+**Immediate follow-up, same day: the fixed *track choice* was the actual
+complaint, not whether music plays at all.** "אל תישאר קבוע על המוזיקה
+הדיפולטיבית תגוון לפי הסרטון... תשנה את המוזיקה ב-2 הסרטונים" — don't stay
+fixed on the default music, vary it per video, change the music in the 2
+videos. Unlike the "on/off" question above, this one reads as general (no
+"just these 2" qualifier on the first half), so it changed the *default*:
+`--bgm-file` now randomizes across the library instead of always picking
+`output000.mp3` (§5e's dated entry above has the mechanics). For that day's
+two specific videos, went further than plain randomization — analyzed all
+29 tracks' tempo/RMS/spectral centroid with `librosa` (`uv run --with
+librosa`, not a project dependency) and hand-picked one energetic/bright
+track for the fast-paced insects countdown (`output012.mp3`, fastest tempo
+in the library) and one slow/dark track for the somber moa extinction story
+(`output007.mp3`, slowest tempo, lowest spectral centroid) — a deliberate
+mood match, not the random default. The random default is what an ordinary
+future build gets; hand-picking by analyzed mood is a nice-to-have worth
+doing again for a story or a tonally distinct episode, not required every
+time.
 
 ## 5f. How to reverse the 2026-08-07 changes
 
@@ -1383,7 +1412,8 @@ of them needs no code edit and no re-render**:
 | To undo | Do this |
 |---|---|
 | Ranked countdown | Just stop passing `--counter-mode countdown`. `progress` is still the built-in default, so the old `1/6…6/6` listicle needs no flag at all. |
-| Background music | Nothing to do — `--bgm` is opt-in, so a normal build already has no music. If one specific build passed `--bgm`, just don't pass it next time. |
+| Background music (on/off) | Nothing to do — `--bgm` is opt-in, so a normal build already has no music. If one specific build passed `--bgm`, just don't pass it next time. |
+| Background music (track choice, 2026-08-08) | Pass `--bgm-file resource/songs/output000.mp3` explicitly to force the old fixed track instead of the random-per-render default. |
 | Transition SFX (as of 2026-08-08, `--sfx` is opt-in and OFF by default) | Nothing to do — a normal build already has no SFX. To add it back for a specific build, pass `--sfx` (the old `--no-sfx` flag no longer exists, it was renamed and its default flipped the same day it was added). |
 | SFX variety (2026-08-08, only matters if `--sfx` is passed) | Pass `--sfx-file resource/sfx/whoosh.wav` (a single file, not the `transitions/` directory) to force one sound everywhere again. |
 | SFX cut-bridging placement (2026-08-08, only matters if `--sfx` is passed) | Not exposed as a flag — pass `bridge_frac=0.0` to `viral.add_transition_sfx()` directly (code edit) to restore "starts exactly at the cut." No owner request for this yet; only the "always the same sound" half was asked to stay reversible via a flag. |
