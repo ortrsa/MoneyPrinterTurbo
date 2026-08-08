@@ -111,6 +111,24 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
   re-render. Final: 35.96s, 18.1MB (no compression needed). Full detail in
   `episode_log.csv` row 28.
 
+- **Ep29 (animal facts, Great Auk — the extinct original "penguin")** —
+  built 2026-08-08 from an owner-supplied lead (a screenshot of a Facebook
+  post saying Greenland has no penguins, asking for it to be expanded from
+  the internet into a ~30s short). **Sent to Telegram, awaiting owner
+  approval — has no assigned slot.** The source screenshot also carried an
+  unrelated political meme (a White House repost about Greenland) —
+  deliberately left out; the build covers only the natural-history/etymology
+  fact. Researched and fact-checked across 6 outlets, see
+  `docs/skill/story_greatauk_lead.txt`. Locked via `--from-dry-run`
+  (`docs/skill/plans/locked_scripts/greatauk_locked.json`). Hook-twist: real
+  penguins are Southern-Hemisphere-only, but the word "penguin" was coined
+  first for a different bird — the Great Auk, extinct since 1844, which
+  actually lived in the North Atlantic near Greenland. 1 AI-generated clip
+  (the auk, zero surviving photography — same treatment as the moa episode),
+  reused across the reveal and payoff segments. Clean frame-verification
+  pass on the **first** render, no defects, no re-render needed. Final:
+  34.84s, 26.8MB. Full detail in `episode_log.csv` row 29.
+
 **FORMAT CHANGE 2026-08-07 — read §5d before building anything.** The flat
 6-fact listicle is no longer the default. New facts episodes are
 **ranked countdowns**: #6 first, #1 last, with a deliberately arguable #1 and
