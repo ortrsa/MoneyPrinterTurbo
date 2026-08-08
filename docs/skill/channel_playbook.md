@@ -66,6 +66,21 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
   Telegram and is what should be approved, not the original send. Full
   detail (prompt, verification, AI-segment count) in `episode_log.csv` row
   26's updated outcome_note.
+  **Second same-morning follow-up, this time on ep27:** owner caught that the
+  insects episode's transition sound was still identical at every cut — a
+  correct catch, ep27 was built *before* the SFX variety/bridging fix (§5e)
+  landed later that same morning. Fixed by re-running only the SFX pass
+  against the already-footage-fixed `with-captions-fixed.mp4` (no need to
+  re-render footage, captions, or TTS) with the new 4-variant pool. Verified
+  on the real delivered audio by diffing the post-SFX track against the
+  pre-SFX track (isolates the added sound from narration): 3 distinct
+  variants across 6 transitions, no immediate repeats, every onset lands
+  0.10–0.18s before its nominal cut point. `viral-result.json`'s `video_file`
+  updated in place again. **Lesson for future same-day pipeline fixes: a code
+  fix does not retroactively apply to a video already rendered before the fix
+  landed — check whether anything built earlier that same session needs the
+  same re-application, don't assume "the code is fixed" means "every
+  already-sent file reflects it."**
 
 **FORMAT CHANGE 2026-08-07 — read §5d before building anything.** The flat
 6-fact listicle is no longer the default. New facts episodes are
