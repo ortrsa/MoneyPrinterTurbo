@@ -1,0 +1,67 @@
+STORY LEAD — Great Auk: the original "penguin," extinct since 1844, lived near
+Greenland (Southern Hemisphere penguins are unrelated)
+
+Supplied by the channel owner 2026-08-08 via a screenshot of a Facebook post
+(page "עובדות לא חשובות") stating Greenland has no penguins. The post also
+embedded an unrelated political meme (a White House social-media repost about
+Greenland) — that meme is NOT used anywhere in this build. The script below
+covers only the natural-history/etymology fact and was written fresh,
+independently verified, NOT copied or translated from the Facebook post's
+own wording.
+
+SOURCES CHECKED (all corroborate the same facts):
+- Wikipedia, Great auk: https://en.wikipedia.org/wiki/Great_auk
+- Britannica, "Great auk": https://www.britannica.com/animal/great-auk
+- Britannica, "Why Are There No Penguins at the North Pole?":
+  https://www.britannica.com/science/Why-Are-There-No-Penguins-at-the-North-Pole
+- World Animal Rescue Network, "Great auk: Why It Went Extinct":
+  https://worldanimalrescuenetwork.org/wildlife-guides/extinct-animals/great-auk/
+- Discover Wildlife, "Why are there no penguins in the Arctic":
+  https://www.discoverwildlife.com/animal-facts/birds/why-are-there-no-penguins-in-the-arctic
+- Birds of the World, Great Auk breeding range:
+  https://birdsoftheworld.org/bow/species/greauk/cur/breeding
+
+VERIFIED FACTS:
+- All ~18 living penguin species are native exclusively to the Southern
+  Hemisphere (Antarctica, sub-Antarctic islands, South Africa, South America
+  including the Galápagos, Australia, New Zealand). None are native to
+  Greenland or anywhere in the Arctic.
+- Penguin ancestors evolved in the Southern Hemisphere roughly 60 million
+  years ago. They are flightless, so they cannot cross the warm equatorial
+  belt and the nutrient-poor tropical waters that separate the hemispheres —
+  this, not temperature alone, is why they never spread north.
+- THE TWIST: the word "penguin" was not coined for these birds. It was first
+  used, centuries earlier, for the Great Auk (Pinguinus impennis) — a large,
+  flightless, black-and-white, upright seabird of the North Atlantic.
+  European sailors later encountered the superficially similar flightless
+  birds of the Southern Hemisphere and called them "penguins" too, by
+  resemblance to the auk, even though the two groups are not closely related
+  (Great Auks belong to the auk/puffin family, Alcidae; true penguins are
+  Sphenisciformes) — a case of convergent evolution, not common ancestry.
+- The Great Auk's range included the North Atlantic waters around
+  Newfoundland (its largest colony, ~10,000 pairs, on Funk Island), Iceland,
+  Scotland, the Faroe Islands, and Norway. Circumstantial evidence (strong
+  but not directly confirmed by a nest find) points to a breeding population
+  in southwestern Greenland near Paamiut — i.e., Greenland very likely did
+  have its own "penguin" once.
+- The species was hunted for down, meat, oil, and later as museum/collector
+  specimens, driving it to extinction. The last confirmed breeding pair was
+  killed on the Icelandic island of Eldey on 3 June 1844; the pair's single
+  egg was crushed in the process.
+
+NARRATIVE SHAPE: open on the surface-level fact (Greenland has zero
+penguins today) without revealing the twist. Explain why real penguins are
+Southern-Hemisphere-locked. Pivot on the etymology: the name itself came
+from a totally different, extinct northern bird. The REVEAL is that
+Greenland's own "penguin" was real and is gone — extinction, not geography,
+is the actual reason there isn't one to see today. Close with the
+180-year gap and a direct CTA.
+
+TREATMENT NOTE: purely a natural-history/etymology story, no real named
+people involved, no sensitive current-events content — the political meme
+in the source screenshot is deliberately excluded. The Great Auk has zero
+surviving photography or video (extinct since 1844, predates photography's
+practical use for wildlife); AI-footage-fill is used for the one segment
+that needs to show the bird, same treatment as the channel's moa episode
+(also an extinct, unphotographable species) — a symbolic/documentary-style
+recreation, not a claim of authentic footage.
