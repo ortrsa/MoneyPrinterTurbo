@@ -1,0 +1,90 @@
+FACT LEAD — "6-7" / "Six-Seven" meme, 2025 internet culture phenomenon
+
+Supplied by the channel owner 2026-08-10 as a Hebrew-language 6-fact draft
+citing Wikipedia. Independently verified via web search before use; the
+Hebrew draft contained two real errors, corrected below rather than shipped
+as submitted.
+
+ERRORS CAUGHT AND FIXED:
+1. Draft said the basketball connection was "LaMelo Ball's brother" whose
+   height is 6'7". Wrong -- it's LaMelo Ball HIMSELF who is listed at 6'7"
+   (2.01m). No brother is part of this story.
+2. Draft attributed the "meaningless slang used by kids" description to
+   Merriam-Webster. Wrong -- that's Dictionary.com's own framing of its own
+   2025 Word of the Year pick. Merriam-Webster's actual 2025 word of the
+   year was "slop" (re: AI slop) -- a different, unrelated selection. Dropped
+   the Merriam-Webster attribution entirely rather than ship a false claim.
+3. Draft said a South Park "school principal" is convinced the term comes
+   from the Antichrist. The actual joke (season 28 premiere, Oct 15 2025) is
+   that Cartman gets so obsessed he can't stop laughing whenever "six" or
+   "seven" comes up in conversation, which convinces a fictional Peter
+   Thiel-based tech-billionaire character that the kids have started a
+   satanic cult. Corrected to match.
+
+SOURCES CHECKED:
+- Wikipedia, "6-7 (meme)" and "Doot Doot (6 7)"
+- Complex: "Skrilla Decodes '6-7,' Gen Z's Favorite Meme"
+- Know Your Meme: "67 Kid"
+- Forbes (2025-10-15): "What Does '67' Mean? Dictionary.com's Word Of The
+  Year Is Viral TikTok Trend"
+- The Hollywood Reporter: "'6, 7' and 'South Park': Explaining the Meme on
+  Season 28 Premiere"
+- Fox Sports: "Viral '6-7' Craze Is Going Strong at NBA, College Basketball
+  Games Nationwide"
+- Dictionary.com's own 2025 Word of the Year writeup
+- PBS/AP wire on Merriam-Webster's actual 2025 word ("slop")
+
+VERIFIED FACTS:
+- "Doot Doot (6 7)" by rapper Skrilla, officially released via Priority
+  Records on 3 Feb 2025 (an unofficial version had leaked online in Dec
+  2024). Hook line: "6-7, I just bipped right on the highway." Skrilla has
+  said on record he never assigned the phrase a meaning and doesn't intend
+  to; competing folk theories include Chicago's 67th Street and the police
+  radio code "10-67" (used in some departments for a death).
+- The phrase spread through basketball edit culture, especially clips of
+  NBA player LaMelo Ball, listed at exactly 6'7" (2.01m). Overtime Elite
+  player Taylen "TK" Kinney is credited with popularizing the accompanying
+  hand gesture (palms up, alternating lift).
+- 31 March 2025: basketball YouTuber Cam Wilder posted a video (~13:24 mark)
+  showing a boy, Maverick Trevillian, shouting "six-seven!" with the gesture
+  at a youth basketball game. Went viral, made him "the 67 kid" -- now over
+  a million TikTok followers and his own merch. TREATMENT NOTE: he is a
+  real, identifiable minor. This build does not depict his likeness in any
+  AI-generated or real footage -- narration only, generic/abstract visuals.
+- 15 Oct 2025: South Park season 28 premiere built a full subplot around it
+  -- Cartman becomes unable to stop laughing whenever "six" or "seven" comes
+  up, which convinces a fictional Peter-Thiel-styled billionaire character
+  the kids have formed a satanic cult.
+- Fortnite teased a Chapter 7 / South Park collab referencing it on 29 Nov
+  2025 (emote released mid-Dec); a microwave prop on a character's mech suit
+  is set to "67 seconds."
+- Documented on-camera use: NBA highlights and college basketball games
+  nationwide, NFL touchdown celebrations, WNBA press conferences, referees
+  ("ref does 67" clips), Premier League footballer Michail Antonio, and (per
+  AOL/wire coverage) a member of the US House of Representatives doing the
+  gesture while presiding over a session.
+- Dictionary.com named "67" (pronounced "six-seven," never "sixty-seven")
+  its official 2025 Word of the Year, describing it as deliberately
+  nonsensical "brainrot" slang; per their own analysis, usage in digital
+  media was roughly 6x higher in October 2025 alone than across all of 2024.
+
+NARRATIVE SHAPE: ranked countdown per the channel's current default (§5d).
+#6 opens on the literal, verifiable origin (a song, a rapper who refuses to
+explain it) since that's the least surprising entry point. Escalates through
+the basketball coincidence, the real kid who got famous by accident, the
+South Park/Fortnite pop-culture crossover, and the spread into major sports
+and even Congress. #1 (the payoff) closes the loop: a phrase its own creator
+insists means nothing is now, officially, the dictionary's word of the year
+-- the irony is the hook's promise paid off.
+
+FOOTAGE TREATMENT: this is real-people-and-real-celebrities-heavy source
+material (Skrilla, LaMelo Ball, Maverick Trevillian, South Park characters,
+NFL/NBA players, a sitting member of Congress). Per the existing
+ai-footage-fill guardrail against generating real named people, and out of
+caution for the real minor at the center of segment 2, NO AI clip in this
+build depicts any specific real person's likeness. The mandatory AI hook
+clip (2026-08-08 standing rule) uses a purely abstract/symbolic concept
+instead -- glowing "6" and "7" numerals breaking out of a phone screen in a
+dark room, meme/glitch aesthetic, no people. All Pexels segments use
+generic sports/phone/crowd footage, never claiming to show any specific
+named individual.

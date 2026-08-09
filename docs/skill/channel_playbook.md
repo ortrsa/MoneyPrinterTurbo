@@ -133,6 +133,33 @@ asking the owner to re-confirm anything.
   highest existing "Facts N" was 24, so these are 25 and 26. Full detail in
   `episode_log.csv` rows 30/31.
 
+- **Ep32 (internet culture, the "6-7" meme)** — built 2026-08-09 from an
+  owner-supplied lead (a fully-written Hebrew 6-fact draft citing Wikipedia).
+  **Sent to Telegram, awaiting approval — no slot assigned.** Independently
+  fact-checked before use anyway, per standing discipline, and caught two
+  real errors in the draft: the basketball coincidence is LaMelo Ball's OWN
+  height (6'7"), not "his brother's"; and the "meaningless slang used by
+  kids" description is Dictionary.com's own framing of their own Word of the
+  Year pick, not Merriam-Webster's — Merriam-Webster's actual 2025 word was
+  unrelated ("slop"). See `docs/skill/plans/facts/sixseven_lead.txt`.
+  Unusually real-people-dense topic (a real minor at the center of one fact,
+  named athletes, a member of Congress) — the mandatory AI hook is a purely
+  abstract "6/7 numerals bursting from a phone" concept with zero people, and
+  every Pexels segment is generic/unbranded B-roll, never claiming to show
+  any specific named individual. First render ran long (70.16s) because the
+  length-estimate formula only covered the 6 facts and missed the hook/outro's
+  own spoken time — trimmed twice to land at 57.76s. **Two real footage
+  defects caught on frame verification**, both fixed by pinning single
+  pre-verified clips via `--segment-clips` rather than trusting a re-probed
+  term: a phone-screen cut showed a real, legible, unrelated ad for another
+  creator's course; a stadium-crowd cut showed Turkish Süper Lig fans and
+  banner text landing exactly on the words "a Premier League" — direct
+  footage-contradicts-narration. (Two follow-up searches for literal Premier
+  League footage returned Hungarian and AFC Asian Cup branding instead —
+  Pexels appears to have no real EPL footage, so this settled for
+  brand-clean generic crowd energy rather than chasing exact-league
+  accuracy.) Final: 57.76s, 27.4MB. Full detail in `episode_log.csv` row 32.
+
 - **Ep28 (true crime, Ina Kenoyer $30M fake-inheritance poisoning)** — built
   2026-08-08 from an owner-supplied lead (a Facebook repost linking to NBC
   News), explicitly flagged as a high-priority viral build with specific
