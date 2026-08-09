@@ -104,13 +104,22 @@ instead of waiting for the owner to supply them, since lead supply — not the
 ratio — is what actually caps story output. Anything the owner sends still
 jumps the queue.
 
-**Today (2026-08-09) ran THREE uploads, not the usual two** — a one-off the
-owner asked for: Facts 25 at 16:30, the **Kenoyer true-crime story at an extra
-19:30 slot**, Facts 26 at 22:30. No standing Routine covers 19:30, so that one
-publishes via a one-shot wakeup at 16:30 UTC rather than through the normal
-slot Routines. **The Great Auk story is already owner-approved for 2026-08-10
-22:30** — tomorrow's 13:00 job should record it without asking again, which
-means tomorrow's 09:00 job only needs ONE new facts episode (for 16:30).
+**2026-08-09/10 sequencing, corrected once by the owner mid-conversation —
+this is the final version, not the first plan floated:** the first idea (an
+extra 19:30 slot today for Kenoyer) was superseded before it ever fired; the
+one-shot wakeup for it was cancelled. Actual plan:
+- **2026-08-09 16:30:** Facts 25 (sleep) — normal slot Routine.
+- **2026-08-09 22:30:** Kenoyer true-crime story — normal slot Routine, swapped
+  in for what was originally Facts 26 (trees) at this slot.
+- **2026-08-10 16:30:** Facts 26 (trees) — moved here from 2026-08-09 22:30.
+- **2026-08-10 22:30:** Great Auk story — unchanged from the original plan.
+All four are already owner-approved for these exact slots. **Consequence for
+tomorrow's 09:00 job: build ZERO new episodes** — both 2026-08-10 slots are
+already filled and approved. Tomorrow's 13:00 job should find
+`storage/todays_uploads_2026-08-10.json` pre-staged with both slots
+`approved: true` (promote it to `storage/todays_uploads.json`, or re-derive
+from `episode_log.csv` rows 29/31 if that staged file is missing) rather than
+asking the owner to re-confirm anything.
 
 - **Ep30 (Facts 25, sleep) and ep31 (Facts 26, trees)** — today's 2026-08-09
   09:00 build, **sent to Telegram, awaiting approval**: ep30 → 16:30, ep31 →
