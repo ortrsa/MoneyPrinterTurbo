@@ -43,16 +43,52 @@ substitutions — a dolphin standing in for a sloth in a fact that names both, a
 ostrich for a moa, golden retrievers for Newfoundlands in a water-rescue shot —
 are legitimate and cheaper, and the playbook already accepts them.
 
+## The hook clip is mandatory (owner instruction, 2026-08-08)
+
+**Every episode's opening segment must be an AI-generated clip**, regardless of
+whether Pexels has usable footage for it. This one is not subject to the
+"does the library actually not have this?" test above — it is a deliberate
+exception, and the reason is control: the first frame is the single frame that
+decides whether a viewer stops scrolling, and generating it is the only way to
+compose it exactly rather than accept whatever a stock clip opens on.
+
+So the standard for the hook clip is not "is this accurate B-roll" but **"does
+this stop a thumb mid-scroll?"** Aim for an image that is arresting on its own
+and, where the story allows, one that visually poses the question the narration
+is about to answer. The ep29 hook is the model: a lone penguin under the aurora
+borealis — an image that cannot exist, which is precisely the episode's subject,
+so the visual and the hook line do the same work.
+
+Weak hook images to avoid: a generic landscape, a wide establishing shot with no
+subject, anything that reads as "stock footage of a place".
+
 ## Budget gate
 
-**One AI clip per episode is the working default. Two is the ceiling before
-asking.** If an episode seems to need three or more, that is not a footage
-problem, it is a topic problem: the episode is about something the visual
-vocabulary of this channel cannot show, and the right move is to say so and
-propose a different topic rather than to generate your way through it. Ask the
-owner before generating a third clip in one episode.
+**The mandatory hook clip, plus up to two more AI clips per episode, may be
+generated without asking. A fourth needs the owner's approval.** (Before
+2026-08-08 the rule was one clip default / two ceiling; the owner raised it when
+making the hook clip mandatory, so the hook does not eat the discretionary
+budget.)
+
+If an episode seems to need four or more, that is usually not a footage problem
+but a topic problem: the episode is about something the visual vocabulary of
+this channel cannot show. Saying so and proposing a different topic is a better
+move than generating your way through it.
+
+**Never let the episode become all-AI** — the owner is explicit that Pexels
+footage must remain in the mix so the video does not read as AI slop. In
+practice that means the discretionary clips go to the segments the library
+genuinely cannot cover, and everything else stays real footage.
 
 Each clip is roughly a few dollars. Cheap once, not cheap daily.
+
+**Do not reuse one clip across two adjacent segments.** An 8s clip spliced into
+two neighbouring segments restarts from frame 0 at the cut and reads as a
+stutter, not a callback — this shipped once in ep29 and the owner caught it in
+playback. Reuse only works when the two segments are far apart in the timeline
+(the moa episode's hook-and-payoff-callback pattern). Adjacent segments each
+need their own clip. Single-frame verification does not catch this; check the
+boundary specifically.
 
 ## Credential setup
 

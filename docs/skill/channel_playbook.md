@@ -25,6 +25,18 @@ A pinned summary for picking up a fresh session fast. Full rationale for every
 line here is in the dated sections below and in `SKILL.md`; this is only the
 "what's true right now" digest.
 
+**STANDING RULE 2026-08-08 — every episode opens on an AI-generated hook
+clip.** The owner's instruction: generate the first frame of every video with
+AI, because that is the frame you have full control over, and make the hook
+strong enough to stop a thumb mid-scroll. This overrides the ai-footage-fill
+skill's usual "only generate what Pexels genuinely cannot supply" test **for
+segment 0 only** — the hook clip is generated whether or not stock footage
+exists for it. Budget was raised to match: **the mandatory hook clip plus up to
+two more AI clips per episode without asking; a fourth needs approval.** The
+owner also reaffirmed that **Pexels footage must stay in the mix** so an
+episode never reads as all-AI. Full guidance, including what makes a hook image
+strong vs. weak, is in `ai-footage-fill/SKILL.md`.
+
 **Live/pending right now:**
 - Ep20 (Facts 20, human body) is **published, public**, video id `MsvTGDudZ-U`.
   Its live YouTube title reads "Random But True Facts 19 👀" — a mislabel from
@@ -139,8 +151,17 @@ line here is in the dated sections below and in `SKILL.md`; this is only the
   timeline (moa's hook-and-payoff-callback pattern) — adjacent or
   near-adjacent segments need their own distinct clip, or the reuse reads as
   a stutter/loop, not a callback.** Re-rendered, re-verified all 6 segments
-  including multiple timestamps across the 3/4 boundary. Final: 34.78s,
-  26.5MB. Full detail in `episode_log.csv` row 29.
+  including multiple timestamps across the 3/4 boundary. **Then rebuilt again
+  under the new AI-hook standing rule** (see the top of this section): the
+  Pexels glacier opening was replaced with a generated shot of a lone penguin
+  under the aurora borealis — an image that cannot exist, which is exactly the
+  episode's subject, so frame 0 poses the question the narration answers. Now
+  3 AI segments (hook, reveal, payoff) against 3 Pexels segments. Final:
+  33.68s, 25.0MB. Full detail in `episode_log.csv` row 29.
+  **Gotcha worth remembering: the animate step repaints the first frame**, so
+  the image reviewed under `--image-only` is *not* the one that ships. Always
+  re-check the actual rendered frame 0 after animating — here the repaint
+  happened to be stronger, but that was luck, not design.
 
 **FORMAT CHANGE 2026-08-07 — read §5d before building anything.** The flat
 6-fact listicle is no longer the default. New facts episodes are
