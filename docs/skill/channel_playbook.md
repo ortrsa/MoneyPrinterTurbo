@@ -2023,6 +2023,42 @@ clip containing a screen, document or signage. Worth stating plainly because it
 is a different *class* of defect from everything else in this log: not "does
 this footage match the words" but "does this footage expose a real person."
 
+**2026-08-09 20:00 report — ep23 finally crosses from pending, resolving the
+length hypothesis that has been open since 2026-08-07; ep21 drifts hard enough
+to be worth flagging on its own.**
+
+- **Ep23 (space facts, 66.06s — the longest facts episode on the channel)
+  finalizes at 102.75% retention.** That number is almost certainly inflated
+  by Shorts' autoplay-loop behavior (viewers rewatching within one view
+  session can push `averageViewPercentage` past 100% — the same mechanism
+  documented for AI2's 128.83% outlier in §5b, there excluded from the hero
+  stat by the `views>=100` floor; ep23 has 596 views, well past that floor,
+  so this isn't a low-n fluke, but the raw percentage still shouldn't be read
+  literally). Even discounted heavily, there is no way to read this number as
+  a retention penalty. **RESOLVED: length (60-66s) does not reliably predict
+  weak retention on this channel** — ep18's weak 31.51%/63.5s result was more
+  likely driven by its everyday-objects topic specifically than by its
+  runtime, since the *next* long episode (ep23, similar length) shows the
+  opposite result. Concrete action: stop holding facts episodes back from the
+  established 50-58s core range purely on length-anxiety grounds; a topic
+  that earns 60s+ can have it. Re-open only if a future 60s+ episode lands
+  weak *and* isn't better explained by its topic, the same standard just
+  applied to close this one out.
+- **Ep22 (pizza) also finalizes tonight at 44.10%** — unremarkable, sits right
+  in the mid-40s cluster most non-outlier facts episodes land in (§5c item 4's
+  "most episodes cluster in the low-to-mid 40s" pattern). No new action; just
+  logged so it isn't sitting as a false "pending" indefinitely.
+- **Ep21 (D-Day story) drifted from 82.83% to 66.95%** as more views came in
+  (28 → 37) — a much bigger swing than the small day-to-day drift seen on
+  other episodes (e.g. ep13's 59.64%→66.71%). At this view count Analytics is
+  still extremely sensitive to single viewers, so **the "severe outlier flops
+  still show above-average retention" finding from 2026-08-08 needs a caveat,
+  not a retraction**: 66.95% is still comfortably above the ~46% facts
+  baseline, so the core conclusion (this was a distribution miss, not a
+  content miss) still holds — but the specific 82.83% figure quoted that
+  night should not be treated as ep21's settled number. Expect further
+  drift at this view count; re-check before citing an exact figure for ep21
+  again.
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
