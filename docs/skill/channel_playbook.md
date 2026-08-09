@@ -96,6 +96,22 @@ strong vs. weak, is in `ai-footage-fill/SKILL.md`.
   same re-application, don't assume "the code is fixed" means "every
   already-sent file reflects it."**
 
+**STORY RATIO RAISED 2026-08-09 — stories now run ~1 in 3 uploads, not
+1 in 4-5.** Owner-approved off the retention evidence (stories 51.2% vs facts
+45.2%, counting only >=100-view videos). Full reasoning and the caveats are in
+§5's upload-flow rule. Paired decision: **source story leads independently**
+instead of waiting for the owner to supply them, since lead supply — not the
+ratio — is what actually caps story output. Anything the owner sends still
+jumps the queue.
+
+**Today (2026-08-09) ran THREE uploads, not the usual two** — a one-off the
+owner asked for: Facts 25 at 16:30, the **Kenoyer true-crime story at an extra
+19:30 slot**, Facts 26 at 22:30. No standing Routine covers 19:30, so that one
+publishes via a one-shot wakeup at 16:30 UTC rather than through the normal
+slot Routines. **The Great Auk story is already owner-approved for 2026-08-10
+22:30** — tomorrow's 13:00 job should record it without asking again, which
+means tomorrow's 09:00 job only needs ONE new facts episode (for 16:30).
+
 - **Ep30 (Facts 25, sleep) and ep31 (Facts 26, trees)** — today's 2026-08-09
   09:00 build, **sent to Telegram, awaiting approval**: ep30 → 16:30, ep31 →
   22:30. Both facts/ranked-countdown, both first-time categories. **Two facts
@@ -901,10 +917,26 @@ time), which the old Israel-anchored calendar did not. This resolves the
 "אנחנו נעלה גם עובדות בפורמט של ה 6 עובדות וגם סיפורים אבל צריך שתהיה זרימה
 בין העלאות ולא להעלות בצורה רנדומלית." Concrete and checkable:
 
-1. **Stories run roughly 1 in every 4-5 uploads, never back-to-back.** The
-   6-fact format is the channel's identity and its measured performer;
-   stories are the change of pace, not the new default. Revisit this ratio
-   once the first stories have real retention data — not before.
+1. **Stories run roughly 1 in every 3 uploads, never back-to-back.**
+   **RATIO RAISED 2026-08-09 from 1-in-4-5 to 1-in-3, owner-approved**, using
+   exactly the revisit condition the original rule set ("revisit once the first
+   stories have real retention data"). That condition is now met — three
+   stories have finalized numbers. The evidence, counting only videos with
+   >=100 views so the tiny-n outliers don't drive it: **stories average 51.2%
+   retention (n=2: ep17 47.2%, ep19 55.2%) against 45.2% for facts (n=15)**,
+   and the four most recent finalized facts episodes landed at 31-40%. Ep21's
+   82.83% is real but sits on 28 views, so it is excluded from the average
+   rather than used to inflate it. Treat this as a direction, not a proof:
+   n=2 on the story side is thin, and the ratio should move back if stories
+   regress toward the facts baseline as more land.
+   The 6-fact countdown is still the channel's identity and still the majority
+   of uploads; stories are now a bigger minority, not the new default.
+   **The binding constraint is lead supply, not the ratio** — 1-in-3 needs a
+   fresh, fact-checked story lead roughly every 1.5 days. Owner decision the
+   same day: **source leads independently rather than waiting for the owner to
+   supply them** (moa, dollar, D-Day and Great Auk were all self-sourced and
+   verified this way), with any lead the owner does send jumping to the front
+   of the queue.
 2. **Never two consecutive uploads from the same topic category.** Rotate
    across animals / ocean / food / everyday objects / cars / people.
 3. **The two same-day slots must differ on at least one axis** — format or
