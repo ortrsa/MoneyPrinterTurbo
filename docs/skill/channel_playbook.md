@@ -96,6 +96,18 @@ strong vs. weak, is in `ai-footage-fill/SKILL.md`.
   same re-application, don't assume "the code is fixed" means "every
   already-sent file reflects it."**
 
+- **Ep30 (Facts 25, sleep) and ep31 (Facts 26, trees)** — today's 2026-08-09
+  09:00 build, **sent to Telegram, awaiting approval**: ep30 → 16:30, ep31 →
+  22:30. Both facts/ranked-countdown, both first-time categories. **Two facts
+  episodes rather than a story because the previous upload (moa, 22:30
+  2026-08-08) was itself a story** and the flow rule forbids back-to-back
+  stories — the two finished stories below stay in inventory instead. §5c
+  actions applied: hook shape logged (both contest-form), footage specificity
+  rated pre-delivery (ep30 ~4.25/5, ep31 ~4.6/5), and both held inside the
+  50-58s core range (53.5s / 54.1s). Live channel was checked before titling:
+  highest existing "Facts N" was 24, so these are 25 and 26. Full detail in
+  `episode_log.csv` rows 30/31.
+
 - **Ep28 (true crime, Ina Kenoyer $30M fake-inheritance poisoning)** — built
   2026-08-08 from an owner-supplied lead (a Facebook repost linking to NBC
   News), explicitly flagged as a high-priority viral build with specific
@@ -1943,6 +1955,33 @@ real finding.**
   of whether ep18's weak 31.51%/63.5s result generalizes to length or was
   specific to the everyday-objects topic. Watch tomorrow.
 
+**2026-08-09 09:00 build — open actions applied, plus a new hard-stop check
+that has nothing to do with retention.** Ep30 (sleep) and ep31 (trees) both
+used contest-form hooks (§5d requires the hook to set up an argument, so the
+countdown format effectively fixes hook shape — worth noting that item 1's
+question-vs-statement comparison can no longer grow from facts episodes while
+the countdown format is the default; only stories can still vary it). Footage
+specificity rated pre-delivery: ep30 ~4.25/5, ep31 ~4.6/5. **Ep31 is a useful
+data point for the category-ceiling hypothesis in the other direction**: trees
+are richly photographable and it scored the session's highest average with
+ordinary search effort, where ep23 (space) and ep25 (weather) were capped low
+by genuinely unphotographable subjects. That is consistent with the ceiling
+being set by the topic, not by how hard anyone searched.
+
+**Both episodes were held to 53-54s** per the 2026-08-07 action against the
+63s+ drift. Ep23 (space, 66.06s) is *still* pending and is still the outstanding
+test of whether ep18's weak 31.5%/63.5s was length or topic — nothing new to
+report on it tonight.
+
+**New production rule, not a retention lesson — see §6.** The first render of
+ep30's #1 segment shipped a real patient's name, DOB and hospital, legible on a
+monitor inside a licensed Pexels medical clip, under narration about a fatal
+inherited disease. It was caught by the standing payoff-segment frame check and
+replaced before delivery. Logged in §6 as a permanent pre-ship check on any
+clip containing a screen, document or signage. Worth stating plainly because it
+is a different *class* of defect from everything else in this log: not "does
+this footage match the words" but "does this footage expose a real person."
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
@@ -1959,6 +1998,18 @@ Full detail in `SKILL.md`; the short version:
   (`octopus` → carpaccio), a species the library lacks (sloth → sloth *bears*),
   and any year in a query (`1956 summer workshop` → nothing).
 - Pin verified terms with `--segment-terms` so the LLM cannot overwrite them.
+- **Read the text that appears ON SCREEN inside a stock clip before shipping
+  it.** 2026-08-09, Facts 25: a Pexels brain-angiogram clip pulled for the #1
+  fact had a real patient's **name, date of birth and hospital** clearly legible
+  on the monitor — running under narration about a fatal inherited brain
+  disease, i.e. an identifiable private individual visually implied to have that
+  illness. The clip is properly licensed; that licence covers *use*, it does not
+  make it OK to imply a named stranger is dying of a prion disease. Caught only
+  because payoff-segment frames get looked at. **Applies to any clip containing
+  a screen, monitor, document, badge, form or signage** — medical, office and
+  "person at a laptop" footage most of all. Zoom in and actually read it; a
+  frame that looks like generic B-roll at thumbnail size can carry someone's
+  personal data at full resolution.
 - **Order the pinned terms so the verified-good one is FIRST.** The first term in
   a segment's list is the primary — it is exempt from cross-segment URL de-dup and
   supplies the opening cut, the one that plays while the fact is actually spoken.
