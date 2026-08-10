@@ -133,6 +133,26 @@ asking the owner to re-confirm anything.
   highest existing "Facts N" was 24, so these are 25 and 26. Full detail in
   `episode_log.csv` rows 30/31.
 
+  **UPDATE 2026-08-10 16:30:** ep31 (trees) hit a real upload failure at its
+  16:30 publish attempt — `docs/skill/youtube/token.json`'s refresh token was
+  expired/revoked (`invalid_grant`, exactly 7 days after the token was
+  created, consistent with Google's 7-day refresh-token expiry for OAuth
+  apps still in "Testing" publishing status — see `SKILL.md` §8j). Owner
+  notified via Telegram, sent a fresh `token.json` shortly after, and also
+  asked live in-conversation for a one-time schedule change: publish ep31
+  immediately once the token was fixed, but move ep29 (Great Auk)'s normal
+  22:30 publish to **2:00am Israel time (2026-08-11), today only**. Both
+  handled: ep31 published live immediately (`h2RlkUXI7YA`); ep29 uploaded as
+  private with YouTube's own `--publish-at 2026-08-10T23:00:00Z` (=02:00
+  IDT) so YouTube itself flips it public at that exact time — a one-off use
+  of the `--publish-at` escape hatch (`SKILL.md` §8e), not a reversal of the
+  2026-08-04 direct-publish-at-slot-time decision (§8i). `storage/
+  todays_uploads.json`'s 22:30 entry was marked `published: true` right away
+  (the upload itself succeeded) specifically so tonight's normal 22:30
+  Routine sees it and skips instead of double-uploading. Tomorrow's routine
+  goes back to normal live 16:30/22:30 publishing — this was a today-only
+  exception, not a new standing schedule.
+
 - **Ep32 (internet culture, the "6-7" meme)** — built 2026-08-09 from an
   owner-supplied lead (a fully-written Hebrew 6-fact draft citing Wikipedia).
   **Sent to Telegram, awaiting approval — no slot assigned.** Independently
