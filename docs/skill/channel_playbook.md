@@ -160,6 +160,38 @@ asking the owner to re-confirm anything.
   brand-clean generic crowd energy rather than chasing exact-league
   accuracy.) Final: 57.76s, 27.4MB. Full detail in `episode_log.csv` row 32.
 
+- **Ep33 (ancient Rome, ranked countdown)** — self-sourced 2026-08-10 (no
+  owner lead pending; own judgment call to fill the still-empty 2026-08-11
+  pipeline slot while both of 2026-08-10's slots were already filled from
+  the prior day's approved plan). **Sent to Telegram, awaiting approval — no
+  slot assigned.** Fresh category, all 6 facts independently sourced and
+  verified (`docs/skill/plans/facts/rome_lead.txt`). Applied the ep32
+  length-estimate lesson proactively this time — budgeted hook+outro word
+  counts into the estimate up front — and landed at 174 words / 57.72s on
+  the **first** render, no post-render trimming needed. **Two real footage
+  defects caught on frame verification**, both whole-segment mismatches
+  rather than single-cut: segment 4 (the vomitorium/"exit passage" fact,
+  term `ancient ruins stone corridor`) returned Angkor Wat / Khmer temple
+  ruins for the *entire* segment — the wrong civilization, not just a bad
+  cut. Segment 6's first cut — the **#1 payoff segment**, self-healing Roman
+  concrete — returned a rustic wooden door with legible modern Turkish
+  utility labels ("ELEKTRIK", "SU") instead of any ancient wall at all, on
+  the single most important shot in the episode. Both fixed by pinning
+  verified clips via `--segment-clips` (`storage/pexels_pinned/`): the
+  corridor segment got a genuine stone exit-passage/stairway shot; the
+  payoff segment got the actual **Pantheon interior** — the world's most
+  famous surviving Roman-concrete structure, a direct thematic match — plus
+  a clean aqueduct close-up. Re-rendered with those two segments pinned
+  while the five already-good segments kept their verified
+  `--segment-terms`, then **re-verified all 8 segments again**, not just the
+  2 fixed ones, since a fresh Pexels probe on the untouched segments could
+  in principle have introduced a new regression — none did. Also: the
+  auto-generated caption asked a recall question ("name the exact year..."),
+  which contradicts the ranked-countdown format's own rule that the CTA
+  should invite disagreement, not recall — discarded and hand-written to
+  match the outro. Final: 57.72s, 42.5MB, no compression needed. Full detail
+  in `episode_log.csv` row 33.
+
 - **Ep28 (true crime, Ina Kenoyer $30M fake-inheritance poisoning)** — built
   2026-08-08 from an owner-supplied lead (a Facebook repost linking to NBC
   News), explicitly flagged as a high-priority viral build with specific
@@ -2114,6 +2146,16 @@ Full detail in `SKILL.md`; the short version:
   "person at a laptop" footage most of all. Zoom in and actually read it; a
   frame that looks like generic B-roll at thumbnail size can carry someone's
   personal data at full resolution.
+- **A generic ruins/architecture term can return the wrong civilization
+  entirely, for the WHOLE segment, not just one bad cut.** 2026-08-10, ep33
+  (ancient Rome): `ancient ruins stone corridor` returned Angkor Wat / Khmer
+  temple architecture for every cut in the segment, and a separate term
+  returned a modern rustic door with legible Turkish utility labels for the
+  #1 payoff segment — neither was a partial miss, both were the wrong
+  subject top to bottom. Checking only one frame, or assuming a segment that
+  "sounds architectural" is safe because the term contains the right era
+  word, both fail here. Verify every segment's actual subject matches the
+  fact being narrated, not just its on-screen text.
 - **Order the pinned terms so the verified-good one is FIRST.** The first term in
   a segment's list is the primary — it is exempt from cross-segment URL de-dup and
   supplies the opening cut, the one that plays while the fact is actually spoken.
