@@ -1,0 +1,71 @@
+FACT LEAD — Ancient Rome, ranked countdown (self-sourced, 2026-08-10)
+
+Self-sourced via outlier-topic research (no owner lead available; story/facts
+inventory check showed no new owner messages since the prior session). Fresh
+category — not used in the last 5 episodes (true crime, Great Auk, sleep,
+trees, "6-7" meme) or recently at all on this channel.
+
+SOURCES CHECKED:
+- Guinness World Records: "Largest ancient stadium" (Circus Maximus)
+- History.com: "The Surprisingly Vast Reach of Ancient Roman Roads"
+- Bad Ancient: "Did most Roman gladiator fights end in death?"
+- Live Science: "Did Roman gladiators really fight to the death?"
+- Scientific American: "Purging the Myth of the Vomitorium"
+- Bad Ancient: "Did the Romans flood the Colosseum to stage naval battles?"
+- Dezeen / Scientific American: MIT-Harvard 2023 self-healing Roman concrete
+  study (Science Advances)
+
+VERIFIED FACTS:
+- Circus Maximus: Guinness credits it as the largest stadium ever built,
+  ~255,000 seated spectators (other sources give a wider 150,000-300,000
+  range depending on era/method of counting — used the Guinness figure as
+  the single citable number). ~6x the Colosseum's ~50,000 capacity.
+- Roman road network: over 400,000 km total, ~80,500 km paved. The Appian
+  Way (Via Appia), begun 312 BCE, is the first major paved Roman road and
+  sections remain walkable today.
+- Gladiators: modern historians (analysis of inscriptions, Pompeii graffiti
+  outcome records, Georges Ville's study of 1st-century CE bouts) estimate
+  roughly 1 in 5 fights ended in the loser's death — i.e. ~80% of defeated
+  gladiators survived. Economic reason: gladiators were trained, valuable
+  property, expensive to replace. (Noted but not scripted: this shifted
+  toward more lethal fights by the 3rd century CE as public taste changed —
+  omitted from the script for space, not because it contradicts the fact.)
+- Vomitorium: genuinely just the passage/exit under stadium seating that lets
+  crowds "spew forth" (Latin vomere) at the end of an event — coined by the
+  5th-century writer Macrobius for this literal architectural meaning. The
+  "room where Romans purged between courses" idea has no ancient evidence;
+  first documented mistaken use traced to Aldous Huxley's 1923 novel "Antic
+  Hay." Genuine myth-debunk, not a hedge.
+- Colosseum naval battles (naumachiae): Cassius Dio explicitly describes a
+  sea battle staged in the Colosseum in 86 CE with the arena flooded deep
+  enough to float ships. However, there is no surviving physical evidence,
+  and modern historians are genuinely split — some propose the accounts
+  describe smaller "theatrical" naumachia (shallow water, small boats) rather
+  than full-scale battles. Scripted with an explicit hedge ("historians still
+  debate how dramatic it really was") rather than stated as flatly settled,
+  matching the channel's convention for genuinely contested claims.
+- Roman self-healing concrete: MIT/Harvard team (led by Admir Masic),
+  published in Science Advances, January 2023. Confirmed that "lime clasts"
+  (small white lumps long assumed to be a sign of sloppy mixing) are a
+  deliberate result of "hot mixing" — combining quicklime directly with
+  volcanic ash and water at high heat. When a crack reaches a clast, water
+  dissolves calcium from it and recrystallizes inside the crack, sealing it.
+  This is the leading explanation for why 2,000-year-old Roman harbor
+  structures still stand while modern concrete typically degrades within
+  decades. Actively being studied to bring similar self-healing concrete to
+  real-world use (e.g. seawalls).
+
+NARRATIVE SHAPE: ranked countdown per §5d. #6 opens on scale (an impressive
+but expected kind of "wow" — big numbers). Escalates through engineering
+reach (#5, roads), a real myth-corrected-by-modern-research counterintuitive
+fact (#4, gladiator survival), a fun word-origin myth-bust (#3, vomitorium),
+a genuinely unresolved historical question (#2, naval battles — good
+comment-bait, invites disagreement), and closes on the strongest payoff:
+real, current (2023) science that makes 2,000-year-old Rome directly
+relevant to modern materials engineering (#1, self-healing concrete).
+
+FOOTAGE TREATMENT: no real named individuals in this topic at all (only
+`MIT and Harvard` as institutions, no researcher named) — the mandatory AI
+hook can be built around a striking Rome-adjacent visual with no guardrail
+concern about depicting real people. All Pexels footage generic/historical
+site B-roll.
