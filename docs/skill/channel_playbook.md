@@ -2138,6 +2138,41 @@ to be worth flagging on its own.**
   night should not be treated as ep21's settled number. Expect further
   drift at this view count; re-check before citing an exact figure for ep21
   again.
+
+**2026-08-10 20:00 report — ep24 and ep25 both finalize, and item 2's
+footage-specificity hypothesis is now RESOLVED against itself.**
+
+- **Ep24 (big cats, 66.9%) and ep25 (weather, 85.61%) both finalize
+  tonight — both well above the ~46% facts baseline**, and ep25 is now the
+  **second-best retention on the whole channel**, behind only ep23's
+  102.75%. Both used question-form hooks (no new data for item 1's
+  question-vs-statement comparison this round).
+- **Item 2 (footage-specificity rating predicting retention) is now
+  RESOLVED, and resolved against the hypothesis.** Ep25 logged the
+  **lowest** footage-specificity rating of any facts episode this session
+  (~3.8/5 — hail and several other phenomena were near-unphotographable)
+  and still landed the **second-highest retention on the channel**. Ep24's
+  ~4.3/5 rating produced a strong-but-unremarkable 66.9%. Combined with
+  ep20's counter-example from 2026-08-08 (the **highest** rating logged,
+  ~4.6/5, paired with one of the **lowest** retentions, 35.28%), the
+  evidence now runs in both directions: high rating with low retention
+  (ep20) and low rating with high retention (ep25). **Concrete action:
+  stop rating footage specificity as a retention-prediction exercise —
+  keep logging it per-episode (it is still useful as a defect/QA record
+  and for the separate category-ceiling observation), but do not spend
+  extra search effort chasing a higher number in the belief it will move
+  retention.** This closes out item 2 the same way item 2's sibling
+  (completion-compulsion, 2026-08-06) and the length hypothesis
+  (2026-08-09) were closed: a same-session pair with the rating running
+  the *opposite* direction from the predicted outcome.
+- Both episodes had real footage defects caught and fixed pre-delivery on
+  frame verification (ep24: a tiger obscured by foreground leaves; ep25: a
+  slowed-motion lightning clip and a payoff-segment fix) — worth noting
+  since both still landed well above baseline despite shipping with
+  caught-and-fixed defects, which is itself a small point of reassurance
+  that the verification step is doing its job rather than papering over a
+  structurally weak build.
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
