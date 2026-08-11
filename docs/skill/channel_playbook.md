@@ -2198,6 +2198,40 @@ footage-specificity hypothesis is now RESOLVED against itself.**
   that the verification step is doing its job rather than papering over a
   structurally weak build.
 
+**2026-08-11 20:00 report — ep26 (moa) and ep27 (insects) both cross from
+pending to real retention, one reinforcing the story-format decision, the
+other flagging the ranked-countdown format's first real data point.**
+
+- **Ep26 (moa story, "The Bird With No Wings At All") finalizes at 68.11%
+  retention on 1,324 views** — the best story-format number on the channel
+  by a real margin, and unlike ep21 (D-Day, 66.95% but only 37 views) this
+  sits on a large enough sample to trust. Added to the >=100-views story
+  average from the 2026-08-09 ratio decision: Ferrari 46.95%, Dollar
+  55.28%, moa 68.11% — **n=3, avg 56.8%**, still comfortably clear of the
+  ~45% facts baseline. This is the "verdict in" the dashboard's own
+  takeaway now states for the story-vs-facts check. **Concrete action:
+  keep the 1-in-3 story cadence from 2026-08-09 — this is a third
+  confirming data point, not a reason to raise it further yet (n=3 is
+  still thin for that), but there is no signal here to walk it back
+  either. Lead supply stays the binding constraint, so keep sourcing story
+  leads independently rather than waiting on it.**
+- **Ep27 (insects, facts) finalizes at 37.31% retention on 892 views** —
+  the first-ever rendered ranked-countdown episode (`--counter-mode
+  countdown`, adopted 2026-08-07), and its retention lands *below* the
+  ~45% facts baseline, notably weaker than the two non-countdown facts
+  episodes published the same week (ep24 big cats 66.9%, ep25 weather
+  85.61%). **Important caveat: §5d's stated hypothesis for this format is
+  about subscriber conversion and comments, not retention** — so this
+  number does not by itself resolve or contradict that hypothesis, and
+  should not be read as "the countdown format failed." It is a real,
+  slightly concerning retention data point on n=1, nothing more.
+  **Concrete action: do not change the countdown format on this single
+  number. Two more countdown episodes (ep30 sleep, ep31 trees) are still
+  pending and are the real next data points — if both also land below the
+  ~45% facts baseline, add a dedicated retention-side note to §5d's
+  hypothesis (currently silent on retention entirely) rather than treating
+  subs/comments as the only thing worth watching on this format.**
+
 ## 6. Production rules learned the hard way
 
 Full detail in `SKILL.md`; the short version:
