@@ -932,20 +932,40 @@ like-for-like. Wait for the 24h mark before deciding anything about the
 story format — and specifically before building Inky.
 
 
-**THE DAILY ROUTINE, adopted 2026-08-03, architecture updated 2026-08-04.**
-The owner set a fixed operating rhythm and asked for it to run on scheduled
-wake-ups. Five Routines now exist (created via `create_trigger`, **bound to
-the persistent session** — see the failure below for why that is not
-optional). Their prompts still begin by re-reading these docs, because
-context gets compacted:
+**THE DAILY ROUTINE, adopted 2026-08-03, architecture updated 2026-08-04,
+trimmed to three Routines 2026-08-11.** The owner set a fixed operating
+rhythm and asked for it to run on scheduled wake-ups. Their prompts still
+begin by re-reading these docs, because context gets compacted:
 
 | Israel time | UTC cron | Job |
 |---|---|---|
 | 09:00 | `0 6 * * *` | Build the day's TWO episodes, send both + full upload kits to Telegram, ask for approval. **Uploads nothing.** |
-| 13:00 | `0 10 * * *` | Check Telegram inbox. Apply corrections if any; **record approval** into `storage/todays_uploads.json` if approved; nudge and stop if no reply. **Uploads nothing** (changed 2026-08-04, see below). |
 | 16:30 | `30 13 * * *` | Read `storage/todays_uploads.json` — if the 16:30 slot is approved and not yet published, upload it live as public **right now**. Otherwise skip and notify. |
 | 22:30 | `30 19 * * *` | Same as 16:30, for the 22:30 slot. |
-| 20:00 | `0 17 * * *` | Generate + publish `docs/skill/plans/generate_dashboard.py`'s HTML dashboard (same URL every night), send one short Telegram digest pointing at it plus the key takeaway, log conclusions to this file, revise the plan if the calendar is running dry. |
+
+**2026-08-11: the 13:00 approval-recording job and the 20:00 dashboard job
+were deleted at the owner's explicit request** ("תמחק את כל הטריגרים חוץ מ 9
+לייצירת סרטונים 16:30 ו 22:30, את השאר נעשה לפי בקשה" — delete every Routine
+except 09:00/16:30/22:30, the rest happens on request). Both jobs still
+work exactly as documented below; they just no longer fire automatically:
+- **Approval recording** now happens live in conversation instead of at a
+  fixed 13:00 slot — this was already the de facto pattern before the
+  deletion (e.g. the 2026-08-11 chess/volcano approvals both happened this
+  way), so nothing about the actual mechanism changes: still write
+  `storage/todays_uploads.json` with `"approved": true` only once the owner
+  has explicitly confirmed that exact rendered version, same hard rule as
+  always.
+- **The dashboard** now generates and publishes only when the owner asks for
+  it, using the same `generate_dashboard.py` command, the same stable
+  Artifact URL, and the same §5c retention-check discipline described
+  below — none of that logic changed, only the trigger.
+- Only three Routines remain: 09:00 build, 16:30 publish, 22:30 publish —
+  all still session-bound (see the failure below for why that is not
+  optional) and all still `--confirm --privacy public` only when
+  `storage/todays_uploads.json` already has `"approved": true` for that
+  slot and date. If the owner ever wants the 13:00/20:00 cadence back,
+  recreate them from the prompts still on file in this session's Routine
+  history rather than reinventing them.
 
 **Direct-publish-at-slot-time, not `--publish-at` scheduling (owner
 request, 2026-08-04):** "I'm still thinking we should post in the same time
