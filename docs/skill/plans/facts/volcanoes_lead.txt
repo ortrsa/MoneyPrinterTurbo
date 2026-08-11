@@ -1,0 +1,70 @@
+FACT LEAD -- Volcanoes, ranked countdown (self-sourced, 2026-08-11)
+
+Self-sourced (no owner lead available; Telegram inbox checked, empty). Fresh
+category -- not used anywhere on this channel before, and not overlapping
+any of the last 5 episodes (ancient Rome, "6-7" meme, trees, sleep, Great
+Auk).
+
+SOURCES CHECKED:
+- National Geographic / Smithsonian: Kawah Ijen "blue lava" is burning
+  sulfur gas, not lava itself
+- NOAA Ocean Exploration / mid-ocean ridge overview: ~75% of Earth's
+  volcanic activity happens underwater
+- Multiple sources (Vaia, HandWiki "Dirty thunderstorm"): volcanic
+  lightning mechanism (ash-particle triboelectric charging)
+- USGS / Britannica: Yellowstone caldera, last major eruption ~640,000
+  years ago, ~2,500x the size of the 1980 Mount St. Helens eruption
+- BBC Sky at Night / Space.com: Olympus Mons, ~21km high (~2.5x Everest),
+  roughly the size of Arizona, largest volcano in the solar system
+- NASA Science / Space.com: Io (Jupiter's moon), most volcanically active
+  body in the solar system, plumes documented up to 500km high, driven by
+  tidal heating from Jupiter's gravity
+
+VERIFIED FACTS:
+- Kawah Ijen, Indonesia: the "blue lava" seen in famous night photos is not
+  lava at all -- it's sulfuric gas igniting on contact with air above
+  ~360C, burning blue. Only visible at night; in daylight the volcano
+  looks ordinary. Genuine myth-correction, not a hedge.
+- ~75% is the most commonly cited figure across sources for the share of
+  Earth's total volcanic activity/magma output happening underwater along
+  the ~65,000km mid-ocean ridge system (estimates range 75-90% depending
+  on measurement method -- used the most-cited figure).
+- Volcanic lightning ("dirty thunderstorms"): ash, rock fragments and ice
+  colliding within an eruption plume generate static charge via
+  triboelectric charging, the same basic mechanism as rubbing a balloon,
+  building an electric field that triggers real lightning.
+- Yellowstone: a supervolcano; its most recent caldera-forming eruption was
+  ~640,000 years ago and is estimated at ~2,500x the volume of the 1980
+  Mount St. Helens eruption. Not implying it's imminent -- just the scale
+  of the last one.
+- Olympus Mons (Mars): ~21km high above the Martian datum (~2.5x Mount
+  Everest's height above sea level), a shield volcano with a footprint
+  roughly the size of Arizona/Poland. Confirmed as the largest volcano in
+  the solar system, no close competitor.
+- Io (moon of Jupiter): the most volcanically active body in the solar
+  system. Hundreds of active volcanoes; the tallest documented sulfur
+  plume reached roughly 500km above the surface. Driven by tidal flexing
+  from Jupiter's gravity (Io's solid body rises and falls ~100m per
+  orbit), not internal radioactive decay like Earth.
+
+NARRATIVE SHAPE: ranked countdown per §5d. #6 opens on a vivid, specific
+visual myth-correction (blue "lava" that isn't lava) since that's an
+inviting, low-effort entry point. Escalates through global-scale numbers
+(#5 underwater majority), a genuinely strange physical phenomenon (#4,
+lightning from ash), a familiar-name supervolcano given real scale (#3,
+Yellowstone), then leaves Earth entirely for the final two: the biggest
+volcano in the solar system (#2, Mars) before the most active one (#1,
+Io) -- closing on an alien, otherworldly payoff that the AI hook image
+directly foreshadows.
+
+FOOTAGE TREATMENT: no real named individuals in this topic at all. The
+mandatory AI hook is built around Io's alien volcanic landscape (dramatic
+sulfur plumes against a starry sky) specifically because no real
+ground-level Io footage exists anywhere -- all real Io imagery is distant
+orbital/telescope photography, not usable as close-up B-roll, so this is a
+genuine "Pexels cannot supply this" case, not just a creative choice.
+Real Pexels footage used for Earth-based segments (Kawah Ijen-style
+volcanic glow, ocean/underwater vents, storm clouds/lightning, Yellowstone
+landscape). Olympus Mons (#2) will need either a real Mars-surface stock
+substitute (same accepted class as prior astronomy episodes) or a second
+AI clip if Pexels has nothing usable -- decide after probing.
