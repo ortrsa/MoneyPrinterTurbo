@@ -2177,6 +2177,15 @@ footage-specificity hypothesis is now RESOLVED against itself.**
 
 Full detail in `SKILL.md`; the short version:
 
+- **Never use an em dash (—) in any text that goes out publicly under the
+  channel's voice** — comment replies, captions, titles, pinned comments.
+  Owner instruction, 2026-08-10: the em dash is a well-known AI-writing
+  tell and immediately gives away that a reply was AI-written, which is
+  exactly the "AI slop" accusation the channel is trying to defuse in
+  comment replies, not invite. Use a regular hyphen with spaces (`word -
+  word`), a comma, a period, or just restructure the sentence instead.
+  Applies to anything drafted for the owner to paste, not just things this
+  pipeline posts directly.
 - **Probe the stock library before rendering** — `docs/skill/probe_footage.py`.
   Thirty seconds versus a six-minute render. Skipping it cost five consecutive
   rejected renders of one animals episode.
