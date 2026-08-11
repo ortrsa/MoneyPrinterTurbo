@@ -212,6 +212,31 @@ asking the owner to re-confirm anything.
   match the outro. Final: 57.72s, 42.5MB, no compression needed. Full detail
   in `episode_log.csv` row 33.
 
+- **Ep34 (volcanoes) and ep35 (chess), both ranked countdown** — self-sourced
+  2026-08-11 09:00 build (ep32 and ep33 both still unapproved, so this is a
+  new day's build on top of an already-growing backlog — flagged to the
+  owner explicitly in the delivery message rather than silently piling up a
+  4th and 5th unapproved candidate). **Both sent to Telegram, awaiting
+  approval — no slots assigned.** Both fresh categories, all facts
+  independently sourced (`docs/skill/plans/facts/volcanoes_lead.txt`,
+  `chess_lead.txt`). Both landed inside target length on the first render
+  (volcanoes 62.98s, right at the 63s ceiling; chess 53.24s, core range) —
+  the length-estimate lesson from ep32/ep33 continues to hold once applied
+  proactively. Ep34 used 2 AI clips (hook + Olympus Mons, since no real
+  Mars-volcano footage exists — same accepted unphotographable-subject class
+  as prior astronomy episodes); ep35 used 1 (hook only). Both clean on full
+  frame verification, zero defects on either — first time in a while neither
+  build needed a mid-process fix. Minor QA-only note on ep35: the
+  "chess boxing" segment never actually cut to its pinned boxing-gloves
+  term, staying pure-chess-visual the whole time — not a defect (nothing
+  contradicts the narration), just lower specificity, logged per the
+  2026-08-10 resolution that footage-specificity is tracked for QA, not
+  retention prediction anymore. Both auto-generated captions asked
+  recall-style CTAs contradicting the countdown format's disagreement rule —
+  both discarded and hand-written to match their outros, with no em dashes
+  per the 2026-08-10 standing rule. Full detail in `episode_log.csv` rows
+  34/35.
+
 - **Ep28 (true crime, Ina Kenoyer $30M fake-inheritance poisoning)** — built
   2026-08-08 from an owner-supplied lead (a Facebook repost linking to NBC
   News), explicitly flagged as a high-priority viral build with specific
