@@ -54,6 +54,7 @@ IL_OFFSET = datetime.timedelta(hours=3)  # IDT; winter is +2, only affects "toda
 
 # video_id -> (episode label, topic, format). Hand-maintained -- see docstring.
 EPISODE_META: dict[str, tuple[str, str, str]] = {
+    "5VpPvoZeT_o": ("35", "Chess, ranked countdown (uploaded manually by the owner; live title reads 'Facts 28')", "facts"),
     "Ds6EHjsAgZE": ("29", "Great Auk -- the extinct original 'penguin' (story)", "story"),
     "h2RlkUXI7YA": ("31", "Trees and plants, ranked countdown (Facts 26)", "facts"),
     "MVyC4cYZk8M": ("28", "True crime -- ND antifreeze poisoning / fake inheritance", "story"),
