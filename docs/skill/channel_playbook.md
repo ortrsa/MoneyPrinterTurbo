@@ -2361,6 +2361,40 @@ Full detail in `SKILL.md`; the short version:
   `segment_timings` ever shows two adjacent entries with identical start/end,
   suspect this same failure mode again - check `segments` for large repeated-word
   runs before assuming the footage or facts are at fault.
+- **A loud-but-garbled TTS glitch reads as a frozen caption, and looks
+  identical to silence unless you check volume.** Owner-reported bug on Facts
+  28 (volcanoes, 2026-08-11): the caption froze on-screen for 6.44s right
+  after "the entire planet." `align_facts_to_words()`
+  (`app/services/viral.py` ~line 195) deliberately sets each fact segment's
+  end boundary to the *next* fact's speech-start time (per whisper), so
+  adjacent captions stay touching instead of flashing blank - that design is
+  correct, but it means any abnormally long gap in the underlying audio
+  between two facts gets faithfully rendered as a long dead caption.
+  `ffmpeg silencedetect` at -35dB and -30dB/0.3s found *nothing* unusual in
+  the suspect window - because the audio wasn't silent. `ffmpeg volumedetect`
+  on the exact window showed it was loud (mean -19dB, max -1.7dB), and a
+  direct re-run of `transcribe_word_timings()` on that audio confirmed
+  whisper genuinely found zero words there despite the volume: a real Gemini
+  TTS glitch (garbled/unintelligible audio), not a silence/pause and not a
+  captioning-code bug. **Diagnosis rule: when a caption looks stuck, don't
+  stop at `silencedetect` - also run `volumedetect` on the exact suspect
+  window and, if it's loud, re-transcribe that audio directly. Loud-but-
+  glitched and true-silence look identical to a human watching the frozen
+  caption but need the same fix either way (a fresh TTS re-render).**
+- **Re-verify ALL segments after ANY re-render, not just the one(s) you
+  fixed.** Fixing the Facts 28 TTS glitch above required a full re-render
+  (same script/footage pins, fresh TTS pass). The re-render fixed the
+  caption freeze, but a full re-verification pass (not just re-checking the
+  fixed segment) caught a second, completely unrelated defect that had not
+  been in the original buggy render at all: a recreational
+  parasailing/yacht/jet-ski clip landed on the underwater-volcanism fact,
+  courtesy of Pexels result instability striking on that specific render.
+  This is now the second confirmed case (after the ep33 Rome re-render) of a
+  fix-only re-check shipping a brand-new defect - re-rendering re-rolls
+  every unpinned segment's Pexels pool, not just the segment you touched, so
+  a full frame-by-frame pass across every segment is mandatory after any
+  re-render, with no exceptions for segments that were "already verified
+  clean" on a prior render.
 
 ### Species used so far
 
