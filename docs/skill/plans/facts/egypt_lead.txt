@@ -1,0 +1,79 @@
+FACT LEAD -- Ancient Egypt, ranked countdown (self-sourced, 2026-08-12)
+
+Self-sourced (no owner lead available; Telegram inbox checked, empty).
+Fresh category -- never used on this channel before, and does not overlap
+any of the last 5 episodes (sleep/dreams, trees/plants, ancient Rome,
+volcanoes, chess). Deliberately distinct from Rome (different civilization,
+different era, different visual language -- desert/Nile vs. Mediterranean
+stone architecture) despite both being "ancient history" facts episodes.
+
+SOURCES CHECKED:
+- Multiple outlets (widely reproduced math, e.g. Vox "Cleopatra lived
+  closer to the Moon landing than to the pyramids"): Great Pyramid
+  completed c. 2560 BCE, Cleopatra VII died 30 BCE (gap ~2530 years),
+  Moon landing 1969 CE (gap from Cleopatra ~1999 years) -- 1999 < 2530.
+- Smithsonian / National Geographic / Zahi Hawass & Mark Lehner's Giza
+  excavations: the pyramid workers' village (bakeries, breweries, a
+  cemetery with proper burials, skeletons showing healed fractures
+  consistent with medical care) -- evidence workers were paid laborers,
+  not slaves.
+- Britannica / Plutarch (Life of Antony): Cleopatra VII was a Macedonian
+  Greek, descended from Ptolemy I Soter (one of Alexander the Great's
+  generals); Plutarch specifically credits her as the first Ptolemaic
+  ruler to bother learning the Egyptian language.
+- Guinness World Records / architectural history: the Great Pyramid was
+  the tallest human-made structure on Earth from c. 2560 BCE until
+  Lincoln Cathedral's spire was completed in England in 1311 CE -- close
+  to 3,800 years, hedged as "almost" since exact completion dates vary
+  slightly by source.
+- Ebers Papyrus (translated medical text) and multiple secondary sources
+  (BBC, history-of-medicine surveys): ancient Egyptian physicians applied
+  moldy bread to wounds. Hedged carefully in the script -- they did not
+  understand germ theory or antibiotics; this is presented as a practice
+  modern science later connected to real antimicrobial properties in
+  mold, not as "they invented penicillin."
+- A toothpaste recipe on a papyrus now in the Vienna collection (widely
+  reported, e.g. a 2003 recreation by Austrian and Egyptian researchers):
+  crushed rock salt, mint, dried iris flowers, and grains of pepper.
+  Hedged as Greco-Roman-period Egypt (the papyrus is usually dated to
+  around the 4th century AD, not the pharaonic Old/Middle/New Kingdom
+  era) rather than implying every pharaoh brushed with this exact recipe.
+
+VERIFIED FACTS:
+- Toothpaste recipe on an Egyptian papyrus: rock salt, mint, dried iris,
+  pepper -- genuine, though from the later Greco-Roman period of Egyptian
+  history, not the pyramid-building era.
+- Moldy bread used medicinally on wounds, documented in medical papyri,
+  millennia before germ theory or penicillin.
+- Pyramid workers were paid laborers with a supporting village and
+  medical care, not slaves -- a real, well-evidenced myth-correction.
+- The Great Pyramid held the "tallest human-made structure on Earth"
+  record for roughly 3,800 years, until Lincoln Cathedral (1311 CE).
+- Cleopatra VII was ethnically Macedonian Greek (Ptolemaic dynasty), not
+  ethnically Egyptian, and is credited as the first in her dynasty to
+  actually learn the Egyptian language.
+- Cleopatra was born closer in time to the 1969 Moon landing (~1999
+  years) than to the completion of the Great Pyramid (~2530 years).
+
+NARRATIVE SHAPE: ranked countdown per §5d. #6 opens on a fun, low-stakes
+curiosity (toothpaste) as an inviting entry point. Escalates through a
+genuine scientific surprise (#5, moldy bread), a real myth-correction with
+social weight (#4, paid workers not slaves), a concrete scale record (#3,
+tallest structure for ~3,800 years), a second identity myth-correction
+that sets up the finale (#2, Cleopatra was Greek), landing on the most
+mind-bending, shareable payoff (#1, the Moon-landing timeline fact) --
+#1 and #2 are linked (both about who Cleopatra actually was and when she
+actually lived) so the payoff builds on the beat right before it rather
+than standing alone, same technique used for chess's #2/#1 pairing.
+
+FOOTAGE TREATMENT: no real named individuals central to the narrated facts
+except Cleopatra (#2/#1), who died over two thousand years ago -- per the
+real-people guardrail this is safely outside "a real, identifiable living
+or recent person," so no AI-likeness concern; real Pexels footage of
+Egyptian/Greco-Roman statuary and artwork (not a living-photograph
+likeness) is the planned treatment for those two segments, no AI clip
+needed for her specifically. The mandatory AI hook is built around the
+Cleopatra/pyramid/Moon-landing timeline concept -- see the segment-terms
+note in the render command for the exact visual chosen. Real Pexels
+footage covers pyramids/desert, ancient Egyptian temple carvings/statues,
+and general historical-Egypt visuals for the rest.
