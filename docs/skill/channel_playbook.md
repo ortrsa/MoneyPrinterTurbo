@@ -2254,6 +2254,29 @@ other flagging the ranked-countdown format's first real data point.**
 
 ## 6. Production rules learned the hard way
 
+**A fact can be individually true and still misattributed to the wrong
+civilization or era — check the SOURCE's actual date, not just the claim
+itself.** Ep36 (ancient Egypt) originally scripted fact #6 as "ancient
+Egyptians invented toothpaste," sourced from a real papyrus recipe (rock
+salt, mint, dried iris, pepper). The recipe is genuine and the sourcing
+notes even flagged it during the original fact-check as "Greco-Roman
+period, not necessarily pharaonic" — but that caveat stayed in the lead
+file and never made it into the actual narration. The owner caught it
+after publish-review, correctly pointing out that "ancient Egyptians"
+reads as the pyramid-building civilization to a viewer, not Egypt three-
+plus centuries later under Greek and Roman rule. **Every fact re-verified
+clean against fresh outside sources when checked** — this was never a
+wrong-fact problem, it was a wrong-*attribution* problem, the kind that
+survives a normal fact-check because the individual claim really is true.
+**Concrete rule: when a source's date sits in a different named era or
+ruling civilization than the one the script attributes it to, put that
+distinction in the narration itself** ("in Egypt under Roman rule," "over
+a thousand years after the pyramids") **rather than only in the internal
+sourcing notes where a viewer will never see it.** Fixed by rewording the
+line and re-rendering from the same footage pins; all 8 segments
+re-verified post-re-render per the standing discipline, landed at 62.8s
+(actually shorter than the flawed version's 63.62s despite more words).
+
 Full detail in `SKILL.md`; the short version:
 
 - **Never use an em dash (—) in any text that goes out publicly under the
