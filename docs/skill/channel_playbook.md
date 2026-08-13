@@ -25,6 +25,26 @@ A pinned summary for picking up a fresh session fast. Full rationale for every
 line here is in the dated sections below and in `SKILL.md`; this is only the
 "what's true right now" digest.
 
+**CORRECTION 2026-08-13 21:xx — the pending-approval backlog was reported as
+4 deep but was actually only 2. Ep36 (Egypt, "Facts 30 🏺") and ep38 (sharks,
+"Facts 31 🦈") were BOTH ALREADY PUBLISHED, uploaded manually by the owner
+outside this session/pipeline (same pattern as ep35's manual chess upload)
+— neither upload was ever recorded back into `episode_log.csv` or here,
+so a fresh session reading only the docs had no way to know and kept
+listing them as awaiting approval.** Caught by pulling the real YouTube
+uploads playlist directly (`channels.list` → `playlistItems.list` →
+`videos.list` via the Data API, `docs/skill/youtube/token.json`) and
+diffing video titles against `episode_log.csv`'s "awaiting approval" rows,
+after the owner said "some I uploaded myself." `episode_log.csv` rows
+36/38 are now corrected with the real video ids/dates/view counts.
+**Lesson: when the owner may have uploaded manually (they have done this
+before — ep35 chess), don't trust `episode_log.csv`/this file's "awaiting
+approval" status at face value if it's been more than a few hours — pull
+the actual channel upload list and cross-check titles before reporting a
+backlog number or risking a double-upload.** The real backlog after this
+fix is 2: **ep33 (ancient Rome)** and **ep37 (Inky the octopus story)** —
+confirmed absent from the live channel by title.
+
 **STANDING RULE 2026-08-08 — every episode opens on an AI-generated hook
 clip.** The owner's instruction: generate the first frame of every video with
 AI, because that is the frame you have full control over, and make the hook
