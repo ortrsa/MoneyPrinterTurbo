@@ -45,6 +45,18 @@ backlog number or risking a double-upload.** The real backlog after this
 fix is 2: **ep33 (ancient Rome)** and **ep37 (Inky the octopus story)** —
 confirmed absent from the live channel by title.
 
+**UPDATE same evening — both approved live in chat by the owner** ("הם
+מאושרים יעלו מחר" — they're approved, will go up tomorrow). Written into
+`storage/todays_uploads.json` for **2026-08-14**: ep33 (Rome) → 16:30 slot,
+ep37 (Inky) → 22:30 slot, both `approved: true`/`published: false`. Also
+recorded in `episode_log.csv` rows 33/37. **Pending-approval backlog is now
+0.** The owner separately asked, independent of the backlog state, to build
+**2 new episodes at tonight's 02:00 build regardless** — so the 02:00
+2026-08-14 build job should build 2 new episodes as normal (the backlog
+being clear makes this the default choice anyway, but note it was also an
+explicit standing instruction for tonight specifically, not just inferred
+from an empty backlog).
+
 **STANDING RULE 2026-08-08 — every episode opens on an AI-generated hook
 clip.** The owner's instruction: generate the first frame of every video with
 AI, because that is the frame you have full control over, and make the hook
