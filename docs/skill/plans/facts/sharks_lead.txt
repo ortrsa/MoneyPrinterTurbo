@@ -1,0 +1,64 @@
+FACT LEAD -- Sharks, ranked countdown (self-sourced, 2026-08-13)
+
+Self-sourced (no owner lead, Telegram inbox checked empty). Fresh category --
+sharks have not been used on this channel before (big cats/dogs/insects/bats
+covered other animal angles, but never sharks specifically), and does not
+overlap any of the last 5 episodes (trees, Great Auk, chess, volcanoes,
+6-7 meme).
+
+SOURCES CHECKED:
+- NOAA Fisheries / sharks4kids: sandbar sharks grow through roughly 35,000
+  teeth over a lifetime, teeth constantly replaced in rows.
+- Multiple sources: shark skeletons are entirely cartilage, no bones.
+- Frontiers in Marine Science (Feb 2021) / Nature / National Geographic:
+  the kitefin shark (Dalatias licha) confirmed as the largest known
+  bioluminescent vertebrate, glowing blue-green from its belly and fins,
+  hormone-regulated (not nerve-regulated like most bioluminescent life).
+- A-Z Animals / Slate / Snopes / PETA: global shark deaths average 5-15
+  people per year; vending machines (~2/yr), cows (~22/yr US), and
+  lightning (~20/yr US) each kill more people annually than sharks do
+  worldwide -- widely cross-verified, not a single-source claim.
+- ScienceDaily / Science.org / Britannica (2016 radiocarbon-dating study):
+  Greenland sharks are the longest-lived vertebrates known, life
+  expectancy of at least 272 years, up to ~392 (+/-120), and they don't
+  reach sexual maturity until roughly age 150.
+- Forbes / Natural History Museum / Smithsonian: sharks first appear in
+  the fossil record ~400-450 million years ago; the earliest known trees
+  appear ~385 million years ago -- sharks predate trees by at least
+  ~50-65 million years depending on source. Scripted as "before trees
+  did," not with a precise year-gap number, since sources vary on the
+  exact margin.
+
+VERIFIED FACTS:
+- ~35,000 teeth over a sandbar shark's lifetime, constant replacement.
+- No bones -- cartilage skeleton (true of all sharks, not just this one).
+- Kitefin shark: largest known bioluminescent vertebrate, confirmed 2021.
+- Sharks kill far fewer people per year than several ordinary causes
+  (vending machines, cows, lightning) -- genuine myth-correction.
+- Greenland sharks: longest-lived vertebrate, 400+ year lifespan, ~150
+  years to sexual maturity.
+- Sharks predate trees in the fossil record by tens of millions of years,
+  and have survived multiple mass extinctions (hedged as "multiple," not
+  a specific count, since the exact number sharks lived through depends
+  on precisely when in the fossil record their origin is dated).
+
+NARRATIVE SHAPE: ranked countdown per §5d. #6 opens on a fun body-quirk
+fact (teeth) as a low-effort entry point. Escalates through more body
+weirdness (#5 cartilage, #4 bioluminescence), a genuine myth-correction
+(#3, real danger ranking), a jaw-dropping longevity record (#2, Greenland
+sharks), landing on the biggest-scale payoff (#1, older than trees,
+survived mass extinctions) -- #2 and #1 are both about deep time/age,
+so the payoff builds on the beat right before it rather than standing
+alone, same technique as chess's and Egypt's #2/#1 pairings.
+
+FOOTAGE TREATMENT: no real named individuals in this topic. All subjects
+are real, filmable species with normally strong Pexels coverage (sharks
+are a popular stock-footage subject) -- the two exceptions expected to be
+thin are the kitefin shark specifically (a deep-sea species, ~200-600m
+depth, unlikely to have dedicated stock footage) and the Greenland shark
+(a slow-moving Arctic species, also likely thin coverage) -- generic
+shark/deep-sea substitutes are the accepted fallback for those two if
+species-specific footage isn't found, same class as prior thin-coverage
+substitutions (dolphin for sloth, ostrich for moa). No AI clip is expected
+to be necessary for this episode since real shark footage should cover
+the hook and #1 payoff adequately -- decide after probing.

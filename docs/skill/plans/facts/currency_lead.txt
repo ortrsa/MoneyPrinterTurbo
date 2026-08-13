@@ -1,0 +1,73 @@
+FACT LEAD -- Strangest things used as money, ranked countdown (self-sourced, 2026-08-13)
+
+Self-sourced (no owner lead, Telegram inbox checked empty). Fresh category --
+world currency/money facts never used on this channel before (the closest
+prior episode, ep19, was a STORY about the etymology of the single word
+"dollar," not a facts list about currency generally -- deliberately kept
+distinct). Does not overlap any of the last 5 episodes (Great Auk, chess,
+volcanoes, 6-7 meme, and today's sibling sharks episode).
+
+SOURCES CHECKED:
+- JMBullion / History Facts / US Mint / ABC News: the US penny cost ~3.69
+  cents to produce in 2025 (more than 3x face value); the US Mint ended
+  penny production on 2026-11-12 2025 -- confirmed via US Mint's own FAQ
+  page and multiple news outlets, not a single source. Scripted in past
+  tense since production has actually ended.
+- CNBC / Tripbase / Remitly: the Kuwaiti dinar is the most valuable
+  currency unit in circulation, worth a little over 3 USD per note.
+- GreekReporter / LBMA / American Numismatic Association: the first coins
+  were minted in Lydia (western Anatolia, modern Turkey) c. 600 BC under
+  King Alyattes, struck from electrum (a natural gold-silver alloy).
+- Wikipedia / Tripbase: the Zimbabwean 100-trillion-dollar note, printed
+  during 2008 hyperinflation and abandoned in 2009, now sells to
+  collectors for well over 100 real USD -- genuinely more valuable as a
+  collectible than it ever was as functional currency.
+- Bank of Canada Museum / NPR / Atlas Obscura / BEYONDbones (multiple
+  independent sources, not a single blog): Yap Island rai stones --
+  giant carved limestone discs, some up to ~12 feet across and several
+  tons; value is tracked by collective oral history rather than physical
+  possession, so ownership can change hands without the stone ever
+  moving. The specific sunk-stone story (a rai lost overboard in a storm
+  during transport, still recognised as valid currency by common
+  agreement since everyone knew it existed and who owned it) is
+  corroborated across NPR, Atlas Obscura, and the Bank of Canada Museum
+  as the same well-documented island account, not a single unverifiable
+  tall tale.
+- CHECKED AND REJECTED: the widely-repeated claim that more Monopoly
+  money is printed annually than real US currency. Current data (Federal
+  Reserve 2024 figures: $180-204B in new US currency vs. Hasbro's ~$30B
+  in Monopoly money) shows this is false today, regardless of how often
+  it's repeated online -- not used in the script.
+
+VERIFIED FACTS:
+- US penny: cost ~3.69 cents to make (2025), production ended Nov 2025.
+- Kuwaiti dinar: most valuable circulating currency unit, ~3 USD.
+- First coins: Lydia, c. 600 BC, electrum alloy.
+- Zimbabwe 100-trillion note: worth more as a collectible than as money.
+- Yap rai stones: huge, sometimes literally too heavy to move; ownership
+  tracked by oral consensus.
+- The specific sunk-rai-stone legend: multiply corroborated, not a single
+  source, and explicitly framed as the island's own account/legend rather
+  than as a verified news event, matching how the channel has previously
+  handled culturally-transmitted stories (e.g. the Cleopatra/Ptolemaic
+  framing in ep36).
+
+NARRATIVE SHAPE: ranked countdown per §5d. #6 opens on a familiar,
+relatable irony (a coin that costs more than it's worth) as a low-effort
+entry point. Escalates through a a record-holder (#5, most valuable
+currency unit), a history fact (#4, the first coins), a hyperinflation
+curiosity (#3, Zimbabwe), building toward the strangest currency concept
+(#2, giant immovable stones) before the single best payoff in the set
+(#1, the stone that sank and still counted) -- #2 sets up #1 by
+introducing the stones before the finale reveals the wildest specific
+story about them, same linking technique used in prior countdown builds.
+
+FOOTAGE TREATMENT: no real named individuals in this topic. Expected thin
+spots: Yap rai stones (a very specific niche subject, likely little to no
+dedicated Pexels coverage) and possibly the Zimbabwean banknote (specific
+prop, may not exist as stock footage) -- generic substitutes (coin/cash
+close-ups, a generic large stone/rock formation for the Yap segments) are
+the accepted fallback if literal footage isn't found; an AI clip is a
+plausible candidate specifically for the #1 payoff (the sunk stone on the
+ocean floor) since that is a very specific historical scene no stock
+footage could possibly show -- decide after probing.

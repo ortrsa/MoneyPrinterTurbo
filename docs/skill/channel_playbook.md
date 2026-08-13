@@ -2254,6 +2254,30 @@ other flagging the ranked-countdown format's first real data point.**
 
 ## 6. Production rules learned the hard way
 
+**The Veo/Vertex AI OAuth token expires on the same ~7-day cycle as the
+YouTube token — it is not a one-time setup.** Building ep39 (currency
+facts) on 2026-08-13, `docs/skill/ai-footage-fill/scripts/generate_ai_clip.py`
+failed with `google.auth.exceptions.RefreshError: invalid_grant: Token has
+been expired or revoked`, the exact same error class already documented
+for `docs/skill/youtube/token.json` in SKILL.md 8j. Root cause is
+identical: the Google Cloud project's OAuth consent screen is still in
+"Testing" status, so Google expires refresh tokens for test users after
+roughly 7 days regardless of use — `docs/skill/veo/token.json` was 8 days
+old (created 2026-08-05) when it failed. **Diagnosed, not guessed**: the
+traceback itself named the exact failure. **Fix requires the owner**:
+re-run `docs/skill/veo/authorize_local.py` locally and send back a fresh
+`token.json`, same as the YouTube-token fix. **Do not block the day's
+build on this** — ep39 was completed with real Pexels footage standing in
+for both planned AI clips (a cliff of round millstones for the Yap giant-
+stone-disc concept, an underwater boulder for the sunk-stone payoff),
+flagged to the owner via Telegram, and logged in episode_log.csv as a
+one-off deviation from the 2026-08-08 AI-hook standing rule, not a policy
+change. **Generalised rule: any OAuth token under this project's Testing-
+status consent screen will expire on the same ~7-day clock — check token
+age before assuming a credential failure is something else**, and budget
+for the owner needing to re-authorize roughly weekly until the consent
+screen is published/verified (the long-term fix already named in 8j).
+
 **A fact can be individually true and still misattributed to the wrong
 civilization or era — check the SOURCE's actual date, not just the claim
 itself.** Ep36 (ancient Egypt) originally scripted fact #6 as "ancient
