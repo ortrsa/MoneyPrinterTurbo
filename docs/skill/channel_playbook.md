@@ -57,17 +57,19 @@ being clear makes this the default choice anyway, but note it was also an
 explicit standing instruction for tonight specifically, not just inferred
 from an empty backlog).
 
-**STANDING RULE 2026-08-08 — every episode opens on an AI-generated hook
-clip.** The owner's instruction: generate the first frame of every video with
-AI, because that is the frame you have full control over, and make the hook
-strong enough to stop a thumb mid-scroll. This overrides the ai-footage-fill
-skill's usual "only generate what Pexels genuinely cannot supply" test **for
-segment 0 only** — the hook clip is generated whether or not stock footage
-exists for it. Budget was raised to match: **the mandatory hook clip plus up to
-two more AI clips per episode without asking; a fourth needs approval.** The
-owner also reaffirmed that **Pexels footage must stay in the mix** so an
-episode never reads as all-AI. Full guidance, including what makes a hook image
-strong vs. weak, is in `ai-footage-fill/SKILL.md`.
+~~**STANDING RULE 2026-08-08 — every episode opens on an AI-generated hook
+clip.**~~ **SUPERSEDED 2026-08-13/14 — see §10.** The owner's original
+instruction (generate the first frame of every video with AI, because that
+is the frame you have full control over) still applies **as the default
+for STORY format only**. For **facts/countdown format, the AI hook is now
+optional/opportunistic** — generate one only when Pexels genuinely cannot
+supply a strong hook shot, same test as the skill's original design, not
+on every video regardless. Reasoning and the data behind this reversal are
+in §10. The rest of the original rule is unchanged where AI clips ARE
+used: budget is the mandatory-when-used hook plus up to two more AI clips
+without asking (a fourth needs approval), and **Pexels footage must stay
+in the mix** so an episode never reads as all-AI. Full guidance on what
+makes a hook image strong vs. weak is in `ai-footage-fill/SKILL.md`.
 
 **Live/pending right now:**
 - Ep20 (Facts 20, human body) is **published, public**, video id `MsvTGDudZ-U`.
@@ -3001,3 +3003,125 @@ fact lists, `story_episode.py` for narrative stories, see §7a), both fact-check
 before rendering and verify footage frame-by-frame after, both now deliver to
 Telegram automatically, and Telegram inbound is available but must be
 triggered manually, not on a schedule.
+
+## 10. Performance analysis and A/B test (owner-approved 2026-08-13/14)
+
+**Full channel pull, 2026-08-13 evening — 39 videos, 36 subscribers, ~24.5K
+views.** Pulled live Data API stats (views/likes/comments, all 39 videos)
+plus Analytics API retention (frozen for the newest ~3) and cross-joined
+against `episode_log.csv`'s format/AI-clip/countdown fields. Full numbers
+live in this session's chat log; the finding that matters:
+
+**The countdown format (adopted 2026-08-07 specifically to fix low
+subscriber/comment conversion) is measuring WORSE than the era before it on
+every live metric, not better:**
+
+| metric | pre-countdown facts (17 videos) | countdown facts (9 videos) | change |
+|---|---|---|---|
+| avg views | 766 | 634 | -17% |
+| avg likes | 16.1 | 9.0 | -44% |
+| like-rate | 2.10% | 1.42% | -32% |
+| avg retention | 53.7% | 51.6% | -2pt |
+| subs/video | 1.35 | 1.00 | -26% |
+
+n is small (9, and 3 of those lack final retention since Analytics is frozen
+~48h) so this is not proof the format is bad — but every live metric moving
+the same direction is a real signal, not noise, and it is the opposite
+direction the format was adopted to move. **STORY format continues to
+outperform everything**: 63.4% avg retention, 3.10% like-rate, 1.50
+subs/video across 6 stories — ep26 (moa) alone brought +7 subscribers, the
+single best subscriber-conversion video on the channel. The channel's
+highest-ever retention facts episodes (space 101.3%, weather 84.3%, big
+cats 75.8%, the original animal-ensemble Facts 4 at 81.6%) all predate the
+countdown switch, which weakens the case that the countdown mechanic itself
+is what retention responds to — topic/footage specificity looks like the
+bigger lever. AI-clip count also correlates with retention, but every
+episode with 3-4 AI clips is a STORY, so this cannot be separated from the
+format effect with current data — see the AI-hook policy change below.
+
+**Owner approved all 5 proposed actions, 2026-08-13/14:**
+
+**1. Controlled A/B test, countdown vs. the old flat listicle, for facts
+episodes only.** Protocol: alternate arms on every new facts build —
+**Arm A = countdown** (`--counter-mode countdown`, current default),
+**Arm B = flat listicle** (`--counter-mode progress`, the pre-2026-08-07
+behavior, recall-style outro instead of the disagreement-invite CTA).
+Self-balancing: before each facts build, count completed+approved episodes
+in each arm since 2026-08-14 and build whichever arm has fewer (ties go to
+whichever arm hasn't run today). Ep33 (Rome, already built/approved,
+countdown) counts as **Arm A run #1**. Target **minimum 4 completed
+episodes per arm** before drawing a conclusion — expected around
+2026-08-21 uploads at the current ~1 facts episode/day pace, with real
+retention readable a couple of days after that (~2026-08-23). Judge on the
+same metrics as the table above (views, likes, like-rate, retention,
+subs), not on any single one in isolation. This is a floor, not a fixed
+end date — extend it if results are still ambiguous at n=4/arm, or stop
+early if one arm is clearly and consistently ahead well before then.
+**Log which arm every facts episode used in its `episode_log.csv`
+outcome_note** (the word "countdown" or "flat listicle", explicitly) so
+the arm assignment is auditable without re-deriving it from the CLI flags.
+
+**2. Story ratio raised from ~1-in-3 to 1-in-2 uploads.** Directly
+supported by the table above — story is the best-performing format on
+every metric measured. Practical shape: **every day's two build slots
+should be one STORY + one facts** (whichever arm is due next per #1),
+never two stories back-to-back (existing rule, unchanged) and never two
+facts on the same day unless a story lead genuinely isn't ready in time
+(flex to 2 facts that day, catch the ratio up the next day). Leads:
+self-source per `SKILL.md` step 0 and this file §9 when the inbound queue
+is empty, exactly as already established — an owner-supplied lead still
+jumps the queue.
+
+**3. AI hook clip: mandatory-by-default only for STORY, optional/
+opportunistic for facts.** See the superseded-rule note in §0. Reasoning:
+the data shows no measurable facts-format benefit from the single
+mandatory hook clip (retention scattered across the arm-B-era episodes
+with no trend), it adds ~$3.24/clip with no shown return there, and it
+made the pipeline depend on a Veo token that dies roughly weekly — for no
+demonstrated gain in that format. STORY keeps the mandatory hook (plus up
+to 2 more without asking, a 4th needs approval) because multi-AI-clip
+stories are the strongest content on the channel and routinely need shots
+Pexels simply cannot supply (extinct animals, symbolic true-crime
+dramatization). For facts, generate an AI clip only when Pexels genuinely
+has nothing usable for the hook — same test the skill was originally
+designed around.
+
+**4. Veo/YouTube token expiry: STOP and ask, don't silently substitute.**
+Owner's explicit instruction 2026-08-13/14: "every time the token expires,
+stop the generation and ask me to generate a new token, I will do it."
+This changes the prior behavior (documented in §6 for ep39: build with
+Pexels-only and log a deviation, don't block the day). New policy:
+- **STORY build, Veo token dead:** do **not** silently fall back and
+  finish the story without its AI clip(s). Stop that build, send a
+  Telegram message to the owner stating exactly which episode is blocked
+  and that a fresh `docs/skill/veo/token.json` is needed (re-run
+  `docs/skill/veo/authorize_local.py` locally), and wait. Resume once a
+  fresh token arrives — do not re-attempt on a stale token.
+- **Facts build, Veo token dead:** no stop needed — the AI hook is
+  optional there now (see #3), so proceed Pexels-only as normal. Still
+  send a short Telegram FYI that the token is dead, so the owner can
+  renew it before the next STORY build needs it, without treating it as
+  urgent/blocking.
+- Same halt-and-ask posture already applies to the YouTube upload token
+  (`docs/skill/youtube/token.json`) per `SKILL.md` 8j — unchanged, this
+  is now the explicit standing policy for both tokens, not YouTube's
+  alone.
+- **Confirmed dead again 2026-08-13 ~22:xx UTC** (`invalid_grant`, via
+  `--probe`) — a fresh token was requested from the owner the same
+  evening this policy was adopted. Check `--probe` before assuming
+  status; do not assume it is still dead indefinitely.
+
+**5. Audit pinned-comment + early-reply discipline.** Per `SKILL.md` item
+10, a pinned comment + replying to early comments is the strongest
+documented subscriber-conversion lever, ahead of any format mechanic —
+worth confirming this is actually happening consistently on recent
+uploads (pinned comment posted immediately after each publish, replies
+sent to early comments) rather than assumed. Not yet audited as of
+2026-08-14 — do this the next time upload activity allows checking the
+channel's comment section directly.
+
+**Schedule communicated to the owner via Telegram 2026-08-14** — see that
+message for the day-by-day build/slot plan through ~2026-08-21. If this
+file and that message ever disagree (a lead falls through, a token outage
+shifts a day), this file is the one to trust and update; the Telegram
+message was a snapshot at send time, not a live document.
