@@ -88,6 +88,14 @@ guess/overwrite it without the exact approved text on hand — owner should
 confirm/paste the correct caption, or re-approve the recall-style one if
 that's actually fine.
 
+**PUBLISHED 2026-08-14 16:47 Israel** by the automated 16:30 job — video id
+`1I1TXQS4pLw`, https://youtube.com/shorts/1I1TXQS4pLw, live title "Random
+But True Facts 33 🏛️". Sequence was re-verified against the live channel
+immediately before upload (highest existing was "Facts 32"), so the
+2026-08-14 04:00 retitle from "Facts 27" held up. **The 2026-08-14 22:30
+slot (ep37, Inky the octopus) is still pending** and remains `approved:
+true`/`published: false` in `storage/todays_uploads.json`.
+
 **RESOLVED 2026-08-14 — owner decision: ship ep33 with the recall-style
 caption as-is, do not chase down the lost hand-written text.** Explicitly
 **not** a reversal of the disagreement-CTA rule (§5d) — it stays the
