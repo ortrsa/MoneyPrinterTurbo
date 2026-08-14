@@ -82,11 +82,19 @@ text** ("name the exact year MIT and Harvard...") even though
 `episode_log.csv` row 33 says a hand-written disagreement-style caption was
 sent to Telegram instead — that correction apparently never got written
 back into the JSON file. Since `upload_video.py` reads caption straight
-from this file, tomorrow's automated 16:30 upload would ship the wrong
+from this file, the automated 16:30 upload would ship the wrong
 (recall-style) caption unless this is corrected before then. Did not
 guess/overwrite it without the exact approved text on hand — owner should
 confirm/paste the correct caption, or re-approve the recall-style one if
 that's actually fine.
+
+**RESOLVED 2026-08-14 — owner decision: ship ep33 with the recall-style
+caption as-is, do not chase down the lost hand-written text.** Explicitly
+**not** a reversal of the disagreement-CTA rule (§5d) — it stays the
+required convention for every countdown-format caption going forward, on
+ep34 onward. This is a one-off exception for ep33 specifically, made
+because the originally-approved replacement text was never saved anywhere
+retrievable, not because recall-style CTAs are fine again.
 
 **UPDATE 2026-08-14, same session — Veo/YouTube token fixed, story resumed.**
 Owner sent a fresh combined-scope token (same client_id and scopes already
