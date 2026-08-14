@@ -57,6 +57,37 @@ being clear makes this the default choice anyway, but note it was also an
 explicit standing instruction for tonight specifically, not just inferred
 from an empty backlog).
 
+**UPDATE 2026-08-14 04:00 build.** Cron was temporarily moved 02:00→04:00 IDT
+for this one firing only (owner request, unrelated to content). Veo token
+re-checked via `--probe`, still dead — per §10 item 4, the STORY build was
+paused (not built) rather than shipped without its AI clip; a Telegram
+message asked the owner for a fresh `docs/skill/veo/token.json`. Built 2
+facts episodes instead (§10's flex-to-2-facts rule) to fill both 8/15 slots:
+**ep40 Vikings (Arm B, flat listicle)**, sent to Telegram, awaiting approval
+— see `episode_log.csv` row 40 for the footage-substitution detail (Pexels
+has essentially no real Viking-era footage, same class of gap as
+sloths/glass-frogs; built entirely on verified visual echoes instead).
+**ep41 mushrooms/fungi (Arm A, countdown)** — arguable #1 payoff is the
+real 2022 Guinness "largest organism" title dispute between the Oregon
+honey fungus and a Shark Bay seagrass meadow, genuinely contested by
+area/weight/definition, which fits the countdown format's disagreement-CTA
+requirement unusually well. **Also caught and fixed while in the area**:
+ep33 (Rome)'s title was still "Facts 27" in its `result_json`, but the live
+channel's highest number had moved to "Facts 32" since that build — left
+uncorrected it would have published tomorrow as a numerically-regressive
+title. Fixed to "Facts 33" (metadata only, no re-render needed, same
+precedent as the 2026-08-06 title-sync). **Flagging, not fixing: ep33's
+`result_json` caption is still the original auto-generated recall-style
+text** ("name the exact year MIT and Harvard...") even though
+`episode_log.csv` row 33 says a hand-written disagreement-style caption was
+sent to Telegram instead — that correction apparently never got written
+back into the JSON file. Since `upload_video.py` reads caption straight
+from this file, tomorrow's automated 16:30 upload would ship the wrong
+(recall-style) caption unless this is corrected before then. Did not
+guess/overwrite it without the exact approved text on hand — owner should
+confirm/paste the correct caption, or re-approve the recall-style one if
+that's actually fine.
+
 ~~**STANDING RULE 2026-08-08 — every episode opens on an AI-generated hook
 clip.**~~ **SUPERSEDED 2026-08-13/14 — see §10.** The owner's original
 instruction (generate the first frame of every video with AI, because that
