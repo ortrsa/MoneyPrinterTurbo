@@ -439,10 +439,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--target-seconds",
         type=int,
-        default=60,
+        default=30,
         help=(
-            f"目标时长，{MIN_SECONDS}-{MAX_SECONDS} 秒。只有真正撑得住的故事才给到 "
-            f"{MAX_SECONDS} 秒；没什么可展开的就做 {MIN_SECONDS} 秒，硬拉长必然掉留存。"
+            f"目标时长，{MIN_SECONDS}-{MAX_SECONDS} 秒。默认 30 秒（owner 2026-08-14 "
+            f"的决定：整体从 ~60 秒改成 ~30 秒）。只有真正撑得住的故事才往上给；"
+            f"硬拉长必然掉留存。"
         ),
     )
     parser.add_argument(

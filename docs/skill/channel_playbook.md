@@ -13,6 +13,48 @@ making this specific channel work, so a fresh session does not restart from zero
 > hypothesis in §5 is now a governing requirement rather than an idea to try
 > eventually.
 
+> ## ⏱️ STANDING RULE 2026-08-14 — episodes target ~30s, not ~60s
+>
+> **Owner decision, applies to every episode built from now on.** Both
+> pipelines' defaults have been changed to match, so a plain invocation now
+> produces a ~30s episode with no extra flags:
+>
+> | | old (~60s) | new (~30s) |
+> |---|---|---|
+> | `viral_episode.py` `--fact-count` | 6 | **4** |
+> | `viral_episode.py` `--fact-max-words` | 25 | **16** |
+> | `story_episode.py` `--target-seconds` | 60 | **30** (→ 3 beats) |
+>
+> Facts math: 4 × 16 = 64 fact words + ~12 hook + ~14 outro ≈ 90 words, and
+> the measured rate is ~3.0 words/sec including `--narration-speed 1.1`
+> (from ep33: 174 words / 57.72s), so ≈ 30s. Countdown format still works at
+> 4 items (#4 → #1). Stories were *already* landing near this in practice
+> (Inky 27.0s, Great Auk 33.7s, Kenoyer 36.0s) — this change mainly moves
+> the **facts** episodes, which had been sitting at 50-58s.
+>
+> **Do not compress below 16 words per fact.** §2d's measured lesson: at 14
+> words there is no room for qualifiers, and the axolotl fact was compressed
+> into something factually wrong ("any organ transplants" instead of "from
+> other axolotls"). 16 is the floor that still holds a qualifier.
+>
+> **This decision runs against the channel's own prior evidence, and that is
+> deliberate — it is the owner's call, not a data-derived conclusion.** The
+> record it overrides, so nobody re-litigates it from the old numbers:
+> §2d/§5's resolved comparison had long format (6-fact, ~52-58s) at 45.8%
+> retention / 724 views across 9 videos vs short format (3-fact, ~25s) at
+> 41.4% / 275 views across 2, and the owner had *already* reverted a 3-fact
+> experiment once before (Facts 11, "the recipe didn't work, revert to 6").
+> The new format is 4 facts rather than 3 and keeps more words per fact, so
+> it is not a literal repeat of the rejected version. **Treat the old
+> length findings above (§2d, §5, the 50-58s "core range", the 63s ceiling)
+> as superseded for planning purposes** — they describe a format the channel
+> no longer builds. Rolling back means restoring 6 / 25 / 60.
+>
+> **Worth watching once ~5 short episodes are live:** retention % and
+> absolute watched-seconds move in opposite directions when you shorten
+> (a 30s video at 55% = 16.5s watched; a 57s video at 45% = 26s watched).
+> Compare both, not just the retention percentage, before judging the change.
+
 Measurements are dated. Anything not marked as measured is reasoning, and is
 labelled as such — several conclusions below rest on very few data points, and
 saying so is more useful than sounding confident.
