@@ -88,6 +88,21 @@ guess/overwrite it without the exact approved text on hand — owner should
 confirm/paste the correct caption, or re-approve the recall-style one if
 that's actually fine.
 
+**UPDATE 2026-08-14, same session — Veo/YouTube token fixed, story resumed.**
+Owner sent a fresh combined-scope token (same client_id and scopes already
+shared by both `docs/skill/youtube/token.json` and `docs/skill/veo/token.json`
+— this project has apparently always used one shared credential for both
+despite `veo/authorize_local.py`'s docstring describing them as meant to stay
+separate). Installed to both files, verified with `--probe` (Veo) and a live
+Data API call (YouTube) before trusting it. Per §10 item 4's stop-and-ask
+policy, immediately resumed the paused STORY build: **ep42, the Great Emu
+War (Western Australia, 1932)** — self-sourced, fact-checked, 2 AI clips
+(hook + soldiers-arrive beat), sent to Telegram awaiting approval. Full
+detail in `episode_log.csv` row 42. This is the first-ever confirmation that
+the halt-and-ask policy actually resumes work quickly once unblocked, not
+just that it prevents shipping a compromised video — worth keeping as the
+default going forward.
+
 ~~**STANDING RULE 2026-08-08 — every episode opens on an AI-generated hook
 clip.**~~ **SUPERSEDED 2026-08-13/14 — see §10.** The owner's original
 instruction (generate the first frame of every video with AI, because that
