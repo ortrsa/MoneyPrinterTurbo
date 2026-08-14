@@ -1,0 +1,70 @@
+STORY LEAD — Wojtek, the bear who was officially enlisted as a Polish soldier
+Self-sourced 2026-08-15 (Telegram inbox empty, no owner lead pending).
+
+WHY THIS TOPIC
+Animal stories are this channel's strongest content (§2/§5a: moa, Great Auk,
+Inky octopus all outperformed). This one adds a genuine documentary twist —
+the enlistment was a real bureaucratic workaround, not a nickname — which is
+the "wait, that actually happened?" shape the story format is built for.
+Fresh: no prior episode has covered WWII animals, Poland, or Iran.
+
+VERIFIED FACTS (independently checked before scripting)
+
+1. ORIGIN — 1942, near Hamadan, Iran. Soldiers of the 22nd Artillery Supply
+   Company, Polish II Corps, obtained a Syrian brown bear cub from a local
+   boy, trading supplies (accounts list canned beef, chocolate, a knife).
+   Named him Wojtek.
+   Sources: Wikipedia "Wojtek (bear)"; Britannica "Wojtek the Bear";
+   Imperial War Museum / Eden Camp Modern History Museum.
+
+2. THE TWIST — British regulations forbade pets and animal mascots aboard
+   military transport ships bound for Italy. To get around this, the Polish
+   II Corps formally ENLISTED him: he was given the rank of private, his own
+   serial number, and a paybook, and was billeted with the troops.
+   This is the hook. It is not folklore — it is the documented reason the
+   enlistment happened at all.
+   Sources: Britannica; Wikipedia; Edinburgh World Heritage; Historic
+   Environment Scotland blog.
+
+3. MONTE CASSINO, 1944 — during the battle Wojtek carried crates of
+   artillery shells for the gun crews, imitating the men around him.
+   Sources: Britannica; Forces News; Wikipedia.
+   HEDGE APPLIED: popular retellings add "and never dropped a single one."
+   That detail is not reliably sourced and reads as embellishment — it is
+   deliberately NOT in the script. The crate-carrying itself is well attested.
+
+4. AFTERMATH — promoted to corporal. The 22nd Company adopted an official
+   emblem showing a bear carrying an artillery shell; it became the unit's
+   badge.
+   Sources: Wikipedia; Britannica; Aquila Polonica.
+
+5. AFTER THE WAR — demobilised and sent to Edinburgh Zoo on 15 November
+   1947. Died December 1963, aged 21. Statues now stand in Edinburgh's
+   Princes Street Gardens and in Kraków.
+   Sources: Britannica; Edinburgh World Heritage; HES blog.
+
+CLAIMS DELIBERATELY AVOIDED
+- Exact weight: commonly given as ~200 kg / 440 lb (Wikipedia), but popular
+  articles inflate this to "500 pounds". Script says "six feet tall", which
+  is consistently attested, and avoids a specific weight figure.
+- "Smoked cigarettes / drank beer": widely repeated and probably true in
+  some form, but it is anecdotal colour, not needed, and drinking/smoking
+  framing is a poor fit for the audience. Left out.
+- Wojtek did NOT fight or handle a weapon. The script says he carried
+  ammunition crates, which is what the sources support.
+
+3-BEAT STRUCTURE (~30s per the 2026-08-14 standing rule)
+  HOOK  — statement form (story convention, not a question): the Polish army
+          had a soldier who was six feet tall and covered in fur.
+  BEAT 1 — soldiers adopted a bear cub in Iran in 1942; he grew up in camp.
+  BEAT 2 — the ship banned animals, so they enlisted him for real: rank,
+          serial number, paybook.
+  BEAT 3 / PAYOFF — at Monte Cassino he hauled crates of artillery shells,
+          was promoted to corporal, and his unit put a bear carrying a shell
+          on their official badge.
+
+AI HOOK CLIP (mandatory for STORY per §10 item 3)
+Concept: a large brown bear standing upright among WWII-era supply crates in
+a military camp at dusk — no human faces, no insignia, no real-person
+likeness. Pexels cannot supply "bear in a military camp"; this is exactly the
+unphotographable-subject case the skill exists for.

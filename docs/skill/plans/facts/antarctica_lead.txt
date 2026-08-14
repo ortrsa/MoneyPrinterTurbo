@@ -1,0 +1,67 @@
+FACTS LEAD — Antarctica (FIRST time this topic)
+Self-sourced 2026-08-15. A/B ARM B = FLAT LISTICLE (--counter-mode progress,
+recall-style outro). Arm A had 1 completed+approved episode since 2026-08-14
+(ep33 Rome); Arm B had 0, so Arm B is due per §10 item 1.
+Format: ~30s, 4 facts x <=16 words, per the 2026-08-14 standing rule.
+
+ARC: emptiest/driest place on Earth -> was once a rainforest -> runs blood
+red -> has a permanent lake of fire. Payoff is fire on the coldest continent.
+
+FACT 1 — largest desert
+"Antarctica is the largest desert on Earth, bigger than the Sahara; deserts
+are defined by rainfall."
+Verified: ~14.2M km2 vs Sahara ~9.2M km2. A desert is any region under
+250mm/yr precipitation regardless of temperature.
+Sources: Discover Wildlife; Mappr; Aurora Expeditions; Poseidon Expeditions.
+
+*** CORRECTION APPLIED — DO NOT RESTORE THE COMMON VERSION OF THIS FACT ***
+The widely repeated claim "Antarctica is drier than the Sahara" is NOT true
+as a continent-wide average: Antarctica averages ~166mm/yr precipitation vs
+the Sahara's ~76mm/yr. Only Antarctica's INTERIOR (<50mm/yr) beats the
+Sahara. The script therefore claims LARGEST, not DRIEST, which is
+unambiguously correct. Same class of error as the ep36 Egypt toothpaste
+attribution — a true-sounding claim that collapses on checking.
+Also avoided: "no rain for 14 million years" / "2 million years" figures for
+the Dry Valleys, which vary wildly between popular sources.
+
+FACT 2 — it was once a rainforest
+"Ninety million years ago a temperate rainforest grew there, less than a
+thousand kilometres from the South Pole."
+Verified: 2020 study on a sediment core from the seafloor off West
+Antarctica found preserved roots, pollen and spores from a mid-Cretaceous
+(92-83 Mya) temperate rainforest within ~900km of the South Pole. Mean
+annual temp ~12-13C, summers up to 20-25C, despite a four-month polar night.
+Sources: Nature; Imperial College London; Science News; Live Science; CBS.
+
+FACT 3 — Blood Falls
+"Blood Falls runs rust-red because ancient iron-rich brine oxidizes the
+moment it hits the air."
+Verified: brine flows from beneath Taylor Glacier into Lake Bonney; iron in
+the brine oxidizes on contact with oxygen, turning it rust red. The brine is
+thought to be ancient trapped seawater, kept liquid by its salt content.
+Sources: National Geographic; Smithsonian Magazine; Wikipedia; Polar Journal.
+NOTE: 2023 work refined the mechanism (iron-rich nanospheres rather than
+simple oxide minerals). The script's phrasing — iron-rich brine oxidizing on
+contact with air — remains correct under the refined account, so no hedge is
+needed, but do not add specific mineral claims.
+
+FACT 4 / PAYOFF — Mount Erebus
+"Mount Erebus, the world's southernmost active volcano, has churned a lava
+lake since at least 1972."
+Verified: 3,794m, on Ross Island, ~35km from McMurdo Station. Persistent
+convecting phonolite lava lake, continuously active since at least 1972 —
+one of only a handful of long-lived lava lakes on Earth.
+Sources: NASA Earth Observatory; Britannica; VolcanoDiscovery; Eos.
+NOTE: ep34 covered volcanoes as a topic. This is one fact inside an
+Antarctica episode, not a repeat topic, and it is the payoff precisely
+because it contradicts the episode's own opening image.
+
+HOOK (~11 words, foreshadows the payoff without spoiling it)
+"The coldest place on Earth is hiding a lake of fire."
+
+OUTRO — RECALL-STYLE, per Arm B (NOT the countdown format's
+disagreement-invite CTA): ask which one the viewer already knew.
+
+AI HOOK CLIP: not planned. Per §10 item 3 the AI hook is optional for facts
+now — generate one only if Pexels genuinely cannot supply a usable hook shot.
+Antarctic ice/aerial footage is well covered on Pexels, so probe first.
