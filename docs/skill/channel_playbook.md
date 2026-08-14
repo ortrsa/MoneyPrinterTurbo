@@ -92,9 +92,14 @@ that's actually fine.
 `1I1TXQS4pLw`, https://youtube.com/shorts/1I1TXQS4pLw, live title "Random
 But True Facts 33 🏛️". Sequence was re-verified against the live channel
 immediately before upload (highest existing was "Facts 32"), so the
-2026-08-14 04:00 retitle from "Facts 27" held up. **The 2026-08-14 22:30
-slot (ep37, Inky the octopus) is still pending** and remains `approved:
-true`/`published: false` in `storage/todays_uploads.json`.
+2026-08-14 04:00 retitle from "Facts 27" held up. **The 22:30 slot (ep37,
+Inky the octopus, STORY) followed at 22:33** — video id `rjjDcnuzcOk`,
+https://youtube.com/shorts/rjjDcnuzcOk, 27.0s. **Both 2026-08-14 slots are
+now published and `storage/todays_uploads.json` is fully consumed** — the
+next build job needs to stage a fresh file for 2026-08-15. The three
+episodes built for those slots (ep40 Vikings, ep41 mushrooms, ep42 Great
+Emu War) are all still **awaiting owner approval** — none has a slot
+assigned, so 2026-08-15 has nothing approved in it yet.
 
 **RESOLVED 2026-08-14 — owner decision: ship ep33 with the recall-style
 caption as-is, do not chase down the lost hand-written text.** Explicitly
