@@ -13,70 +13,56 @@ making this specific channel work, so a fresh session does not restart from zero
 > hypothesis in §5 is now a governing requirement rather than an idea to try
 > eventually.
 
-> ## ⏱️ STANDING RULE 2026-08-14 — episodes target ~30s, not ~60s
+> ## ⏱️ LENGTH: back to ~60s. The ~30s rule was tried for one day and REWOUND.
 >
-> **Owner decision, applies to every episode built from now on.** Both
-> pipelines' defaults have been changed to match, so a plain invocation now
-> produces a ~30s episode with no extra flags:
+> **Timeline, so this is not re-litigated in either direction:**
+> - **2026-08-14** the owner moved every episode to ~30s and both pipelines'
+>   defaults were changed (`--fact-count` 6→4, `--fact-max-words` 25→16,
+>   story `--target-seconds` 60→30).
+> - **2026-08-15** the owner **rewound it**, explicitly to protect the
+>   countdown-vs-listicle A/B test. All three defaults are back to **6 / 25 /
+>   60**, and the two episodes built under the short rule (ep43 Antarctica,
+>   ep44 Wojtek) were **rebuilt at the old length** rather than left as
+>   outliers.
 >
-> | | old (~60s) | new (~30s) |
-> |---|---|---|
-> | `viral_episode.py` `--fact-count` | 6 | **4** |
-> | `viral_episode.py` `--fact-max-words` | 25 | **16** |
-> | `story_episode.py` `--target-seconds` | 60 | **30** (→ 3 beats) |
+> **Why the rewind, in one line:** §10's A/B test had already logged ep33
+> (Rome, countdown, 57.72s) as Arm A run #1. Building Arm B at ~33s would
+> have confounded *countdown vs flat listicle* with *58s vs 33s* — a much
+> bigger variable than the arm being tested. Shortening mid-test would have
+> cost the experiment, so the length change goes back in the box until the
+> A/B test finishes.
 >
-> Facts math: 4 × 16 = 64 fact words + ~12 hook + ~14 outro ≈ 90 words, and
-> the measured rate is ~3.0 words/sec including `--narration-speed 1.1`
-> (from ep33: 174 words / 57.72s), so ≈ 30s. Countdown format still works at
-> 4 items (#4 → #1). Stories were *already* landing near this in practice
-> (Inky 27.0s, Great Auk 33.7s, Kenoyer 36.0s) — this change mainly moves
-> the **facts** episodes, which had been sitting at 50-58s.
->
-> **Do not compress below 16 words per fact.** §2d's measured lesson: at 14
-> words there is no room for qualifiers, and the axolotl fact was compressed
-> into something factually wrong ("any organ transplants" instead of "from
-> other axolotls"). 16 is the floor that still holds a qualifier.
->
-> **This decision runs against the channel's own prior evidence, and that is
-> deliberate — it is the owner's call, not a data-derived conclusion.** The
-> record it overrides, so nobody re-litigates it from the old numbers:
-> §2d/§5's resolved comparison had long format (6-fact, ~52-58s) at 45.8%
-> retention / 724 views across 9 videos vs short format (3-fact, ~25s) at
-> 41.4% / 275 views across 2, and the owner had *already* reverted a 3-fact
-> experiment once before (Facts 11, "the recipe didn't work, revert to 6").
-> The new format is 4 facts rather than 3 and keeps more words per fact, so
-> it is not a literal repeat of the rejected version. **Treat the old
-> length findings above (§2d, §5, the 50-58s "core range", the 63s ceiling)
-> as superseded for planning purposes** — they describe a format the channel
-> no longer builds. Rolling back means restoring 6 / 25 / 60.
->
-> **Worth watching once ~5 short episodes are live:** retention % and
-> absolute watched-seconds move in opposite directions when you shorten
-> (a 30s video at 55% = 16.5s watched; a 57s video at 45% = 26s watched).
-> Compare both, not just the retention percentage, before judging the change.
+> **Do not re-adopt ~30s while the A/B test is running.** After it concludes
+> (§10 item 1 targets a minimum of 4 completed episodes per arm) the length
+> question is open again and worth testing properly — as its own single-
+> variable experiment, not folded into another one. The measured record that
+> already exists: long format (6-fact, ~52-58s) 45.8% retention / 724 views
+> across 9 videos vs short format (3-fact, ~25s) 41.4% / 275 across 2, plus
+> an owner-reverted 3-fact experiment on Facts 11. The 50-58s core range and
+> the ~63s ceiling are live targets again.
 
-> ### 2026-08-15 02:00 build — first two episodes under the ~30s rule
+> ### 2026-08-15 02:00 build — ep43 Antarctica + ep44 Wojtek
 >
 > **Both 2026-08-14 slots published** (ep33 Rome 16:30, ep37 Inky 22:30), so
-> `storage/todays_uploads.json` is fully consumed and **still dated
-> 2026-08-14** — the next job needs a fresh file for 2026-08-15, which has
-> **nothing approved in it**.
+> `storage/todays_uploads.json` was fully consumed and **still dated
+> 2026-08-14** — a fresh file is needed for 2026-08-15, which has **nothing
+> approved in it**.
 >
 > **Backlog decision.** Three finished episodes were already awaiting approval
-> (ep40 Vikings, ep41 mushrooms, ep42 Emu War). Built 2 more anyway rather
-> than skipping, because **all three are now off-spec**: they are 47.6s /
-> 47.4s / 49.5s, built hours *before* the ~30s rule landed. They are not a
-> ready-to-ship queue, they are the last of the old format. Flagged to the
-> owner as an explicit either/or (ship them as final old-format episodes, or
-> drop them in favour of the new ~30s builds) instead of silently stacking to
-> five. **Backlog is now 5 unapproved — do not build a 6th and 7th without
-> an answer on ep40/41/42.**
+> (ep40 Vikings 47.6s, ep41 mushrooms 47.4s, ep42 Emu War 49.5s). Built 2 more
+> anyway rather than skipping, and flagged the pile to the owner explicitly
+> instead of silently stacking. **Backlog is 5 unapproved — do not build a 6th
+> and 7th without an answer on ep40/41/42.** Note those three were built under
+> neither regime cleanly (they are ~48s, between the old ~55s and the
+> short-lived ~30s); with the rewind they are much closer to spec than they
+> were, so the "off-spec, drop them?" framing sent to the owner on 2026-08-15
+> is now mostly moot.
 >
-> **Built:** ep43 Antarctica (facts, **Arm B flat listicle**, 33.02s) and ep44
-> Wojtek the soldier bear (STORY, ~32s). Veo token probed alive before both.
-> Ep43 used 1 AI clip (payoff only — the AI hook is optional for facts now and
-> Pexels had a good antarctic aerial); ep44 used **3, the no-ask ceiling**
-> (hook + 2 discretionary per §10 item 3; a 4th would need approval).
+> **Built:** ep43 Antarctica (facts, **Arm B flat listicle**) and ep44 Wojtek
+> the soldier bear (STORY). Veo token probed alive before both. Both were
+> first built at ~33s under the short-lived rule and then **rebuilt at full
+> length** after the rewind — see their `episode_log.csv` rows for both
+> durations.
 >
 > **Pexels gap confirmed again, two new categories.** No usable *lava lake*
 > footage (returns CGI graphics, an industrial furnace, turquoise crater
@@ -94,24 +80,6 @@ making this specific channel work, so a fresh session does not restart from zero
 > for *deliberately illegible* writing, which is the reusable trick here: an
 > AI document shot with shallow depth of field cannot contradict the
 > narration the way real foreign text does.
-
-> ### ⚠️ The ~30s change breaks the A/B test's comparability — read before
-> reading any Arm A vs Arm B result
->
-> Noted 2026-08-15 by the 02:00 build. §10 item 1 names **ep33 (Rome) as Arm A
-> run #1** — but ep33 is a **57.72s old-format** episode, and every episode
-> built from 2026-08-15 onward is **~30s**. Arm B run #1 (ep43, Antarctica)
-> came in at **33.02s**. Comparing them heads-up confounds *countdown vs flat
-> listicle* with *58s vs 33s*, which is a far larger change than the arm
-> itself.
->
-> **Recommended fix, not yet applied because it is the owner's call:** reset
-> both arm counters to zero at the 2026-08-14 length change, so the test runs
-> only within the new ~30s regime, and stop counting ep33 as Arm A run #1.
-> That costs one already-built data point and pushes the n=4/arm target back
-> by roughly two days. The alternative — carrying ep33 forward — means the
-> first Arm A vs Arm B comparison is not interpretable. Either way, **do not
-> read a winner off a table that mixes the two lengths.**
 
 Measurements are dated. Anything not marked as measured is reasoning, and is
 labelled as such — several conclusions below rest on very few data points, and

@@ -41,16 +41,9 @@ from loguru import logger  # noqa: E402
 from app.services import viral  # noqa: E402
 from app.utils import utils as app_utils  # noqa: E402
 
-# owner 决定（2026-08-14）：成片目标时长从 ~60 秒改成 ~30 秒。
-# 实测口播速率 ~3.0 词/秒（已含 narration_speed 1.1，见 ep33：174 词 / 57.72 秒），
-# 所以 30 秒 ≈ 90 个词：钩子 ~12 词 + 结尾 ~14 词，剩下 ~64 词分给事实，
-# 即 4 条 × 16 词。倒计时格式在 4 条时仍然成立（#4 → #1）。
-#
-# 注意：这条改动和 playbook §2d/§5 里已有的实测证据方向相反（长版 6 条/~55 秒
-# 在留存和播放量上都优于 3 条/~25 秒的短版，owner 当时也亲自否掉过短版），
-# 属于 owner 的明确决定，不是从数据推出来的结论。要回滚就把这两个常量
-# 改回 6 / 25。
-DEFAULT_FACT_COUNT = 4
+# 研究结论：50-60 秒档位在事实类短视频里平均表现最好，而完播率仍是核心指标。
+# 按 150-170 WPM 的口播语速，约 50 秒对应 125-140 个词，正好放得下 6 条事实。
+DEFAULT_FACT_COUNT = 6
 
 # 一组常见的、读起来明显"像 AI 写的"词汇/说法，直接写进 prompt 里禁止，
 # 比重新生成后再事后过滤要便宜、也更可靠——模型一开始就不会往这个方向写。
@@ -69,13 +62,10 @@ HUMANIZATION_NOTE = (
     "length instead of writing uniform-length sentences."
 )
 
-# 每条事实的词数上限直接决定成片长度：25 词一条大约 8-9 秒口播，16 词约 5-6 秒。
-# 配合 DEFAULT_FACT_COUNT=4，4 × 16 词 + 钩子/结尾 ≈ 90 词 ≈ 30 秒，即当前目标。
-#
-# 不要再往下压到 14 词：playbook §2d 的实测教训是 14 词一条时没有空间放限定语，
-# axolotl 那条因此被压成了事实上不准确的说法（"任何器官移植"而不是"来自其他
-# 美西螈的移植"）。16 词是"够短但还留得住限定语"的下限。
-DEFAULT_FACT_MAX_WORDS = 16
+# 每条事实的词数上限直接决定成片长度：25 词一条大约 8-9 秒口播，六条就是
+# 50-60 秒；要压到 20 秒以内（增长指南 Rank 1 的硬指标）只能同时减少条数
+# 并把每条压到 14 词左右（约 4-5 秒）。所以词数必须可调，不能写死。
+DEFAULT_FACT_MAX_WORDS = 25
 
 # 观众反馈（owner，2026-08-05）：整体节奏偏慢，希望旁白和字幕都快一点——
 # 但明确要求画面剪辑仍然要跟着口播走，不能让声音和画面脱节。这里选择在
@@ -710,9 +700,8 @@ def main(argv: list[str] | None = None) -> int:
         type=int,
         default=DEFAULT_FACT_MAX_WORDS,
         help=(
-            "每条事实口播的词数上限，直接决定成片长度。16 词约 5-6 秒一条，"
-            "配合 --fact-count 4 是当前 ~30 秒的默认档；25 词约 8-9 秒一条，"
-            "配合 --fact-count 6 是旧的 ~55-60 秒档。"
+            "每条事实口播的词数上限，直接决定成片长度。25 词约 8-9 秒一条；"
+            "要做 20 秒以内的短版本，配合 --fact-count 3 用 14 左右。"
         ),
     )
     parser.add_argument("--root", type=Path, default=PROJECT_ROOT)
