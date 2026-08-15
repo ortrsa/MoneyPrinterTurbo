@@ -3204,8 +3204,13 @@ built/approved, countdown) counts as **Arm A run #1**.
 
 | arm | episodes since 2026-08-14 | count |
 |---|---|---|
-| **A — countdown** | ep33 Rome (57.72s, approved), ep41 mushrooms (47.4s, awaiting approval) | **2** |
-| **B — flat listicle** | ep40 Vikings (47.6s, awaiting approval), ep43 Antarctica (56.0s, awaiting approval) | **2** |
+| **A — countdown** | ep33 Rome (57.72s, published), ep41 mushrooms (47.4s, approved) | **2** |
+| **B — flat listicle** | ep40 Vikings (47.6s, approved), ep43 Antarctica (56.0s, approved) | **2** |
+
+**Resolved 2026-08-15: the owner approved ep40 and ep41 as a pair**, so both
+arms keep their ~47.5s data point and the arms stay level at 2/2. ep43
+(Antarctica) and ep44 (Wojtek) were approved in the same exchange. Backlog is
+down to 1 — ep42 Emu War, a STORY, outside the A/B test.
 
 **The arms are balanced at 2/2, so the next facts build is a tie — break it
 on whichever arm hasn't run today.** They also stay balanced under either
