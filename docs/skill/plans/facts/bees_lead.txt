@@ -1,0 +1,70 @@
+BEES — ranked countdown (A/B Arm A), episode 45. Sourced and fact-checked 2026-08-16.
+
+Format: countdown #6 -> #1, deliberately arguable #1, outro invites disagreement.
+All six independently verified via web search; hedges noted per fact.
+
+---
+
+#6  Honeybees are not native to the Americas.
+    The Virginia Company shipped hives to Jamestown in a fleet that arrived April 1622.
+    ~4,000 native bee species already existed in North America, none of them honey producers.
+    Native Americans reportedly called the European honeybee "the white man's fly."
+    HEDGE: the "white man's fly" line is widely repeated in secondary sources; kept because
+    it is attributed, not stated as the bees' own history. 231 years from east coast to west.
+    Sources: thebfarm.com, National Honey Board, LA County Beekeepers Assoc.
+
+#5  A single worker bee makes about 1/12 of a teaspoon of honey in her entire life.
+    Worker lifespan ~5-6 weeks in spring/summer. A 16oz jar = 1,100+ bees' foraging.
+    HEDGE (IMPORTANT): this is an educated average, NOT a measurement — there is no way to
+    measure one bee's output, and it shifts with weather, nectar, season, colony. Script says
+    "about", never a precise claim.
+    Sources: Local Hive Honey, Carolina Honeybees, Apiary Project.
+
+#4  Honey does not spoil.
+    Honey recovered from sealed Egyptian tombs 3,000+ years old has not spoiled. Mechanism is
+    real chemistry: very low water content, low pH (acidic), and hydrogen peroxide produced by
+    a bee enzyme — together these make microbial growth almost impossible.
+    HEDGE (IMPORTANT): the popular "archaeologists tasted it and it was still sweet" detail is
+    only *reportedly* sourced and is DELIBERATELY LEFT OUT. Script anchors on the chemistry and
+    on the honey being unspoiled, which is well supported. Same discipline as ep44's Wojtek
+    "never dropped a shell" omission.
+    Sources: Dallas Express, SpaceDaily, History Facts, STEMfinity.
+
+#3  Bees can be trained to recognise individual human faces.
+    >80% accuracy discriminating a target face from a similar distractor, and they hold the
+    recognition across viewpoints. Brain ~1mm across, ~1 million neurons.
+    They use CONFIGURAL PROCESSING — identity from the spatial arrangement of features — the
+    same strategy the human visual system uses, evidenced by the fact that rotating stimuli
+    180 degrees collapses their performance, exactly as face inversion impairs humans.
+    Sources: J. Exp. Biol. 2005 (208:4709) and 2010 (213:593), PubMed 16326952 / 20118310,
+    ScienceDaily.
+
+#2  The waggle dance encodes both direction and distance.
+    Angle of the waggle run relative to vertical = bearing to the food relative to the sun;
+    duration of the waggle = distance. Decoded by Karl von Frisch, Nobel Prize 1973.
+    Textbook-solid, no hedge needed.
+
+#1  (ARGUABLE PAYOFF) Honeybees are not endangered — they are livestock, and keeping more of
+    them may be actively harming the wild bees that are actually in trouble.
+    Cambridge researchers argue honeybees should be thought of as livestock, not wildlife, and
+    that conflating managed-colony die-offs with the wild-pollinator conservation crisis
+    confuses the public. Beekeeping is an extractive activity: it removes nectar and pollen
+    that wild species need. 78% of reviewed studies found exploitative competition from honey
+    bees toward wild pollinators. High-density beekeeping measured at -55% wild bee occurrence
+    and -50% nectar foraging success. Promoting hives inside protected areas likely worsens
+    wild pollinator loss.
+    WHY THIS IS A LEGITIMATE ARGUABLE #1: this is a real, live disagreement between beekeepers
+    and bee conservationists with published evidence on both sides — not a manufactured
+    controversy. Directly contradicts the "save the bees" message most viewers have absorbed,
+    which is exactly the disagreement the countdown outro asks for. Same class of fit as ep41's
+    Guinness largest-organism dispute.
+    Sources: University of Cambridge research news, Nature Sci Reports (s41598-018-27591-y),
+    ScienceDirect (S1470160X20306865, S221204162300030X), PMC6006304, PMC8081269.
+
+---
+
+FOOTAGE NOTE: unlike Vikings/Antarctica/WWII, bees have GOOD real Pexels coverage
+(bees on flowers, hives, beekeepers in veils, honey pouring, honeycomb). Expect no AI clip
+needed — per §10 item 3 the AI hook is optional for facts. The one segment to watch is #1,
+which is an argument rather than an object; plan a beekeeper-with-hives shot (managed
+colonies = the literal subject) rather than anything trying to depict "competition".
