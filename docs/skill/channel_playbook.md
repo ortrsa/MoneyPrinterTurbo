@@ -3181,10 +3181,40 @@ episodes only.** Protocol: alternate arms on every new facts build —
 **Arm A = countdown** (`--counter-mode countdown`, current default),
 **Arm B = flat listicle** (`--counter-mode progress`, the pre-2026-08-07
 behavior, recall-style outro instead of the disagreement-invite CTA).
-Self-balancing: before each facts build, count completed+approved episodes
-in each arm since 2026-08-14 and build whichever arm has fewer (ties go to
-whichever arm hasn't run today). Ep33 (Rome, already built/approved,
-countdown) counts as **Arm A run #1**. Target **minimum 4 completed
+Self-balancing: before each facts build, count **built-and-frame-verified**
+episodes in each arm since 2026-08-14 and build whichever arm has fewer
+(ties go to whichever arm hasn't run today). Ep33 (Rome, already
+built/approved, countdown) counts as **Arm A run #1**.
+
+> **Counting rule corrected 2026-08-15 — count BUILT, not APPROVED.** This
+> originally read "completed+approved", which stalls the moment approvals
+> lag behind builds. On 2026-08-15 the backlog was 5 unapproved with only
+> ep33 approved since 2026-08-14, so the counts read Arm A 1 / Arm B 0 even
+> though ep43 (Arm B) was already built and verified — the rule would have
+> assigned Arm B to the next facts build, and the one after that, until
+> approvals landed. That is a run of consecutive same-arm builds caused
+> purely by bookkeeping, which is exactly the imbalance the self-balancing
+> rule exists to prevent. An episode's arm is fixed the moment it renders;
+> approval decides whether it *ships*, not which arm it belongs to. Count a
+> build once it has passed frame verification. If an episode is later
+> dropped rather than approved, subtract it from its arm's count then — do
+> not pre-emptively withhold the count while it sits awaiting approval.
+
+**Live arm counts as of 2026-08-15, under the corrected rule:**
+
+| arm | episodes since 2026-08-14 | count |
+|---|---|---|
+| **A — countdown** | ep33 Rome (57.72s, approved), ep41 mushrooms (47.4s, awaiting approval) | **2** |
+| **B — flat listicle** | ep40 Vikings (47.6s, awaiting approval), ep43 Antarctica (56.0s, awaiting approval) | **2** |
+
+**The arms are balanced at 2/2, so the next facts build is a tie — break it
+on whichever arm hasn't run today.** They also stay balanced under either
+outcome of the pending ep40/ep41 decision, because that pair is one episode
+from each arm: approve both and it is 2/2, drop both and it is 1/1. This is
+why ep40 and ep41 must be decided **as a pair** — approving or dropping only
+one leaves the arms at 2/1 *and* puts a lone ~47.5s episode in one arm
+against ~56s in the other, reintroducing the length confound the 2026-08-15
+rebuild was done to remove, this time inside a single arm. Target **minimum 4 completed
 episodes per arm** before drawing a conclusion — expected around
 2026-08-21 uploads at the current ~1 facts episode/day pace, with real
 retention readable a couple of days after that (~2026-08-23). Judge on the
