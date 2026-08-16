@@ -93,6 +93,42 @@ making this specific channel work, so a fresh session does not restart from zero
 > missing one. **2026-08-17 is still coverable** — ep45 plus ep42 (Emu War,
 > STORY, built and awaiting approval since 2026-08-14) fill both slots if
 > ep42 is approved. If ep42 is dropped, 2026-08-17 needs a story built.
+
+> ### 2026-08-16, later same session — ep46 Swiss hijack story, built on direct request
+>
+> Owner asked directly to build the story that got flagged as not-built above.
+> **Real fact-check catch before scripting: the lead's payoff was wrong.**
+> `story_swisshijack_lead.txt` originally claimed "Switzerland granted him
+> asylum rather than prosecuting him." Independent re-verification found this
+> does not hold up — Swiss prosecutors declined to prosecute at all (not the
+> same as asylum) after a panel unanimously found the hijacker had been in a
+> state of complete paranoia during the hijacking; he was ordered into
+> mandatory psychiatric treatment instead of prison. "Granted asylum" is
+> unconfirmed and at least one source directly contradicts it. The corrected
+> payoff is arguably a better twist than the original — more specific, more
+> surprising, and it's actually sourced. **Lesson: a lead's payoff line
+> deserves the same independent verification as its setup facts — leads
+> supplied secondhand (Facebook screenshots, in this case) can get the ending
+> wrong even when the middle of the story checks out.** Full correction and
+> sourcing in `docs/skill/story_swisshijack_lead.txt` and `episode_log.csv`
+> row 46.
+>
+> **Two AI clips used** (hook + fighter-jet-scramble), within the STORY
+> budget. The fighter-jet segment is a newly confirmed Pexels gap — three
+> different search terms all returned the same handful of civilian
+> airshow-crowd footage, wrong tone and containing identifiable bystanders.
+> **Also caught before rendering: a Pexels candidate for the
+> psychiatric-treatment segment showed a woman in a wheelchair** — rejected,
+> since the real hijacker is male and the wheelchair implies an unrelated
+> physical disability; same failure class as ep28 Kenoyer's gender-mismatched
+> prison photo. Used an empty, peopleless hospital corridor instead.
+>
+> **Noted a pipeline quirk, not a defect:** `story-result.json`'s
+> `ai_generated_segments` field just lists every index passed via
+> `--segment-clips`, not which ones are actually AI-sourced. This build passed
+> real pinned Pexels files for 5 of 7 segments (to dodge Pexels's known
+> result-reordering instability) plus 2 genuine AI clips, and the field lists
+> all 7. Do not trust that field name at face value in a future session.
 >
 > **`--pre-written` is now the default for any fact carrying a hedge.** The
 > dry run caught the LLM rewrite introducing three errors at once, including
