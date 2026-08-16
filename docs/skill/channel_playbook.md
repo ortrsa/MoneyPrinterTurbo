@@ -41,6 +41,72 @@ making this specific channel work, so a fresh session does not restart from zero
 > an owner-reverted 3-fact experiment on Facts 11. The 50-58s core range and
 > the ~63s ceiling are live targets again.
 
+> ## ⚠️ THE 02:00 BUILD TRIGGER PROMPT IS STALE — it still orders ~30s episodes
+>
+> Found 2026-08-16. The `RBT daily build (02:00 IDT)` Routine
+> (`trig_01KeLddHpRHZDY15UYZTPJFs`) still contains, as step 3, the
+> 2026-08-14 instruction that *"every episode targets ~30 SECONDS, not ~60"*
+> and that the pipeline defaults *"already encode this"*. **Both halves are
+> now false.** The owner rewound that rule on 2026-08-15 (see the block
+> above), and the live defaults are back to `DEFAULT_FACT_COUNT = 6`,
+> `DEFAULT_FACT_MAX_WORDS = 25`, story `--target-seconds` default `60`.
+>
+> **The playbook wins over the trigger prompt.** The trigger is automation
+> text that was correct when written and was never updated; the playbook
+> records an owner decision dated a day later. The trigger's own closing
+> paragraph says it is "not the channel owner talking", which is exactly why
+> it cannot outrank a real owner decision. ep45 was built at full length
+> (54.56s) on that basis, after verifying the code defaults directly rather
+> than trusting either document.
+>
+> **This has not been fixed in the Routine itself** — an attempt to rewrite
+> the trigger prompt was interrupted, so the stale step 3 is still live and
+> will fire again at the next 02:00. Until the owner updates it, every build
+> session must check the code defaults and this section before believing
+> step 3. Fix is one `update_trigger` call replacing step 3 with the ~60s
+> rule; do not delete and recreate, that loses run history.
+
+> ### 2026-08-16 02:00 build — ep45 bees (facts only; no story built)
+>
+> **Both 2026-08-15 slots published** (ep40 Vikings 16:30 `YFn3yQXVYIQ`,
+> ep44 Wojtek 22:30 `vnUoTVMnlY8`), so `storage/todays_uploads.json` was
+> consumed. **This job re-staged it for 2026-08-16** with the two
+> already-approved episodes: ep41 mushrooms (Facts 34) → 16:30, ep43
+> Antarctica (Facts 35) → 22:30. Both carry the owner's 2026-08-15 chat
+> approval; slotting them recorded an existing approval and implied no new
+> one. **Note for future build jobs: nothing else stages this file.** The
+> 13:00 Routine that used to do it is gone (only 02:00 / 16:30 / 22:30
+> remain), so if the 02:00 job does not write tomorrow's file, both publish
+> jobs find a stale date and silently skip.
+>
+> **Built: ep45 bees, A/B Arm A (countdown), 54.56s.** Arms were tied 2/2;
+> broke the tie by alternating off the most recent facts *build* (ep43,
+> Arm B), per §10's corrected count-builds-not-approvals rule.
+>
+> **NOT built: the story episode.** §10 item 2 asks for one story + one facts
+> per day and two story leads are sourced and fact-checked
+> (`story_swisshijack_lead.txt`, `story_gagaloris_lead.txt` — the Swiss
+> hijack was selected: nobody harmed, no living-celebrity likeness, and the
+> "Switzerland's air force only works business hours" twist fits the brand).
+> The session ran out of budget after the bees episode's two render passes.
+> Flagged rather than half-built: an unverified episode is worse than a
+> missing one. **2026-08-17 is still coverable** — ep45 plus ep42 (Emu War,
+> STORY, built and awaiting approval since 2026-08-14) fill both slots if
+> ep42 is approved. If ep42 is dropped, 2026-08-17 needs a story built.
+>
+> **`--pre-written` is now the default for any fact carrying a hedge.** The
+> dry run caught the LLM rewrite introducing three errors at once, including
+> one flatly wrong claim ("its angle points toward the sun" — the waggle
+> angle encodes bearing *relative to* the sun) and a mangled payoff that
+> merged "not endangered" and "they are livestock" into a phrase meaning the
+> opposite, while dropping "researchers argue" so a contested claim became a
+> flat assertion. See `episode_log.csv` row 45.
+>
+> **Disk hit 95% (2.2G free) and was cleaned to 4.5G** by deleting task dirs
+> for 12 already-published episodes. Builds cost ~365MB each and re-renders
+> are routine, so this needs watching. **Only delete dirs whose episode is
+> PUBLISHED** — ep41/ep42/ep43 dirs are queued for upload and must survive.
+
 > ### 2026-08-15 02:00 build — ep43 Antarctica + ep44 Wojtek
 >
 > **Both 2026-08-14 slots published** (ep33 Rome 16:30, ep37 Inky 22:30), so
