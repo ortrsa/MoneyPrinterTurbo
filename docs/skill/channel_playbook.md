@@ -129,6 +129,53 @@ making this specific channel work, so a fresh session does not restart from zero
 > real pinned Pexels files for 5 of 7 segments (to dodge Pexels's known
 > result-reordering instability) plus 2 genuine AI clips, and the field lists
 > all 7. Do not trust that field name at face value in a future session.
+
+> ### 2026-08-17 02:00 build — ep47 gagaloris story + ep48 Greece facts
+>
+> **Both 2026-08-16 slots published** (ep41 mushrooms 16:30, ep43 Antarctica
+> 22:30), so `todays_uploads.json` needed a fresh file. **Nothing is approved
+> yet, so it was staged with both slots `approved: false`** rather than left
+> pointing at the stale 08-16 date — the 16:30/22:30 jobs will read this and
+> send a clear "nothing approved" notice instead of silently finding a stale
+> file.
+>
+> **Backlog is now 5 unapproved, all flagged explicitly to the owner**: ep42
+> (Emu War STORY, since 2026-08-14 — 3 days old), ep45 (bees), ep46 (Swiss
+> hijack STORY), ep47 (gagaloris STORY), ep48 (Greece facts). This matches
+> the 2026-08-15 precedent (build to 5, flag clearly, do not build a 6th/7th
+> without an answer) rather than halting early — ep42's age is the one thing
+> that most needs the owner's attention.
+>
+> **Built ep47 (gagaloris — Lady Gaga bitten by a slow loris on a 2014 video
+> shoot).** Unlike the Swiss hijack lead, every claim in this lead held up on
+> independent re-verification — no corrections needed. Two AI clips (hook +
+> venom-description beat) after confirming Pexels only returns lemurs and
+> marmosets for "slow loris primate" searches — wrong species, would have
+> directly contradicted "looks like a stuffed toy" narration. **Real defect
+> caught and fixed:** a Pexels clip selected for the "she laughed it off"
+> segment was mischaracterized during selection as generic film-crew
+> footage — it actually showed a person in a lion-style mask playing a tuba
+> on a photo backdrop, tonally incoherent against the narration. Swapped,
+> re-verified all 7 segments, zero regressions.
+>
+> **Built ep48 (ancient Greece facts, Arm B flat listicle).** First-time
+> topic, six independently-verified facts, three carrying hedges (democracy's
+> ~80% exclusion is an approximation across sources; the Parthenon's
+> curve-to-correct-an-illusion explanation is contested by at least one
+> recent paper, not settled fact; the Hippocratic oath in modern use means
+> *modernized* versions, not the literal ancient text) — built `--pre-written`
+> for exactly this reason. **The auto-generated caption reintroduced the
+> Parthenon overreach anyway** ("designed to trick the eye" as flat fact),
+> confirming again that hedges need checking at every text-generation step,
+> not just the script. Hand-rewritten before sending. **Confirmed Pexels gap:
+> "Spartan warrior helmet"** returns a street scene, a costumed horseback
+> reenactor, and empty rocks — nothing usable, joining WWII/Vikings/lava-lake
+> on the known-gap list. Used a generic marble bust as a visual echo rather
+> than force it or spend a facts-episode AI clip on a non-hook segment (the
+> AI budget for facts is hook-only per §10 item 3). **One QA-only note, not a
+> defect:** the single most literal fact (Parthenon columns) got a hazier,
+> less specific shot than was available — logged rather than re-rendered,
+> same tier as ep35's chess-boxing note.
 >
 > **`--pre-written` is now the default for any fact carrying a hedge.** The
 > dry run caught the LLM rewrite introducing three errors at once, including
