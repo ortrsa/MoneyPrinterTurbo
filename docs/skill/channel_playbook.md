@@ -66,6 +66,76 @@ making this specific channel work, so a fresh session does not restart from zero
 > step 3. Fix is one `update_trigger` call replacing step 3 with the ~60s
 > rule; do not delete and recreate, that loses run history.
 
+> ### 2026-08-18 02:00 build — ep49 Cardiff Giant story + ep50 coffee facts
+>
+> **Both 2026-08-17 slots published** (ep42 Emu War 16:30, ep45 bees 22:30),
+> so this job re-staged `storage/todays_uploads.json` for 2026-08-18 with the
+> two already-approved episodes next in the queue table set 2026-08-17
+> 10:32: ep46 Swiss hijack → 16:30, ep48 ancient Greece facts → 22:30. Both
+> carry the owner's 2026-08-17 batch approval ("כולם מאושרים"); slotting them
+> recorded an existing approval and implied no new one. **ep47 (gagaloris)
+> remains queued for 2026-08-19 16:30 per that table — untouched by this
+> job.** The 2026-08-19 22:30 slot has no queued content; see below for what
+> fills it.
+>
+> **Disk-space methodology bug found and fixed before cleanup.** The first
+> attempt to find safe-to-delete `storage/tasks/<uuid>` dirs under-matched,
+> because marking an episode PUBLISHED overwrites `episode_log.csv`'s
+> `status` field — which sometimes held the only recorded UUID-path
+> reference, making published episodes' directories falsely look orphaned.
+> Fixed by checking the full raw CSV text for each UUID, cross-referenced
+> against a "must keep" list built only from currently
+> unpublished/queued/awaiting-approval rows (the ones whose `status` field
+> is guaranteed not yet overwritten). Cleaned ~14 truly-orphaned dirs,
+> 95%→81% disk usage, 7.2GB free — comfortable for tonight's two renders.
+>
+> **Built ep49 (Cardiff Giant, 1869 hoax — FIRST time hoax/con-artist
+> topic).** Locked via `--from-dry-run`
+> (`docs/skill/plans/locked_scripts/cardiffgiant_locked.json`) since the
+> Barnum fake-of-a-fake / lawsuit-dismissal payoff is a precise sequence
+> that a rewrite could easily flatten. One AI clip (mandatory hook only —
+> shovel revealing pale stone); the other 7 segments are real Pexels footage
+> pinned by exact file path. **Mtime-pairing caught again:** the courtroom
+> segment's candidate was first assumed, from its thumbnail, to be a
+> costume/cosplay judge — re-extracting a higher-resolution frame showed it
+> was actually stylized studio courtroom stock, accepted since it makes no
+> false claim about a specific real case. 64.28s, just over the ~63s soft
+> ceiling (kept — the six-beat structure needed the room). Sent to Telegram,
+> **awaiting owner approval**, not slotted anywhere. Full sourcing:
+> `docs/skill/story_cardiffgiant_lead.txt`, `episode_log.csv` row 49.
+>
+> **Built ep50 (coffee myths/facts — FIRST time this topic).** A/B tally
+> was tied 3-3 (A={33,41,45}, B={40,43,48}) going in; tie broken by
+> alternating off the most recently-built facts episode (ep48, Arm B), so
+> this is **Arm A run #4** (countdown). Written `--pre-written`
+> (`docs/skill/facts_coffee.txt`) since 3 of 6 facts carry hedges
+> (Beethoven's 60-beans story is biographer-sourced and unproven; the
+> Ethiopian goat-herder discovery is legend, not settled; the "coffee is the
+> 2nd most traded commodity" claim is explicitly busted as false — real rank
+> ~98th per MIT's Observatory of Economic Complexity). All three hedges
+> survived into the auto-generated caption without flattening this time —
+> checked and left as-is, no hand-rewrite needed. **Confirmed Pexels gap:
+> "civet cat"** returns only wrong-species/non-representative matches (a
+> fence cat, an obscured dark animal, a domestic ginger tabby) — worked
+> around with coffee-beans-roasting footage instead of forcing a wrong
+> animal, since the facts format's AI budget is hook-only, not per-fact.
+> Zero AI clips needed. All 8 segments pinned via `--segment-clips` using
+> file paths from **isolated single-term probes** (one term per probe
+> directory) specifically to dodge Pexels's known cross-call result-order
+> instability — every candidate's duration checked against its segment
+> length before pinning, all comfortably safe. 63.22s (at the soft
+> ceiling), 27.0MB. Sent to Telegram, **awaiting owner approval**, not
+> slotted anywhere. Full outcome: `episode_log.csv` row 50.
+>
+> **Neither new build was auto-slotted into the open 2026-08-19 22:30
+> slot.** Per standing practice, a self-sourced build does not become
+> approved just because a slot happens to be open — both ep49 and ep50 go
+> into the normal "sent to Telegram, awaiting approval" backlog exactly
+> like ep42/45/46/47/48 originally did. **2026-08-19 22:30 remains
+> unfilled** until the owner approves something for it; the backlog is now
+> ep49 + ep50, both flagged here explicitly rather than left to pile up
+> silently.
+
 > ### 2026-08-16 02:00 build — ep45 bees (facts only; no story built)
 >
 > **Both 2026-08-15 slots published** (ep40 Vikings 16:30 `YFn3yQXVYIQ`,
