@@ -130,6 +130,36 @@ making this specific channel work, so a fresh session does not restart from zero
 > result-reordering instability) plus 2 genuine AI clips, and the field lists
 > all 7. Do not trust that field name at face value in a future session.
 
+> ### 2026-08-17 10:32 — all 5 backlog episodes approved at once, queue set
+>
+> Owner reviewed all 5 unapproved videos sent individually to Telegram
+> (no upload kit, just the raw files for review) and replied **"כולם
+> מאושרים"** — all approved, in a single message covering ep42, 45, 46,
+> 47, 48 together. **Backlog is now 0.**
+>
+> **Queue order, oldest-first, alternating story/facts so none land
+> back-to-back** (last published before this batch was ep43, a facts
+> episode, so opening the queue on a story is safe):
+>
+> | order | slot | episode | format |
+> |---|---|---|---|
+> | 1 | 2026-08-17 16:30 | ep42 Emu War | STORY |
+> | 2 | 2026-08-17 22:30 | ep45 bees | facts (Arm A) |
+> | 3 | 2026-08-18 16:30 | ep46 Swiss hijack | STORY |
+> | 4 | 2026-08-18 22:30 | ep48 ancient Greece | facts (Arm B) |
+> | 5 | 2026-08-19 16:30 | ep47 gagaloris | STORY |
+>
+> **`storage/todays_uploads.json` only holds today's two slots** (per the
+> existing convention), so it currently has ep42/ep45 staged for
+> 2026-08-17. **The 2026-08-18 and 2026-08-19 02:00 build jobs need to
+> stage the remaining queue from this table** — ep46+ep48 for 08-18, then
+> ep47 for one of 08-19's two slots (the other 08-19 slot needs a fresh
+> build, or check whether the queue itself is not to be treated as fixed
+> since new approvals may land before then). **Do not build fresh
+> episodes to fill 08-18 or the first 08-19 slot — these three are
+> already built, verified, and approved,** just not yet slotted. Building
+> new ones instead would leave already-approved content sitting unused.
+
 > ### 2026-08-17 02:00 build — ep47 gagaloris story + ep48 Greece facts
 >
 > **Both 2026-08-16 slots published** (ep41 mushrooms 16:30, ep43 Antarctica
