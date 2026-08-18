@@ -66,7 +66,101 @@ making this specific channel work, so a fresh session does not restart from zero
 > step 3. Fix is one `update_trigger` call replacing step 3 with the ~60s
 > rule; do not delete and recreate, that loses run history.
 
-> ### 2026-08-18 — views-decline investigation (owner-requested)
+> ## 📉 ROOT CAUSE OF THE VIEWS DECLINE: topic drift away from animals
+>
+> **Found 2026-08-18 (second, deeper pass after the owner pushed back that
+> views are clearly down).** The first pass that same day looked at
+> channel-level daily totals and lifetime per-video views and concluded
+> "mostly an age artifact." **That conclusion was too weak.** Measuring
+> each video's views *at the same age* (day-1 views, which removes the age
+> confound entirely) shows a real and specific problem.
+>
+> **The floor is fine. The ceiling collapsed.**
+>
+> | period | median day-1 views | breakouts (>=900 day-1) |
+> |---|---|---|
+> | early 7/27-8/3 | 652 | 3/12 (25%) |
+> | peak 8/4-8/10 | 692 | 3/14 (21%) |
+> | recent 8/11-8/16 | 634 | **0/12 (0%)** |
+>
+> Baseline distribution is intact — every video still gets its ~600-650
+> opening test audience. What stopped happening is *expansion*: not one
+> video since 2026-08-10 has broken 900 on day 1, where roughly 1 in 4 did
+> before. The channel didn't get quieter; it stopped producing hits.
+>
+> **Why: the topic mix flipped, and topic category is the single strongest
+> predictor of reach found so far.**
+>
+> | category | n | median day-1 | breakout rate (>=850) |
+> |---|---|---|---|
+> | EVERYDAY/RELATABLE | 4 | 851 | 50% |
+> | ANIMAL | 15 | 814 | 33% |
+> | NATURE/SCIENCE | 7 | 587 | 14% |
+> | HISTORY/ABSTRACT | 10 | 598 | 0% |
+>
+> Core (animal+everyday) median 814 vs drift (nature+history) median 596 —
+> a +218 day-1 gap, **permutation test p=0.0005**, breakout rate 37% vs 6%.
+>
+> And the mix inverted almost exactly when the breakouts stopped:
+>
+> | | ANIMAL | EVERYDAY | NATURE | HISTORY |
+> |---|---|---|---|---|
+> | 7/27-8/10 | **54%** | 12% | 17% | 17% |
+> | 8/11-8/16 | **17%** | 8% | 25% | **50%** |
+>
+> **The cause was a playbook rule, not bad luck.** §"never two consecutive
+> uploads from the same topic category" (now revoked — see that section)
+> forced rotation *away* from animals every time an animal episode ran,
+> and the "FIRST time this topic" novelty habit in build jobs pushed
+> steadily into more obscure territory: chess, ancient Greece, Vikings,
+> Rome, Antarctica, ancient artifacts, Cardiff Giant. Every one of those
+> landed at the ~600 floor. The two best recent performers were the only
+> two animals in the window — sharks (814) and the octopus story (843).
+>
+> **Things that are NOT the problem, checked and ruled out:**
+> - **Retention.** Correlation between day-1 views and retention% is
+>   **-0.11 — essentially zero.** Retention has actually *improved*
+>   (channel daily avg 65.5% on 8/16 vs 42-50% in late July) while reach
+>   fell. Optimizing retention further will not fix reach. This directly
+>   contradicts `shorts_growth_guide.md`'s framing of retention as the
+>   governing metric — for *reach* on this channel, topic beats retention.
+> - **Duration / the A/B arms.** Recent videos are 49-64s, same as the peak
+>   window. The 28s octopus scored 843 and the 70s moa scored 1311. No
+>   length signal. Do not blame the countdown-vs-listicle test.
+> - **Traffic source.** Shorts feed is ~97% of views in every period. No
+>   shift.
+> - **Publish times.** Unchanged across the whole window.
+>
+> **THE FIX (adopted 2026-08-18):**
+> 1. **Target ~50% ANIMAL + ~15% EVERYDAY/RELATABLE across any rolling 10
+>    uploads.** This is the mix that was running when the channel produced
+>    breakouts. It is now the primary topic constraint.
+> 2. **Revoked the forced category-rotation rule** that caused the drift.
+>    Repeating a *category* is fine; repeating a *subject* is not.
+> 3. **EVERYDAY/RELATABLE is under-used and has the best numbers of any
+>    category** (median 851, 50% breakout rate, n=4). Sleep/dreams (971),
+>    everyday objects (1102), and the 6-7 meme (731) all landed well. Mine
+>    this vein harder — food, money habits, phone/tech habits, sleep, the
+>    body, things in every house.
+> 4. **Stop treating "FIRST time this topic" as a virtue in itself.** It
+>    correlates with obscurity, and obscurity is what stopped the hits.
+> 5. **Re-check in ~7 days** (around 2026-08-25) once 10+ uploads have run
+>    under the new mix: has the >=900 breakout rate recovered toward the
+>    20-25% it held through 8/10? If it has not, the next hypothesis to
+>    test is hook quality, and after that the new-channel-boost-taper
+>    explanation (which would mean accepting a lower ceiling rather than
+>    fixing one).
+
+> ### 2026-08-18 — views-decline investigation (owner-requested, FIRST pass — superseded)
+>
+> **Superseded by the topic-drift section above.** Kept as the record of a
+> reasoning error worth not repeating: this pass compared *lifetime* views
+> across videos of different ages, correctly noticed the age confound, and
+> then over-corrected into "there's no real problem." The right move was to
+> measure views at matched age immediately — which takes one extra API pass
+> and turns an ambiguous picture into a p=0.0005 result. **When a metric is
+> age-confounded, control for age; do not settle for "it's probably the
+> confound."** Original text follows.
 >
 > Owner asked why recent videos are dropping in views instead of rising.
 > Pulled real numbers via `docs/skill/youtube/fetch_channel_analytics.py`
@@ -1552,15 +1646,35 @@ time), which the old Israel-anchored calendar did not. This resolves the
    supply them** (moa, dollar, D-Day and Great Auk were all self-sourced and
    verified this way), with any lead the owner does send jumping to the front
    of the queue.
-2. **Never two consecutive uploads from the same topic category.** Rotate
-   across animals / ocean / food / everyday objects / cars / people.
+2. **~~Never two consecutive uploads from the same topic category.~~
+   REVOKED 2026-08-18 — this rule was measurably costing reach.** See the
+   "topic drift" analysis section near the top of this file. In short:
+   ANIMAL and EVERYDAY/RELATABLE topics carry a median 814 day-1 views and
+   a 37% breakout rate; NATURE/SCIENCE and HISTORY/ABSTRACT carry median
+   596 and a 6% breakout rate (permutation test on the median gap,
+   p=0.0005, n=36). The forced-rotation rule kept pushing the channel out
+   of its two winning categories because they "had just been used," and
+   the topic mix flipped from 54% animal / 17% history to 17% animal / 50%
+   history — exactly tracking the disappearance of every breakout.
+   **Replacement rule: target ~50% ANIMAL and ~15% EVERYDAY/RELATABLE
+   across any rolling 10 uploads.** Repeating a category on consecutive
+   days is fine and often correct; what must not repeat is the specific
+   *subject* (rule 4 below still stands, and is the real anti-staleness
+   mechanism). Variety was never the thing driving this channel — it was
+   an assumption, and it did not survive contact with the numbers.
 3. **The two same-day slots must differ on at least one axis** — format or
    category. Two animal-facts episodes on the same day is exactly the
-   "random" feel the owner is asking to avoid.
+   "random" feel the owner is asking to avoid. **Softened 2026-08-18:**
+   format (story vs facts) alone satisfies this. Do not burn an animal
+   slot on a weak category just to make the two slots differ on category —
+   an animal story plus an animal facts episode on the same day is
+   acceptable and is better than pairing one animal with one chess.
 4. **Check `episode_log.csv`'s `key_subjects` column before finalising a
    topic.** Never reuse a specific subject (a species, a brand, a person)
    that appeared in the last 5 episodes. This is the whole reason that
-   column exists.
+   column exists. **This rule is the one that stays** — "more animal
+   episodes" means octopus, then crows, then wolves, not octopus three
+   times.
 
 **Known constraint at adoption time: 2 videos/day burns the calendar in ~2
 days.** After the Ferrari story publishes, only 4 episodes remain (14 Inky,
