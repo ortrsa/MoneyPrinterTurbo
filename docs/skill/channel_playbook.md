@@ -151,6 +151,38 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-18, same conversation — owner approved acting on the topic-drift
+> ### finding: hold ep49, slot ep50 for 2026-08-19 22:30
+>
+> Presented the topic-drift analysis above to the owner live in chat. Asked
+> directly: hold ep49 (Cardiff Giant, HISTORY/ABSTRACT — the worst-performing
+> category) and slot ep50 (coffee, EVERYDAY/RELATABLE — the best-performing
+> category) into the open 2026-08-19 22:30 slot instead. **Owner replied
+> "Yes"** — this is the real chat approval for both the hold and the slot
+> assignment, not an automated-trigger approval.
+>
+> **Queue for 2026-08-19, updated:**
+>
+> | slot | episode | category | note |
+> |---|---|---|---|
+> | 16:30 | ep47 gagaloris | ANIMAL | unchanged, per the 2026-08-17 queue table |
+> | 22:30 | ep50 coffee | EVERYDAY/RELATABLE | newly approved/slotted this conversation |
+>
+> **ep49 (Cardiff Giant) is HELD, not rejected** — stays in the backlog,
+> sent to Telegram, awaiting a future decision. Do not slot it into any
+> upcoming date without a fresh approval; `episode_log.csv` row 49's status
+> field records the hold and the reason. **Do not build a fresh
+> HISTORY/ABSTRACT episode to replace it either** — per the new topic-mix
+> target, the next few build slots should skew ANIMAL/EVERYDAY, not
+> backfill the category that was just identified as the problem.
+>
+> **`storage/todays_uploads.json` is not touched by this entry** — it only
+> holds *today's* (2026-08-18) slots per the existing convention, and both
+> of today's slots are already published. **The 2026-08-19 02:00 build job
+> must read this table, not build fresh topics for either slot** — both
+> 2026-08-19 slots are already spoken for by already-built, already-approved
+> episodes.
+
 > ### 2026-08-18 — views-decline investigation (owner-requested, FIRST pass — superseded)
 >
 > **Superseded by the topic-drift section above.** Kept as the record of a
