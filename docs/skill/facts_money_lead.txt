@@ -1,0 +1,15 @@
+1	Money/spending psychology facts (EVERYDAY/RELATABLE category, per the 2026-08-18 topic-drift finding).
+
+2	Fact 1 (lost wallet study): Cohn et al., Science, June 2019. 17,303 wallets "lost" in 355 cities across 40 countries. Return rate rose from 40% (no cash) to 51% (small amount of cash) to 72% at $94.15. Counterintuitive/myth-busting -- used as the lead fact. Sources: Science (2019), Science News, Scientific American, ABC News.
+
+3	Fact 2 (pain of paying): term coined 1996 by Ofer Zellermayer (PhD dissertation, Carnegie Mellon, advisor George Loewenstein). 2007 Stanford/MIT/CMU brain-scanner study found paying activates the anterior insula, the same region associated with physical pain/disgust. Stronger for cash than card. Sources: Wikipedia (Pain of paying), Neuromarketing, The Decision Lab.
+
+4	Fact 3 (credit cards increase spending): MIT Sloan study -- credit card cues activate the striatum, "step on the gas" for spending. McDonald's average ticket $7 (card) vs $4.50 (cash) is a widely cited real-world example from the same body of research. Sources: MIT Sloan press release, NerdWallet, Journal of Applied Psychology (restaurant tipping study, +4.3% with card logo visible).
+
+5	Fact 4 (charm pricing / $9.99, HEDGED): the left-digit effect (brain reads $9.99 as closer to $9 than $10) is well-supported by pricing research and stated as fact. The ORIGIN STORY (that .99 pricing started to force cashiers to open the register, preventing employee theft) is popular but under-sourced folklore, not a rigorously documented historical origin -- scripted as "one popular story says" to avoid overreach.
+
+6	Fact 5 (the penny): US Mint struck its final circulating penny November 12, 2025, ending 232 years of production. Cost per penny was $0.0369 (3.69 cents) vs 1-cent face value -- nearly 4x. Sources: JM Bullion, St. Louis Fed (Page One Economics), Numismatic News, US Mint penny FAQ.
+
+7	Fact 6 (tipping bans): 16th-17th century England origin (servants tipped by wealthy guests); imported to the US by wealthy travelers in the 1850s-60s. Six US states (Washington, Arkansas, Iowa, South Carolina, Tennessee, and either Georgia or Mississippi depending on source) passed anti-tipping laws 1909-1915, arguing it was undemocratic. All repealed or struck down by courts by 1926. Deliberately kept to the "banned as undemocratic" framing, not the more contested slavery-legacy framing some sources (e.g. TIME) also raise -- multiple sources agree on the undemocratic framing and the ban dates without dispute, fewer agree on the causal weight of the slavery framing. Sources: Richmond Fed (Econ Focus), Mental Floss, TipHaus, TipCalc.info.
+
+8	All 6 facts written as final --pre-written spoken text in docs/skill/facts_money.txt, since fact 4 carries a hedge that an LLM rewrite has a documented track record of flattening (see this session's bees/coffee episodes).

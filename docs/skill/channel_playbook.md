@@ -151,6 +151,65 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-19 02:00 build — ep51 Unsinkable Sam story + ep52 money facts,
+> ### first build under the new topic-mix policy
+>
+> **Both 2026-08-18 slots published** (ep46 Swiss hijack 16:30, ep48 ancient
+> Greece 22:30), and `storage/todays_uploads.json` was re-staged for
+> 2026-08-19 with the two already-approved, already-built episodes from the
+> queue set the same night: **ep47 gagaloris (ANIMAL) → 16:30, ep50 coffee
+> (EVERYDAY/RELATABLE) → 22:30.** No fresh topics were built for either of
+> tomorrow's slots, per that entry's explicit instruction. **Backlog is now 2
+> unapproved: ep49 (held, HISTORY/ABSTRACT, not competing for a slot) plus
+> the two built tonight (ep51, ep52) — both flagged here, neither silently
+> piled up.**
+>
+> **This is the first build night run under the topic-mix fix** (see the
+> "ROOT CAUSE" section above). Both topics were chosen deliberately from the
+> two recommended categories rather than continuing the "avoid the last
+> category" rotation that caused the drift.
+>
+> **Built ep51 (Unsinkable Sam, WWII ship's cat — FIRST time this topic,
+> ANIMAL).** Real, carefully hedged story: the Ark Royal rescue (Nov 1941)
+> is solidly documented; the earlier Bismarck/Cossack legs trace only to the
+> sailors' own telling, and at least one source found conflicting photos
+> suggesting the popular "Unsinkable Sam" photo may actually show a
+> different WWII ship's cat. Built `--from-dry-run` specifically to keep
+> that distinction intact — the locked script states the Bismarck/Cossack
+> legs as "the sailors' own telling" and flags the Ark Royal leg as the part
+> "every historian agrees is real." **Three AI clips (hook + 2 more, at the
+> STORY budget ceiling)** — a newly confirmed Pexels gap: no usable WWII-era
+> warship footage exists for battleship/destroyer/aircraft-carrier searches
+> (blank ocean, a modern museum ship, passenger ferries, one airplane wing —
+> nothing usable), joining the WWII/Vikings/lava-lake list. All three AI
+> clips verified clean, no drift, no visible people. 51.74s, 45MB.
+>
+> **Built ep52 (money and spending psychology facts, Arm B flat listicle —
+> FIRST time this topic, EVERYDAY/RELATABLE).** Deliberately mined the
+> best-performing category per the topic-drift finding's recommendation #3.
+> Six independently-verified facts (2019 lost-wallet study, pain of paying,
+> credit-card spending research, charm pricing, the US Mint's November 2025
+> final penny, 1909-1915 tipping bans), built `--pre-written` since the
+> charm-pricing fact carries a hedge (the left-digit psychological effect is
+> real research; the cash-register anti-theft origin story is folklore, not
+> documented history). Zero AI clips needed — Pexels covered everything.
+> **One accepted trade-off:** the best visual match for the penny fact (a
+> coin stack) was only 7.24s against an ~8.7s segment; kept it anyway over a
+> worse-matching but longer banknote clip, verified no visible slow-motion
+> artifact on frame-check. 64.94s (~2s over the soft ceiling, accepted as
+> minor, same standard as ep49's 64.28s), 26MB.
+>
+> **Disk space:** cleaned ~740MB of `/tmp` probe scratch after both renders
+> (never tracked, safe to delete once verified). Ended the night at 5.8GB
+> free / 85% used — comfortable but worth watching; `storage/tasks/`
+> cleanup (published-only, cross-checked against the CSV) is the next lever
+> if it gets tighter, per the established methodology above.
+>
+> **Neither ep51 nor ep52 was auto-slotted anywhere** — both go into the
+> standard awaiting-approval backlog. The now-3-deep backlog (ep49 held +
+> ep51 + ep52) is explicitly flagged here rather than left to silently pile
+> up, per standing practice.
+
 > ### 2026-08-18, same conversation — owner approved acting on the topic-drift
 > ### finding: hold ep49, slot ep50 for 2026-08-19 22:30
 >
