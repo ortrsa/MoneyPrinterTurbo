@@ -66,6 +66,70 @@ making this specific channel work, so a fresh session does not restart from zero
 > step 3. Fix is one `update_trigger` call replacing step 3 with the ~60s
 > rule; do not delete and recreate, that loses run history.
 
+> ### 2026-08-18 — views-decline investigation (owner-requested)
+>
+> Owner asked why recent videos are dropping in views instead of rising.
+> Pulled real numbers via `docs/skill/youtube/fetch_channel_analytics.py`
+> plus two one-off scripts against the same OAuth token (channel-wide
+> `videos.list` for lifetime views/duration by publish date, and Analytics
+> `dimensions=day,insightTrafficSourceType` for a true day-of-view trend) —
+> not guesswork.
+>
+> **What the data actually shows:**
+> - **Real but partial decline, and it is confounded by video age.**
+>   Grouping by *publish* date, avg views/video: early (7/25-8/3) 597 →
+>   peak (8/4-8/10) 834 → recent (8/11-8/17) 651. But this compares
+>   lifetime-so-far totals across videos of very different ages — a video
+>   published yesterday has had 1 day to accumulate views vs. two weeks for
+>   an 8/4 video, so part of the "recent" numbers being lower is structural,
+>   not a real-time signal.
+> - **The true day-of-view trend (not by-publish-date) does NOT show a
+>   monotonic collapse.** Total channel views per calendar day: 8/8 2262
+>   (peak) → 8/11 1055, 8/12 1100 (real dip) → **8/13 2060, 8/14 1721**
+>   (rebounded back near-peak). YouTube Analytics has ~2 day processing
+>   lag, so 8/16-18 aren't in confirmed data yet — there is no verified
+>   real-time evidence of a *current* sharp drop as of this writing, only a
+>   dip on 8/11-12 that already partly recovered by 8/13-14. Re-check this
+>   in ~2 days once 8/16-18 are processed before treating a drop as
+>   confirmed and ongoing.
+> - **Retention has NOT declined** — average-view-percentage in the
+>   confirmed-data window (8/11-8/15: 35-74%) is comparable to or better
+>   than the peak window (8/4-8/10: 32-101%). Content quality/watch-time,
+>   once someone clicks, is intact. The problem (to the extent it's real)
+>   is on the *reach/distribution* side, not content quality.
+> - **Traffic-source mix is unchanged** — Shorts feed is ~97% of views in
+>   every period measured (early/peak/recent). No shift away from Shorts
+>   feed to search/browse/external; whatever's happening is inside the
+>   Shorts algorithm's own distribution decision, not a channel-external
+>   factor.
+> - **Duration/format are not implicated.** Recent videos are still 49-64s
+>   (same as peak period) except two brief outliers (Octopus 28s on 8/14,
+>   which actually got 1111 views/61% retention — no evidence short length
+>   hurt it).
+> - **Two individual videos flopped hard, well below the channel's normal
+>   500+ floor:** Facts 29 (volcanoes/lava-lake topic) 117 views, Facts 36
+>   (bees, ep45) 331 views. Worth reviewing their hook lines specifically —
+>   the Shorts algorithm tests every upload on a small audience first and
+>   expands distribution based on early swipe-through/completion signals,
+>   so a weak first 1-2 seconds can suppress total reach independent of
+>   overall retention.
+> - **Channel is only ~3.5 weeks old (launched 2026-07-25).** New-channel
+>   exploratory-distribution boosts commonly taper after the first few
+>   weeks as YouTube settles into steady-state distribution — a plausible
+>   partial explanation that isn't a content problem and isn't fixable by
+>   changing the format.
+>
+> **Recommendations given to the owner:** don't reactively change format
+> (duration/A-B arm) — the data doesn't implicate either. Do tighten hook
+> lines specifically, since that's the best-supported lever given retention
+> is fine but reach dipped. Prioritize topics resembling the channel's
+> proven biggest hits (Facts 4/12/18/21-26, the moa story) over narrower
+> ones. Review Facts 29 and Facts 36 individually for a weak hook. Finish
+> the countdown-vs-listicle A/B test (§10, currently tied 3-3, needs one
+> more build per arm) before layering in a new experiment; a hook-style
+> test is the logical next one once it wraps, since hooks are what the data
+> actually points at.
+
 > ### 2026-08-18 02:00 build — ep49 Cardiff Giant story + ep50 coffee facts
 >
 > **Both 2026-08-17 slots published** (ep42 Emu War 16:30, ep45 bees 22:30),
