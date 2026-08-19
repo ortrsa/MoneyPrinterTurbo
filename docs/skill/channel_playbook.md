@@ -41,30 +41,73 @@ making this specific channel work, so a fresh session does not restart from zero
 > an owner-reverted 3-fact experiment on Facts 11. The 50-58s core range and
 > the ~63s ceiling are live targets again.
 
-> ## ⚠️ THE 02:00 BUILD TRIGGER PROMPT IS STALE — it still orders ~30s episodes
+> ## ✅ RESOLVED — the build-trigger stale-~30s warning (was here 2026-08-16
+> ## through 2026-08-19)
 >
-> Found 2026-08-16. The `RBT daily build (02:00 IDT)` Routine
-> (`trig_01KeLddHpRHZDY15UYZTPJFs`) still contains, as step 3, the
-> 2026-08-14 instruction that *"every episode targets ~30 SECONDS, not ~60"*
-> and that the pipeline defaults *"already encode this"*. **Both halves are
-> now false.** The owner rewound that rule on 2026-08-15 (see the block
-> above), and the live defaults are back to `DEFAULT_FACT_COUNT = 6`,
-> `DEFAULT_FACT_MAX_WORDS = 25`, story `--target-seconds` default `60`.
+> The `update_trigger` fix this section used to call for was applied
+> 2026-08-19, as part of the bigger publish-workflow change below (see that
+> section) — the build trigger's full prompt was rewritten, including a
+> correct step 3 with no ~30s language. **The underlying discipline still
+> stands even though the specific staleness is fixed:** trigger prompts are
+> automation text, not the owner talking, and can go stale again — always
+> verify length against the live code defaults (`DEFAULT_FACT_COUNT`,
+> `DEFAULT_FACT_MAX_WORDS` in `viral_episode.py`; `--target-seconds` default
+> in `story_episode.py`) and this file's most recent dated entry before
+> trusting any trigger's own length instructions, the same habit that caught
+> the original staleness.
+
+> ## 🔁 PUBLISH WORKFLOW CHANGED 2026-08-19 — no more 16:30/22:30 triggers
 >
-> **The playbook wins over the trigger prompt.** The trigger is automation
-> text that was correct when written and was never updated; the playbook
-> records an owner decision dated a day later. The trigger's own closing
-> paragraph says it is "not the channel owner talking", which is exactly why
-> it cannot outrank a real owner decision. ep45 was built at full length
-> (54.56s) on that basis, after verifying the code defaults directly rather
-> than trusting either document.
+> **The owner asked, live in chat, to eliminate the separate live-publish
+> triggers entirely.** Both `RBT publish 16:30 IDT`
+> (`trig_01P8m2TTGhCdgqmDz8fvTBuF`) and `RBT publish 22:30 IDT`
+> (`trig_01UBEF4pe6YhF3joy3zcXA6k`) were **permanently deleted**. The build
+> trigger (`trig_01KeLddHpRHZDY15UYZTPJFs`) was retimed from 02:00 IDT to
+> **09:00 IDT** (`0 6 * * *` UTC) and renamed `RBT daily build (09:00 IDT)`;
+> it is now the **only** scheduled trigger left in this pipeline.
 >
-> **This has not been fixed in the Routine itself** — an attempt to rewrite
-> the trigger prompt was interrupted, so the stale step 3 is still live and
-> will fire again at the next 02:00. Until the owner updates it, every build
-> session must check the code defaults and this section before believing
-> step 3. Fix is one `update_trigger` call replacing step 3 with the ~60s
-> rule; do not delete and recreate, that loses run history.
+> **New model:** the build job still only builds and sends to Telegram —
+> it still must never upload. But publishing is no longer triggered by wall
+> clock time at all. Instead: the owner reviews the day's built episode(s)
+> and approves them **in a live chat message**, same as any other approval,
+> and upload happens **immediately in that same conversation** via
+> `docs/skill/youtube/upload_video.py --confirm --publish-at <RFC3339 UTC
+> timestamp>` — YouTube's own scheduler flips the video public at the
+> requested time (IDT is UTC+3; e.g. 16:30 IDT → `13:30:00Z`), so there is
+> no dependency on a Claude-side trigger firing at exactly the right minute
+> for the video to actually go live. `--publish-at` uploads as `private`
+> until that timestamp; this is a real, confirmed API behavior
+> (`status.publishAt`), not scheduled-guessing.
+>
+> **Why this is better than the old model:** the 16:30/22:30 triggers were
+> pure wall-clock risk — if a session wasn't available exactly then, or
+> `todays_uploads.json` was stale, publishing silently didn't happen (this
+> already happened at least once, see the 2026-08-16 entry about the 13:00
+> Routine being removed and nothing else staging the file). Scheduling via
+> `--publish-at` at approval time removes that entire failure class: once
+> uploaded-and-scheduled, YouTube's own infrastructure — not this session's
+> uptime — is responsible for the video going live.
+>
+> **First run of the new model, 2026-08-19:** ep47 (gagaloris) and ep50
+> (coffee) were already sitting approved in `storage/todays_uploads.json`
+> for that day's 16:30/22:30 slots when the owner asked for this change.
+> Uploaded both immediately with `--publish-at` set to that day's original
+> 16:30/22:30 IDT times (`2026-08-19T13:30:00Z` and `...T19:30:00Z`)
+> rather than leaving them to strand once the triggers were deleted.
+>
+> **`storage/todays_uploads.json` is now a reference/tracking record only**
+> — nothing reads it to decide whether to publish anymore, since there is
+> no publish-time trigger left. Still worth keeping updated with each day's
+> intended slot assignments for continuity across sessions/compaction, but
+> writing it no longer has any operational effect on what actually
+> publishes. The build trigger's prompt was updated to say this explicitly.
+>
+> **Open question, not yet resolved with the owner:** what publish times to
+> default to going forward. 16:30/22:30 IDT (the owner's original stated
+> preference, "at least 6 hours difference between videos") is the
+> reasonable default until told otherwise, but nothing requires sticking to
+> exactly those two clock times anymore now that scheduling is manual —
+> worth confirming with the owner rather than assuming permanence.
 
 > ## 📉 ROOT CAUSE OF THE VIEWS DECLINE: topic drift away from animals
 >
