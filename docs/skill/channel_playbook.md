@@ -194,6 +194,67 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-20 09:00 build — ep53 Cacareco the rhino story + ep54 crow
+> ### facts, second build night under the new topic-mix policy
+>
+> First firing of the retimed (02:00→09:00 IDT) build trigger. Backlog going
+> in was 3 (ep49 held, ep51, ep52 both awaiting approval) — under the
+> established "build to 5, flag clearly" threshold, so this job built 2 more
+> rather than pausing. **Backlog is now 5, all explicitly flagged**: ep49
+> (held), ep51, ep52, ep53, ep54.
+>
+> Checked the rolling-10 category mix before picking topics (episodes 43-52):
+> 40% ANIMAL, 20% EVERYDAY/RELATABLE, 10% NATURE/SCIENCE, 30% HISTORY/ABSTRACT
+> — still short of the ~50% ANIMAL target. **Built both of tonight's episodes
+> ANIMAL** to push the rolling window toward target (new window 45-54 lands
+> at 50% ANIMAL / 20% EVERYDAY / 30% HISTORY once the two oldest entries roll
+> off).
+>
+> **Built ep53 (Cacareco the rhinoceros — 1959 São Paulo city council
+> election).** Real, unusually clean lead — the 100,000-vote/15% figure is
+> consistent across every source with no dispute found, a rarer thing this
+> session than expected. **Worth recording the topic that got rejected
+> first:** Cher Ami, the WWI messenger pigeon credited with saving the "Lost
+> Battalion," looked like a strong ANIMAL candidate on first pass. A second,
+> deeper pass found that Snopes and the Smithsonian's own curator say
+> official military records cannot confirm which pigeon delivered the
+> critical message that day — **this is a different class of problem than
+> Unsinkable Sam's hedge.** Sam's disputed detail was an embellishment on a
+> solid, independently-photographed core (the Ark Royal rescue). Cher Ami's
+> disputed detail *is* the story's central causal claim. **Lesson: a hedge
+> on an embellishment is scriptable (state the solid core, flag the
+> embellishment as "the sailors' own telling"); a hedge on the central claim
+> itself is a sign to pick a different topic, not to hedge harder.** Switched
+> to Cacareco rather than force it. Zero AI clips needed for the build itself
+> — no Pexels gap for rhino/zoo, voting, or São Paulo city visuals. 55.86s.
+>
+> **Built ep54 (crow/corvid intelligence facts, Arm A countdown run #5 —
+> tally was tied 4-4, broke off the most recent Arm B build).** Confirmed
+> Pexels gap: no footage anywhere shows a crow actually using a tool (every
+> candidate was just a perched or flying bird) — used a clear crow portrait
+> instead of forcing it or spending the facts-format AI budget (hook-only)
+> on a non-hook segment. **Also caught a wrong-species near-miss:** a
+> candidate for the "shiny objects" segment was actually a red-billed
+> chough, a different corvid with a distinctive red beak/legs — would have
+> been a subtle species mismatch under a generic "crow" claim, swapped for
+> an unambiguous silhouetted pair. **Auto-generated caption flattened two of
+> the three hedges** (funeral interpretation, gift-giving motivation) into
+> flat assertions, dropping "scientists think" / "researchers suspect" —
+> hand-corrected before sending. This is now the third time this exact
+> failure mode has hit a caption (after ep45 honey, ep48 Parthenon) — **the
+> caption step needs the same hedge-check as the script, every single time,
+> not just when a fact "feels" contested.** 56.52s.
+>
+> **Disk:** cleaned ~/tmp probe scratch after both renders, ended the night
+> at 5.5GB free / 86% used.
+>
+> **Neither ep53 nor ep54 was uploaded** — both sent to Telegram, awaiting
+> owner approval per the new publish-on-chat-approval model (see the
+> workflow-change section above). `storage/todays_uploads.json` updated to
+> the new reference-only shape introduced 2026-08-19 (no more slot times,
+> just a backlog list) since there is no publish trigger left to stage slots
+> for.
+
 > ### 2026-08-19 02:00 build — ep51 Unsinkable Sam story + ep52 money facts,
 > ### first build under the new topic-mix policy
 >

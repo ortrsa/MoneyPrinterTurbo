@@ -1,0 +1,15 @@
+1	Crow/corvid intelligence facts (ANIMAL category, per the 2026-08-18 topic-drift finding).
+
+2	Fact 1 (tool crafting): New Caledonian crows fashion hooked tools from twigs to extract insects from crevices -- widely cited as among the most sophisticated non-primate tool use documented. Sources: multiple (Discover Magazine, US Bird Guide, standard corvid-cognition literature).
+
+3	Fact 2 (facial recognition + grudges): Dr. John Marzluff, University of Washington, 2010 study published in Animal Behaviour. Researchers trapped/banded wild crows while wearing a distinctive ("caveman") mask; crows scolded the mask-wearer for years afterward and were observed teaching the response to offspring/other crows. Sources: Forbes (2025 explainer), Science Times, Animals Around the Globe, Discover Magazine -- consistent across sources.
+
+4	Fact 3 (funerals, HEDGED): corvids do gather around dead conspecifics and vocalize/act agitated -- well documented behavior. The INTERPRETATION as grief/mourning vs. threat-assessment/information-gathering about a potential danger is actively debated among researchers -- scripted to favor the threat-assessment explanation per current research framing rather than asserting "grief" as settled.
+
+5	Fact 5 (gift-giving, HEDGED): real, documented behavior -- the widely-cited case of an 8-year-old Seattle girl (Gabi Mann) who received 100+ small objects from crows she fed is well sourced (Audubon, Animals Around the Globe). The "gratitude" framing is explicitly pushed back on by researchers (John Marzluff, corvidresearch.blog) as an unproven, anthropomorphized read on what may simply be a learned reward-reinforcement loop -- scripted accordingly, not asserted as conscious gratitude.
+
+6	Fact 6 (shiny-object myth, ARGUABLE #1): the popular belief that crows/magpies are magpie-style "shiny object" collectors is not supported by controlled experiments (corvidresearch.blog cites studies finding no significant preference for shiny vs. dull objects). Used as the myth-bust/countdown-anchor fact.
+
+7	Fact 4 (Aesop's fable / water displacement, HEDGED for precision): Jelbert et al. 2014, PLOS ONE, University of Auckland -- New Caledonian crows solve a stone-dropping water-displacement task at a causal-understanding level comparable to human children aged 5-7. Scripted as "roughly the level of," not a blanket "as smart as a child" claim, since the same study found crows failed harder variants of the test (tube-width sensitivity, counter-intuitive U-shaped apparatus) -- the equivalence is task-specific, not general intelligence.
+
+8	All 6 facts independently web-verified via WebSearch. Written pre-written/final in docs/skill/facts_crows.txt and rendered with --pre-written since 3 of 6 facts (funerals, gift-giving, water-displacement precision) carry hedges with a documented track record of LLM-rewrite flattening.
