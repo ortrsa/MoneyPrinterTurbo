@@ -194,6 +194,22 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-20, same conversation — owner approved and uploaded ep56 + ep57
+>
+> Owner, live in chat: "תעלה עכשיו את הסיפור האחרון וב 2300 עוד סיפור האחד
+> לפני האחרון שתיהם מאושרים" (upload the last story now, and the one before
+> it at 23:00 — both are approved). Read "last" / "one before last" as the
+> two most recently built STORY episodes: ep57 (Slender Man) and ep56 (eye
+> drops), both correctly identified since no other story was built between
+> them. **ep57 uploaded immediately as public** (`--privacy public`, per
+> the owner's explicit "now" — https://youtube.com/shorts/y4H0C51e3QA).
+> **ep56 scheduled via `--publish-at 2026-08-20T20:00:00Z`** (23:00 IDT —
+> https://youtube.com/shorts/hLejd2pEFDU), uploaded private until YouTube
+> flips it at that timestamp, per the 2026-08-19 publish-workflow model.
+> Both approvals traced to this real chat message, not a trigger firing.
+> Backlog after this: ep49 (held) + ep51-55 still awaiting approval (6
+> episodes) — flagged to the owner alongside this build.
+
 > ### 2026-08-20, same conversation — ep57 the real Slender Man origin story:
 > ### owner rejected a fabricated "true 1962 event" creepypasta, first
 > ### deliberate genre pivot into eerie/mystery content
