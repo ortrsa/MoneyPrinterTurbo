@@ -194,6 +194,55 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-20, same conversation — ep56 the eye-drop-recall story: owner
+> ### said ep55 "still boring," first deliberately NON-ANIMAL build
+>
+> Owner's reaction to ep55: "still boring, do something not about animals
+> that's trending today." Read as: even a strong ANIMAL pick can read as
+> more-of-the-same after several in a row — **the topic-mix policy sets a
+> floor for animals, not a ceiling that every single video must hit.**
+> Category diversity within "what's actually trending" matters too.
+>
+> **Rejected a much more obviously "trending" candidate first, and this is
+> the one to remember.** The single most viral non-animal true-crime story
+> right now is the FBI Most Wanted "fake heiress" true-crime TV producer
+> case (Mary Carole McDonnell — allegedly conned banks out of $30M, now a
+> fugitive believed to be in Dubai). It looked perfect on the surface:
+> dramatic, real, currently trending. **Rejected anyway, because she is a
+> real, living person, currently at large, only *alleged* to have
+> committed the crime, under active federal investigation.** That's a
+> categorically different risk than this channel's usual real-but-settled
+> subjects — defamation exposure before any conviction, safety/privacy
+> concerns, and facts that could shift before this even publishes. **This
+> is the same family of judgment as the Cher Ami rejection (2026-08-20,
+> earlier) but one level more serious: Cher Ami's problem was a disputed
+> historical detail; this was a real person's unresolved legal jeopardy.
+> New standing rule: an active criminal investigation of a named living
+> person is off the table regardless of how well-documented or trending it
+> is, full stop — this isn't a hedge-it-carefully case, it's a pick-a-
+> different-topic case.**
+>
+> **Built ep56 instead: the 2023 EzriCare artificial-tears outbreak
+> (81 infected, 14 lost vision, 4 died, from contaminated eye drops),
+> bridged to the real, currently-running wave of 2026 eye-drop recalls**
+> (Clear Eyes, Rohto, a wave of store brands — all citing the same root
+> failure, inadequate sterility assurance). EVERYDAY/RELATABLE, genuinely
+> trending (FDA update dated 2026-08-14, six days before this build), zero
+> living-person risk — the only subject is a company's manufacturing
+> failure and a closed CDC-documented outbreak.
+>
+> **AI budget: zero clips.** Probed real footage for all 9 segments first
+> and it held up completely without needing a single generation — real lab
+> workers in PPE, a real pediatric eye exam, real dropper-bottle handling.
+> This is the cleanest demonstration yet of the ai-footage-fill discipline
+> working as intended: **generation is for confirmed gaps, and an ordinary
+> everyday subject like this one usually has none.** Directly responsive to
+> the owner's standing AI-restraint caution from ep55.
+>
+> Sent to Telegram, **awaiting owner approval** — not uploaded. Backlog is
+> now 7 unapproved (ep49 held + ep51/52/53/54/55/56), all explicitly
+> flagged.
+
 > ### 2026-08-20, owner request — ep55 Neil the Seal: first TRENDING-topic
 > ### build, and the AI-restraint precedent
 >
