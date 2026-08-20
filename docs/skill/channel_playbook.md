@@ -194,6 +194,71 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-20, same conversation — ep57 the real Slender Man origin story:
+> ### owner rejected a fabricated "true 1962 event" creepypasta, first
+> ### deliberate genre pivot into eerie/mystery content
+>
+> Owner posted an Instagram screenshot of "Yellow Echo" — a creepypasta
+> claiming 37 children vanished around a faceless figure in 1962 — with the
+> instruction "Make this a story." Checked it: it's a **modern fabricated
+> creepypasta** (verbatim on creepypasta.com and midnightsignals.net,
+> inconsistent details between versions, no actual 1962 historical record),
+> not a documented event, despite the source account's own "unclear if real
+> or urban legend" hedge — that hedge language is itself a common
+> creepypasta framing device, not a genuine sourcing caveat. **Declined to
+> build it as a "true story"** — doing so would break the channel's core
+> brand promise and the fact-checking discipline this session has held on
+> Cher Ami and the FBI-fugitive case. Offered the owner two alternatives: (1)
+> a genuinely real, verified, similarly-eerie true story instead, or (2)
+> build Yellow Echo itself but explicitly labeled legend/creepypasta, not
+> "true" — a brand deviation requiring explicit sign-off. **Owner replied
+> "1."**
+>
+> Built the real 2009 origin of "Slender Man": Eric Knudsen, posting as
+> "Victor Surge," created him in a single Something Awful Photoshop-contest
+> thread on June 10, 2009 — no ancient legend, no prior history, just one
+> forum post with two edited photos and invented "witness" text. The
+> internet then built him a fake past after the fact (a supposed 16th-
+> century German woodcut, "Der Großmann," fake case files) specifically to
+> make him look centuries old — a genuinely eerie true story about a *fake*
+> true story, which lands as an ironic, on-brand mirror of the very thing
+> the owner asked about. Full sourcing: `docs/skill/story_slenderman_lead.txt`
+> (Wikipedia, Newsweek, Rolling Stone, NBC News, Know Your Meme).
+>
+> **New sensitivity layer, extending the living-person standing rule
+> (2026-08-20 earlier entry, Cher Ami/FBI-fugitive precedent):** the honest
+> payoff of this story is the 2014 Waukesha, Wisconsin stabbing, where two
+> 12-year-old girls cited Slender Man as their motive. Named Knudsen (public
+> figure, spoke on the record via NBC News) but **deliberately did not name
+> the two attackers or the victim** — they were minors at the time, the
+> victim is a private individual, and one attacker resurfaced in real news
+> very recently (a reported group-home escape, Nov 2025), so this is not
+> settled cold history. Referred to them only as "two 12-year-old girls" and
+> "a classmate," and stated plainly that the victim survived rather than
+> leaving it as unresolved dread. **Extend this as a general rule:** even
+> when a crime is fully adjudicated/closed, a *recent recurrence in the news*
+> of one of the real people involved pushes it back toward the
+> "don't-name-them" side, same as an still-open case would.
+>
+> **Footage catch worth keeping:** first-pass render put the 2014-case
+> narration over real Pexels footage of a silhouetted person walking alone
+> down a foggy forest road. Not factually wrong, but on frame-check it read
+> as an **implied reenactment** of the real attackers/victim — exactly the
+> kind of visual the sensitivity decision above was trying to avoid. Swapped
+> for an empty misty-forest shot with no person in frame, re-rendered,
+> re-verified all 8 segments. **New footage-check habit:** for any segment
+> whose narration involves real, identifiable people (even unnamed ones),
+> screen candidate footage specifically for "does this visual read as
+> depicting a person from the story" — not just "is this literally forest at
+> night," which is too weak a bar.
+>
+> AI budget: exactly 1 of 8 segments (the mandatory STORY hook — a faceless
+> figure in a black suit in a foggy forest, which cannot exist as real stock
+> without using someone else's copyrighted fan art). Image-only test passed
+> on the first prompt this time, no safety-filter refusal. All 7 other
+> segments real Pexels footage, per the owner's standing AI-restraint
+> caution. Final: 63.58s, 33MB, no compression needed.
+
 > ### 2026-08-20, same conversation — ep56 the eye-drop-recall story: owner
 > ### said ep55 "still boring," first deliberately NON-ANIMAL build
 >
