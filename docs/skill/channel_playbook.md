@@ -194,6 +194,72 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-20, owner request — ep55 Neil the Seal: first TRENDING-topic
+> ### build, and the AI-restraint precedent
+>
+> Owner asked directly for one video that is **interesting, eye-catching, and
+> pulled from today's top Google trends** while fitting this channel — with an
+> explicit caution that **excessive AI generation can itself provoke a negative
+> audience reaction.** That caution is now a standing consideration, not a
+> one-off note.
+>
+> **Trending-topic sourcing, and why the obvious list was useless.** Google's
+> actual trending searches for 2026-08-19/20 were sports fixtures, celebrity
+> news and product recalls — nothing that survives as evergreen absurd-but-true
+> content. **The productive move was to search for currently-viral stories
+> *within* the channel's proven category (ANIMAL) rather than to mine the
+> generic trending list.** That surfaced three live candidates; two were
+> rejected and the reasons are worth keeping:
+> - **Punch the macaque** (Japan, ~40M views in Feb 2026, IKEA plush sold out
+>   worldwide) — rejected because the zoo has *publicly rebutted* the viral
+>   "he's being bullied" framing and an animal-rights group has separately
+>   criticised his treatment. **The popular version of the story is the wrong
+>   version**, and he is a specific living zoo animal with no legitimate
+>   footage available. Same failure class as the Cher Ami rejection: the
+>   disputed part is the core, not an embellishment.
+> - **Jimothy the raccoon** (Seattle) — the short-spine-syndrome claim is
+>   speculative in the sourcing, and building a comedy beat on an animal's
+>   suspected deformity is off-tone for this channel.
+>
+> **Built ep55 (Neil the Seal + the Freya precedent).** Neil is a one-tonne
+> southern elephant seal who hauls out into Tasmanian towns twice a year and
+> blocks roads, rams cars and sleeps in streets; 1.5M+ followers. The payoff is
+> the genuinely dark, fully documented turn: officials aren't worried about the
+> cars, they're worried about the crowds — and in 2022 Norway euthanised Freya
+> the walrus, not because she hurt anyone, but because the public would not
+> keep its distance. **Hedge held:** the script never claims Neil will be
+> euthanised or that anyone threatened it — only what is sourced.
+>
+> **AI restraint, deliberately: 2 of 8 segments (25%), despite the STORY budget
+> allowing 3.** Both were genuine confirmed gaps — the hook (a seal lying
+> across a suburban road; no stock library has this, and it is the episode's
+> eye-catching shot) and Freya (**"walrus" on Pexels returns only children in
+> walrus onesies** — a total gap, now on the known-gap list). The other six
+> segments are real footage. **This is the precedent to follow when the owner's
+> AI-caution is in play: spend AI on the hook and on true gaps, carry the rest
+> on real stock, and never claim a generated clip depicts the real named
+> animal.**
+>
+> **Reusable safety-filter lesson.** The first hook prompt was *refused* by the
+> image model because it contained "looks like real amateur news footage" — the
+> generator rejects prompts that read as documentary coverage of a real event.
+> Rewriting the identical shot as a pure filmable scene ("cinematic wide
+> shot… camera slowly pushing in") passed immediately. **Describe the scene,
+> never the provenance.**
+>
+> **One re-render:** the first pass put a tourist photographing a Thai temple
+> under the "officials are worried about the crowds" segment — not
+> contradictory, but the wrong setting entirely. Swapped for a real coastal
+> warning sign and re-verified all 8 segments, zero regressions.
+>
+> **Also new: first render to exceed Telegram's 50MB limit in a while** (58MB
+> at 54.9s, because two 1080p Veo clips plus long real clips compress poorly).
+> Compressed to 29MB at CRF 26 *for Telegram only* — the full-quality file
+> stays in the task dir and is what should be uploaded to YouTube. Keep that
+> split; do not upload the compressed copy.
+>
+> Sent to Telegram, **awaiting owner approval** — not uploaded.
+
 > ### 2026-08-20 09:00 build — ep53 Cacareco the rhino story + ep54 crow
 > ### facts, second build night under the new topic-mix policy
 >
