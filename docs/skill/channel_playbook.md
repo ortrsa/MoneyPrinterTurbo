@@ -194,6 +194,25 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-21 09:00 IDT build job — SKIPPED, backlog already flagged
+>
+> The daily build trigger fired normally (06:08:58 UTC). Backlog check:
+> still 6 episodes awaiting approval (ep49, 51-55) — ep56/ep57 uploaded the
+> day before, but nothing else moved. The trigger's own instructions say to
+> **flag a deep backlog instead of silently building more** when it's
+> unflagged; this one was *already* flagged to the owner minutes earlier in
+> the same conversation (as part of the views-decline analysis, which also
+> found that live-upload cadence itself is what drives the channel's view
+> totals — see the entry above). Building 2 more here would directly work
+> against that finding: more unpublished episodes sitting in the queue,
+> not more live at-bats. **Decision: skipped this build cycle**, sent a
+> short Telegram reminder instead, and left `episode_log.csv` / the CSV's
+> stale "AWAITING OWNER APPROVAL" text on the now-uploaded ep56/ep57 rows
+> corrected (it still said AWAITING even after upload, which would have
+> thrown off any future backlog count — fixed to "APPROVED AND UPLOADED").
+> Resume normal 2-episodes/day building once the owner clears some of the
+> backlog or explicitly asks to keep building anyway.
+
 > ### 2026-08-20, owner asked again "why the decline, fix it" — sharper root
 > ### cause found with real per-day Analytics data (first time this pipeline
 > ### queried dimensions=day instead of dimensions=video)
