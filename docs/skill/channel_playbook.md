@@ -194,6 +194,49 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-21, same conversation — owner said "implement the
+> ### recommendations": full 6-episode backlog cleared same day
+>
+> Owner, live in chat, quoted the three recommendations from the
+> views-decline analysis back verbatim and said to implement them: clear
+> the queue (ep49, 51-55), give the topic-mix fix a real chance, re-check
+> around 8/25. This is explicit, per-episode-named approval for all six —
+> traced to a real chat message, not a trigger firing.
+>
+> **Scheduled all 6 the same day (2026-08-21), spread through the day
+> rather than dumped at once**, alternating STORY/FACTS where the mix
+> allowed (4 stories : 2 facts in this batch, so the last two are back-to-
+> back stories — unavoidable, not a format-policy violation since this is
+> backlog catch-up, not a normal daily build). Chose same-day over spread-
+> across-days because the owner's own reasoning ("every day without upload
+> is a day with zero chance at the algorithmic push") argues for speed, and
+> the pulse mechanism found in the entry above showed no evidence that
+> multiple same-day uploads cannibalize each other — each video's pulse
+> chance ties to its own publish moment, not to how many other videos went
+> up that day.
+>
+> | ep | title | publish_at UTC | IDT | format |
+> |----|-------|-----------------|-----|--------|
+> | 49 | The Ten-Foot Man That Wasn't Real (Cardiff Giant) | 08:00 | 11:00 | STORY |
+> | 52 | money/spending psychology facts | 10:00 | 13:00 | facts |
+> | 51 | Unsinkable Sam | 12:00 | 15:00 | STORY |
+> | 54 | crow intelligence facts | 14:00 | 17:00 | facts |
+> | 53 | The Rhino Who Won An Election (Cacareco) | 16:00 | 19:00 | STORY |
+> | 55 | Neil the Seal | 18:00 | 21:00 | STORY |
+>
+> (ep56 already scheduled 20:00 UTC/23:00 IDT the day before; ep57 already
+> live since 2026-08-20 — so this is actually **8 episodes publishing
+> across 2026-08-20/21**, the closest thing to a real live-distribution
+> test the topic-mix fix has had yet.) Approval for ep49 specifically also
+> lifts its 2026-08-18 HOLD — the owner's "clear the queue... ep49, 51-55"
+> named it explicitly, and the hold was a topic-mix-recovery precaution,
+> not a content problem, so this instruction supersedes it. Backlog is now
+> **fully cleared** — `storage/todays_uploads.json` updated to reflect
+> this and to carry a `next_check_in: 2026-08-25` note forward across
+> sessions. A one-shot reminder was also scheduled via `send_later`/trigger
+> for 2026-08-25 to actually re-run the per-day-Analytics pulse check
+> against ep51-57 rather than rely on remembering to do it.
+
 > ### 2026-08-21 09:00 IDT build job — SKIPPED, backlog already flagged
 >
 > The daily build trigger fired normally (06:08:58 UTC). Backlog check:
