@@ -194,6 +194,76 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-20, owner asked again "why the decline, fix it" — sharper root
+> ### cause found with real per-day Analytics data (first time this pipeline
+> ### queried dimensions=day instead of dimensions=video)
+>
+> Owner asked again to look at the view decline and understand/fix it.
+> Pulled real data via `fetch_channel_analytics.py` plus two ad-hoc
+> `dimensions=day` Analytics queries (channel-wide, and filtered to the
+> top-8 lifetime-view videos) rather than re-stating the 08-18 finding from
+> memory — that finding was built on lifetime/day-1 totals across videos,
+> never on a real day-by-day channel timeline, so it was worth checking
+> whether fresher data told the same story or a sharper one. It told a
+> sharper one:
+>
+> **Channel-wide daily views, last ~4 weeks (YouTube Analytics API, real
+> numbers, `dimensions=day`):** roughly 1000-2200/day from 2026-07-26
+> through 2026-08-17, then a cliff to **428 on 2026-08-18** (-63% in one
+> day). No rows exist yet for 08-19/08-20 — normal Analytics API reporting
+> lag (2-3 days), not zero views; those days show as explicit `0` rows when
+> genuinely zero (confirmed against 07-22 to 07-24, before the channel's
+> first upload).
+>
+> **The mechanism, found by filtering the same day-by-day query to just the
+> channel's top-8 all-time videos:** each of those videos shows ONE huge
+> single-day view spike, and the spike date is consistently that video's
+> own upload date (or the day after) — 08-02 (Facts 12, uploaded 08-02),
+> 08-04 (Facts 18, uploaded 08-04), **08-08 (2200 views — "The Bird With No
+> Wings At All," uploaded 08-08)**, 08-10 (Facts 26, uploaded 08-10),
+> **08-14 (868 views — "The Octopus That Escaped," uploaded 08-14)**. Every
+> one of these videos is essentially flat before/after its own spike day.
+> This is the Shorts recommender's actual behavior on this channel: a new
+> video either gets pushed hard on/near its own publish day, or it doesn't,
+> and that single day determines most of the video's lifetime total — not
+> gradual organic discovery, not legacy videos resurging at random.
+>
+> **The finding that matters: no video published after 08-14 (Octopus) has
+> landed one of these pulses.** Everything from 08-15 onward — Facts 33/34,
+> "War Australia Lost To Birds," Facts 35, "Bear Who Was Officially A
+> Soldier," Facts 36, "Pilot Switzerland Couldn't Catch," Facts 37, "Animal
+> That Bit Lady Gaga," ep50 — sits at 6-141 views apiece with no spike day
+> of its own. The 08-18 channel-total cliff is simply the exact date the
+> last successful pulse (Octopus, 08-14) finished decaying with nothing new
+> to replace it. **This corroborates the 08-18 "topic drift away from
+> animals" finding through a completely independent lens** (day-by-day
+> channel Analytics instead of per-video day-1 comparisons) and sharpens
+> it: the failure window (no pulses since 08-14) lines up almost exactly
+> with when the forced category-rotation rule was dragging topics away from
+> ANIMAL/EVERYDAY, right before it was revoked on 08-18.
+>
+> **A second, compounding factor found in the same pass:** the topic-mix
+> fix has been *policy* since 08-18 and every build since (ep51-57) follows
+> it, but **almost none of those builds have actually gone live on YouTube**
+> — they piled up in the approval backlog from 08-19 until today, when the
+> owner approved and uploaded ep56/ep57. That means the fix has had almost
+> no live at-bats yet to prove out; the channel went ~36-48 hours (exactly
+> the highest-leverage window right after the 08-18 cliff) with no new
+> upload at all to even *attempt* a pulse. Every day a built episode sits
+> unapproved instead of going live is a day with zero chance of landing the
+> algorithmic push that, per the mechanism above, is what actually drives
+> this channel's view totals.
+>
+> **Recommendation given to the owner:** (1) clear the remaining backlog
+> (ep49, 51-55, six episodes) at a steady cadence rather than let it sit —
+> more live uploads means more chances at a pulse; (2) the topic-mix fix
+> needs real upload volume to be judged fairly, so the 08-25 re-check
+> (§ROOT CAUSE item 5) should specifically look at whether any of ep51-57
+> lands a pulse-day spike like Octopus/Bird/Facts-18/26/12 did, not just
+> raw view totals; (3) no further pipeline change recommended yet — the
+> already-adopted fix hasn't been tested with real distribution, so
+> changing anything else now would confound the read again.
+
 > ### 2026-08-20, same conversation — owner approved and uploaded ep56 + ep57
 >
 > Owner, live in chat: "תעלה עכשיו את הסיפור האחרון וב 2300 עוד סיפור האחד
