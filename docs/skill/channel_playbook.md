@@ -246,6 +246,20 @@ making this specific channel work, so a fresh session does not restart from zero
 > against a chopping block, feathers drifting, a rooster walking calmly in
 > the background) that evokes the story without depicting the act, same
 > discipline as mainstream retellings (Britannica, Scientific American).
+> Image-only test passed on the first prompt, no safety-filter refusal.
+> **ONE RE-RENDER:** first-pass segment 4 (the dropper-feeding beat) landed
+> on real Pexels footage of a small white DOG being hand-fed — not
+> factually contradictory (script never claims the footage is Mike) but a
+> visible species mismatch in a chicken story, which reads as a mistake to
+> viewers rather than a defect a viewer would forgive. Re-probed
+> specifically for chicken/chick imagery, found a clean shot of a small
+> chicken on a hand, re-rendered, re-verified all 8 segments, zero
+> regressions on the 7 untouched ones. **New footage-check habit:** the
+> generic-stock-as-visual-echo discipline (never claim footage depicts the
+> specific named individual/event) still requires the stand-in to be the
+> same *species*, not just thematically close — a same-category-different-
+> animal substitution is a step too far and reads as an error, not an
+> echo. 57.64s, 53MB (compressed to 27MB for Telegram).
 
 > ### 2026-08-21, same conversation — owner said "implement the
 > ### recommendations": full 6-episode backlog cleared same day
