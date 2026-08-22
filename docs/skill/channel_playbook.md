@@ -194,6 +194,59 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-22 09:00 IDT build — ep58 Mike the Headless Chicken (STORY) +
+> ### ep59 elephant facts (FACTS, Arm B)
+>
+> First normal 2-episode build since the backlog was cleared 2026-08-21 —
+> backlog check came back empty (0 awaiting approval), so this build
+> proceeded per the trigger's standard instructions rather than being
+> skipped. Also fixed a recurring bug while checking the backlog: the
+> ep49/51-55 rows still said "AWAITING OWNER APPROVAL"/"HELD" in
+> `episode_log.csv` even though they were uploaded 2026-08-21 — the
+> upload-logging step had only *appended* "UPLOADED..." text after the
+> stale phrase instead of replacing it, so a naive backlog scan would have
+> re-counted them as pending. Corrected the text on all 8 rows (49, 51-57)
+> and will replace-not-append going forward.
+>
+> **ep59 (elephant facts, ANIMAL, Arm B/flat-listicle)** — last-10 topic
+> tally coming in was ANIMAL 4/10 (under the ~50% target), so picked
+> another ANIMAL topic to close the gap; A/B tally was A={33,41,45,50,54}=5,
+> B={40,43,48,52}=4, so Arm B was due. Fresh subject ("elephant" only
+> appeared before as a different animal, "elephant seal," in the Neil the
+> Seal story). All 6 facts independently verified (docs/skill/facts_elephants_lead.txt),
+> 3 of 6 carry hedges (elephants share the no-jump trait with rhinos/hippos
+> rather than being unique; the 35-45-year matriarch water-memory figure is
+> field-inference, not a lab-verified test; post-matriarch-death behavior is
+> documented, not asserted as human-equivalent grief) so built with
+> `--pre-written`. Zero AI clips — elephants are extremely well covered by
+> Pexels. **Footage-pairing gotcha worth keeping:** two different search
+> terms ("elephant close up eye" and "elephant trunk close up") returned
+> overlapping Pexels results including the *same underlying video file* at
+> different index positions in each result set — caught by comparing file
+> hashes across all candidate picks before finalizing, since using it twice
+> under two different facts would have shown an identical repeated shot.
+> All 8 segments frame-verified, zero defects. 44.84s, 54MB (compressed to
+> 28MB for Telegram, full file kept for YouTube).
+>
+> **ep58 (Mike the Headless Chicken, STORY, ANIMAL)** — real, Snopes-
+> confirmed-true 1945 story (Fruita, Colorado), fresh subject, absurd-but-
+> true register that fits the channel well. Full sourcing:
+> docs/skill/story_mikechicken_lead.txt (Wikipedia, Snopes, Britannica,
+> Scientific American, Sky HISTORY). HEDGE: the exact mechanism of Mike's
+> death (choked on corn vs. couldn't clear his severed trachea because the
+> feeding syringe was left behind) is disputed across sources — script
+> states only what's undisputed (died in a motel in Phoenix, ~18 months
+> after the beheading, from a choking/breathing incident) without picking a
+> side. Mike's age at beheading is also inconsistently reported across
+> sources (5.5 months vs. an outlying "five-year-old" claim) — script avoids
+> stating a specific age rather than pick one. Built via `--from-dry-run`
+> for script-fidelity given the hedge. **Sensitivity handling:** the story
+> involves a real beheading — hook and all segments are non-graphic by
+> design; the mandatory AI hook is a tasteful farmyard scene (axe resting
+> against a chopping block, feathers drifting, a rooster walking calmly in
+> the background) that evokes the story without depicting the act, same
+> discipline as mainstream retellings (Britannica, Scientific American).
+
 > ### 2026-08-21, same conversation — owner said "implement the
 > ### recommendations": full 6-episode backlog cleared same day
 >
