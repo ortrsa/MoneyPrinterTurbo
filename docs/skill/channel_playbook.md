@@ -194,6 +194,22 @@ making this specific channel work, so a fresh session does not restart from zero
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
 
+> ### 2026-08-22, same conversation — owner approved and uploaded ep58 + ep59
+>
+> Owner, live in chat: "מאושר אחד תעלה עכשיו ואחד תתזמן ל 23:00" (one is
+> approved — upload one now and schedule one for 23:00). Read as approving
+> **both** of today's two episodes (ep58, ep59 — the only two pending), one
+> immediate and one scheduled, matching the pattern from the 08-21
+> approvals. **The owner did not specify which one goes now vs. 23:00** —
+> made a judgment call: ep58 (Mike the Headless Chicken, STORY) uploaded
+> immediately as public
+> (https://youtube.com/shorts/IoCcXrvf33I); ep59 (elephant facts)
+> scheduled via `--publish-at 2026-08-22T20:00:00Z` / 23:00 IDT
+> (https://youtube.com/shorts/s06GCAoNKu4). Flagged this assumption back to
+> the owner in the reply so it can be corrected if the intended order was
+> reversed — same open-assumption discipline as the earlier "trigger of 9"
+> AM/PM call.
+
 > ### 2026-08-22 09:00 IDT build — ep58 Mike the Headless Chicken (STORY) +
 > ### ep59 elephant facts (FACTS, Arm B)
 >
