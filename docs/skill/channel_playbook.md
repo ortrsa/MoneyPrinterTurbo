@@ -6,6 +6,52 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
+> ## 📍 HANDOFF — current state as of 2026-08-22 (read this first)
+>
+> **Backlog: EMPTY.** Every built episode through ep59 is either live or
+> scheduled. Nothing is waiting on owner approval right now. The most
+> recent two (ep58 Mike the Headless Chicken, ep59 elephant facts) were
+> approved and uploaded 2026-08-22 — ep58 live immediately, ep59 scheduled
+> for 23:00 IDT the same day (`--publish-at 2026-08-22T20:00:00Z`).
+>
+> **Publish workflow (since 2026-08-19):** only one scheduled trigger
+> exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
+> builds and sends to Telegram only — it must NEVER upload. Uploading
+> happens only after the owner approves a specific episode **in a live
+> chat message**, via `docs/skill/youtube/upload_video.py --confirm` with
+> either `--privacy public` (owner said "now") or `--publish-at <UTC
+> timestamp>` (owner gave a time — convert from IDT, currently UTC+3).
+>
+> **Views-decline investigation — where it stands:** root-caused twice,
+> with independent evidence both times (see "ROOT CAUSE OF THE VIEWS
+> DECLINE" below, and the sharper 2026-08-20 per-day-Analytics finding
+> right after it). Short version: this channel's view totals are driven
+> almost entirely by whether a video lands a one-day algorithmic push on
+> or near its own publish date; no video published after 2026-08-14 had
+> landed one as of 2026-08-20, which lines up with a topic-mix drift away
+> from ANIMAL/EVERYDAY that has since been reversed (target ~50% ANIMAL +
+> ~15% EVERYDAY per rolling 10). The backlog clear-out on 08-21/08-22 was
+> specifically to give that fix real live-upload volume to be judged by.
+> **A trigger is already scheduled for 2026-08-25**
+> (`trig_017uh9hhsfgWhqqtHDWsNiBk`) to re-pull real Analytics and report
+> back whether any of ep49/51-59 landed a pulse — no action needed until
+> it fires, but if picking this up before then, that check can be run
+> early on request.
+>
+> **Two flagged assumptions still awaiting owner confirmation** (acted on
+> as the best available reading, but not yet corrected or confirmed):
+> 1. "The trigger of 9" was read as 9:00 AM IDT (the live build trigger).
+> 2. The 2026-08-22 "one now, one at 23:00" approval didn't name which
+>    episode was which — ep58 was sent live immediately and ep59 was
+>    scheduled, as a judgment call. If the owner meant it reversed, no
+>    fix is needed on ep59 (still scheduled, can still be swapped before
+>    23:00 IDT fires) but ep58 already went public and can't be unwound
+>    the same way — flag this trade-off if it comes up.
+>
+> No open build is in progress. Next scheduled event is the 09:00 IDT
+> daily build trigger (build 1 story + 1 facts per the topic-mix policy,
+> per SKILL.md/§10), unless the owner says otherwise first.
+
 > **Strategy note (2026-07-29):** [`shorts_growth_guide.md`](shorts_growth_guide.md)
 > is now the adopted strategy and takes precedence on targets. It sets **≤20s
 > length** and **≥70% stayed-to-watch**; our best measured figure is 51.6% at
