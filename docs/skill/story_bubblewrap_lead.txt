@@ -1,0 +1,16 @@
+1	True story: the 1957 invention of Bubble Wrap as failed wallpaper -- built 2026-08-23 by the 09:00 build job. EVERYDAY/RELATABLE category, per the topic-mix policy. Rolling-10 tally going into this build was ANIMAL 6/10 (over the ~50% target) and EVERYDAY 3/10 (over the ~15% target) -- picked EVERYDAY deliberately to diversify today's pair rather than push ANIMAL to 8/10.
+
+2	WHY THIS TOPIC: fresh subject -- "bubble wrap" appears once in the whole log as a single one-line fact inside an "everyday objects" facts episode (Facts 18), never as its own full narrative. Classic "started as one thing, became famous for something else" twist story, exactly this channel's best format.
+
+3	THE FACTS (independently verified):
+	- 1957, Hawthorne, New Jersey. Engineers Alfred W. Fielding and Marc Chavannes sealed two plastic shower curtains together, trapping small pockets of air, intending to create a textured 3D wallpaper. Sources: Smithsonian Magazine, Wikipedia ("Bubble wrap"), Sealed Air's own company history, Core77, todayifoundout.com.
+	- The wallpaper idea did not sell. They then tried marketing it as greenhouse insulation -- that also failed to catch on.
+	- In 1960, Fielding and Chavannes founded Sealed Air Corporation, still without a proven commercial use for the material.
+	- A Sealed Air marketer, Frederick W. Bowers, recognized the material's potential as protective packaging and pitched it to IBM, who adopted it to ship their computers. This was the breakthrough that made bubble wrap a packaging staple. (Sources differ slightly on the exact year of the IBM pitch -- most cite "around 1959-1960"; the script does not state a specific year for the IBM adoption to avoid overstating precision the sources themselves do not agree on.)
+	- Sealed Air Corporation is a real, still-operating packaging company (NYSE: SEE) that continues to manufacture Bubble Wrap-brand product today.
+
+4	HEDGE APPLIED: the exact year of the IBM pitch/adoption is not asserted with a specific date, since sources give slightly different timelines (some say 1959, some say "after founding Sealed Air in 1960"). The script says only "then... pitched it to IBM," without a specific year, which is accurate to all sources without picking an unverified one.
+
+5	SENSITIVITY NOTE: none -- this is corporate/invention history about a real, still-operating company, no named living individuals characterized negatively, fully comparable in register to the Cardiff Giant/Lamborghini-founding-insult class of story already used successfully on this channel.
+
+6	FOOTAGE APPROACH: mandatory STORY hook via real Pexels footage expected to be easily available -- bubble wrap popping/texture is extremely well covered by stock libraries. Real footage also expected for: wallpaper/interior design, greenhouse, vintage office/factory, IBM-era computer/mainframe imagery, and shipping/packaging boxes. AI generation should not be needed for any segment; probe first and only fall back if a genuine gap turns up (e.g., a convincing "1950s New Jersey engineers" recreation may not exist on Pexels, in which case a generic textured-wallpaper/plastic-sheet close-up stands in without claiming to depict the real people).
