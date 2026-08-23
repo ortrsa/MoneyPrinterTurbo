@@ -8,11 +8,10 @@ making this specific channel work, so a fresh session does not restart from zero
 
 > ## 📍 HANDOFF — current state as of 2026-08-23 (read this first)
 >
-> **Backlog: 2 episodes awaiting approval** — ep60 (Bubble Wrap origin
-> story, EVERYDAY/RELATABLE) and ep61 (domestic cat facts, Arm A
-> countdown), both built by the 2026-08-23 09:00 IDT job, both sent to
-> Telegram, neither approved yet. ep49 and ep51-59 are all live/published
-> — see episode_log.csv for exact URLs and publish times.
+> **Backlog: EMPTY.** ep60 and ep61 were approved and uploaded 2026-08-23
+> ("Both approved," no timing specified — ep60 live immediately, ep61
+> scheduled 23:00 IDT, following the recent cadence). ep49 and ep51-61 are
+> all live/published — see episode_log.csv for exact URLs and times.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -240,6 +239,17 @@ making this specific channel work, so a fresh session does not restart from zero
 >    test is hook quality, and after that the new-channel-boost-taper
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
+
+> ### 2026-08-23, same conversation — owner approved and uploaded ep60 + ep61
+>
+> Owner, live in chat: "Both approved." No timing specified this time
+> (unlike the 08-21/08-22 approvals, which named "now" and "23:00"
+> explicitly). Followed the established recent cadence rather than guess
+> fresh: ep60 (STORY) uploaded immediately as public
+> (https://youtube.com/shorts/WPcRVkGqgc4) — matches both prior instances
+> where the STORY of the pair went live immediately (ep57, ep58). ep61
+> (facts) scheduled via `--publish-at 2026-08-23T20:00:00Z` / 23:00 IDT
+> (https://youtube.com/shorts/fEFVm0YvKFc). Backlog empty again.
 
 > ### 2026-08-23 09:00 IDT build — ep60 Bubble Wrap origin (STORY) + ep61
 > ### domestic cat facts (FACTS, Arm A)
