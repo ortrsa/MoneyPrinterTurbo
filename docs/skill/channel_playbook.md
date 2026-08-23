@@ -6,13 +6,13 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
-> ## 📍 HANDOFF — current state as of 2026-08-22 (read this first)
+> ## 📍 HANDOFF — current state as of 2026-08-23 (read this first)
 >
-> **Backlog: EMPTY.** Every built episode through ep59 is either live or
-> scheduled. Nothing is waiting on owner approval right now. The most
-> recent two (ep58 Mike the Headless Chicken, ep59 elephant facts) were
-> approved and uploaded 2026-08-22 — ep58 live immediately, ep59 scheduled
-> for 23:00 IDT the same day (`--publish-at 2026-08-22T20:00:00Z`).
+> **Backlog: 2 episodes awaiting approval** — ep60 (Bubble Wrap origin
+> story, EVERYDAY/RELATABLE) and ep61 (domestic cat facts, Arm A
+> countdown), both built by the 2026-08-23 09:00 IDT job, both sent to
+> Telegram, neither approved yet. ep49 and ep51-59 are all live/published
+> — see episode_log.csv for exact URLs and publish times.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -30,27 +30,28 @@ making this specific channel work, so a fresh session does not restart from zero
 > or near its own publish date; no video published after 2026-08-14 had
 > landed one as of 2026-08-20, which lines up with a topic-mix drift away
 > from ANIMAL/EVERYDAY that has since been reversed (target ~50% ANIMAL +
-> ~15% EVERYDAY per rolling 10). The backlog clear-out on 08-21/08-22 was
-> specifically to give that fix real live-upload volume to be judged by.
-> **A trigger is already scheduled for 2026-08-25**
+> ~15% EVERYDAY per rolling 10). The backlog clear-out on 08-21/08-22 gave
+> that fix its first real live-upload volume (8 episodes across 08-20 to
+> 08-22). **A trigger is scheduled for 2026-08-25**
 > (`trig_017uh9hhsfgWhqqtHDWsNiBk`) to re-pull real Analytics and report
-> back whether any of ep49/51-59 landed a pulse — no action needed until
+> back whether any of ep49/51-61 landed a pulse — no action needed until
 > it fires, but if picking this up before then, that check can be run
 > early on request.
 >
-> **Two flagged assumptions still awaiting owner confirmation** (acted on
-> as the best available reading, but not yet corrected or confirmed):
-> 1. "The trigger of 9" was read as 9:00 AM IDT (the live build trigger).
-> 2. The 2026-08-22 "one now, one at 23:00" approval didn't name which
->    episode was which — ep58 was sent live immediately and ep59 was
->    scheduled, as a judgment call. If the owner meant it reversed, no
->    fix is needed on ep59 (still scheduled, can still be swapped before
->    23:00 IDT fires) but ep58 already went public and can't be unwound
->    the same way — flag this trade-off if it comes up.
+> **Recurring risk to keep checking, not yet fully solved:** the
+> auto-generated caption has flattened a hedge on 4 separate builds now
+> (ep45, ep48, ep54, ep61) even when `--pre-written` locked the spoken
+> script — the caption is a separate LLM pass every time. Always read the
+> caption in the result JSON against the locked script's hedges before
+> sending to Telegram, every single build.
+>
+> **One flagged assumption still awaiting owner confirmation:** "the
+> trigger of 9" was read as 9:00 AM IDT (the live build trigger) —
+> flagged to the owner, never explicitly confirmed or corrected.
 >
 > No open build is in progress. Next scheduled event is the 09:00 IDT
-> daily build trigger (build 1 story + 1 facts per the topic-mix policy,
-> per SKILL.md/§10), unless the owner says otherwise first.
+> daily build trigger, unless the owner approves the ep60/ep61 backlog or
+> says otherwise first.
 
 > **Strategy note (2026-07-29):** [`shorts_growth_guide.md`](shorts_growth_guide.md)
 > is now the adopted strategy and takes precedence on targets. It sets **≤20s
@@ -239,6 +240,44 @@ making this specific channel work, so a fresh session does not restart from zero
 >    test is hook quality, and after that the new-channel-boost-taper
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
+
+> ### 2026-08-23 09:00 IDT build — ep60 Bubble Wrap origin (STORY) + ep61
+> ### domestic cat facts (FACTS, Arm A)
+>
+> Backlog empty going in (per the 08-22 HANDOFF block), so built normally:
+> 1 STORY + 1 FACTS. Rolling-10 topic mix going in was ANIMAL 6/10 (over
+> the ~50% target) and EVERYDAY 3/10 (over ~15%) — the last 6 uploads had
+> skewed heavily ANIMAL (Sam, Cacareco, crows, Neil, Mike the Chicken,
+> elephants). Deliberately picked ep60 as EVERYDAY/RELATABLE (Bubble
+> Wrap's 1957 origin as a failed wallpaper) to diversify rather than push
+> ANIMAL to 8/10 — kept ep61 as ANIMAL (domestic cat facts, a strong fresh
+> lead) anyway since the pair together still lands one of each register.
+>
+> **A/B tally:** tied 5-5 after ep59 (Arm B), tie-broken to Arm A for ep61
+> (countdown) per the alternate-off-most-recent rule.
+>
+> **Caption hedge-flattening, fourth occurrence this session** (after
+> ep45/ep48/ep54): ep61's auto-generated caption stated the 1987 cat
+> high-rise-syndrome study "proved" the terminal-velocity-relax mechanism
+> as settled causal fact, dropping the locked script's "seem to" hedge and
+> the single-study-limitations framing from the lead doc. Hand-corrected
+> before sending. **Reinforces the standing rule harder:** `--pre-written`
+> only locks the *spoken* narration — the caption is a separate LLM
+> generation pass every time and must be hedge-checked independently on
+> every build, not assumed safe because the facts file was pre-written.
+>
+> **Footage-file-collision catch (ep60):** two different search terms
+> ("vintage office typewriter desk" and "vintage mainframe computer
+> retro") returned an overlapping Pexels result at different index
+> positions — same failure mode as the elephant episode (ep59) two days
+> earlier. Caught by cross-checking file hashes before assigning segments,
+> confirms this is a recurring-enough pattern to check every time multiple
+> probe terms are thematically adjacent, not just when something looks
+> visually identical on the contact sheet.
+>
+> Both built with zero AI clips (both topics extremely well covered by
+> Pexels), frame-verified, sent to Telegram. ep60: 54.52s/28MB. ep61:
+> 53.3s/30MB.
 
 > ### 2026-08-22, same conversation — owner approved and uploaded ep58 + ep59
 >
