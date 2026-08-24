@@ -1,0 +1,17 @@
+1	True story: the 1925 Nome Serum Run, and the Togo-vs-Balto credit controversy -- built 2026-08-24 by the 09:00 build job. ANIMAL category, per the topic-mix policy.
+
+2	WHY THIS TOPIC: fresh subject (checked: neither "Togo" nor "Balto" appears anywhere in the log). Classic "the dog who did the hard work didn't get the credit" twist -- exactly this channel's best-performing register (absurd-but-true, payoff subverts the popular version of the story), and purely historical (1925, no living people involved, no sensitivity concerns).
+
+3	THE FACTS (independently verified):
+	- January 1925, Nome, Alaska: a diphtheria outbreak threatened the town, and the only antitoxin serum was in Anchorage/Nenana, roughly 674 miles away by the fastest available route.
+	- A relay of roughly 20 mushers and 150+ sled dogs carried the serum across Alaska in a blizzard, temperatures reported around -40°F to -50°F with wind chill.
+	- Leonhard Seppala and his lead dog Togo (12 years old at the time, near typical retirement age for a sled dog) ran the longest and most dangerous leg of the relay: 264 miles round-trip, including a deliberate shortcut across the frozen, unstable ice of Norton Sound during a whiteout blizzard -- other teams in the relay averaged about 31 miles each.
+	- The final 55-mile leg into Nome was run by musher Gunnar Kaasen and his lead dog Balto. Balto's team arrived in Nome first (February 2, 1925) and received the public credit -- Balto became a national celebrity, the subject of a movie, and got a statue erected in New York's Central Park later that year.
+	- Seppala publicly felt Togo was denied the credit he deserved. Most dog-sledding historians and experts today agree Togo's leg was the objectively harder, more dangerous, and more consequential one, both in distance and conditions.
+	Sources: AKC ("The True Story of Togo"), Anchorage Daily News, All That's Interesting, Animals Around The Globe, History vs. Hollywood, Wikipedia ("Togo (dog)," "1925 serum run to Nome").
+
+4	HEDGE APPLIED: "historians now agree Togo was the real hero" is scripted as "most historians" / "most dog-sledding experts," matching the sourcing's own qualified language (not universal, but a strong documented consensus) rather than presenting it as an unqualified fact. The relay's exact dog/musher counts vary slightly by source (roughly 20 mushers, 150-160 dogs cited across sources) -- script uses "over a hundred fifty" and "twenty," round figures consistent with all sources checked, not a single precise disputed number.
+
+5	SENSITIVITY NOTE: none. Purely historical (1925), no named living individuals, no graphic content -- the closest comparable precedent this session is Unsinkable Sam (a real historical-animal story with a well-documented embellishment/credit issue, not a disputed core fact).
+
+6	FOOTAGE APPROACH: mandatory STORY hook via AI likely needed -- a specific 1925 sled-dog-team-in-a-blizzard scene is unlikely to exist as real stock footage without misrepresenting a modern sled dog team as the historical event. Real Pexels footage expected to cover: generic sled dogs/huskies running, snow storm/blizzard conditions, Alaska landscape, and a statue/park setting for the Central Park beat. Per the owner's AI-restraint caution, cap at the mandatory hook unless a second genuine gap turns up on probe.
