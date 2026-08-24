@@ -6,12 +6,13 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
-> ## 📍 HANDOFF — current state as of 2026-08-23 (read this first)
+> ## 📍 HANDOFF — current state as of 2026-08-24 (read this first)
 >
-> **Backlog: EMPTY.** ep60 and ep61 were approved and uploaded 2026-08-23
-> ("Both approved," no timing specified — ep60 live immediately, ep61
-> scheduled 23:00 IDT, following the recent cadence). ep49 and ep51-61 are
-> all live/published — see episode_log.csv for exact URLs and times.
+> **Backlog: 2 episodes awaiting approval** — ep62 (Togo vs Balto story,
+> ANIMAL) and ep63 (hiccups facts, Arm B listicle), both built by the
+> 2026-08-24 09:00 IDT job, both sent to Telegram, neither approved yet.
+> ep49 and ep51-61 are all live/published — see episode_log.csv for exact
+> URLs and times.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -20,6 +21,10 @@ making this specific channel work, so a fresh session does not restart from zero
 > chat message**, via `docs/skill/youtube/upload_video.py --confirm` with
 > either `--privacy public` (owner said "now") or `--publish-at <UTC
 > timestamp>` (owner gave a time — convert from IDT, currently UTC+3).
+> When the owner approves without naming which episode goes when, the
+> established fallback (used twice now, 08-22 and 08-23) is: the STORY of
+> the pair goes live immediately, the FACTS episode gets scheduled for
+> 23:00 IDT.
 >
 > **Views-decline investigation — where it stands:** root-caused twice,
 > with independent evidence both times (see "ROOT CAUSE OF THE VIEWS
@@ -30,26 +35,29 @@ making this specific channel work, so a fresh session does not restart from zero
 > landed one as of 2026-08-20, which lines up with a topic-mix drift away
 > from ANIMAL/EVERYDAY that has since been reversed (target ~50% ANIMAL +
 > ~15% EVERYDAY per rolling 10). The backlog clear-out on 08-21/08-22 gave
-> that fix its first real live-upload volume (8 episodes across 08-20 to
-> 08-22). **A trigger is scheduled for 2026-08-25**
-> (`trig_017uh9hhsfgWhqqtHDWsNiBk`) to re-pull real Analytics and report
-> back whether any of ep49/51-61 landed a pulse — no action needed until
-> it fires, but if picking this up before then, that check can be run
-> early on request.
+> that fix its first real live-upload volume. **A trigger is scheduled to
+> fire 2026-08-25** (`trig_017uh9hhsfgWhqqtHDWsNiBk`, i.e. the day after
+> this handoff) to re-pull real Analytics and report back whether any of
+> ep49/51-63 landed a pulse — this is the very next thing likely to happen
+> in this session if picked up before the next 09:00 build; no action
+> needed to prepare for it.
 >
-> **Recurring risk to keep checking, not yet fully solved:** the
-> auto-generated caption has flattened a hedge on 4 separate builds now
-> (ep45, ep48, ep54, ep61) even when `--pre-written` locked the spoken
-> script — the caption is a separate LLM pass every time. Always read the
-> caption in the result JSON against the locked script's hedges before
-> sending to Telegram, every single build.
+> **Recurring risk, NOT solved, now the single most reliable failure
+> point in the pipeline:** the auto-generated caption has flattened a
+> hedge on 5 separate builds now (ep45, ep48, ep54, ep61, ep63) even when
+> `--pre-written` locked the spoken script — the caption is always a
+> separate LLM pass, regenerated fresh even on a re-render. ep63 flattened
+> the *same* hedge on both its original render and its re-render, so this
+> is not a rare fluke — treat "read the caption in the result JSON against
+> the locked script's hedges" as mandatory on every single send, with the
+> same weight as frame-verification, never skippable.
 >
 > **One flagged assumption still awaiting owner confirmation:** "the
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) —
 > flagged to the owner, never explicitly confirmed or corrected.
 >
 > No open build is in progress. Next scheduled event is the 09:00 IDT
-> daily build trigger, unless the owner approves the ep60/ep61 backlog or
+> daily build trigger, unless the owner approves the ep62/ep63 backlog or
 > says otherwise first.
 
 > **Strategy note (2026-07-29):** [`shorts_growth_guide.md`](shorts_growth_guide.md)
@@ -239,6 +247,43 @@ making this specific channel work, so a fresh session does not restart from zero
 >    test is hook quality, and after that the new-channel-boost-taper
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
+
+> ### 2026-08-24 09:00 IDT build — ep62 Togo vs Balto (STORY) + ep63
+> ### hiccups facts (FACTS, Arm B)
+>
+> Backlog empty going in. A/B tied 6-6 after ep61 (Arm A) — wait, tally was
+> A=6/B=5 going in, so Arm B was due for ep63; confirmed correct. Rolling-10
+> mix going in was still ANIMAL-heavy (6/10), so kept the same
+> diversification approach as 08-23: ep62 ANIMAL (Togo/Balto, a strong
+> fresh true-crime-adjacent-but-not lead), ep63 EVERYDAY/RELATABLE
+> (hiccups) rather than stacking two ANIMAL.
+>
+> **Caption hedge-flattening, 5th occurrence this session** (ep63,
+> hiccups): the fetal-hiccup-frequency figure lost its "some studies
+> suggest" qualifier on BOTH the first-pass caption and the re-rendered
+> caption — confirms this is not a one-off LLM quirk, it happens
+> consistently on this specific type of hedge (a numeric figure with a
+> sourcing qualifier). Hand-corrected both times. This is now the single
+> most reliable failure point in the whole pipeline; treat "check the
+> caption against the locked script's hedges" as a mandatory step with the
+> same weight as frame-verification, not an occasional spot-check.
+>
+> **Footage QA, two different flavors this build:**
+> - ep63 segment 3 (amphibian-ancestor fact): the frog was barely visible
+>   in the rendered frames even though the source thumbnail showed it
+>   clearly — a reminder that the probe thumbnail and the actual rendered
+>   segment can diverge (different crop/zoom/compression), so the
+>   post-render frame-check is not redundant with the pre-render thumbnail
+>   review, it catches a genuinely different failure.
+> - ep62 segment 1 (blizzard/setup beat): landed on an abstract grainy
+>   grey-texture clip, not misleading but visually weak — logged as a QA
+>   note rather than re-rendered, since it doesn't contradict anything and
+>   isn't distracting, just underwhelming.
+>
+> AI budget: ep62 held to the mandatory hook only (1/8, a blizzard sled
+> team scene, no safety-filter issue this time); ep63 used zero AI clips.
+> Both frame-verified, sent to Telegram. ep62: 52.9s/35MB. ep63:
+> 55.16s/22MB.
 
 > ### 2026-08-23, same conversation — owner approved and uploaded ep60 + ep61
 >
