@@ -8,11 +8,11 @@ making this specific channel work, so a fresh session does not restart from zero
 
 > ## 📍 HANDOFF — current state as of 2026-08-24 (read this first)
 >
-> **Backlog: 2 episodes awaiting approval** — ep62 (Togo vs Balto story,
-> ANIMAL) and ep63 (hiccups facts, Arm B listicle), both built by the
-> 2026-08-24 09:00 IDT job, both sent to Telegram, neither approved yet.
-> ep49 and ep51-61 are all live/published — see episode_log.csv for exact
-> URLs and times.
+> **Backlog: EMPTY.** ep62 and ep63 were approved 2026-08-24 ("2 videos
+> approved, upload at their own times — not now") and both scheduled
+> rather than uploaded immediately: ep62 for 16:30 IDT, ep63 for 23:00
+> IDT. ep49 and ep51-63 are all live/scheduled — see episode_log.csv for
+> exact URLs and times.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -247,6 +247,24 @@ making this specific channel work, so a fresh session does not restart from zero
 >    test is hook quality, and after that the new-channel-boost-taper
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
+
+> ### 2026-08-24, same conversation — owner approved ep62 + ep63, explicitly
+> ### NOT now
+>
+> Owner, live in chat: "2 הסרטונים מאושרים תעלה אותם בשעות שלהם (לא עכשיו)"
+> (the 2 videos are approved, upload them at their own times — not now).
+> This is the first approval this session that explicitly ruled out the
+> immediate-upload default. Read "their own times" as the channel's
+> classic two-slot cadence from before the 2026-08-19 workflow change
+> (16:30 IDT / 22:30-23:00 IDT), since no specific times were named
+> otherwise. Scheduled both via `--publish-at`, neither uploaded
+> immediately: ep62 (STORY) for 16:30 IDT / `2026-08-24T13:30:00Z`
+> (https://youtube.com/shorts/TfWae_c_tgo); ep63 (facts) for 23:00 IDT /
+> `2026-08-24T20:00:00Z` (https://youtube.com/shorts/aShl4efbi9E). Backlog
+> empty again. **Note for next time:** if "their own times" is meant to
+> reference something more specific than this inferred 16:30/23:00
+> reading, that hasn't been confirmed by the owner — flag if it comes up
+> again.
 
 > ### 2026-08-24 09:00 IDT build — ep62 Togo vs Balto (STORY) + ep63
 > ### hiccups facts (FACTS, Arm B)
