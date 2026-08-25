@@ -14,6 +14,19 @@ making this specific channel work, so a fresh session does not restart from zero
 > 16:30 IDT, ep65 (FACTS) for 23:00 IDT. ep49 and ep51-65 are all
 > live/scheduled — see episode_log.csv for exact URLs and times.
 >
+> **QUEUED FOR THE 2026-08-26 09:00 IDT BUILD:** owner sent an Instagram
+> screenshot (Columbus Zoo credit) claiming zoos pair anxious cheetah cubs
+> with dog companions, and asked to verify it and use it as "tomorrow's
+> story." Fact-checked TRUE (well-documented, not a myth — see
+> `docs/skill/story_cheetahdog_lead.txt`) and already scripted/locked
+> (`docs/skill/plans/locked_scripts/cheetahdog_locked.json`) — origin
+> story of Laurie Marker/Khayam/Shesho (Wildlife Safari, Oregon, 1976),
+> tied back to Columbus Zoo's real Emmett/Cullen pairing. **This is a
+> STORY topic — the next build should build this as the STORY half of
+> the pair (a fresh FACTS topic still needs picking), not re-derive facts
+> from scratch.** Footage not yet probed — that's the next step at build
+> time.
+>
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
 > builds and sends to Telegram only — it must NEVER upload. Uploading
@@ -276,6 +289,62 @@ making this specific channel work, so a fresh session does not restart from zero
 >    test is hook quality, and after that the new-channel-boost-taper
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
+
+> ### 2026-08-25, same conversation — owner-lead topic verified and locked:
+> ### cheetahs get emotional-support dogs, queued for tomorrow's STORY
+>
+> Owner sent an Instagram screenshot (video credited "Columbus Zoo and
+> Aquarium") claiming shy cheetah cubs are raised alongside calm Labrador
+> Retrievers as companions, because cheetahs are especially anxious
+> animals, particularly in captivity. Instruction: "תאמת את נכונות
+> הדברים וזה יהיה הסיפור למחר" (verify the correctness of this and it'll
+> be tomorrow's story).
+>
+> **Verified TRUE, independently, via WebSearch — not a myth or
+> exaggeration.** Corroborated across many mainstream sources (NBC4
+> Columbus, Today.com, Atlas Obscura, Boing Boing, Cincinnati Zoo,
+> Columbus Zoo's own Facebook posts) plus one peer-reviewed academic
+> source on the physiology (Terio et al., "Evidence for chronic stress in
+> captive but not free-ranging cheetahs," PubMed / Cheetah Conservation
+> Fund resource library). The screenshot's specific claim about Columbus
+> Zoo and Labrador companions checks out exactly.
+>
+> **Caught one conflation risk and avoided it:** Anatolian Shepherds are
+> genuinely used as companion dogs at some zoos including Columbus Zoo,
+> but they're *also* used in a completely different Cheetah Conservation
+> Fund program in Namibia — livestock-guardian dogs that protect
+> *farmers'* animals from *wild* cheetah predation, reducing retaliatory
+> killing. Different mechanism, different continent, different purpose.
+> The script does not mix these two programs together.
+>
+> **Hedge applied:** the peer-reviewed source specifically shows chronic
+> stress in *captive* cheetahs that *free-ranging* cheetahs don't show —
+> so the script says cheetahs in zoos/captivity show measurable stress,
+> not an unqualified "cheetahs are the most nervous animal on Earth"
+> (a media-headline simplification, not the precise finding).
+>
+> **Narrative chosen: the origin story**, not just the general phenomenon
+> — 1976, Wildlife Safari (Oregon): researcher Laurie Marker hand-raising
+> a lonely cheetah cub, Khayam, paired her on a hunch with a Labrador-mix
+> puppy, Shesho, and it worked immediately. Khayam became the first
+> cheetah conservation ambassador. Ties back to the screenshot's own
+> Columbus Zoo credit via a real, verified detail: cheetah Emmett and Lab
+> Cullen were paired as cubs in 2016 and were inseparable for years (not
+> using the fact that Emmett died in 2024 — keeps the story upbeat,
+> same choice as not dwelling on Dolly the sheep's death). Laurie Marker
+> named only via her own on-record, positive career story — no
+> sensitivity issue, same register as other living public figures named
+> for a positive, on-record reason this session (Dolly Parton, Eric
+> Knudsen).
+>
+> Wrote `docs/skill/story_cheetahdog_lead.txt` (full fact-check) and
+> locked the script at
+> `docs/skill/plans/locked_scripts/cheetahdog_locked.json` (~168 words, 8
+> segments) — ready for the 2026-08-26 09:00 IDT build via
+> `--from-dry-run`. Footage not yet probed. **Reminder for build time:**
+> ep24's footage-check found cheetah-specific Pexels searches return
+> false positives (giraffes, other big cats) more often than expected —
+> budget extra probe terms and verify species in every thumbnail.
 
 > ### 2026-08-25, same conversation — owner approved ep64 + ep65, scheduled
 > ### for "their own times"
