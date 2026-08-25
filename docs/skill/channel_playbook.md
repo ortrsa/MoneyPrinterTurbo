@@ -6,13 +6,13 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
-> ## 📍 HANDOFF — current state as of 2026-08-24 (read this first)
+> ## 📍 HANDOFF — current state as of 2026-08-25 (read this first)
 >
-> **Backlog: EMPTY.** ep62 and ep63 were approved 2026-08-24 ("2 videos
-> approved, upload at their own times — not now") and both scheduled
-> rather than uploaded immediately: ep62 for 16:30 IDT, ep63 for 23:00
-> IDT. ep49 and ep51-63 are all live/scheduled — see episode_log.csv for
-> exact URLs and times.
+> **Backlog: ep64 (Dolly the sheep, STORY) + ep65 (brain freeze, FACTS
+> Arm A) — both built, rendered, frame-verified, sent to Telegram
+> 2026-08-25 by the 09:00 build job, AWAITING OWNER APPROVAL.** No chat
+> message approving them has arrived yet. ep49 and ep51-63 are all
+> live/scheduled — see episode_log.csv for exact URLs and times.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -22,9 +22,25 @@ making this specific channel work, so a fresh session does not restart from zero
 > either `--privacy public` (owner said "now") or `--publish-at <UTC
 > timestamp>` (owner gave a time — convert from IDT, currently UTC+3).
 > When the owner approves without naming which episode goes when, the
-> established fallback (used twice now, 08-22 and 08-23) is: the STORY of
-> the pair goes live immediately, the FACTS episode gets scheduled for
-> 23:00 IDT.
+> established fallback (used twice, 08-22 and 08-23) is: the STORY of the
+> pair goes live immediately, the FACTS episode gets scheduled for 23:00
+> IDT. When the owner explicitly says "not now, at their own times"
+> without naming times (used once, 08-24), the fallback read is the
+> channel's old pre-08-19 two-slot cadence, 16:30 IDT / 23:00 IDT —
+> flagged as unconfirmed, see below.
+>
+> **PIPELINE CHANGE DISCOVERED 2026-08-25: `viral_episode.py` and
+> `story_episode.py` now auto-send to Telegram at the end of the script**
+> (calls `send_to_telegram.send_episode()` internally) **unless
+> `--no-telegram` is passed.** This is new since the last time these
+> scripts were read closely — it broke the "fix the caption before it
+> ever reaches Telegram" discipline on the ep65 build (see below), because
+> the flawed caption went out automatically before it could be reviewed.
+> Fixed for ep64 by passing `--no-telegram`, reviewing frames + caption
+> locally, then sending manually via `send_to_telegram.py --result-json
+> ... --pinned-comment "..."`. **Pass `--no-telegram` on every future
+> render, on both pipelines, and send manually after review — do not rely
+> on the auto-send.**
 >
 > **Views-decline investigation — where it stands:** root-caused twice,
 > with independent evidence both times (see "ROOT CAUSE OF THE VIEWS
@@ -34,31 +50,41 @@ making this specific channel work, so a fresh session does not restart from zero
 > or near its own publish date; no video published after 2026-08-14 had
 > landed one as of 2026-08-20, which lines up with a topic-mix drift away
 > from ANIMAL/EVERYDAY that has since been reversed (target ~50% ANIMAL +
-> ~15% EVERYDAY per rolling 10). The backlog clear-out on 08-21/08-22 gave
-> that fix its first real live-upload volume. **A trigger is scheduled to
-> fire 2026-08-25** (`trig_017uh9hhsfgWhqqtHDWsNiBk`, i.e. the day after
-> this handoff) to re-pull real Analytics and report back whether any of
-> ep49/51-63 landed a pulse — this is the very next thing likely to happen
-> in this session if picked up before the next 09:00 build; no action
-> needed to prepare for it.
+> ~15% EVERYDAY per rolling 10). The backlog clear-out starting 08-21 gave
+> that fix its first real live-upload volume. **A trigger was scheduled to
+> fire 2026-08-25T07:00:00Z** (`trig_017uh9hhsfgWhqqtHDWsNiBk`) to re-pull
+> real Analytics and report back whether any of ep49/51-63 landed a
+> pulse — it had not yet fired as of the 09:00 IDT (06:17 UTC) build
+> trigger firing this same day; still the very next thing likely to
+> happen in this session once it does.
 >
-> **Recurring risk, NOT solved, now the single most reliable failure
-> point in the pipeline:** the auto-generated caption has flattened a
-> hedge on 5 separate builds now (ep45, ep48, ep54, ep61, ep63) even when
-> `--pre-written` locked the spoken script — the caption is always a
-> separate LLM pass, regenerated fresh even on a re-render. ep63 flattened
-> the *same* hedge on both its original render and its re-render, so this
-> is not a rare fluke — treat "read the caption in the result JSON against
-> the locked script's hedges" as mandatory on every single send, with the
-> same weight as frame-verification, never skippable.
+> **Recurring risk, NOT solved, still the single most reliable failure
+> point in the FACTS pipeline (`--pre-written`):** the auto-generated
+> caption has flattened a hedge on 6 separate builds now (ep45, ep48,
+> ep54, ep61, ep63, ep65) even when `--pre-written` locked the spoken
+> script — the caption is always a separate LLM pass, regenerated fresh
+> even on a re-render, and `--pre-written` never touches it.
+> ep65's flattening was caught only AFTER it had already auto-sent to
+> Telegram (see pipeline-change note above) — fixed by editing the local
+> result JSON and sending an explicit follow-up "correction" message.
+> Treat "read the caption in the result JSON against the locked script's
+> hedges, before sending" as mandatory on every single FACTS send, same
+> weight as frame-verification, never skippable. **New finding, ep64:**
+> STORY's `--from-dry-run` does NOT have this risk — the rendered
+> caption is pulled verbatim from the locked script JSON, confirmed
+> word-for-word identical including the hedge. The caption-flattening
+> risk is specific to `--pre-written` FACTS builds, not STORY.
 >
-> **One flagged assumption still awaiting owner confirmation:** "the
-> trigger of 9" was read as 9:00 AM IDT (the live build trigger) —
-> flagged to the owner, never explicitly confirmed or corrected.
+> **Two flagged assumptions still awaiting owner confirmation:** (1) "the
+> trigger of 9" was read as 9:00 AM IDT (the live build trigger); (2) "at
+> their own times" (08-24 approval) was read as the old 16:30/23:00 IDT
+> cadence. Neither has been explicitly confirmed or corrected by the
+> owner.
 >
-> No open build is in progress. Next scheduled event is the 09:00 IDT
-> daily build trigger, unless the owner approves the ep62/ep63 backlog or
-> says otherwise first.
+> No open build is in progress. Next scheduled event is either the
+> 2026-08-25T07:00:00Z Analytics pulse-check trigger, or the owner
+> approving the ep64/ep65 backlog, or the next 09:00 IDT daily build,
+> whichever comes first.
 
 > **Strategy note (2026-07-29):** [`shorts_growth_guide.md`](shorts_growth_guide.md)
 > is now the adopted strategy and takes precedence on targets. It sets **≤20s
@@ -247,6 +273,83 @@ making this specific channel work, so a fresh session does not restart from zero
 >    test is hook quality, and after that the new-channel-boost-taper
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
+
+> ### 2026-08-25 09:00 IDT build — ep64 Dolly the sheep (STORY) + ep65
+> ### brain freeze facts (FACTS, Arm A)
+>
+> Backlog empty going in (ep62/ep63 cleared 08-24). A/B tally was tied 6-6
+> after ep63 (Arm B), tie-broken by alternating off the most recent facts
+> build, so Arm A (countdown) was due for ep65; confirmed correct. Rolling
+> mix diversified as usual: ep64 ANIMAL (Dolly the sheep, fresh subject),
+> ep65 EVERYDAY/RELATABLE (brain freeze, fresh subject) — same pairing
+> discipline as every recent day.
+>
+> **PIPELINE CHANGE FOUND THIS BUILD:** `viral_episode.py` and
+> `story_episode.py` now call `send_to_telegram.send_episode()`
+> internally at the end of the render, auto-sending to Telegram unless
+> `--no-telegram` is passed. Not passing it on the ep65 render meant the
+> video (and its flawed caption, see below) went out before there was any
+> chance to review it — the review-before-send discipline this session
+> has relied on since ep45 assumed a manual send step that no longer
+> exists by default. Fixed for ep64 by passing `--no-telegram` and
+> sending manually after full review. **Recommend `--no-telegram` as
+> standard on every future render, both pipelines.**
+>
+> **Caption hedge-flattening, 6th occurrence this session** (ep65, brain
+> freeze): the migraine-link fact's "probably because" qualifier was
+> flattened to a flat "because" in the auto-generated caption — same
+> failure class as ep45/ep48/ep54/ep61/ep63, still `--pre-written`-proof
+> only for the *spoken* narration, never the caption. This time it had
+> already auto-sent (see pipeline note above) before being caught — fixed
+> by editing the local `viral-result.json` and sending an explicit
+> follow-up "correction" message to Telegram rather than the usual
+> pre-send edit. The on-screen burned-in captions (from the locked facts
+> text) were unaffected — verified "probably because" intact in the
+> frame-check screenshots; only the separate YouTube-description caption
+> text was wrong.
+>
+> **New finding, ep64 (STORY, `--from-dry-run`): no caption-flattening
+> risk.** Confirmed the rendered `story-result.json` caption matches
+> `dollysheep_locked.json`'s caption verbatim, hedge intact
+> ("likely wasn't connected to cloning"). Unlike `--pre-written` FACTS
+> builds, STORY's `--from-dry-run` pulls the whole metadata block
+> (including caption) straight from the locked script rather than
+> regenerating it — the caption-hedge risk documented all session is
+> specific to the FACTS pipeline, not STORY.
+>
+> **Footage: ep65 (brain freeze)** — zero AI clips, real Pexels footage
+> for all 8 segments, pinned via `--segment-clips` from 7 isolated probes
+> (hook, slow, tongue, vessels, migraine, doctor, scan). Caught two things
+> before rendering: (1) the "hook" and "slow" term pools heavily
+> overlapped — 4 of 8 candidates in each were the literal same underlying
+> file at different index positions, cross-checked hashes and picked
+> non-overlapping files; (2) the first-picked "tongue" candidate was only
+> 5.06s long against a ~7.9s spoken-duration need — swapped to a 10.48s
+> candidate before rendering rather than accepting an excessive stretch.
+> All 8 segments frame-verified post-render, one cosmetic-only note: a
+> brief overlapping-caption-text artifact between two caption chunks in
+> segment 5's first two sample frames, resolved by the third frame — a
+> normal text-transition artifact, not a rendering defect, same tier as
+> prior QA-note-not-defect precedents.
+>
+> **Footage: ep64 (Dolly the sheep)** — 1 of 8 segments AI (mandatory
+> STORY hook only): a dim 1990s lab at night, a sheep silhouetted under a
+> cone of blue light, evoking the cloning-lab mood without literally
+> depicting the real 1996 procedure. Image-only test passed on the first
+> prompt, no safety-filter refusal, full clip clean across 4 sample
+> frames. All 7 other segments real Pexels footage, cross-checked for
+> hash collisions across all 7 term pools (none found). **One
+> re-render:** the first-pass outro clip (a sheep with a bright magenta
+> breeding-marker dye patch — common and benign in real sheep farming,
+> but read as a risk of momentarily looking like an injury on the
+> episode's very last visual before the follow CTA) was swapped for a
+> clean unmarked sheep-and-lamb pair from the same search pool,
+> re-rendered, all 8 segments re-verified end to end, zero regressions
+> (segment timings shifted slightly between renders from normal TTS
+> variance, not a defect).
+>
+> Both episodes logged as AWAITING OWNER APPROVAL in episode_log.csv.
+> Backlog: ep64 + ep65, neither approved yet as of this entry.
 
 > ### 2026-08-24, same conversation — owner approved ep62 + ep63, explicitly
 > ### NOT now

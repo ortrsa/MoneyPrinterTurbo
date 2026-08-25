@@ -1,0 +1,18 @@
+1	True story: Dolly the sheep, first cloned mammal, 1996-2003 -- built 2026-08-25 by the 09:00 build job. ANIMAL category, per the topic-mix policy.
+
+2	WHY THIS TOPIC: fresh subject (zero prior mentions). Genuine "popular myth vs. nuanced truth" twist -- exactly this channel's best register -- plus a fun, verifiable naming anecdote (Dolly Parton). Purely historical/scientific, no living-person sensitivity issues (Dolly Parton is named but only in a positive, on-the-record, flattered reaction -- not a negative characterization).
+
+3	THE FACTS (independently verified):
+	- July 5, 1996, the Roslin Institute near Edinburgh, Scotland. Ian Wilmut and colleagues created Dolly, a Finn Dorset sheep, by fusing the nucleus of an adult mammary-gland cell (from one ewe) into an enucleated egg cell (from a different ewe, a Scottish Blackface) -- the first mammal cloned from an adult somatic cell.
+	- It took 277 attempts; Dolly was the only lamb born alive.
+	- The name: lab assistant John Bracken suggested "Dolly," on the spot, as a joke referencing Dolly Parton -- because the donor cell came from a mammary gland. Dolly Parton herself later said she was "flattered" when she learned about it.
+	- Dolly's birth was announced publicly in February 1997 and became global news, sparking real public and scientific debate about the ethics and feasibility of human cloning.
+	- In 1999, Nature published research suggesting Dolly's cells had unusually short telomeres, fueling a popular theory that cloned animals might age prematurely.
+	- On February 14, 2003, Dolly was euthanized at age 6 due to progressive lung disease (later identified as ovine pulmonary adenocarcinoma, a retrovirus-caused sheep lung cancer) and arthritis.
+	Sources: Britannica ("Dolly"), Wikipedia ("Dolly (sheep)"), Scientific American ("Dolly at 20"), Seattle Times/NBC News (death coverage), PBS NOVA, CBC.
+
+4	HEDGE APPLIED (the actual twist of the story): Roslin Institute scientists stated they did NOT think Dolly's death was connected to her being a clone -- other, non-cloned sheep in the same indoor flock contracted the same lung disease, and indoor-housed sheep are generally more prone to it (Dolly was kept inside for security, given her fame). Her arthritis/weight may have been linked to her being fed treats as a celebrity animal. Later research on other cloned sheep (including four genomic copies of Dolly, tracked into old age) found no evidence of accelerated aging. The script does NOT assert "clones age faster" as fact -- it states the 1999 finding and the theory it fueled, then gives the scientists' own more nuanced explanation, exactly matching the sourcing.
+
+5	SENSITIVITY NOTE: Dolly Parton is named, but only via a positive, publicly on-the-record reaction (she said she was flattered) -- not a negative or exploitative characterization of a living person, consistent with the "don't name/characterize living people negatively" discipline without triggering it (this is the reverse case -- a fond, factual footnote she's publicly commented on herself).
+
+6	FOOTAGE APPROACH: mandatory STORY hook via AI likely needed -- a 1996 cloning-lab moment has no honest real-stock equivalent. Real Pexels footage expected to cover: sheep/lambs (real, generic, not claiming to be Dolly), a science/genetics lab setting, and Scottish countryside for the setting. Per the owner's AI-restraint caution, cap at the mandatory hook unless a second genuine gap turns up on probe.

@@ -1,0 +1,15 @@
+1	EVERYDAY/RELATABLE facts episode -- brain freeze / ice cream headache, FIRST time this topic (checked: zero prior mentions). Built 2026-08-25 by the 09:00 build job. A/B TEST ARM A (countdown, --counter-mode countdown) -- tally going into this build was A=6, B=6 (tied after ep63, Arm B), tie broken by alternating off the most recent facts episode, so Arm A.
+
+2	WHY THIS TOPIC: universal, highly relatable everyday sensation, mining the EVERYDAY/RELATABLE vein per the standing recommendation. Rolling-10 topic mix going in was ANIMAL-heavy again -- paired with a fresh ANIMAL story (Dolly the sheep) to keep both categories represented.
+
+3	ALL 6 FACTS INDEPENDENTLY WEB-VERIFIED, ordered for countdown build-up (least to most surprising, #6 to #1):
+	#6. Brain freeze is triggered by eating/drinking something cold too fast -- slowing down is the main practical prevention. Standard medical-reference fact (Johns Hopkins, Houston Methodist).
+	#5. Fastest known relief: press the tongue against the roof of the mouth, or drink something warm, to rewarm the palate. Johns Hopkins Medicine, Britannica.
+	#4. Mechanism: cold against the palate makes blood vessels there rapidly constrict, then rapidly dilate as warm blood rushes back -- that sudden vascular shift, not the cold itself, triggers the pain via the trigeminal nerve. Medical News Today, Britannica, Popular Science.
+	#3. People who get migraines are more likely to experience brain freeze, likely because their trigeminal pain pathways are already hypersensitive. Britannica, Medical News Today. HEDGE: "more likely" / "probably because" -- an association/plausible-mechanism finding, not a fully proven causal claim, matching the sourcing's own hedged language.
+	#2. Brain freeze has a real clinical name: sphenopalatine ganglioneuralgia. Widely used in medical literature (Healthline, Biology Online Dictionary, clinicaltrials.gov study listings).
+	#1. In 2012, Harvard Medical School researcher Jorge Serrador and colleagues used transcranial Doppler ultrasound to scan brain blood flow in real time while subjects experienced brain freeze -- pain onset matched a rapid dilation of the anterior cerebral artery, and pain relief matched that artery constricting again. Presented at Experimental Biology 2012; covered by ScienceDaily, CBS News, LiveScience, Newswise.
+
+4	WHY --pre-written: fact #3 (migraine link) carries a hedge (association/plausible mechanism, not proven causation) that an LLM rewrite risks flattening into an unqualified claim -- consistent with this session's repeated caption/script hedge-flattening pattern (5 occurrences so far).
+
+5	FOOTAGE APPROACH: brain freeze itself (a person reacting to cold food/drink) should be well covered by Pexels -- ice cream, cold drinks, a person wincing/holding their head, a brain/nerve medical illustration for the mechanism fact, and a migraine/headache-adjacent shot for that fact. No AI generation expected to be needed; per the FACTS-format policy (AI hook optional, only if Pexels has nothing), fall back only on a confirmed gap.
