@@ -8,10 +8,10 @@ making this specific channel work, so a fresh session does not restart from zero
 
 > ## 📍 HANDOFF — current state as of 2026-08-25 (read this first)
 >
-> **Backlog: ep64 (Dolly the sheep, STORY) + ep65 (brain freeze, FACTS
-> Arm A) — both built, rendered, frame-verified, sent to Telegram
-> 2026-08-25 by the 09:00 build job, AWAITING OWNER APPROVAL.** No chat
-> message approving them has arrived yet. ep49 and ep51-63 are all
+> **Backlog: EMPTY.** ep64 and ep65 were approved 2026-08-25 ("מאושר
+> תתזמן אותם לשעות שלהם" — approved, schedule them for their own times)
+> and both scheduled rather than uploaded immediately: ep64 (STORY) for
+> 16:30 IDT, ep65 (FACTS) for 23:00 IDT. ep49 and ep51-65 are all
 > live/scheduled — see episode_log.csv for exact URLs and times.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
@@ -24,10 +24,13 @@ making this specific channel work, so a fresh session does not restart from zero
 > When the owner approves without naming which episode goes when, the
 > established fallback (used twice, 08-22 and 08-23) is: the STORY of the
 > pair goes live immediately, the FACTS episode gets scheduled for 23:00
-> IDT. When the owner explicitly says "not now, at their own times"
-> without naming times (used once, 08-24), the fallback read is the
-> channel's old pre-08-19 two-slot cadence, 16:30 IDT / 23:00 IDT —
-> flagged as unconfirmed, see below.
+> IDT. When the owner says "schedule them for their own times" without
+> naming exact times (now used **twice**, 08-24 and 08-25, near-identical
+> phrasing both times, never corrected either time), the fallback read is
+> the channel's old pre-08-19 two-slot cadence, **STORY → 16:30 IDT,
+> FACTS → 23:00 IDT** — the repeat with no correction makes this reading
+> more credible, but it has still never been explicitly confirmed by the
+> owner in so many words. Keep flagging it if it comes up again.
 >
 > **PIPELINE CHANGE DISCOVERED 2026-08-25: `viral_episode.py` and
 > `story_episode.py` now auto-send to Telegram at the end of the script**
@@ -273,6 +276,26 @@ making this specific channel work, so a fresh session does not restart from zero
 >    test is hook quality, and after that the new-channel-boost-taper
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
+
+> ### 2026-08-25, same conversation — owner approved ep64 + ep65, scheduled
+> ### for "their own times"
+>
+> Owner, live in chat: "מאושר תתזמן אותם לשעות שלהם" (approved, schedule
+> them for their own times). Near-identical phrasing to the 08-24
+> approval ("2 הסרטונים מאושרים תעלה אותם בשעות שלהם (לא עכשיו)"), which
+> was read as the channel's classic pre-08-19 two-slot cadence (16:30 IDT
+> / 23:00 IDT) since no specific times were named. Applied the same
+> reading again, in the same STORY-earlier/FACTS-later order: ep64 (Dolly
+> the sheep, STORY) scheduled via `--publish-at 2026-08-25T13:30:00Z`
+> (16:30 IDT — https://youtube.com/shorts/gri2xBEKCzg); ep65 (brain
+> freeze facts) scheduled via `--publish-at 2026-08-25T20:00:00Z` (23:00
+> IDT — https://youtube.com/shorts/TQoAsiP0NoU). Neither uploaded
+> immediately, matching "schedule" (תתזמן) rather than "upload now" in
+> the owner's wording. Backlog empty again. **This is the second time
+> this exact reading has been used with no correction from the owner** —
+> raises confidence it's right, but it's still an inference, not a
+> confirmed instruction; keep flagging it if a future approval suggests
+> otherwise.
 
 > ### 2026-08-25 07:00 UTC — pulse re-check: the fix is working, recovery
 > ### confirmed with real data, not just theory
