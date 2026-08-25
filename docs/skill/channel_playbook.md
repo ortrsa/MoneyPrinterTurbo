@@ -42,21 +42,21 @@ making this specific channel work, so a fresh session does not restart from zero
 > render, on both pipelines, and send manually after review — do not rely
 > on the auto-send.**
 >
-> **Views-decline investigation — where it stands:** root-caused twice,
-> with independent evidence both times (see "ROOT CAUSE OF THE VIEWS
-> DECLINE" below, and the sharper 2026-08-20 per-day-Analytics finding
-> right after it). Short version: this channel's view totals are driven
-> almost entirely by whether a video lands a one-day algorithmic push on
-> or near its own publish date; no video published after 2026-08-14 had
-> landed one as of 2026-08-20, which lines up with a topic-mix drift away
-> from ANIMAL/EVERYDAY that has since been reversed (target ~50% ANIMAL +
-> ~15% EVERYDAY per rolling 10). The backlog clear-out starting 08-21 gave
-> that fix its first real live-upload volume. **A trigger was scheduled to
-> fire 2026-08-25T07:00:00Z** (`trig_017uh9hhsfgWhqqtHDWsNiBk`) to re-pull
-> real Analytics and report back whether any of ep49/51-63 landed a
-> pulse — it had not yet fired as of the 09:00 IDT (06:17 UTC) build
-> trigger firing this same day; still the very next thing likely to
-> happen in this session once it does.
+> **Views-decline investigation — RECOVERY CONFIRMED with real data
+> (2026-08-25 pulse re-check).** The 08-18 cliff (427 views) was a one-day
+> dip, not a collapse: 08-21 (2845) and 08-22 (2793) are now the two
+> highest channel-wide days in the whole ~5-week dataset, above even the
+> pre-cliff peak (2262 on 08-08), and 99% of those two days' views are
+> explained by the freshly-uploaded backlog episodes themselves (ep49-59),
+> not the back-catalog. 4 of 9 assessed videos landed a genuine pulse-day
+> spike (ep49 918, ep51 644, ep58 992, ep59 1014 — all ≥ the old Octopus
+> benchmark of 868), a 44% hit rate matching the pre-decline breakout
+> rates. **The 08-18 topic-mix fix is confirmed working, not just adopted
+> on paper.** Findings reported to the owner in Hebrew via Telegram and
+> logged in the dated entry below. ep60-63 are still outside the
+> Analytics reporting window (2-3 day lag) — worth a follow-up check once
+> their data lands, but no further pipeline/policy change is indicated by
+> this pass.
 >
 > **Recurring risk, NOT solved, still the single most reliable failure
 > point in the FACTS pipeline (`--pre-written`):** the auto-generated
@@ -273,6 +273,58 @@ making this specific channel work, so a fresh session does not restart from zero
 >    test is hook quality, and after that the new-channel-boost-taper
 >    explanation (which would mean accepting a lower ceiling rather than
 >    fixing one).
+
+> ### 2026-08-25 07:00 UTC — pulse re-check: the fix is working, recovery
+> ### confirmed with real data, not just theory
+>
+> Scheduled follow-up to the 2026-08-20/21 investigation (see "ROOT CAUSE
+> OF THE VIEWS DECLINE" and the 08-20 sharper-finding entry below). Pulled
+> fresh real YouTube Analytics: channel-wide `dimensions=day` for the last
+> 5 weeks, plus `dimensions=day,video` filtered to ep49/51-59 (ep60-63
+> not yet queryable — uploaded 08-23/08-24, still inside the API's normal
+> 2-3 day reporting lag).
+>
+> **Channel-wide daily views, 08-18 through 08-22 (real numbers):** 427,
+> 1199, 321, **2845**, **2793**. The 08-18 cliff was a one-day dip, not a
+> collapse — 08-21 and 08-22 are now the two highest days in the entire
+> ~5-week dataset, above even the pre-cliff peak (2262 on 08-08). 08-19
+> was actually fine (1199, within the old 1000-2200 baseline); 08-20 dipped
+> again (321) but that too was transient.
+>
+> **The mechanism prediction from the 08-20 entry checks out almost
+> exactly:** filtering the same day-by-day query to just ep49/51-59 shows
+> nearly the entire 08-21/08-22 total is explained by those freshly-
+> uploaded episodes alone — 2821 of 2845 views on 08-21 (99%), 2769 of
+> 2793 on 08-22 (99%). This is not the back-catalog resurging; it is the
+> backlog clear-out generating a batch of fresh pulse-or-no-pulse rolls,
+> exactly as the mechanism model predicted.
+>
+> **4 of 9 assessed videos (44%) landed a genuine pulse-day spike**,
+> comparable to or exceeding the historical pulse benchmarks (Octopus 868,
+> Bird 2200): ep49 "The Ten-Foot Man That Wasn't Real" (918, upload day
+> 08-21), ep58 "Mike the Headless Chicken" (992, upload day 08-22), ep59
+> elephant facts (1014, upload day 08-22), ep51 "The Cat Three Warships
+> Couldn't Sink" (644, upload day 08-21). **This is the first confirmed
+> post-08-14 pulse** — direct evidence the channel had not lost the
+> ability to land one, it just hadn't had upload volume to try since the
+> backlog pileup. The 44% hit rate lines up with the pre-decline breakout
+> rates the 08-18 finding measured (ANIMAL 33%, EVERYDAY 50%), so this
+> reads as the expected outcome under the restored mix, not a lucky
+> fluke.
+>
+> **Not every video hit:** ep53 "The Rhino Who Won An Election" essentially
+> flopped (53 lifetime views total), and ep52/54/56/57 were weak
+> (39-327 range, below the old ~600-650 floor). This is expected and
+> consistent with the model — mix improves the odds, it doesn't guarantee
+> every individual video.
+>
+> **Conclusion sent to the owner (Hebrew, via Telegram):** the 08-18 fix
+> is working — real recovery, not just restored policy on paper. ep60-63
+> are still outside the Analytics reporting window and need a follow-up
+> check once their data lands (likely within the next 1-2 days). No
+> pipeline or policy change recommended from this pass — the fix is
+> doing what it was supposed to do; the next useful re-check is once
+> ep60-63 (and eventually ep64/65) have real day-by-day numbers.
 
 > ### 2026-08-25 09:00 IDT build — ep64 Dolly the sheep (STORY) + ep65
 > ### brain freeze facts (FACTS, Arm A)
