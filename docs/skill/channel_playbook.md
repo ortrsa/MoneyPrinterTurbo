@@ -6,26 +6,13 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
-> ## 📍 HANDOFF — current state as of 2026-08-25 (read this first)
+> ## 📍 HANDOFF — current state as of 2026-08-26 (read this first)
 >
-> **Backlog: EMPTY.** ep64 and ep65 were approved 2026-08-25 ("מאושר
-> תתזמן אותם לשעות שלהם" — approved, schedule them for their own times)
-> and both scheduled rather than uploaded immediately: ep64 (STORY) for
-> 16:30 IDT, ep65 (FACTS) for 23:00 IDT. ep49 and ep51-65 are all
-> live/scheduled — see episode_log.csv for exact URLs and times.
->
-> **QUEUED FOR THE 2026-08-26 09:00 IDT BUILD:** owner sent an Instagram
-> screenshot (Columbus Zoo credit) claiming zoos pair anxious cheetah cubs
-> with dog companions, and asked to verify it and use it as "tomorrow's
-> story." Fact-checked TRUE (well-documented, not a myth — see
-> `docs/skill/story_cheetahdog_lead.txt`) and already scripted/locked
-> (`docs/skill/plans/locked_scripts/cheetahdog_locked.json`) — origin
-> story of Laurie Marker/Khayam/Shesho (Wildlife Safari, Oregon, 1976),
-> tied back to Columbus Zoo's real Emmett/Cullen pairing. **This is a
-> STORY topic — the next build should build this as the STORY half of
-> the pair (a fresh FACTS topic still needs picking), not re-derive facts
-> from scratch.** Footage not yet probed — that's the next step at build
-> time.
+> **Backlog: ep66 (cheetah-dog companions, STORY, owner-lead topic) + ep67
+> (deja vu, FACTS Arm B) — both built, rendered, frame-verified, sent to
+> Telegram 2026-08-26 by the 09:00 build job, AWAITING OWNER APPROVAL.**
+> No chat message approving them has arrived yet. ep49 and ep51-65 are
+> all live/scheduled — see episode_log.csv for exact URLs and times.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -76,31 +63,42 @@ making this specific channel work, so a fresh session does not restart from zero
 >
 > **Recurring risk, NOT solved, still the single most reliable failure
 > point in the FACTS pipeline (`--pre-written`):** the auto-generated
-> caption has flattened a hedge on 6 separate builds now (ep45, ep48,
-> ep54, ep61, ep63, ep65) even when `--pre-written` locked the spoken
-> script — the caption is always a separate LLM pass, regenerated fresh
-> even on a re-render, and `--pre-written` never touches it.
-> ep65's flattening was caught only AFTER it had already auto-sent to
-> Telegram (see pipeline-change note above) — fixed by editing the local
-> result JSON and sending an explicit follow-up "correction" message.
-> Treat "read the caption in the result JSON against the locked script's
-> hedges, before sending" as mandatory on every single FACTS send, same
-> weight as frame-verification, never skippable. **New finding, ep64:**
-> STORY's `--from-dry-run` does NOT have this risk — the rendered
-> caption is pulled verbatim from the locked script JSON, confirmed
-> word-for-word identical including the hedge. The caption-flattening
-> risk is specific to `--pre-written` FACTS builds, not STORY.
+> caption has flattened a hedge on 7 separate builds now (ep45, ep48,
+> ep54, ep61, ep63, ep65, ep67) even when `--pre-written` locked the
+> spoken script — the caption is always a separate LLM pass, regenerated
+> fresh even on a re-render, and `--pre-written` never touches it. **Good
+> news, ep67:** with `--no-telegram` now standard practice, this one was
+> caught and hand-corrected in the local JSON *before* any send —
+> the review-before-send discipline held. Treat "read the caption in the
+> result JSON against the locked script's hedges, before sending" as
+> mandatory on every single FACTS send, same weight as frame-verification,
+> never skippable. **STORY's `--from-dry-run` still does NOT have this
+> risk** — confirmed again on ep66, caption pulled verbatim from the
+> locked script JSON. The caption-flattening risk is specific to
+> `--pre-written` FACTS builds, not STORY.
+>
+> **Footage lesson sharpened, ep66:** cheetah-specific Pexels searches are
+> even less reliable than ep24 first showed — 9 probe terms returned
+> almost entirely false positives (lions, leopards, servals, giraffes,
+> even human close-ups for "cheetah face close up"), with only ONE
+> genuinely strong real cheetah clip found in the whole probe. One
+> first-pass segment used what turned out to be a leopard (rosette
+> spots, not cheetah's solid round spots + tear-marks) — caught only on
+> close post-render inspection, not the source thumbnail. When real
+> footage for a specific animal is this scarce, budget AI generation
+> more liberally for that species (ep66 used 3 of 8 segments AI, the
+> session cap, and it was worth it).
 >
 > **Two flagged assumptions still awaiting owner confirmation:** (1) "the
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger); (2) "at
-> their own times" (08-24 approval) was read as the old 16:30/23:00 IDT
-> cadence. Neither has been explicitly confirmed or corrected by the
-> owner.
+> their own times" (08-24/08-25 approvals) was read as the old
+> 16:30/23:00 IDT cadence. Neither has been explicitly confirmed or
+> corrected by the owner.
 >
-> No open build is in progress. Next scheduled event is either the
-> 2026-08-25T07:00:00Z Analytics pulse-check trigger, or the owner
-> approving the ep64/ep65 backlog, or the next 09:00 IDT daily build,
-> whichever comes first.
+> No open build is in progress. Next scheduled event is either the owner
+> approving the ep66/ep67 backlog, a follow-up Analytics check once
+> ep60-63 (and eventually ep64-67) clear the reporting lag, or the next
+> 09:00 IDT daily build, whichever comes first.
 
 > **Strategy note (2026-07-29):** [`shorts_growth_guide.md`](shorts_growth_guide.md)
 > is now the adopted strategy and takes precedence on targets. It sets **≤20s
@@ -417,6 +415,53 @@ making this specific channel work, so a fresh session does not restart from zero
 > pipeline or policy change recommended from this pass — the fix is
 > doing what it was supposed to do; the next useful re-check is once
 > ep60-63 (and eventually ep64/65) have real day-by-day numbers.
+
+> ### 2026-08-26 09:00 IDT build — ep66 cheetah-dog companions (STORY,
+> ### owner-lead) + ep67 deja vu facts (FACTS, Arm B)
+>
+> Backlog empty going in (ep64/65 approved and scheduled 08-25). ep66 used
+> the pre-fact-checked, pre-locked cheetah-dog script queued the previous
+> evening (see the 2026-08-25 owner-lead entry below) rather than
+> re-deriving anything — the topic-mix flag left in the HANDOFF block
+> ("build this as the STORY half, pick a fresh FACTS") was followed. A/B
+> tally since 08-14 going in was A=4, B=3, so Arm B (flat listicle,
+> --counter-mode progress) was due for ep67; confirmed correct. Picked
+> deja vu (EVERYDAY/RELATABLE, fresh subject) to avoid stacking two
+> ANIMAL topics alongside the cheetah STORY.
+>
+> **ep66 footage: real cheetah stock is extremely scarce.** 9 search
+> terms probed; nearly all results were false positives (lions, leopards,
+> servals, giraffes, even a search for "cheetah face close up" returning
+> human face close-ups). Only one strong, repeatedly-returned real
+> cheetah clip existed across the whole probe. First-pass segment 1 (the
+> 1976 lonely-cub beat) landed on what turned out to be a **leopard**
+> (rosette-pattern spots, climbing — not a cheetah's solid round spots
+> and tear-marks), caught only by close post-render inspection, not the
+> source thumbnail. Also swapped segment 7 (outro, "the fastest animal on
+> Earth") off a real giraffe clip that was species-neutral in isolation
+> but a poor semantic fit under a line specifically about a cheetah's
+> speed. Fixed by generating a 3rd AI clip (a lone cheetah cub in an
+> enclosure, staying within the session's mandatory-hook-plus-2-more cap)
+> for segment 1, and deliberately reusing the one strong real cheetah
+> clip for segment 7 — an informed exception to the usual
+> no-duplicate-files rule, judged better than a wrong-species or
+> wrong-emphasis mismatch on two key beats. Re-rendered, re-verified all
+> 8 segments, zero regressions. Full write-up: docs/skill/story_cheetahdog_lead.txt,
+> episode_log.csv row 66.
+>
+> **ep67 caption hedge-flattening, 7th occurrence this session**
+> (deja vu): the "leading theory, not proven" qualifier on the
+> familiarity-signal-misfire fact was flattened to "science has tracked
+> down the root cause" in the first-pass auto-generated caption — same
+> failure class as ep45/48/54/61/63/65. Difference this time: `--no-telegram`
+> was passed (standard practice since the ep65 lesson), so the flawed
+> caption was caught and hand-corrected in the local JSON before any send
+> reached Telegram — no follow-up correction message needed, review-before-
+> send held. Full write-up: docs/skill/facts_dejavu_lead.txt, episode_log.csv
+> row 67.
+>
+> Both episodes logged as AWAITING OWNER APPROVAL. Backlog: ep66 + ep67,
+> neither approved yet as of this entry.
 
 > ### 2026-08-25 09:00 IDT build — ep64 Dolly the sheep (STORY) + ep65
 > ### brain freeze facts (FACTS, Arm A)
