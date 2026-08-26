@@ -8,11 +8,11 @@ making this specific channel work, so a fresh session does not restart from zero
 
 > ## 📍 HANDOFF — current state as of 2026-08-26 (read this first)
 >
-> **Backlog: ep66 (cheetah-dog companions, STORY, owner-lead topic) + ep67
-> (deja vu, FACTS Arm B) — both built, rendered, frame-verified, sent to
-> Telegram 2026-08-26 by the 09:00 build job, AWAITING OWNER APPROVAL.**
-> No chat message approving them has arrived yet. ep49 and ep51-65 are
-> all live/scheduled — see episode_log.csv for exact URLs and times.
+> **Backlog: EMPTY.** ep66 and ep67 were approved 2026-08-26 ("מאושר
+> תתזמן לשעות שלהם" — approved, schedule for their own times) and both
+> scheduled rather than uploaded immediately: ep66 (STORY) for 16:30 IDT,
+> ep67 (FACTS) for 23:00 IDT. ep49 and ep51-67 are all live/scheduled —
+> see episode_log.csv for exact URLs and times.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -24,13 +24,15 @@ making this specific channel work, so a fresh session does not restart from zero
 > When the owner approves without naming which episode goes when, the
 > established fallback (used twice, 08-22 and 08-23) is: the STORY of the
 > pair goes live immediately, the FACTS episode gets scheduled for 23:00
-> IDT. When the owner says "schedule them for their own times" without
-> naming exact times (now used **twice**, 08-24 and 08-25, near-identical
-> phrasing both times, never corrected either time), the fallback read is
-> the channel's old pre-08-19 two-slot cadence, **STORY → 16:30 IDT,
-> FACTS → 23:00 IDT** — the repeat with no correction makes this reading
-> more credible, but it has still never been explicitly confirmed by the
-> owner in so many words. Keep flagging it if it comes up again.
+> IDT. When the owner says "schedule for their own times" without naming
+> exact times (now used **three times**, 08-24, 08-25, and 08-26, all
+> near-identical phrasing, never corrected any of the three times), the
+> fallback read is the channel's old pre-08-19 two-slot cadence,
+> **STORY → 16:30 IDT, FACTS → 23:00 IDT** — three repeats with zero
+> correction makes this reading solidly reliable at this point, though it
+> has technically still never been spelled out in so many words by the
+> owner. Keep using it; only reconsider if a future approval contradicts
+> it.
 >
 > **PIPELINE CHANGE DISCOVERED 2026-08-25: `viral_episode.py` and
 > `story_episode.py` now auto-send to Telegram at the end of the script**
@@ -89,16 +91,16 @@ making this specific channel work, so a fresh session does not restart from zero
 > more liberally for that species (ep66 used 3 of 8 segments AI, the
 > session cap, and it was worth it).
 >
-> **Two flagged assumptions still awaiting owner confirmation:** (1) "the
-> trigger of 9" was read as 9:00 AM IDT (the live build trigger); (2) "at
-> their own times" (08-24/08-25 approvals) was read as the old
-> 16:30/23:00 IDT cadence. Neither has been explicitly confirmed or
-> corrected by the owner.
+> **One flagged assumption still awaiting owner confirmation:** "the
+> trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
+> explicitly confirmed or corrected. (The "own times" → 16:30/23:00 IDT
+> reading is no longer flagged as shaky — see above, now solid after
+> three uncorrected repeats.)
 >
-> No open build is in progress. Next scheduled event is either the owner
-> approving the ep66/ep67 backlog, a follow-up Analytics check once
-> ep60-63 (and eventually ep64-67) clear the reporting lag, or the next
-> 09:00 IDT daily build, whichever comes first.
+> No open build is in progress. Next scheduled event is either a
+> follow-up Analytics check once ep60-63 (and eventually ep64-67) clear
+> the reporting lag, or the next 09:00 IDT daily build, whichever comes
+> first.
 
 > **Strategy note (2026-07-29):** [`shorts_growth_guide.md`](shorts_growth_guide.md)
 > is now the adopted strategy and takes precedence on targets. It sets **≤20s
@@ -415,6 +417,21 @@ making this specific channel work, so a fresh session does not restart from zero
 > pipeline or policy change recommended from this pass — the fix is
 > doing what it was supposed to do; the next useful re-check is once
 > ep60-63 (and eventually ep64/65) have real day-by-day numbers.
+
+> ### 2026-08-26, same conversation — owner approved ep66 + ep67, scheduled
+> ### for "their own times" (3rd uncorrected repeat)
+>
+> Owner, live in chat: "מאושר תתזמן לשעות שלהם" (approved, schedule for
+> their own times). Third occurrence of this exact phrasing pattern
+> (after 08-24 and 08-25), applied the same reading again: ep66 (cheetah-
+> dog STORY) scheduled via `--publish-at 2026-08-26T13:30:00Z` (16:30
+> IDT — https://youtube.com/shorts/kJ2RBVplMOo); ep67 (deja vu facts)
+> scheduled via `--publish-at 2026-08-26T20:00:00Z` (23:00 IDT —
+> https://youtube.com/shorts/FmupP4lhXqY). Neither uploaded immediately.
+> Backlog empty again. Three uncorrected repeats of the same reading is
+> enough to treat it as reliable going forward — downgraded from
+> "unconfirmed, flag every time" to just noting it in the fallback
+> description (see HANDOFF block).
 
 > ### 2026-08-26 09:00 IDT build — ep66 cheetah-dog companions (STORY,
 > ### owner-lead) + ep67 deja vu facts (FACTS, Arm B)
