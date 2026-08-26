@@ -101,6 +101,70 @@ making this specific channel work, so a fresh session does not restart from zero
 > follow-up Analytics check once ep60-63 (and eventually ep64-67) clear
 > the reporting lag, or the next 09:00 IDT daily build, whichever comes
 > first.
+>
+> **NEW EDITORIAL POLICY, adopted 2026-08-26 — see "🗣️ TAKE A STANCE"
+> section below.** Owner asked for scripts/captions to take an elegant,
+> implicit stance on facts going forward (never "in our opinion"/"we
+> think") to drive both agreement and disagreement comments. Applies
+> starting with the next build.
+
+> ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
+> ## here on
+>
+> **Owner, live in chat, verbatim:** "בסרטונים הבאים אנחנו צריכים יותר
+> להביע דעה על העובדות זה יוצר הזדהות בהסכמה או וויכוח ותגובות באי
+> הסכמה ושתיהפ זה דבר טוב כמובן שלעשות את זה בצורה מתוחכמת ולא ״לדעתנו״
+> או ״אנחנו חושבים״ אלא לבחור צד בצורה אלגנטית" — translation: future
+> videos need to express more of an opinion on the facts. This creates
+> identification through agreement, or debate and disagreement comments —
+> and both are a good thing. Do it sophisticatedly, not "in our opinion"
+> or "we think" — choose a side elegantly.
+>
+> **What this means concretely:**
+> - Never write "we think," "in our opinion," "arguably," or any other
+>   visible hedge-on-the-opinion-itself phrase. State the take as if it's
+>   simply true. The audience should feel like they're hearing a
+>   confident claim worth agreeing or arguing with, not a wishy-washy
+>   disclaimer.
+> - The channel already has a proven version of this — the "who actually
+>   deserves credit" STORY format (Togo vs Balto: "the sled dog who did
+>   the hard part and got no statue," not a neutral "some historians
+>   debate credit"; Mike the Headless Chicken's title leans into the
+>   surprising-survivor framing rather than a flat description). **Do
+>   more of exactly this, and extend it to FACTS episodes too** — when a
+>   fact has a genuinely more-surprising or more-defensible framing among
+>   several valid ones, pick that framing and state it with confidence,
+>   rather than defaulting to the blandest fully-hedged phrasing.
+> - Good places to take a stance: who deserves credit/blame in a true
+>   story; whether a popular belief is flatly wrong vs. just
+>   oversimplified; which side of a real debate is more convincing; what
+>   an underrated/overrated fact implies. Bad places: overriding an
+>   actually-unsettled scientific question into false certainty (see the
+>   hedge-discipline note below), or taking a stance on anything covered
+>   by the living-person/active-investigation sensitivity rules.
+> - **This does NOT relax the hedge/fact-check discipline — the two
+>   operate at different layers.** A hedge exists to protect a *factual*
+>   claim from overreach (a study limitation, a disputed detail, a
+>   theory that isn't proven). A "stance" is a *judgment/interpretation*
+>   layered on top of settled or well-sourced facts (whose contribution
+>   mattered more, whether something is surprising, who was really
+>   responsible). It is possible, and often the elegant move, to state a
+>   hedge confidently AS the stance itself — e.g. "the leading theory is
+>   X, and honestly the fact that nobody's proven it after this long is
+>   the real story" reads as an opinionated take while keeping the
+>   underlying hedge completely intact. Never resolve a genuine hedge by
+>   just picking a side and dropping the qualifier — that would be the
+>   caption-hedge-flattening failure (§9, now 7 occurrences) with extra
+>   steps, just done on purpose instead of by accident.
+> - Comment-bait CTAs (e.g. "Comment if you think X," "Comment your age
+>   if...") already exist in the pipeline as a device — this policy asks
+>   for the STANCE itself to invite disagreement, not just the closing
+>   line. A good outro CTA now follows naturally from a script that
+>   already took a real position, rather than being the only place an
+>   opinion shows up.
+> - Applies to the spoken script, the on-screen title-card teaser, and
+>   the caption alike — all three should carry the same confident framing
+>   consistently, not just the caption.
 
 > **Strategy note (2026-07-29):** [`shorts_growth_guide.md`](shorts_growth_guide.md)
 > is now the adopted strategy and takes precedence on targets. It sets **≤20s
