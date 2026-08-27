@@ -8,11 +8,12 @@ making this specific channel work, so a fresh session does not restart from zero
 
 > ## 📍 HANDOFF — current state as of 2026-08-27 (read this first)
 >
-> **Backlog: ep68 (QWERTY keyboard myth, STORY) + ep69 (goosebumps,
-> FACTS Arm A) — both built, rendered, frame-verified, sent to Telegram
-> 2026-08-27 by the 09:00 build job, AWAITING OWNER APPROVAL.** No chat
-> message approving them has arrived yet. ep49 and ep51-67 are all
-> live/scheduled — see episode_log.csv for exact URLs and times.
+> **Backlog: EMPTY.** ep68 and ep69 were approved 2026-08-27 ("2
+> הסרטונים של היום מאושרים" — today's 2 videos are approved, no timing
+> given) — this time with NO "own times" phrasing, so the older
+> no-timing fallback applied instead: ep68 (STORY) uploaded immediately
+> as public, ep69 (FACTS) scheduled for 23:00 IDT. ep49 and ep51-69 are
+> all live/scheduled — see episode_log.csv for exact URLs and times.
 >
 > **These are the first two builds under the new "🗣️ TAKE A STANCE"
 > policy (adopted 2026-08-26, see that section below).** Both leaned
@@ -542,6 +543,23 @@ making this specific channel work, so a fresh session does not restart from zero
 > recovery finding, it's just a smaller, noisier sample. Next Analytics
 > follow-up worth doing once ep64-67 (and eventually 68/69) clear the same
 > reporting lag.
+
+> ### 2026-08-27, new conversation — owner approved ep68 + ep69, no
+> ### timing given (reverts to the older no-timing fallback)
+>
+> Owner, live in chat (new session, picked up via the HANDOFF block):
+> "2 הסרטונים של היום מאושרים" (today's 2 videos are approved) — no
+> "own times" phrasing this time, just a plain approval. Applied the
+> OLDER no-timing fallback (used 08-22/08-23, distinct from the
+> "own times" 16:30/23:00 fallback used 08-24 through 08-26): the STORY
+> of the pair goes live immediately, the FACTS episode gets scheduled
+> for 23:00 IDT. ep68 (QWERTY) uploaded immediately as public
+> (https://youtube.com/shorts/CBFqw0WxUb4); ep69 (goosebumps) scheduled
+> via `--publish-at 2026-08-27T20:00:00Z` (23:00 IDT —
+> https://youtube.com/shorts/e9WYhGLI0RY). Backlog empty again. **Note:**
+> this confirms the two fallbacks are genuinely distinct and both still
+> active depending on the owner's exact phrasing — don't collapse them
+> into one rule.
 
 > ### 2026-08-27 09:00 IDT build — ep68 QWERTY keyboard myth (STORY) +
 > ### ep69 goosebumps (FACTS, Arm A) -- first two builds under "TAKE A
