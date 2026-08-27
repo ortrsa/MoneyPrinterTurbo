@@ -1,0 +1,17 @@
+1	True story: the real reason the QWERTY keyboard layout exists (FIRST time this topic) -- built 2026-08-27 by the 09:00 build job. EVERYDAY/RELATABLE category, per the topic-mix policy -- rolling-10 going in was ANIMAL 6/10 (over target) + EVERYDAY 4/10, so picked non-ANIMAL deliberately.
+
+2	WHY THIS TOPIC: fresh subject (zero prior mentions -- only Napoleon III/aluminium appeared once as an unrelated fact in ep18's "everyday objects" episode). Classic "popular myth is wrong, real story is more interesting" register -- this channel's best-performing type of twist -- and it's a genuinely universal object (everyone has typed on a QWERTY keyboard). Also the first build under the new 2026-08-26 "TAKE A STANCE" policy: this story leads directly with a confident myth-debunking claim rather than a neutral "some say..." framing.
+
+3	THE FACTS (independently verified):
+	- June 23, 1868: Christopher Latham Sholes, with Carlos Glidden and Samuel W. Soule, patented one of the first practical typewriters in Milwaukee.
+	- The first keyboard layout was alphabetical (A, B, C...) and jammed constantly -- frequently-typed adjacent letters caused the mechanical typebars to strike each other and lock up.
+	- Sholes rearranged the keys specifically to separate commonly-paired letters from each other, reducing typebar clashes -- this became the QWERTY layout, first documented in US Patent No. 207,559 (Aug 27, 1878).
+	- In 1873 Sholes sold the patent rights to E. Remington and Sons for $12,000; Remington marketed it as the "Remington Typewriter" and QWERTY spread from there.
+	- QWERTY persisted after typebars became obsolete (and later, digital keyboards removed the jamming problem entirely) purely through path dependence -- everyone already knew it, every machine shipped with it, typing schools taught it for a century.
+	Sources: Smithsonian Magazine ("The QWERTY Keyboard Will Never Die"), Britannica (Christopher Latham Sholes), National Inventors Hall of Fame, EBSCO Research Starters, UW-Madison wi101.wisc.edu ("Origins of the QWERTY Keyboard" + the specific myth-vs-telegraph-history page), History Facts, Built by Buit.
+
+4	THE STANCE (per 2026-08-26 "TAKE A STANCE" policy): the popular claim -- "QWERTY was designed to slow typists down so the machine wouldn't jam" -- is stated as a widely-repeated MYTH, not a maybe. Sourcing directly supports a confident debunking: "there is little to no hard evidence of any deliberate slowdown," and touch typing did not exist yet at the time, so there was no one fast enough to need slowing down. The real, well-documented mechanical-jam-prevention reason is stated as fact, not hedged, because it IS the well-sourced, undisputed explanation. This is a genuine "popular belief is wrong" case, not an unsettled scientific question -- no hedge needed on the central claim itself.
+
+5	SENSITIVITY: none. Christopher Latham Sholes died in 1890; purely historical, no living-person or active-controversy issues.
+
+6	FOOTAGE APPROACH: extremely well covered by real stock -- vintage typewriters, modern keyboards, hands typing, old patent/document imagery. No AI expected needed; per the FACTS/STORY AI policy, only fall back to AI if Pexels genuinely has a gap (e.g. if no clean 1868-era typewriter close-up exists).

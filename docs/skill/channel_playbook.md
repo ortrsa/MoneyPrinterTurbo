@@ -6,13 +6,21 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
-> ## 📍 HANDOFF — current state as of 2026-08-26 (read this first)
+> ## 📍 HANDOFF — current state as of 2026-08-27 (read this first)
 >
-> **Backlog: EMPTY.** ep66 and ep67 were approved 2026-08-26 ("מאושר
-> תתזמן לשעות שלהם" — approved, schedule for their own times) and both
-> scheduled rather than uploaded immediately: ep66 (STORY) for 16:30 IDT,
-> ep67 (FACTS) for 23:00 IDT. ep49 and ep51-67 are all live/scheduled —
-> see episode_log.csv for exact URLs and times.
+> **Backlog: ep68 (QWERTY keyboard myth, STORY) + ep69 (goosebumps,
+> FACTS Arm A) — both built, rendered, frame-verified, sent to Telegram
+> 2026-08-27 by the 09:00 build job, AWAITING OWNER APPROVAL.** No chat
+> message approving them has arrived yet. ep49 and ep51-67 are all
+> live/scheduled — see episode_log.csv for exact URLs and times.
+>
+> **These are the first two builds under the new "🗣️ TAKE A STANCE"
+> policy (adopted 2026-08-26, see that section below).** Both leaned
+> into a confident, implicit stance rather than neutral framing: ep68's
+> hook flatly states the QWERTY-slowdown myth is false ("That's not what
+> happened"); ep69's hook states goosebumps aren't useless. Neither
+> required dropping a hedge to do this — see the dated entry below for
+> how each stayed inside the fact-check discipline.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -91,22 +99,29 @@ making this specific channel work, so a fresh session does not restart from zero
 > more liberally for that species (ep66 used 3 of 8 segments AI, the
 > session cap, and it was worth it).
 >
+> **New caption risk found, ep69 — a mechanism-object swap, not a
+> dropped hedge:** the auto-generated caption said the arrector pili
+> muscle "anchors the stem cells," when the actual finding (and the
+> locked script) is that it anchors the *nerves* that regulate the stem
+> cells — same object doing the same general job description, but the
+> literal claim changed what the muscle physically attaches to. Caught
+> and fixed pre-send by the same "read the caption against the locked
+> script" discipline that catches hedge-flattening — worth explicitly
+> checking for this failure mode too, not just missing qualifiers, on
+> any fact involving a specific mechanism/anatomy claim.
+>
+> **"TAKE A STANCE" policy (adopted 2026-08-26) now has two builds under
+> it (ep68, ep69) — see that section below for how each did it without
+> touching the hedge discipline.**
+>
 > **One flagged assumption still awaiting owner confirmation:** "the
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
-> explicitly confirmed or corrected. (The "own times" → 16:30/23:00 IDT
-> reading is no longer flagged as shaky — see above, now solid after
-> three uncorrected repeats.)
+> explicitly confirmed or corrected.
 >
 > No open build is in progress. Next scheduled event is either a
-> follow-up Analytics check once ep60-63 (and eventually ep64-67) clear
+> follow-up Analytics check once ep60-63 (and eventually ep64-69) clear
 > the reporting lag, or the next 09:00 IDT daily build, whichever comes
 > first.
->
-> **NEW EDITORIAL POLICY, adopted 2026-08-26 — see "🗣️ TAKE A STANCE"
-> section below.** Owner asked for scripts/captions to take an elegant,
-> implicit stance on facts going forward (never "in our opinion"/"we
-> think") to drive both agreement and disagreement comments. Applies
-> starting with the next build.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
@@ -496,6 +511,49 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-27 09:00 IDT build — ep68 QWERTY keyboard myth (STORY) +
+> ### ep69 goosebumps (FACTS, Arm A) -- first two builds under "TAKE A
+> ### STANCE"
+>
+> Backlog empty going in. A/B tally since 08-14 was A=4, B=4 tied after
+> ep67 (Arm B), tie-broken by alternating off the most recent facts
+> episode, so Arm A (countdown) was due for ep69. Rolling-10 going in was
+> ANIMAL 6/10 (over target), so picked non-ANIMAL for BOTH of today's
+> episodes deliberately rather than picking one of each — first time
+> this session both slots went non-ANIMAL on purpose.
+>
+> **ep68 (QWERTY):** the first build under the new stance policy. Hook
+> states the popular "designed to slow typists down" belief is false,
+> directly, not hedged as "some say." This didn't require touching the
+> fact-check discipline at all — the debunking IS the well-sourced,
+> undisputed historical explanation (Smithsonian Magazine, Britannica,
+> NIHF, UW-Madison), so stating it with confidence is simply accurate,
+> not an opinion layered over uncertainty. Zero AI clips — vintage
+> typewriters and modern keyboards are both extremely well covered by
+> Pexels (unlike the recent cheetah scarcity). One duration catch (a
+> 4.9s clip against an ~8.3s need, swapped before rendering). All 8
+> segments frame-verified clean — segment 2's typewriter typebar
+> mechanism shot was an unusually strong literal match for "the metal
+> arms crossed and locked up." Full write-up: docs/skill/story_qwerty_lead.txt,
+> episode_log.csv row 68.
+>
+> **ep69 (goosebumps):** the second stance build. Hook: "Your goosebumps
+> aren't useless. Science just proved it" — an implicit stance against
+> the common "goosebumps are a pointless leftover" assumption, resting
+> on a real, accurately-hedged 2020 Harvard/Cell study finding (not
+> overstated as a settled textbook fact or a baldness cure). Caught a
+> **new caption-risk variant** before sending: the first-pass caption
+> said the arrector pili muscle "anchors the stem cells," but the actual
+> mechanism (and the locked script) is that it anchors the *nerves*
+> that regulate the stem cells — a mechanism-object swap, not a missing
+> hedge, caught by the same pre-send caption check. Also caught a
+> duration shortfall on the frisson-fact clip (2.65s against a ~7.6s
+> need) before rendering. All 8 segments frame-verified clean. Full
+> write-up: docs/skill/facts_goosebumps_lead.txt, episode_log.csv row 69.
+>
+> Both episodes logged as AWAITING OWNER APPROVAL. Backlog: ep68 + ep69,
+> neither approved yet as of this entry.
 
 > ### 2026-08-26 09:00 IDT build — ep66 cheetah-dog companions (STORY,
 > ### owner-lead) + ep67 deja vu facts (FACTS, Arm B)
