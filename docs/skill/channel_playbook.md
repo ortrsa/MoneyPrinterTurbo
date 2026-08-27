@@ -66,10 +66,12 @@ making this specific channel work, so a fresh session does not restart from zero
 > benchmark of 868), a 44% hit rate matching the pre-decline breakout
 > rates. **The 08-18 topic-mix fix is confirmed working, not just adopted
 > on paper.** Findings reported to the owner in Hebrew via Telegram and
-> logged in the dated entry below. ep60-63 are still outside the
-> Analytics reporting window (2-3 day lag) — worth a follow-up check once
-> their data lands, but no further pipeline/policy change is indicated by
-> this pass.
+> logged in the dated entry below. **Follow-up done 2026-08-27:** ep60-63
+> data has now cleared the reporting lag — 933/366/200/466 views, 1/4
+> (25%) cleared the spike benchmark, in line with the pre-decline 20-25%
+> band, n too small to call a trend either way. No pipeline/policy change
+> indicated. See the dated entry below for the full table. Next check
+> once ep64-67 clear the same lag.
 >
 > **Recurring risk, NOT solved, still the single most reliable failure
 > point in the FACTS pipeline (`--pre-written`):** the auto-generated
@@ -118,10 +120,12 @@ making this specific channel work, so a fresh session does not restart from zero
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
-> No open build is in progress. Next scheduled event is either a
-> follow-up Analytics check once ep60-63 (and eventually ep64-69) clear
-> the reporting lag, or the next 09:00 IDT daily build, whichever comes
-> first.
+> No open build is in progress. The ep60-63 Analytics follow-up (flagged
+> above) is now done as of this session (2026-08-27, checked chat +
+> Telegram inbox for approval first — neither had one). Next scheduled
+> event is either owner approval of ep68/ep69, a follow-up Analytics check
+> once ep64-67 clear the reporting lag, or the next 09:00 IDT daily build,
+> whichever comes first.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
@@ -511,6 +515,33 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-27, follow-up — ep60-63 Analytics data cleared the reporting
+> ### lag, checked as flagged in the 08-25 pulse re-check
+>
+> The 08-25 pulse re-check (see that entry above) left ep60-63 outside the
+> 2-3 day Analytics reporting window and flagged a follow-up once their
+> data landed. Ran `fetch_channel_analytics.py --days 30` today; all four
+> now have real numbers:
+>
+> | ep | title | views | retention | category |
+> |---|---|---|---|---|
+> | 60 | Wallpaper Nobody Wanted (STORY) | 933 | 55.4% | above spike benchmark |
+> | 61 | Facts 61 | 366 | 51.5% | below |
+> | 62 | Sled Dog / Togo vs Balto (STORY) | 200 | 39.3% | below |
+> | 63 | Facts 63 (hiccups) | 466 | 23.3% | below |
+>
+> 1/4 (25%) cleared the ≥868-views spike benchmark (the Octopus figure
+> used throughout this log) — in line with the pre-decline historical
+> breakout band (20-25%), not a repeat of the 44% (4/9) figure from the
+> 08-25 check, but n=4 is too small to read as a regression on its own.
+> Retention averages ~42% across the four, still well under the
+> `shorts_growth_guide.md` ≥70% target, with ep60 (55.4%) the strongest
+> and ep63 (23.3%) the weakest of the batch. **No pipeline or policy
+> change indicated by this pass** — nothing here contradicts the 08-25
+> recovery finding, it's just a smaller, noisier sample. Next Analytics
+> follow-up worth doing once ep64-67 (and eventually 68/69) clear the same
+> reporting lag.
 
 > ### 2026-08-27 09:00 IDT build — ep68 QWERTY keyboard myth (STORY) +
 > ### ep69 goosebumps (FACTS, Arm A) -- first two builds under "TAKE A
