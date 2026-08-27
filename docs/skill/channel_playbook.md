@@ -20,10 +20,23 @@ making this specific channel work, so a fresh session does not restart from zero
 > 2026-08-27 ahead of the next scheduled 09:00 IDT trigger, per the
 > owner's explicit live-chat instruction "Make now the videos for
 > tomorrow." A build instruction is not upload approval — do not upload
-> either until a live chat message approves them by name. ep68 and ep69
-> were approved and uploaded earlier the same day (see below) — ep49 and
-> ep51-69 are all live/scheduled, see episode_log.csv for exact URLs and
-> times.
+> either until a live chat message approves them by name. **Also awaiting
+> an owner answer on whether to re-render ep70/ep71's outros to
+> "subscribe" wording (see the Analytics dated entry below) before
+> approval, or ship as-is.** ep68 and ep69 were approved and uploaded
+> earlier the same day (see below) — ep49 and ep51-69 are all
+> live/scheduled, see episode_log.csv for exact URLs and times.
+>
+> **Real YouTube Analytics screenshots from the owner (2026-08-27,
+> dated entry below) drove two adopted changes:** (1) the "schedule for
+> their own times" fallback default moved from 16:30/23:00 IDT to
+> **15:30/20:30 IDT**, based on the audience-activity graph; (2) outro
+> CTAs now say **"subscribe," not "follow"** (SKILL.md item 3), matching
+> YouTube's actual button. Several other suggestions (sharper CTA to fix
+> the 99.4%-non-subscribed ratio, demographic-driven topic pivot,
+> long-form + Related Video linking) were evaluated and mostly NOT
+> adopted as-is — see that dated entry for the reasoning, including one
+> open question back to the owner about long-form video.
 >
 > **These are the FIRST TWO BUILDS under the new 🚀 GROWTH PIVOT policy
 > (adopted 2026-08-27, see that section below) — read it before touching
@@ -63,15 +76,23 @@ making this specific channel work, so a fresh session does not restart from zero
 > When the owner approves without naming which episode goes when, the
 > established fallback (used twice, 08-22 and 08-23) is: the STORY of the
 > pair goes live immediately, the FACTS episode gets scheduled for 23:00
-> IDT. When the owner says "schedule for their own times" without naming
-> exact times (now used **three times**, 08-24, 08-25, and 08-26, all
-> near-identical phrasing, never corrected any of the three times), the
-> fallback read is the channel's old pre-08-19 two-slot cadence,
-> **STORY → 16:30 IDT, FACTS → 23:00 IDT** — three repeats with zero
-> correction makes this reading solidly reliable at this point, though it
-> has technically still never been spelled out in so many words by the
-> owner. Keep using it; only reconsider if a future approval contradicts
-> it.
+> IDT — **this immediate-STORY half of the fallback stays unchanged**,
+> only the "schedule for their own times" default times below moved.
+> When the owner says "schedule for their own times" without naming exact
+> times, the fallback (used 08-24/25/26 at the old 16:30/23:00 pre-08-19
+> cadence, **updated 2026-08-27 per real YouTube Analytics "When your
+> viewers are on YouTube" data the owner shared**) is now:
+> **first video → 15:30 IDT, second video → 20:30 IDT.** Reasoning from
+> the data: viewer activity peaks 19:00-23:00 IDT (with a tail into
+> 00:00-02:00), driven partly by the 18.2% US-audience share whose
+> morning/midday falls in that window; uploading 1-2 hours before a peak
+> gives YouTube's algorithm room to start distributing before the wave
+> hits, hence 15:30 (ahead of the 17:00-18:00 ramp-up) and 20:30 (just
+> inside the 19:00-23:00 peak, catching it early rather than late); the
+> old 23:00 slot was catching the tail end of the peak instead of its
+> start. Mornings (06:00-12:00) are confirmed weak and stay avoided. Keep
+> using 15:30/20:30 going forward; only reconsider if real performance
+> data contradicts it.
 >
 > **PIPELINE CHANGE DISCOVERED 2026-08-25: `viral_episode.py` and
 > `story_episode.py` now auto-send to Telegram at the end of the script**
@@ -655,6 +676,76 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-27, later still — owner shared real YouTube Analytics
+> ### screenshots (audience-activity graph, subscriber split, demographics,
+> ### geography/captions, format), asked to adapt to the findings
+>
+> Owner sent a detailed Hebrew write-up of conclusions drawn from their
+> own YouTube Studio Analytics screenshots and asked to fit the channel
+> to them. Went through each claim on its merits rather than implementing
+> all of it uncritically:
+>
+> 1. **Publish timing (ADOPTED).** "When your viewers are on YouTube"
+> shows peak activity 19:00-23:00 IDT (tail into 00:00-02:00), partly
+> explained by the 18.2% US-audience share whose morning/midday lands in
+> that window; mornings 06:00-12:00 are weak. Updated the "schedule for
+> their own times" fallback default from 16:30/23:00 IDT to **15:30/20:30
+> IDT** (see HANDOFF block for the full reasoning) — this is a real,
+> low-risk, directly-actionable change, adopted as stated.
+>
+> 2. **Outro CTA wording (ADOPTED, narrowly).** Owner flagged 99.4% of
+> watch time coming from non-subscribed viewers as a gap needing a
+> sharper CTA. Pushed back honestly rather than agreeing uncritically:
+> this ratio is the *expected* signature of algorithm-driven Shorts
+> discovery working correctly, not evidence of a channel-specific
+> problem — a healthy Shorts channel's growth is supposed to run
+> overwhelmingly through non-subscribed browse/scroll traffic. Also, the
+> channel already tested and documented (§4, "Subscribers are downstream
+> of retention... fix retention before rewriting CTAs again") that
+> earlier CTA-wording rewrites did not move subscriber conversion much —
+> retention did. So did NOT adopt "a sharper CTA will fix conversion" as
+> a premise. Did adopt one narrow, nearly-free correction: outro CTAs
+> have said **"follow,"** but YouTube's actual action button says
+> **"subscribe"** — switched to explicit "subscribe" wording going
+> forward (SKILL.md item 3, updated) since matching the platform's own
+> term can only help and costs nothing. The GROWTH PIVOT's
+> retention-first levers (length, hook, loop-design) remain the primary
+> bet for moving subscriber conversion, not CTA wording.
+>
+> 3. **Demographics/topic skew (NOTED, not adopted as a hard policy).**
+> 74.9% male, core ages 25-44. This is a soft directional fit with the
+> existing topic mix (surprising/nerdy science, history, and animal
+> facts already skew toward this demographic) — will keep it in mind
+> when picking within the existing ANIMAL/EVERYDAY floors, but did NOT
+> touch those floors, since they're backed by the channel's own more
+> granular topic-mix performance data (§5), not just demographic fit.
+>
+> 4. **Burned-in captions (ALREADY MET, no action needed).** 97% of
+> viewers don't enable YouTube's CC menu — the pipeline has burned in
+> karaoke-style ASS captions by default since early in the channel's
+> history (SKILL.md item 4), so this recommendation was already
+> satisfied; documented as validated by the owner's own data rather than
+> treated as a new task.
+>
+> 5. **Numbered series (ALREADY COVERED, existing guidance stands).**
+> SKILL.md item 7 already concluded numbering aids channel-page binging
+> but "what converts a numbered series into subscribers is a consistent
+> recognizable format, not the number" — consistent with, not
+> contradicted by, the owner's suggestion. No change needed.
+>
+> 6. **Long-form + "Related Video" linking (FLAGGED, not started).** This
+> channel has no long-form production pipeline — it's Shorts-only.
+> Adopting this would mean starting a new content track, not tuning an
+> existing parameter, so it needs an explicit owner decision rather than
+> being folded in silently. Asked the owner directly rather than
+> assuming either way.
+>
+> **ep70/ep71 note:** both already have "Follow for more" baked into
+> their locked scripts/audio from before this policy update. Asked the
+> owner whether to re-render their outros to "subscribe" wording before
+> approval, or ship as-is and apply "subscribe" starting with the next
+> build (ep72+).
 
 > ### 2026-08-27, later same conversation — ep70 Harriet the tortoise
 > ### (STORY) + ep71 phantom vibration (FACTS) — first two builds under
