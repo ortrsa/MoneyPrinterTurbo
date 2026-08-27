@@ -20,10 +20,10 @@ making this specific channel work, so a fresh session does not restart from zero
 > 2026-08-27 ahead of the next scheduled 09:00 IDT trigger, per the
 > owner's explicit live-chat instruction "Make now the videos for
 > tomorrow." A build instruction is not upload approval — do not upload
-> either until a live chat message approves them by name. **Also awaiting
-> an owner answer on whether to re-render ep70/ep71's outros to
-> "subscribe" wording (see the Analytics dated entry below) before
-> approval, or ship as-is.** ep68 and ep69 were approved and uploaded
+> either until a live chat message approves them by name. **Owner
+> decided (via AskUserQuestion) to ship ep70/ep71 as-is with "Follow for
+> more" — no re-render; "subscribe" wording starts fresh at ep72** (see
+> the Analytics dated entry below). ep68 and ep69 were approved and uploaded
 > earlier the same day (see below) — ep49 and ep51-69 are all
 > live/scheduled, see episode_log.csv for exact URLs and times.
 >
@@ -734,18 +734,19 @@ making this specific channel work, so a fresh session does not restart from zero
 > recognizable format, not the number" — consistent with, not
 > contradicted by, the owner's suggestion. No change needed.
 >
-> 6. **Long-form + "Related Video" linking (FLAGGED, not started).** This
-> channel has no long-form production pipeline — it's Shorts-only.
+> 6. **Long-form + "Related Video" linking (ASKED, DECLINED for now).**
+> This channel has no long-form production pipeline — it's Shorts-only.
 > Adopting this would mean starting a new content track, not tuning an
-> existing parameter, so it needs an explicit owner decision rather than
-> being folded in silently. Asked the owner directly rather than
-> assuming either way.
+> existing parameter, so asked the owner directly rather than assuming
+> either way. **Owner decision (via AskUserQuestion): not now, stay
+> Shorts-only — revisit later if the channel grows further.**
 >
 > **ep70/ep71 note:** both already have "Follow for more" baked into
-> their locked scripts/audio from before this policy update. Asked the
-> owner whether to re-render their outros to "subscribe" wording before
-> approval, or ship as-is and apply "subscribe" starting with the next
-> build (ep72+).
+> their locked scripts/audio from before this policy update. **Owner
+> decision (asked via AskUserQuestion):** ship both as-is, no re-render —
+> "subscribe" wording starts fresh with ep72. **Long-form/Related-Video
+> decision:** not now, stay Shorts-only — revisit later if the channel
+> grows further.
 
 > ### 2026-08-27, later same conversation — ep70 Harriet the tortoise
 > ### (STORY) + ep71 phantom vibration (FACTS) — first two builds under
