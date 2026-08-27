@@ -1,0 +1,16 @@
+1	EVERYDAY/RELATABLE facts episode -- phantom vibration syndrome, FIRST time this topic. Built 2026-08-27, FIRST facts episode under the new GROWTH PIVOT policy -- target ~20s (code-suggested --fact-count 3 --fact-max-words 14 for a sub-20s build), hook-discipline + loop-design applied, TAKE A STANCE framing (states directly that the phone isn't buzzing, not hedged).
+
+2	WHY THIS TOPIC: universal, highly relatable modern sensation almost everyone has experienced, mining the EVERYDAY/RELATABLE vein per the standing recommendation (best historical performer on this channel). Fresh subject, well-documented in real research (not folk science), and short enough to work as exactly 3 punchy facts rather than diluting it to fit 6.
+
+3	ALL 3 FACTS INDEPENDENTLY WEB-VERIFIED:
+	#1. Nearly 90% of people in surveyed studies report having felt their phone vibrate when it actually didn't -- a 2012 study of college undergrads found this rate; not universal but very common.
+	#2. Leading mechanism (per a 2010 BMJ-published study and follow-on research): the brain misinterprets ambiguous real sensory input (a muscle twitch, clothing shifting, background noise) as the specific, familiar pattern of a phone vibration -- a sensory-misinterpretation effect, not a hallucination from nothing.
+	#3 (payoff/stance). Research on frequent smartphone use and phantom-vibration frequency finds heavier, more habitual phone checking is associated with experiencing phantom vibrations more often -- framed as researchers' finding/association, not a proven strict dose-response causal law (HEDGE: "associated with," not "the more you check the more it happens" as a hard rule).
+
+4	WHY --pre-written: fact #3 has a real hedge (association found in research, not a precise causal gradient) that risks being tightened into an overclaimed "more checking = more buzzing, guaranteed" statement by an LLM rewrite -- same discipline as every hedge-bearing facts build this session.
+
+5	FOOTAGE APPROACH: person reacting to phone/checking pocket, close-up of a phone screen/vibration, and a brain/neuroscience visual for the mechanism fact. All well covered by Pexels. No AI expected needed for a FACTS build (optional-only per policy).
+
+6	SOURCES: ScienceDirect ("An experiential account of phantom vibration syndrome"), NPR/All Tech Considered coverage of the 2012 undergrad study, PMC/ResearchGate coverage of prevalence and smartphone-use-association studies, Forbes (psychologist explainer).
+
+7	LOOP DESIGN (GROWTH PIVOT, new): outro references "your brain" and "that buzz" again, echoing the hook's exact framing ("that phantom buzz... it's your brain"), so the ending loops back into the opening claim.

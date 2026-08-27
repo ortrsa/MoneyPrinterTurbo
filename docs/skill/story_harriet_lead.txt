@@ -1,0 +1,21 @@
+1	True story: Harriet the tortoise, the popular "Darwin's tortoise" claim, largely debunked by DNA (FIRST time this topic). Built 2026-08-27, FIRST episode under the new GROWTH PIVOT policy -- target 30s (the pipeline's MIN_SECONDS floor for story_episode.py, the closest achievable compliance with the new 15-30s length target without a code change), hook-discipline + loop-design applied, TAKE A STANCE framing (states the debunk directly, not hedged as "some say").
+
+2	WHY THIS TOPIC: fresh subject (zero prior mentions), ANIMAL category (rolling-10 going in was ANIMAL 4/10, under the 50% target -- correcting for it after two non-ANIMAL days). Classic "beloved popular myth is probably wrong" twist -- this channel's best-performing register -- and short enough to actually fit a real single beat into 30s rather than forcing a multi-part narrative into too little time.
+
+3	THE FACTS (independently verified):
+	- Harriet was a Galapagos tortoise who lived most of her later life at Australia Zoo (Queensland), owned by Steve and Terri Irwin, from 1987 until her death.
+	- The popular/traditional story: Charles Darwin personally collected her as a small tortoise during his 1835 Galapagos visit on HMS Beagle.
+	- She died June 23, 2006, of an acute heart attack/heart failure, at an age reported as 175 (one source says 176 -- HEDGE: exact age has a 1-year discrepancy across otherwise-reliable outlets, script uses "175" as the more commonly cited figure without claiming false precision).
+	- DNA testing (1998) found Harriet is Chelonoidis niger porteri, a subspecies native to Santa Cruz Island in the Galapagos -- an island Darwin's own travel records show he never visited during the Beagle voyage.
+	- Because of this species/location mismatch, most researchers/historians now doubt Darwin personally collected her, even though Australia Zoo's own official materials still tell the traditional Darwin-collected story.
+	Sources: Snopes ("Did Charles Darwin and Steve Irwin Own the Same Tortoise?"), Wikipedia ("Harriet (tortoise)"), Australia Zoo's own history page, ABC News, Al Jazeera, CBC (death coverage, age reported as 175/176).
+
+4	THE STANCE (per the 2026-08-26 TAKE A STANCE policy): hook states the debunk directly ("She probably never did"), not hedged as "some historians question." This is not overriding a genuinely unsettled scientific question -- it's the same well-sourced pattern as the QWERTY build (ep68): the debunking IS the mainstream, well-evidenced position (DNA + travel-record mismatch is about as solid as historical debunking gets), even though the traditional story is still what the zoo itself publicly tells visitors. Script does NOT claim the Darwin story is impossible, just that it's probably wrong -- matches sourcing exactly ("most researchers doubt," not "definitively disproven").
+
+5	SENSITIVITY: none. Darwin died 1882, Harriet died 2006, Steve Irwin (real person, died 2006, unrelated to Harriet's death) is mentioned only as her well-known real owner/zoo, a neutral factual reference, not a negative characterization.
+
+6	LOOP DESIGN (GROWTH PIVOT, new): outro callback references "the myth" from the hook line, so the ending loops back to the opening claim rather than just ending cleanly -- see locked script.
+
+7	LENGTH: target 30s (story_episode.py's MIN_SECONDS=30 hard floor -- cannot go lower without a code change; this is the closest achievable compliance with the new 15-30s GROWTH PIVOT target). Script is ~81 words, 4 segments (hook + 2 beats + outro), a deliberate departure from the previous 8-segment structure now that the format is this short.
+
+8	FOOTAGE APPROACH: mandatory AI hook (STORY default) -- a giant tortoise close-up evoking age/history, or a 1835-era ship/expedition visual for the myth being told; real Pexels footage for the tortoise beats (giant tortoise, Galapagos-adjacent or zoo tortoise footage) and the DNA/science beat.
