@@ -8,6 +8,14 @@ making this specific channel work, so a fresh session does not restart from zero
 
 > ## 📍 HANDOFF — current state as of 2026-08-27 (read this first)
 >
+> **READ THE 🚀 GROWTH PIVOT SECTION BELOW BEFORE THE NEXT BUILD.** New
+> target length 15-30s (supersedes the 50-58s/63s-ceiling rule), new
+> hook-discipline and loop-design requirements, an AI-disclosure
+> recommendation, and trending audio on hold pending an owner
+> risk-tolerance answer — all adopted 2026-08-27 in response to the
+> owner's explicit "need a significant change, not a mix tweak" push.
+> Applies starting with the very next build, not a someday idea.
+>
 > **Backlog: EMPTY.** ep68 and ep69 were approved 2026-08-27 ("2
 > הסרטונים של היום מאושרים" — today's 2 videos are approved, no timing
 > given) — this time with NO "own times" phrasing, so the older
@@ -186,14 +194,121 @@ making this specific channel work, so a fresh session does not restart from zero
 >   the caption alike — all three should carry the same confident framing
 >   consistently, not just the caption.
 
+> ## 🚀 GROWTH PIVOT — adopted 2026-08-27, target: break the channel's own
+> ## 10K-views-per-video ceiling (best-ever single video: 2,200; best-ever
+> ## single day, all videos combined: 2,845)
+>
+> **Why this exists:** the owner pushed back on the 2026-08-27 "no policy
+> change indicated" Analytics readout — that verdict answered a narrower
+> question (did the channel recover from the 08-18 decline: yes, clearly)
+> but the owner's actual goal is 10,000 views on a single video within two
+> weeks, roughly **4.5x this channel's best-ever single-video result**.
+> Returning to the pre-decline ceiling doesn't get there — that requires a
+> structural change, not a mix tweak. Researched 2026 YouTube Shorts
+> algorithm mechanics and picked concrete, evidence-backed changes; owner
+> chose length/audio/hook as the three priority directions via a
+> multi-select, and asked for additional non-routine findings on top
+> (same spirit as the "TAKE A STANCE" pivot).
+>
+> **What the research found (WebSearch, 2026-08-27, multiple 2026 sources
+> per topic):**
+> 1. **The first 2 seconds are the primary algorithmic filter.** Swipe-away
+>    rate is tracked continuously; if too many viewers swipe before the
+>    2-second mark, distribution slows or stops regardless of the rest of
+>    the video. A verbal curiosity-gap line paired with a visual pattern
+>    interrupt is the strongest combination found across sources.
+> 2. **Shorts in the 15-30s range get the highest completion rates.** This
+>    channel has been running 50-63s since the 08-15 rewind (see the ⏱️
+>    LENGTH section below) — well outside that band.
+> 3. **Loop rate is a distinct, sometimes stronger signal than completion —
+>    the single most non-routine finding.** A 25s Short with a 200% loop
+>    rate can outrank a 58s Short with 100% completion. Since March 2025,
+>    YouTube counts an unprompted replay as an additional view. Design
+>    technique: end on a beat/frame that visually or verbally echoes the
+>    opening, so a satisfied viewer's brain reads the loop as "the next
+>    logical frame" and replays without a conscious decision to. **Apply
+>    to every script from here on** — this is a new, permanent script-
+>    writing discipline, not a one-off experiment.
+> 4. **Trending audio in the first 5 seconds ≈ 21% more algorithmic reach**
+>    per multiple 2026 sources — but carries real Content-ID/monetization
+>    risk (the same fingerprinting that spreads a trending sound is what
+>    flags it for claims). This channel currently uses only generic,
+>    randomly-assigned BGM, never a trending-sound layer. **Flagged back
+>    to the owner for a explicit risk-tolerance call before implementing**
+>    — this tradeoff wasn't visible when "trending audio" was picked as a
+>    priority direction, so it needs a real decision, not an assumption.
+> 5. **Comment-bait CTAs are explicitly fine per YouTube policy.** An
+>    early search result looked alarming ("engagement bait... demoted"),
+>    but a follow-up search clarified the policy targets bots/rewards/
+>    coercion specifically — "it's okay to ask viewers to like, comment,
+>    or subscribe." No change needed to the existing CTA device.
+> 6. **AI-disclosure compliance gap, found while researching, not asked
+>    for.** YouTube's 2026 policy requires the "Altered/synthetic content"
+>    toggle when generated media could mislead viewers about what
+>    actually happened — including "a realistic scene that never existed"
+>    shown in a factual context. Several STORY hooks on this channel are
+>    exactly that (Dolly's 1996 lab, the 1925 blizzard sled run, the 1976
+>    wildlife park). YouTube states ticking the toggle **does not affect
+>    monetization or recommendations** — zero measured downside.
+>    **Recommendation: tick "Yes" on the AI-disclosure toggle going
+>    forward for any episode whose AI-generated segment depicts a
+>    specific real scene/event**, starting with the current backlog.
+>
+> **Concrete changes, effective the next build:**
+> - **LENGTH:** the countdown-vs-listicle A/B test has reached its
+>   pre-set minimum sample (4 completed builds per arm, per §10 item 1) —
+>   this is the exact moment the ⏱️ LENGTH section below already flagged
+>   as "the length question is open again." New target: **15-30s**,
+>   superseding the 50-58s/63s-ceiling rule adopted 08-15. Exact
+>   `--fact-count`/`--fact-max-words`/`--target-seconds` values to be
+>   tuned at build time against this new target (see ⏱️ LENGTH section for
+>   the full history so this isn't re-litigated). **Honesty check:** the
+>   channel's one prior short-format data point (3-fact, ~25s, ep11) was
+>   n=2 and underperformed on retention/views — but it predates all of
+>   this pivot's techniques (loop design, hook discipline, research-backed
+>   length band) and is too small a sample to read as a verdict against
+>   trying again properly.
+> - **HOOK:** hard discipline check on every build — full hook text
+>   visible immediately in frame 1 (never animating in), a genuine visual
+>   pattern interrupt, and a spoken curiosity-gap line. Verify the
+>   existing title-card rendering actually shows full text from frame 1
+>   (not a progressive reveal) — check this against the live pipeline
+>   output, don't assume.
+> - **LOOP DESIGN:** every script's closing beat should echo the opening
+>   beat/frame (same subject, same wording pattern, or a visual callback),
+>   engineered for an unprompted replay, not just a clean ending. New,
+>   permanent script-writing step.
+> - **TRENDING AUDIO:** on hold pending an explicit owner decision on
+>   Content-ID/monetization risk tolerance (see finding #4) — do not
+>   implement until that's answered.
+> - **AI DISCLOSURE:** start ticking the toggle per finding #6, no
+>   further decision needed (zero measured downside).
+>
+> Sources (2026 WebSearch): SocialBee, Blitzcut, ReelForgeAI, Likes.io
+> (algorithm ranking factors); AIR Media-Tech, ScaleLab (loop rate,
+> unconventional tactics); YouTube's own Blog (AI disclosure policy,
+> Jan 2026 CEO letter); Gyre, LoopexDigital (trending audio reach %);
+> YouTube Help Spam Policy (engagement-bait scope); NealSchaffer,
+> DigitalBlacksmiths, VirVid (loop-structure design technique); VidIQ,
+> OpusClip, Blitzcut (hook-writing / pattern-interrupt technique).
+
 > **Strategy note (2026-07-29):** [`shorts_growth_guide.md`](shorts_growth_guide.md)
 > is now the adopted strategy and takes precedence on targets. It sets **≤20s
 > length** and **≥70% stayed-to-watch**; our best measured figure is 51.6% at
 > ~52s. The §5 strategy decisions below still hold on topic mix, but the length
 > hypothesis in §5 is now a governing requirement rather than an idea to try
-> eventually.
+> eventually. **SUPERSEDED 2026-08-27 by the 🚀 GROWTH PIVOT section above —
+> the ≤20s target in this note and the new 15-30s target are now the same
+> direction, no longer in tension with the 08-15 rewind.**
 
 > ## ⏱️ LENGTH: back to ~60s. The ~30s rule was tried for one day and REWOUND.
+>
+> **SUPERSEDED 2026-08-27 — see 🚀 GROWTH PIVOT above.** The A/B test this
+> section was protecting reached its minimum sample (4 per arm) exactly as
+> anticipated below, and the length question is now open again, per the
+> owner's explicit direction: new target 15-30s, not the 50-58s/63s-ceiling
+> described in this section. Kept below for the full history/reasoning —
+> still the reference for why 08-15 through 08-27 ran at ~60s.
 >
 > **Timeline, so this is not re-litigated in either direction:**
 > - **2026-08-14** the owner moved every episode to ~30s and both pipelines'
