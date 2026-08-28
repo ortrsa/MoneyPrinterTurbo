@@ -1,0 +1,16 @@
+1	EVERYDAY/RELATABLE facts episode -- earworms (songs stuck in your head), FIRST time this topic. Built 2026-08-28, GROWTH PIVOT build (4th overall, 2nd FACTS) -- target ~20s (--fact-count 3 --fact-max-words 14), hook-discipline + loop-design applied, TAKE A STANCE framing. FIRST FACTS build under the new "subscribe" CTA wording (policy adopted 2026-08-27, applies starting ep72/ep73).
+
+2	WHY THIS TOPIC: universal, highly relatable modern sensation almost everyone has experienced, mining the EVERYDAY/RELATABLE vein per the standing recommendation (best historical performer). Fresh subject, well-documented in real research (formally called "involuntary musical imagery," not folk science), and short enough to work as exactly 3 punchy facts.
+
+3	ALL 3 FACTS INDEPENDENTLY WEB-VERIFIED:
+	#1. Weekly frequency: research (e.g. the widely-cited Reading/Liverpool "stuck song syndrome" literature) finds roughly 90% of people experience an earworm at least once a week -- HEDGE: framed as "research finds," not a bare universal statistic, since exact prevalence figures vary by study (a range of ~72-92% weekly, ~98% lifetime, appears across different sources).
+	#2. Trigger/musical features: songs most likely to become earworms tend to have a fast tempo plus a common-yet-unusual melodic shape (repetitive intervals, catchy hooks) -- per music-psychology research on "cheese in the mind" tracks (e.g. "Bad Romance," "Smoke on the Water" cited as examples in coverage of this research).
+	#3 (payoff/stance). Songs with lyrics cause earworms far more often than instrumental music -- one study found lyrics involved in about 73.7% of earworm episodes vs. only 7.7% for pure instrumentals, meaning lyrical songs are roughly ten times more likely to get stuck.
+
+4	WHY --pre-written: fact #1 has a real hedge (a range of prevalence figures across different studies, not one settled universal number) that risks being tightened into an overclaimed flat "90% of everyone" statement by an LLM rewrite -- same discipline as every hedge-bearing facts build this session.
+
+5	FOOTAGE APPROACH: person with headphones/humming a tune, person visibly annoyed or amused by a song stuck in their head, brain/audio-waveform visual for the mechanism/trigger fact, person singing along or mouthing lyrics for the lyrics-vs-instrumental fact. All well covered by Pexels. No AI expected needed for a FACTS build (optional-only per policy).
+
+6	SOURCES: ScienceDirect ("Earworms as mental habits"), Kennedy Center ("Your Brain on Music: Earworms"), SAGE Journals (Claire Arthur, "Why do Songs get Stuck in our Heads?"), APA ("Dissecting an Earworm"), Classical Music magazine, Centaur/Reading University PDF ("Earworms: towards a natural history of intrusive thoughts").
+
+7	LOOP DESIGN (GROWTH PIVOT): hook opens on "that song stuck in your head right now" -- outro references the same "song stuck in your head" framing again, so the ending loops back into the opening claim.

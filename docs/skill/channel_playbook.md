@@ -6,65 +6,73 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
-> ## 📍 HANDOFF — current state as of 2026-08-27 (read this first)
+> ## 📍 HANDOFF — current state as of 2026-08-28 (read this first)
 >
 > **RESPOND IN ENGLISH ONLY, per an explicit owner instruction in live
 > chat 2026-08-27 ("תשאר באנגלית מעכשיו" — stay in English from now on).
-> This is a durable constraint for this session and should carry forward
-> — do not revert to Hebrew replies even though the owner writes in
-> Hebrew.**
+> This is a durable constraint carrying across sessions — do not revert
+> to Hebrew replies even though the owner writes in Hebrew.**
 >
-> **Backlog: ep70 (STORY, Harriet the tortoise) and ep71 (FACTS, phantom
-> vibration syndrome) are BUILT, rendered, frame-verified, and sent to
-> Telegram for review — AWAITING OWNER APPROVAL, NOT uploaded.** Built
-> 2026-08-27 ahead of the next scheduled 09:00 IDT trigger, per the
-> owner's explicit live-chat instruction "Make now the videos for
-> tomorrow." A build instruction is not upload approval — do not upload
-> either until a live chat message approves them by name. **Owner
-> decided (via AskUserQuestion) to ship ep70/ep71 as-is with "Follow for
-> more" — no re-render; "subscribe" wording starts fresh at ep72** (see
-> the Analytics dated entry below). ep68 and ep69 were approved and uploaded
-> earlier the same day (see below) — ep49 and ep51-69 are all
-> live/scheduled, see episode_log.csv for exact URLs and times.
+> **Backlog: FOUR episodes awaiting owner approval, none uploaded —
+> ep70 (STORY, Harriet the tortoise), ep71 (FACTS, phantom vibration),
+> ep72 (STORY, Laika the space dog), ep73 (FACTS, earworms).** ep70/71
+> were built 2026-08-27 per the owner's "Make now the videos for
+> tomorrow" instruction; ep72/73 were built 2026-08-28 by the scheduled
+> 09:00 IDT daily build trigger. **A build instruction — including the
+> trigger's own firing — is explicitly NOT upload approval.** Do not
+> upload any of the four until a live chat message approves them by
+> name. This is the deepest the unapproved backlog has been in a while;
+> if it grows further before an approval lands, flag it explicitly to
+> the owner rather than silently building more (per the 08-15
+> precedent: build to 5, flag clearly, don't build a 6th/7th blind).
+> ep68 and ep69 were approved and uploaded 2026-08-27 (see below) — ep49
+> and ep51-69 are all live/scheduled, see episode_log.csv for exact URLs
+> and times.
 >
-> **Real YouTube Analytics screenshots from the owner (2026-08-27,
-> dated entry below) drove two adopted changes:** (1) the "schedule for
-> their own times" fallback default moved from 16:30/23:00 IDT to
-> **15:30/20:30 IDT**, based on the audience-activity graph; (2) outro
-> CTAs now say **"subscribe," not "follow"** (SKILL.md item 3), matching
-> YouTube's actual button. Several other suggestions (sharper CTA to fix
-> the 99.4%-non-subscribed ratio, demographic-driven topic pivot,
-> long-form + Related Video linking) were evaluated and mostly NOT
-> adopted as-is — see that dated entry for the reasoning, including one
-> open question back to the owner about long-form video.
+> **ep70/ep71 ship with "Follow for more" (owner declined a re-render);
+> ep72/ep73 are the FIRST builds using the new "subscribe" CTA wording**
+> (SKILL.md item 3, adopted 2026-08-27 per owner-shared YouTube
+> Analytics). The "schedule for their own times" fallback default is now
+> **15:30/20:30 IDT** (moved from 16:30/23:00), also from that Analytics
+> data — see the 2026-08-27 dated entry for the full reasoning and what
+> was evaluated but NOT adopted (a demographic topic pivot, the
+> sharper-CTA-fixes-conversion premise). The long-form/Related-Video
+> question was asked and answered: **not now, stay Shorts-only.**
 >
-> **These are the FIRST TWO BUILDS under the new 🚀 GROWTH PIVOT policy
-> (adopted 2026-08-27, see that section below) — read it before touching
-> either of these two episodes or building the next one.** New target
-> length 15-30s (supersedes the old 50-58s/63s-ceiling rule): ep70 landed
-> at 26.2s (the story_episode.py MIN_SECONDS=30 floor is the practical
-> lower bound for STORY without a code change), ep71 landed at 21.64s.
-> Hook-discipline (full hook text visible from frame 1, confirmed on
-> both) and loop-design (outro echoes the hook's framing, confirmed on
-> both) both applied and verified. Trending audio remains ON HOLD
-> pending an owner risk-tolerance answer (Content-ID/monetization
-> tradeoff) — neither ep70 nor ep71 uses it. ep70's AI hook (mandatory,
-> giant tortoise close-up) does not depict a specific historical scene,
-> so the AI-disclosure recommendation does not apply to it.
+> **🚀 GROWTH PIVOT (adopted 2026-08-27) now has FOUR builds under it**
+> (ep70, ep71, ep72, ep73) — read that section below before touching any
+> of them or building the next one. Actual landed durations: ep70 26.2s,
+> ep71 21.64s, ep72 30.96s (STORY's MIN_SECONDS=30 floor, same pattern as
+> Harriet/QWERTY), ep73 25.85s — all within the 15-30s band. Hook-
+> discipline and loop-design confirmed on all four via frame-check.
+> Trending audio remains ON HOLD pending an owner risk-tolerance answer
+> — none of the four use it. **AI-disclosure flag: ep72's hook (a stray
+> dog silhouette against a capsule porthole) depicts a dramatized version
+> of a specific real historical scene (Laika inside Sputnik 2), unlike
+> ep70's generic tortoise close-up — recommend ticking YES on YouTube's
+> Altered/synthetic content toggle for ep72 specifically at upload time.**
 >
-> **ep70 and ep71 are also the 3rd and 4th builds under "🗣️ TAKE A
-> STANCE" (ep68, ep69 were 1st/2nd)** — ep70's hook states the Darwin
-> myth is probably false directly; ep71's hook states directly that the
-> buzz isn't the phone, it's the brain. Neither required dropping a
-> hedge.
+> **"🗣️ TAKE A STANCE" (adopted 2026-08-26) now has FIVE builds** (ep68
+> through ep72 have stance hooks; ep73's hook is also stance-y though
+> less contested). See the dated entries for how each stayed inside the
+> hedge discipline.
 >
 > **Caption-hedge-flattening tally now 8 occurrences** (ep45, 48, 54, 61,
-> 63, 65, 67, and now ep71) — ep71's fact #3 caption turned "linked to"
-> into a direct causal claim ("the more...the stronger...becomes"),
-> caught and hand-corrected before sending, same discipline as every
-> prior occurrence. `--pre-written` still only locks spoken narration,
-> never the caption. ep70's `--from-dry-run` caption pulled verbatim
-> again, zero risk, consistent with every prior STORY build.
+> 63, 65, 67, 71) — unchanged since ep71, no new occurrence on ep72/73's
+> flattening axis specifically. **But ep73 found a NEW caption-failure
+> variant, distinct from both hedge-flattening and the ep69
+> mechanism-swap: fact-conflation + a fabricated recall-bait CTA.** The
+> auto-generated caption merged two separately-hedged facts into one
+> sentence implying a causal link the sourcing never supported, AND
+> invented a "comment the exact tempo range" CTA referencing a number
+> that was never stated anywhere in the script. Both caught and
+> corrected pre-send by the same "read the caption against the locked
+> script and the actual stated facts" discipline — but this confirms the
+> caption-check needs to verify more than just missing hedges and
+> swapped objects; also check for merged-claim causation and CTAs that
+> reference facts/numbers not actually in the video. ep70/ep72's
+> `--from-dry-run` captions both pulled verbatim again, zero risk,
+> STORY's caption-flattening risk stays at zero occurrences ever.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -74,112 +82,51 @@ making this specific channel work, so a fresh session does not restart from zero
 > either `--privacy public` (owner said "now") or `--publish-at <UTC
 > timestamp>` (owner gave a time — convert from IDT, currently UTC+3).
 > When the owner approves without naming which episode goes when, the
-> established fallback (used twice, 08-22 and 08-23) is: the STORY of the
-> pair goes live immediately, the FACTS episode gets scheduled for 23:00
-> IDT — **this immediate-STORY half of the fallback stays unchanged**,
-> only the "schedule for their own times" default times below moved.
-> When the owner says "schedule for their own times" without naming exact
-> times, the fallback (used 08-24/25/26 at the old 16:30/23:00 pre-08-19
-> cadence, **updated 2026-08-27 per real YouTube Analytics "When your
-> viewers are on YouTube" data the owner shared**) is now:
-> **first video → 15:30 IDT, second video → 20:30 IDT.** Reasoning from
-> the data: viewer activity peaks 19:00-23:00 IDT (with a tail into
-> 00:00-02:00), driven partly by the 18.2% US-audience share whose
-> morning/midday falls in that window; uploading 1-2 hours before a peak
-> gives YouTube's algorithm room to start distributing before the wave
-> hits, hence 15:30 (ahead of the 17:00-18:00 ramp-up) and 20:30 (just
-> inside the 19:00-23:00 peak, catching it early rather than late); the
-> old 23:00 slot was catching the tail end of the peak instead of its
-> start. Mornings (06:00-12:00) are confirmed weak and stay avoided. Keep
-> using 15:30/20:30 going forward; only reconsider if real performance
-> data contradicts it.
+> established fallback (used 08-22, 08-23, and 08-27) is: the STORY of
+> the pair goes live immediately, the FACTS episode gets scheduled for
+> 23:00 IDT — **this immediate-STORY half stays unchanged.** When the
+> owner says "schedule for their own times" without naming exact times,
+> the fallback (used 08-24/25/26 at the old cadence, **updated 2026-08-27
+> per real YouTube Analytics data**) is now: **first video → 15:30 IDT,
+> second video → 20:30 IDT** — see the 2026-08-27 dated entry for the
+> full audience-activity reasoning. Mornings (06:00-12:00) are confirmed
+> weak and stay avoided.
 >
-> **PIPELINE CHANGE DISCOVERED 2026-08-25: `viral_episode.py` and
-> `story_episode.py` now auto-send to Telegram at the end of the script**
-> (calls `send_to_telegram.send_episode()` internally) **unless
-> `--no-telegram` is passed.** This is new since the last time these
-> scripts were read closely — it broke the "fix the caption before it
-> ever reaches Telegram" discipline on the ep65 build (see below), because
-> the flawed caption went out automatically before it could be reviewed.
-> Fixed for ep64 by passing `--no-telegram`, reviewing frames + caption
-> locally, then sending manually via `send_to_telegram.py --result-json
-> ... --pinned-comment "..."`. **Pass `--no-telegram` on every future
-> render, on both pipelines, and send manually after review — do not rely
-> on the auto-send.**
+> **PIPELINE CHANGE (2026-08-25, still in force): `viral_episode.py` and
+> `story_episode.py` auto-send to Telegram at the end of the script
+> unless `--no-telegram` is passed.** Pass `--no-telegram` on every
+> render, on both pipelines, review frames + caption locally (checking
+> for hedge-flattening, mechanism-object swaps, AND fact-conflation /
+> fabricated CTAs per the ep73 lesson above), then send manually via
+> `send_to_telegram.py --result-json ... --pinned-comment "..."`.
 >
-> **Views-decline investigation — RECOVERY CONFIRMED with real data
-> (2026-08-25 pulse re-check).** The 08-18 cliff (427 views) was a one-day
-> dip, not a collapse: 08-21 (2845) and 08-22 (2793) are now the two
-> highest channel-wide days in the whole ~5-week dataset, above even the
-> pre-cliff peak (2262 on 08-08), and 99% of those two days' views are
-> explained by the freshly-uploaded backlog episodes themselves (ep49-59),
-> not the back-catalog. 4 of 9 assessed videos landed a genuine pulse-day
-> spike (ep49 918, ep51 644, ep58 992, ep59 1014 — all ≥ the old Octopus
-> benchmark of 868), a 44% hit rate matching the pre-decline breakout
-> rates. **The 08-18 topic-mix fix is confirmed working, not just adopted
-> on paper.** Findings reported to the owner in Hebrew via Telegram and
-> logged in the dated entry below. **Follow-up done 2026-08-27:** ep60-63
-> data has now cleared the reporting lag — 933/366/200/466 views, 1/4
-> (25%) cleared the spike benchmark, in line with the pre-decline 20-25%
-> band, n too small to call a trend either way. No pipeline/policy change
-> indicated. See the dated entry below for the full table. Next check
-> once ep64-67 clear the same lag.
+> **Views-decline investigation — RECOVERY CONFIRMED (2026-08-25), then
+> ep60-63 follow-up (2026-08-27) found no further pipeline/policy signal
+> on its own** (1/4 cleared the spike benchmark, in line with the
+> pre-decline 20-25% band) — **this is what triggered the owner's
+> GROWTH PIVOT pushback** ("why no policy change, I want 10,000
+> views/video within two weeks"), which produced the structural changes
+> above. Next Analytics check: once ep64-67 clear the reporting lag, and
+> eventually ep68-73.
 >
-> **Recurring risk, NOT solved, still the single most reliable failure
-> point in the FACTS pipeline (`--pre-written`):** the auto-generated
-> caption has flattened a hedge on 8 separate builds now (ep45, ep48,
-> ep54, ep61, ep63, ep65, ep67, ep71) even when `--pre-written` locked the
-> spoken script — the caption is always a separate LLM pass, regenerated
-> fresh even on a re-render, and `--pre-written` never touches it. **Good
-> news, every time since ep67:** with `--no-telegram` now standard
-> practice, ep71's flattening was caught and hand-corrected in the local
-> JSON *before* any send — the review-before-send discipline continues to
-> hold. Treat "read the caption in the result JSON against the locked
-> script's hedges, before sending" as mandatory on every single FACTS
-> send, same weight as frame-verification, never skippable. **STORY's
-> `--from-dry-run` still does NOT have this risk** — confirmed again on
-> ep70, caption pulled verbatim from the locked script JSON. The
-> caption-flattening risk is specific to `--pre-written` FACTS builds,
-> not STORY.
->
-> **Footage lesson sharpened, ep66:** cheetah-specific Pexels searches are
-> even less reliable than ep24 first showed — 9 probe terms returned
-> almost entirely false positives (lions, leopards, servals, giraffes,
-> even human close-ups for "cheetah face close up"), with only ONE
-> genuinely strong real cheetah clip found in the whole probe. One
-> first-pass segment used what turned out to be a leopard (rosette
-> spots, not cheetah's solid round spots + tear-marks) — caught only on
-> close post-render inspection, not the source thumbnail. When real
-> footage for a specific animal is this scarce, budget AI generation
-> more liberally for that species (ep66 used 3 of 8 segments AI, the
-> session cap, and it was worth it).
->
-> **New caption risk found, ep69 — a mechanism-object swap, not a
-> dropped hedge:** the auto-generated caption said the arrector pili
-> muscle "anchors the stem cells," when the actual finding (and the
-> locked script) is that it anchors the *nerves* that regulate the stem
-> cells — same object doing the same general job description, but the
-> literal claim changed what the muscle physically attaches to. Caught
-> and fixed pre-send by the same "read the caption against the locked
-> script" discipline that catches hedge-flattening — worth explicitly
-> checking for this failure mode too, not just missing qualifiers, on
-> any fact involving a specific mechanism/anatomy claim.
->
-> **"TAKE A STANCE" policy (adopted 2026-08-26) now has four builds under
-> it (ep68, ep69, ep70, ep71) — see that section below for how each did
-> it without touching the hedge discipline.**
+> **Disk space housekeeping (2026-08-28):** cleaned up ~9GB of stale
+> `/tmp/probe_*` directories from long-finished episodes, plus two
+> `storage/tasks/` directories for already-uploaded episodes (ep68,
+> ep69) not referenced by any unapproved row. Check `df -h` before
+> rendering and repeat this cleanup if space gets tight again — cross-
+> check any `storage/tasks/<uuid>` against episode_log.csv's UPLOADED
+> rows AND the current unapproved backlog before deleting.
 >
 > **One flagged assumption still awaiting owner confirmation:** "the
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
-> No open build is in progress. ep70 and ep71 are built and awaiting
+> No open build is in progress. ep70/71/72/73 are all built and awaiting
 > owner approval (see above — do not upload without a live chat approval
-> naming them). The ep60-63 Analytics follow-up is done (2026-08-27, see
-> above). Next scheduled event is either owner approval of ep70/ep71, an
-> owner answer on the trending-audio risk-tolerance question, a follow-up
-> Analytics check once ep64-67 clear the reporting lag, or the next 09:00
-> IDT daily build, whichever comes first.
+> naming them). Next scheduled event is either an owner approval, an
+> owner answer on the trending-audio risk-tolerance question, a
+> follow-up Analytics check once ep64-67 clear the reporting lag, or the
+> next 09:00 IDT daily build, whichever comes first.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
@@ -676,6 +623,75 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-28 09:00 IDT build — ep72 Laika the space dog (STORY) +
+> ### ep73 earworms (FACTS) — 3rd/4th GROWTH PIVOT builds, first
+> ### "subscribe"-wording builds
+>
+> Fired by the scheduled daily build trigger. Backlog check first: ep70
+> and ep71 were still unapproved (2 episodes) — well under the 5-episode
+> flag threshold, so proceeded to build rather than halting. Rolling-10
+> was ANIMAL 4/10 (under target: ep62, 64, 66, 70) and EVERYDAY 6/10
+> (over the floor) — picked STORY=ANIMAL (Laika) to correct the deficit,
+> FACTS=EVERYDAY (earworms) continuing the standing recommendation to
+> mine that vein. Both fresh subjects, fact-checked via WebSearch, built
+> `--from-dry-run`/`--pre-written` given real hedges in each.
+>
+> **ep72 (Laika):** hook states the 45-year cover-up directly ("They
+> said she died peacefully. She didn't"), sourced to the mission
+> scientist's own 2002 public admission — no hedge dropped. Targeted
+> 28-30s (STORY's practical floor), landed 30.96s, 4 segments. AI budget
+> 2 of 4 (mandatory hook + 1 more): a stray dog silhouetted against a
+> capsule porthole for the hook, and a vintage gauge panel with the
+> needle climbing into the red zone for the 2002-revelation beat — real
+> "vintage mission control" and "vintage rocket launch" Pexels searches
+> both returned false positives (modern audio mixing boards, toy
+> rockets, industrial chimneys), confirmed footage scarcity before
+> falling back to AI, same pattern as the ep66 cheetah and ep70 Harriet
+> precedents. **Both Veo jobs hit transient "high load" errors (code 8)
+> on the first attempt** — not a stale-token issue, confirmed via
+> `--probe` beforehand — and succeeded on retry; worth remembering this
+> failure mode is distinct from a dead token and just needs a retry, not
+> a stop-and-flag. Real footage: a Moscow stray dog and a real
+> night-sky/Milky Way clip for the outro (swapped from an initial
+> 5.48s-too-short candidate to a 17.23s one). **AI-disclosure flag
+> raised**: unlike Harriet's generic tortoise close-up, this hook
+> dramatizes a specific real historical scene (Laika inside the actual
+> capsule) — recommend the owner tick YES on YouTube's synthetic-content
+> toggle for this one at upload time. Caption pulled verbatim via
+> `--from-dry-run`, zero flattening risk. Full write-up:
+> docs/skill/story_laika_lead.txt, episode_log.csv row 72.
+>
+> **ep73 (earworms):** hook/outro loop on "that song stuck in your head"
+> framing. Targeted ~20s via `--fact-count 3 --fact-max-words 14`,
+> landed 25.85s (a bit over target, still inside the 15-30s band). **Two
+> distinct caption defects caught before sending, not just one**: (1)
+> the usual hedge-flattening pattern, but compounded with a
+> fact-conflation — the caption merged fact #1's hedged weekly-prevalence
+> stat with fact #2's musical-trigger claim into one sentence implying
+> tempo/melody *causes* the ~90% prevalence figure, which the sourcing
+> never supported (fact #2 explains which songs are more likely to
+> stick, not why most people get earworms at all); (2) a fabricated
+> recall-bait CTA asking viewers to "comment the exact tempo range" —
+> no tempo range number was ever stated anywhere in the script. Both
+> hand-corrected in the local JSON before sending. This is a new
+> caption-failure shape worth watching for going forward: check not just
+> for dropped hedges and swapped mechanism-objects, but also for
+> LLM-invented causal links between two separate facts, and CTAs that
+> reference specifics never actually in the video. Zero AI clips, all
+> real footage, no hash collisions; one duration catch on an outro
+> candidate (3.52s too short, swapped to 18.76s). Full write-up:
+> docs/skill/facts_earworms_lead.txt, episode_log.csv row 73.
+>
+> Both episodes frame-verified (hook-discipline + loop-design confirmed
+> on both) and sent to Telegram manually for review. Also did disk
+> housekeeping mid-build: `df -h` showed only 4.1G free (90% used)
+> before rendering, so cleaned ~9GB of stale `/tmp/probe_*` dirs from
+> long-finished episodes plus two already-uploaded `storage/tasks/`
+> dirs (ep68, ep69, cross-checked against the unapproved backlog first)
+> — freed to 15G, rendering proceeded without issue. Backlog now FOUR
+> unapproved episodes (ep70, 71, 72, 73) — flagged in the HANDOFF block
+> per the 08-15 precedent rather than building further blind.
 
 > ### 2026-08-27, later still — owner shared real YouTube Analytics
 > ### screenshots (audience-activity graph, subscriber split, demographics,

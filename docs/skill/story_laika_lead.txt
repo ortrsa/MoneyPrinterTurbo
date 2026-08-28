@@ -1,0 +1,21 @@
+1	True story: Laika, the Soviet space dog, and the 45-year cover-up of how she actually died (FIRST time this topic). Built 2026-08-28, THIRD build under GROWTH PIVOT -- target 28-30s (story_episode.py's MIN_SECONDS floor), hook-discipline + loop-design applied, TAKE A STANCE framing (states the cover-up directly, not hedged). FIRST build under the new "subscribe" CTA wording (outro must say "subscribe," not "follow" -- policy adopted 2026-08-27 later the same day as ep70/71, applies starting this episode).
+
+2	WHY THIS TOPIC: fresh subject (zero prior mentions, confirmed via grep on episode_log.csv). ANIMAL category -- rolling-10 going in was ANIMAL 4/10 (under the 50% target: ep62 Togo/Balto, ep64 Dolly, ep66 cheetah-dog, ep70 Harriet), correcting the deficit. Classic "official story vs. suppressed truth" register, same successful pattern as Harriet/QWERTY, but with real stakes (space race history, Cold War secrecy) rather than a folk myth.
+
+3	THE FACTS (independently verified):
+	- Laika was a stray dog picked up off the streets of Moscow, originally named Kudryavka ("Little Curly"), nicknamed Laika ("Barker").
+	- Launched aboard Sputnik 2 on November 3, 1957 -- the first living creature to orbit the Earth.
+	- The spacecraft was a one-way mission: no re-entry/recovery system existed, so Laika was never going to survive the flight regardless of what actually killed her.
+	- Official Soviet position, maintained for 45 years: she orbited peacefully for several days, then was painlessly euthanized via poisoned food before oxygen ran out.
+	- In October 2002, Dr. Dimitri Malashenkov (a scientist on the original Sputnik 2 mission) presented findings at the World Space Congress revealing the true cause: a fault in the thermal control system caused the capsule's temperature to climb (multiple sources cite it reaching roughly 104°F), and Laika died from overheating and stress within hours of reaching orbit -- around the fourth orbit, not after several days.
+	Sources: Wikipedia ("Laika"), Britannica, Space.com, History.com, SpaceDaily.
+
+4	THE STANCE (per the 2026-08-26 TAKE A STANCE policy): hook states the cover-up directly ("They said she died peacefully. She didn't"), not hedged as "some say the official story may not be accurate." This is not overriding a genuinely unsettled question -- the 2002 revelation came from the mission's own scientist, presented at a public scientific congress, and is the mainstream/undisputed historical account today. No hedge is dropped: the script doesn't claim to know Laika's exact subjective experience, just the documented mechanical/timeline facts (thermal failure, hours not days).
+
+5	SENSITIVITY: an animal's death is inherently part of this story, but it's 1957, extremely well-documented, and widely covered by mainstream outlets including family-friendly sources (History.com, Britannica) -- kept factual (cooling system failure, overheating) without dwelling on suffering in graphic terms, consistent with how the channel has handled Wojtek, Unsinkable Sam, Dolly the sheep, and the Great Auk. No graphic/gory language used.
+
+6	LOOP DESIGN (GROWTH PIVOT): outro references "the official story"/"peaceful" again, echoing the hook's exact framing, so the ending loops back into the opening claim -- see locked script.
+
+7	LENGTH: target 28-30s (story_episode.py's MIN_SECONDS=30 hard floor is the practical lower bound for STORY under the GROWTH PIVOT's 15-30s target). Script ~84 words, 4 segments (hook + 2 beats + outro), matching the Harriet/QWERTY-era short structure now that the format is this compressed.
+
+8	FOOTAGE APPROACH: mandatory AI hook (STORY default) -- since no real footage of the actual 1957 Laika capsule/launch exists, and stock footage of "space dog" searches returns nothing usable; a vintage Soviet-era rocket launch or a dog silhouette against a capsule window evokes the era without claiming to be real archival footage. Real Pexels footage for the stray-dog-on-a-street beat and a mission-control/vintage-technology beat for the 2002 revelation. Real archival Sputnik-era photos may exist on Pexels/stock but likely thin -- probe first, AI-fill only what's missing.
