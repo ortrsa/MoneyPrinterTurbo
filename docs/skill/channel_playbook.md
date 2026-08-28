@@ -13,21 +13,36 @@ making this specific channel work, so a fresh session does not restart from zero
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
-> **Backlog: FOUR episodes awaiting owner approval, none uploaded —
-> ep70 (STORY, Harriet the tortoise), ep71 (FACTS, phantom vibration),
-> ep72 (STORY, Laika the space dog), ep73 (FACTS, earworms).** ep70/71
-> were built 2026-08-27 per the owner's "Make now the videos for
-> tomorrow" instruction; ep72/73 were built 2026-08-28 by the scheduled
-> 09:00 IDT daily build trigger. **A build instruction — including the
-> trigger's own firing — is explicitly NOT upload approval.** Do not
-> upload any of the four until a live chat message approves them by
-> name. This is the deepest the unapproved backlog has been in a while;
-> if it grows further before an approval lands, flag it explicitly to
-> the owner rather than silently building more (per the 08-15
-> precedent: build to 5, flag clearly, don't build a 6th/7th blind).
-> ep68 and ep69 were approved and uploaded 2026-08-27 (see below) — ep49
-> and ep51-69 are all live/scheduled, see episode_log.csv for exact URLs
-> and times.
+> **Backlog: TWO episodes still awaiting owner approval — ep70 (STORY,
+> Harriet the tortoise) and ep71 (FACTS, phantom vibration), both built
+> 2026-08-27.** ep72 (STORY, Laika) and ep73 (FACTS, earworms) were
+> approved and uploaded 2026-08-28 (see below) — do not re-approve or
+> re-upload them. **A build instruction — including the daily trigger's
+> own firing — is still explicitly NOT upload approval** for ep70/71;
+> wait for a live chat message naming them specifically. ep68 and ep69
+> were approved and uploaded 2026-08-27 — ep49 and ep51-69/72/73 are all
+> live/scheduled, see episode_log.csv for exact URLs and times.
+>
+> **APPROVAL-PHRASING NOTE (2026-08-28, new variant):** owner approved
+> ep72+ep73 with "שתיהם מאושרים תתזמן אותם" ("both approved, schedule
+> them") — this contains the scheduling verb "תתזמן" (a hallmark of the
+> "own times" fallback) but OMITS the actual "own times" qualifier
+> ("לשעות שלהם") that has been the documented discriminator between the
+> two fallbacks all session. Read as closer to the "own times" fallback
+> in spirit (explicit instruction to schedule, not "publish now"), so
+> targeted STORY→15:30 IDT / FACTS→20:30 IDT. **In practice, the 15:30
+> IDT STORY slot had already passed by the time the approval landed
+> (~16:09 IDT)** — uploaded ep72 immediately as public instead (closest
+> available substitute), and scheduled ep73 for the still-future 20:30
+> IDT slot as planned. Which pair "שתיהם" (dual "both of them") referred
+> to was inferred from context — it followed a message that had just
+> reported building ep72/73 as "today's" pair, matching every prior
+> approval this session (always the most-recently-reported pair, never
+> reaching back into older backlog). Worth watching for: a future
+> "תתזמן אותם" without "לשעות שלהם" may need a clarifying question if
+> the backlog ever has more than one same-day pair to disambiguate
+> between, or if it recurs enough to be worth asking the owner to
+> confirm the reading once and for all.
 >
 > **ep70/ep71 ship with "Follow for more" (owner declined a re-render);
 > ep72/ep73 are the FIRST builds using the new "subscribe" CTA wording**
@@ -46,11 +61,13 @@ making this specific channel work, so a fresh session does not restart from zero
 > Harriet/QWERTY), ep73 25.85s — all within the 15-30s band. Hook-
 > discipline and loop-design confirmed on all four via frame-check.
 > Trending audio remains ON HOLD pending an owner risk-tolerance answer
-> — none of the four use it. **AI-disclosure flag: ep72's hook (a stray
+> — none of the four use it. **AI-disclosure note: ep72's hook (a stray
 > dog silhouette against a capsule porthole) depicts a dramatized version
 > of a specific real historical scene (Laika inside Sputnik 2), unlike
-> ep70's generic tortoise close-up — recommend ticking YES on YouTube's
-> Altered/synthetic content toggle for ep72 specifically at upload time.**
+> ep70's generic tortoise close-up. Confirmed `upload_video.py` already
+> sets `containsSyntheticMedia = true` by default on every upload (every
+> episode uses AI TTS narration) — so ep72's upload (2026-08-28) already
+> carried the disclosure with no extra flag needed.**
 >
 > **"🗣️ TAKE A STANCE" (adopted 2026-08-26) now has FIVE builds** (ep68
 > through ep72 have stance hooks; ep73's hook is also stance-y though
@@ -121,12 +138,14 @@ making this specific channel work, so a fresh session does not restart from zero
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
-> No open build is in progress. ep70/71/72/73 are all built and awaiting
-> owner approval (see above — do not upload without a live chat approval
-> naming them). Next scheduled event is either an owner approval, an
-> owner answer on the trending-audio risk-tolerance question, a
-> follow-up Analytics check once ep64-67 clear the reporting lag, or the
-> next 09:00 IDT daily build, whichever comes first.
+> No open build is in progress. ep72 and ep73 were approved and uploaded
+> 2026-08-28 (see the approval-phrasing note above). ep70 and ep71 are
+> still built and awaiting owner approval — do not upload without a live
+> chat approval naming them. Next scheduled event is either an owner
+> approval of ep70/71, an owner answer on the trending-audio
+> risk-tolerance question, a follow-up Analytics check once ep64-67
+> clear the reporting lag, or the next 09:00 IDT daily build, whichever
+> comes first.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
@@ -623,6 +642,42 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-28, later same day — owner approved ep72 + ep73, a new
+> ### approval-phrasing variant that mixed both fallbacks' signals
+>
+> Owner, live in chat: "שתיהם מאושרים תתזמן אותם" ("both approved,
+> schedule them"). This phrase includes "תתזמן אותם" (schedule them) —
+> previously only ever seen in "own times" fallback triggers — but
+> omits the actual "לשעות שלהם" ("own times") qualifier that has been
+> the documented discriminator between the two fallbacks all session.
+> Read this as closer to the "own times" fallback in spirit (an
+> explicit instruction to schedule, not "publish now"), so targeted
+> STORY→15:30 IDT / FACTS→20:30 IDT. Which pair "שתיהם" (dual "both of
+> them") meant was inferred from context: the immediately preceding
+> message had just reported ep72+ep73 as "today's" build and flagged
+> the 4-deep backlog — matching every prior approval this session, which
+> always targeted the most-recently-reported pair, never reaching back
+> into older backlog (ep70/71 were not what "both" meant here).
+>
+> By execution time the approval had landed at ~16:09 IDT — the 15:30
+> IDT STORY slot had already passed. Uploaded ep72 (Laika) immediately
+> as public instead (closest available substitute to the missed
+> pre-peak slot): https://youtube.com/shorts/Q2VZjXR28mU. Scheduled ep73
+> (earworms) for the still-future 20:30 IDT slot via `--publish-at
+> 2026-08-28T17:30:00Z`: https://youtube.com/shorts/GWxGPkHzJVo.
+> `upload_video.py` sets `containsSyntheticMedia=true` by default on
+> every upload (all episodes use AI TTS narration), so ep72's
+> AI-disclosure flag (its hook dramatizes a specific real historical
+> scene) was already satisfied with no extra flag needed. Backlog back
+> down to two (ep70, ep71).
+>
+> **Worth watching going forward:** a bare "תתזמן אותם" without "לשעות
+> שלהם" is a genuinely new phrasing variant, not a clean match to either
+> previously-documented fallback. If it recurs, or if the backlog ever
+> has more than one same-day-built pair at once (making "which pair"
+> ambiguous), it's worth asking the owner directly to confirm the
+> reading rather than continuing to infer it.
 
 > ### 2026-08-28 09:00 IDT build — ep72 Laika the space dog (STORY) +
 > ### ep73 earworms (FACTS) — 3rd/4th GROWTH PIVOT builds, first
