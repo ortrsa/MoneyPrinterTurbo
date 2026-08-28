@@ -13,14 +13,17 @@ making this specific channel work, so a fresh session does not restart from zero
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
-> **Backlog: TWO episodes still awaiting owner approval — ep70 (STORY,
-> Harriet the tortoise) and ep71 (FACTS, phantom vibration), both built
-> 2026-08-27.** ep72 (STORY, Laika) and ep73 (FACTS, earworms) were
-> approved and uploaded 2026-08-28 (see below) — do not re-approve or
-> re-upload them. **A build instruction — including the daily trigger's
-> own firing — is still explicitly NOT upload approval** for ep70/71;
-> wait for a live chat message naming them specifically. ep68 and ep69
-> were approved and uploaded 2026-08-27 — ep49 and ep51-69/72/73 are all
+> **Backlog: ONE episode still awaiting owner approval — ep71 (FACTS,
+> phantom vibration), built 2026-08-27.** ep70 (STORY, Harriet) was
+> approved via an explicit named-episode instruction ("Upload 70 now")
+> and uploaded immediately as public 2026-08-28:
+> https://youtube.com/shorts/CwTFkcMyV_w. ep72 (STORY, Laika) and ep73
+> (FACTS, earworms) were approved and uploaded 2026-08-28 (see below) —
+> do not re-approve or re-upload any of ep70/72/73. **A build
+> instruction — including the daily trigger's own firing — is still
+> explicitly NOT upload approval** for ep71; wait for a live chat
+> message naming it specifically. ep68 and ep69 were approved and
+> uploaded 2026-08-27 — ep49, ep51-69, ep70, ep72, ep73 are all
 > live/scheduled, see episode_log.csv for exact URLs and times.
 >
 > **APPROVAL-PHRASING NOTE (2026-08-28, new variant):** owner approved
@@ -138,13 +141,13 @@ making this specific channel work, so a fresh session does not restart from zero
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
-> No open build is in progress. ep72 and ep73 were approved and uploaded
-> 2026-08-28 (see the approval-phrasing note above). ep70 and ep71 are
-> still built and awaiting owner approval — do not upload without a live
-> chat approval naming them. Next scheduled event is either an owner
-> approval of ep70/71, an owner answer on the trending-audio
-> risk-tolerance question, a follow-up Analytics check once ep64-67
-> clear the reporting lag, or the next 09:00 IDT daily build, whichever
+> No open build is in progress. ep70, ep72, and ep73 were all approved
+> and uploaded 2026-08-28 (see the dated entries above). ep71 is still
+> built and awaiting owner approval — do not upload without a live chat
+> approval naming it. Next scheduled event is either an owner approval
+> of ep71, an owner answer on the trending-audio risk-tolerance
+> question, a follow-up Analytics check once ep64-67 clear the reporting
+> lag, or the next 09:00 IDT daily build, whichever
 > comes first.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
@@ -642,6 +645,14 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-28, later still — owner approved ep70 with an explicit
+> ### named-episode instruction
+>
+> Owner, live in chat: "Upload 70 now" — unambiguous, names the episode
+> number and gives explicit immediate timing, no fallback-reading needed.
+> Uploaded ep70 (Harriet the tortoise) immediately as public:
+> https://youtube.com/shorts/CwTFkcMyV_w. Backlog down to one (ep71).
 
 > ### 2026-08-28, later same day — owner approved ep72 + ep73, a new
 > ### approval-phrasing variant that mixed both fallbacks' signals
