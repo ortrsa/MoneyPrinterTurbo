@@ -13,17 +13,32 @@ making this specific channel work, so a fresh session does not restart from zero
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
-> **Backlog: THREE episodes awaiting owner approval — ep71 (FACTS,
-> phantom vibration, built 2026-08-27), ep74 (STORY, Jack the baboon
-> signalman) and ep75 (FACTS, contagious yawning), both built 2026-08-29
-> by the scheduled daily trigger.** ep70 (STORY, Harriet), ep72 (STORY,
-> Laika), and ep73 (FACTS, earworms) were all approved and uploaded
-> 2026-08-28 — do not re-approve or re-upload any of them. **A build
-> instruction — including the daily trigger's own firing — is still
-> explicitly NOT upload approval** for ep71/74/75; wait for a live chat
-> message naming them specifically. ep68 and ep69 were approved and
-> uploaded 2026-08-27 — ep49, ep51-70, ep72, ep73 are all live/scheduled,
-> see episode_log.csv for exact URLs and times.
+> **Backlog: ONE episode awaiting owner approval — ep71 (FACTS, phantom
+> vibration, built 2026-08-27).** ep74 (STORY, Jack the baboon) and ep75
+> (FACTS, contagious yawning) were approved and scheduled 2026-08-29
+> (see below) — do not re-approve or re-upload them. ep70 (STORY,
+> Harriet), ep72 (STORY, Laika), and ep73 (FACTS, earworms) were all
+> approved and uploaded 2026-08-28 — do not re-approve or re-upload any
+> of them either. **A build instruction — including the daily trigger's
+> own firing — is still explicitly NOT upload approval** for ep71; wait
+> for a live chat message naming it specifically. ep68 and ep69 were
+> approved and uploaded 2026-08-27 — ep49, ep51-70, ep72-75 are all
+> live/scheduled, see episode_log.csv for exact URLs and times.
+>
+> **APPROVAL-PHRASING NOTE (2026-08-29, yet another variant):** owner
+> approved ep74+ep75 with "2 מהסרטונים מאושרים תתזמן 1 לשעה 16:00 ואת
+> השני ל 23:00" ("2 of the videos are approved, schedule one for 16:00
+> and the other for 23:00") — explicit exact times given, no fallback
+> reasoning needed for timing. Read "2 of the videos" as the
+> most-recently-built pair (ep74/75), not reaching back to the older
+> ep71, consistent with every prior approval this session. Mapped the
+> earlier time (16:00) to STORY (ep74) and the later time (23:00) to
+> FACTS (ep75), per the established STORY-gets-earlier-slot convention
+> — the owner didn't name which video went to which time, so this
+> mapping was inferred, not confirmed. ep74 scheduled via `--publish-at
+> 2026-08-29T13:00:00Z`: https://youtube.com/shorts/KHip8oO-p7o. ep75
+> scheduled via `--publish-at 2026-08-29T20:00:00Z`:
+> https://youtube.com/shorts/3OSKUHbaipo.
 >
 > **APPROVAL-PHRASING NOTE (2026-08-28, new variant):** owner approved
 > ep72+ep73 with "שתיהם מאושרים תתזמן אותם" ("both approved, schedule
@@ -149,14 +164,14 @@ making this specific channel work, so a fresh session does not restart from zero
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
-> No open build is in progress. ep70, ep72, and ep73 were all approved
-> and uploaded 2026-08-28. ep71, ep74, and ep75 are all built and
-> awaiting owner approval — do not upload any without a live chat
+> No open build is in progress. ep70, ep72, ep73, ep74, and ep75 were
+> all approved and uploaded/scheduled by 2026-08-29. ep71 is still built
+> and awaiting owner approval — do not upload without a live chat
 > approval naming it specifically. Next scheduled event is either an
-> owner approval of one of those three, an owner answer on the
-> trending-audio risk-tolerance question, a follow-up Analytics check
-> once ep64-67 clear the reporting lag, or the next 09:00 IDT daily
-> build, whichever comes first.
+> owner approval of ep71, an owner answer on the trending-audio
+> risk-tolerance question, a follow-up Analytics check once ep64-67
+> clear the reporting lag, or the next 09:00 IDT daily build, whichever
+> comes first.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
@@ -653,6 +668,22 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-29, later same day — owner approved ep74 + ep75 with
+> ### explicit exact times, a third approval-phrasing variant
+>
+> Owner, live in chat: "2 מהסרטונים מאושרים תתזמן 1 לשעה 16:00 ואת השני
+> ל 23:00" ("2 of the videos are approved, schedule one for 16:00 and
+> the other for 23:00") — exact times given explicitly, no fallback
+> needed. Read "2 of the videos" as the most-recently-built pair
+> (ep74/75), not the older ep71, matching every prior approval this
+> session. Mapped 16:00→STORY (ep74), 23:00→FACTS (ep75) per the
+> established STORY-gets-the-earlier-slot convention, since the owner
+> didn't say which video went to which time. ep74 (Jack the baboon)
+> scheduled via `--publish-at 2026-08-29T13:00:00Z` (16:00 IDT):
+> https://youtube.com/shorts/KHip8oO-p7o. ep75 (contagious yawning)
+> scheduled via `--publish-at 2026-08-29T20:00:00Z` (23:00 IDT):
+> https://youtube.com/shorts/3OSKUHbaipo. Backlog down to one (ep71).
 
 > ### 2026-08-29 09:00 IDT build — ep74 Jack the baboon signalman
 > ### (STORY) + ep75 contagious yawning (FACTS) — 6th/7th GROWTH PIVOT
