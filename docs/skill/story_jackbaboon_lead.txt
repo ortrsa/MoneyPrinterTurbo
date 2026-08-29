@@ -1,0 +1,22 @@
+1	True story: Jack the baboon, official South African railway signalman, 1880s-1890s (FIRST time this topic). Built 2026-08-29, FIFTH GROWTH PIVOT build -- target 28-30s (story_episode.py's MIN_SECONDS floor), hook-discipline + loop-design applied, TAKE A STANCE framing (states the "spotless record" claim directly), "subscribe" CTA wording (in force since ep72).
+
+2	WHY THIS TOPIC: fresh subject (zero prior mentions, confirmed via grep on episode_log.csv). ANIMAL category -- rolling-10 going in was ANIMAL 4/10 (under the 50% target: ep64 Dolly, ep66 cheetah-dog, ep70 Harriet, ep72 Laika), correcting the deficit again. Whimsical "an animal was better at a human job than most humans" register -- distinct from the recent run of "myth debunk" STORY hooks (Harriet, QWERTY), gives some format variety while staying inside the proven "surprising true story" vein.
+
+3	THE FACTS (independently verified):
+	- James Edwin Wide, a guard for the Cape Government Railways in South Africa, earned the nickname "Jumper" for jumping on and off moving trains -- until he mistimed a jump, fell under a train, and lost both legs.
+	- He returned to work at Uitenhage railway station (near Port Elizabeth) using two homemade wooden legs.
+	- He bought a chacma baboon he saw skillfully driving an oxcart at a local market, named him Jack, and kept him as a companion/assistant, using him to help push his trolley between his cottage and the signal cabin.
+	- Jack watched Wide operate the signal levers and picked up the pattern himself, eventually able to work the levers/switches without Wide's direct guidance.
+	- After a passenger complained to the railway authorities about seeing a baboon operating signals, superintendent George B. Howe investigated and tested Jack directly rather than firing Wide -- Howe reported Jack knew the signal whistle codes and every lever perfectly.
+	- The railway formally employed Jack, giving him an official employee number and a small wage. Multiple sources report he worked for about nine years and, per the historical record as commonly cited, never made a single signaling error in that time.
+	Sources: Amusing Planet ("Jack The Baboon Signalman"), Mental Floss ("Signalman Jack: The Baboon Who Worked for the Railroad -- and Never Made a Mistake"), A-Z Animals, 2oceansvibe News.
+
+4	THE STANCE (per the 2026-08-26 TAKE A STANCE policy): hook and outro state the "never made a mistake" / "better than most human employees" claim directly and playfully, not hedged as "some say." This is the commonly-repeated core of the well-sourced historical account (multiple independent outlets cite the same "no errors in nine years" claim), so stating it with confidence matches the sourcing -- this is a fun, low-stakes historical anecdote, not a contested scientific claim, so no meaningful hedge is being dropped.
+
+5	SENSITIVITY: James Wide's leg-loss accident is mentioned factually and briefly (a single sentence, not dwelt on), matching the register already used for Mike the Headless Chicken and similar "surprising resilience" stories on this channel. Both real people/animal died over a century ago (Wide 1859-1904 per most sources), no living-person issue. Skipped the wage detail's colorful "half a bottle of beer per week" specifics from the spoken script (kept out of narration, not essential to the story arc) to keep the on-screen script clean and focused -- can go in a pinned comment or caption aside instead if useful.
+
+6	LOOP DESIGN (GROWTH PIVOT): outro callback references the "never made a mistake" / "did the job" framing from the hook, so the ending loops back to the opening claim.
+
+7	LENGTH: target 28-30s (story_episode.py's MIN_SECONDS=30 floor). Script ~87 words, 4 segments (hook + 2 beats + outro), matching the compressed structure used since Harriet/Laika.
+
+8	FOOTAGE APPROACH: mandatory AI hook (STORY default) -- a baboon operating vintage railway signal levers, sepia/period tone, evoking 1880s South Africa; this depicts a specific real historical scene/event (Jack at the signal levers), so the AI-disclosure recommendation applies, same as Laika (ep72) -- note this for the owner at approval time, though `upload_video.py` already defaults `containsSyntheticMedia=true` on every upload regardless. Real Pexels footage for a chacma baboon close-up beat and a vintage railway/train-tracks beat.

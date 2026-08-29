@@ -6,25 +6,24 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
-> ## 📍 HANDOFF — current state as of 2026-08-28 (read this first)
+> ## 📍 HANDOFF — current state as of 2026-08-29 (read this first)
 >
 > **RESPOND IN ENGLISH ONLY, per an explicit owner instruction in live
 > chat 2026-08-27 ("תשאר באנגלית מעכשיו" — stay in English from now on).
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
-> **Backlog: ONE episode still awaiting owner approval — ep71 (FACTS,
-> phantom vibration), built 2026-08-27.** ep70 (STORY, Harriet) was
-> approved via an explicit named-episode instruction ("Upload 70 now")
-> and uploaded immediately as public 2026-08-28:
-> https://youtube.com/shorts/CwTFkcMyV_w. ep72 (STORY, Laika) and ep73
-> (FACTS, earworms) were approved and uploaded 2026-08-28 (see below) —
-> do not re-approve or re-upload any of ep70/72/73. **A build
+> **Backlog: THREE episodes awaiting owner approval — ep71 (FACTS,
+> phantom vibration, built 2026-08-27), ep74 (STORY, Jack the baboon
+> signalman) and ep75 (FACTS, contagious yawning), both built 2026-08-29
+> by the scheduled daily trigger.** ep70 (STORY, Harriet), ep72 (STORY,
+> Laika), and ep73 (FACTS, earworms) were all approved and uploaded
+> 2026-08-28 — do not re-approve or re-upload any of them. **A build
 > instruction — including the daily trigger's own firing — is still
-> explicitly NOT upload approval** for ep71; wait for a live chat
-> message naming it specifically. ep68 and ep69 were approved and
-> uploaded 2026-08-27 — ep49, ep51-69, ep70, ep72, ep73 are all
-> live/scheduled, see episode_log.csv for exact URLs and times.
+> explicitly NOT upload approval** for ep71/74/75; wait for a live chat
+> message naming them specifically. ep68 and ep69 were approved and
+> uploaded 2026-08-27 — ep49, ep51-70, ep72, ep73 are all live/scheduled,
+> see episode_log.csv for exact URLs and times.
 >
 > **APPROVAL-PHRASING NOTE (2026-08-28, new variant):** owner approved
 > ep72+ep73 with "שתיהם מאושרים תתזמן אותם" ("both approved, schedule
@@ -57,42 +56,43 @@ making this specific channel work, so a fresh session does not restart from zero
 > sharper-CTA-fixes-conversion premise). The long-form/Related-Video
 > question was asked and answered: **not now, stay Shorts-only.**
 >
-> **🚀 GROWTH PIVOT (adopted 2026-08-27) now has FOUR builds under it**
-> (ep70, ep71, ep72, ep73) — read that section below before touching any
-> of them or building the next one. Actual landed durations: ep70 26.2s,
-> ep71 21.64s, ep72 30.96s (STORY's MIN_SECONDS=30 floor, same pattern as
-> Harriet/QWERTY), ep73 25.85s — all within the 15-30s band. Hook-
-> discipline and loop-design confirmed on all four via frame-check.
-> Trending audio remains ON HOLD pending an owner risk-tolerance answer
-> — none of the four use it. **AI-disclosure note: ep72's hook (a stray
-> dog silhouette against a capsule porthole) depicts a dramatized version
-> of a specific real historical scene (Laika inside Sputnik 2), unlike
+> **🚀 GROWTH PIVOT (adopted 2026-08-27) now has SIX builds under it**
+> (ep70 through ep75) — read that section below before touching any of
+> them or building the next one. Actual landed durations: ep70 26.2s, ep71
+> 21.64s, ep72 30.96s, ep73 25.85s, ep74 30.05s, ep75 23.5s — all within
+> the 15-30s band; STORY keeps landing at its MIN_SECONDS=30 floor
+> (Harriet, Laika, Jack all ~30s). Hook-discipline and loop-design
+> confirmed on all six via frame-check. Trending audio remains ON HOLD
+> pending an owner risk-tolerance answer. **AI-disclosure note: both
+> ep72's hook (Laika in the capsule) and ep74's hook (Jack at the signal
+> levers) depict dramatized specific real historical scenes, unlike
 > ep70's generic tortoise close-up. Confirmed `upload_video.py` already
 > sets `containsSyntheticMedia = true` by default on every upload (every
-> episode uses AI TTS narration) — so ep72's upload (2026-08-28) already
-> carried the disclosure with no extra flag needed.**
+> episode uses AI TTS narration) — so this is already satisfied with no
+> extra action needed, on any episode.**
 >
-> **"🗣️ TAKE A STANCE" (adopted 2026-08-26) now has FIVE builds** (ep68
-> through ep72 have stance hooks; ep73's hook is also stance-y though
-> less contested). See the dated entries for how each stayed inside the
-> hedge discipline.
+> **"🗣️ TAKE A STANCE" (adopted 2026-08-26) now has SIX builds** (ep68
+> through ep74 have stance hooks; ep73/75's hooks are also stance-y
+> though less contested/more self-referential). See the dated entries
+> for how each stayed inside the hedge discipline.
 >
-> **Caption-hedge-flattening tally now 8 occurrences** (ep45, 48, 54, 61,
-> 63, 65, 67, 71) — unchanged since ep71, no new occurrence on ep72/73's
-> flattening axis specifically. **But ep73 found a NEW caption-failure
-> variant, distinct from both hedge-flattening and the ep69
-> mechanism-swap: fact-conflation + a fabricated recall-bait CTA.** The
-> auto-generated caption merged two separately-hedged facts into one
-> sentence implying a causal link the sourcing never supported, AND
-> invented a "comment the exact tempo range" CTA referencing a number
-> that was never stated anywhere in the script. Both caught and
-> corrected pre-send by the same "read the caption against the locked
-> script and the actual stated facts" discipline — but this confirms the
-> caption-check needs to verify more than just missing hedges and
-> swapped objects; also check for merged-claim causation and CTAs that
-> reference facts/numbers not actually in the video. ep70/ep72's
-> `--from-dry-run` captions both pulled verbatim again, zero risk,
-> STORY's caption-flattening risk stays at zero occurrences ever.
+> **Caption-hedge-flattening tally stays at 8 occurrences** (ep45, 48,
+> 54, 61, 63, 65, 67, 71) — no new occurrence on that specific axis since
+> ep71. **But the NEW "fact-conflation" caption-failure variant found on
+> ep73 (distinct from hedge-flattening and the ep69 mechanism-swap) is
+> now CONFIRMED RECURRING — ep75 hit the same pattern.** Both times, the
+> auto-generated caption merged multiple separately-hedged facts into
+> one sentence implying an unsupported causal link, dropping a hedge in
+> the process (ep73 also fabricated a CTA referencing a number never in
+> the script; ep75 asserted a contested mechanism as flat settled fact).
+> Both caught and corrected pre-send by the same "read the caption
+> against the locked script and the actual stated facts" discipline —
+> but with 2 occurrences now, treat fact-conflation as a standing,
+> equal-priority check alongside hedge-flattening and mechanism-swaps on
+> every FACTS caption, not a one-off. ep70/ep72/ep74's `--from-dry-run`
+> captions all pulled verbatim again, zero risk — STORY's
+> caption-flattening risk stays at zero occurrences ever, across 6
+> GROWTH PIVOT builds now.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -135,20 +135,28 @@ making this specific channel work, so a fresh session does not restart from zero
 > ep69) not referenced by any unapproved row. Check `df -h` before
 > rendering and repeat this cleanup if space gets tight again — cross-
 > check any `storage/tasks/<uuid>` against episode_log.csv's UPLOADED
-> rows AND the current unapproved backlog before deleting.
+> rows AND the current unapproved backlog before deleting. (14G free as
+> of 2026-08-29, no cleanup needed that day.)
+>
+> **Footage-species lesson repeated, ep74:** searching "baboon close up
+> primate" returned mostly macaques and other monkey species — only 2 of
+> 8 candidates were genuine baboons. Same failure shape as the ep66
+> cheetah/leopard mismatch: a plausible search term can still return the
+> wrong species, so always verify species on close inspection of the
+> actual thumbnail/frames, not just trust the term matched.
 >
 > **One flagged assumption still awaiting owner confirmation:** "the
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
 > No open build is in progress. ep70, ep72, and ep73 were all approved
-> and uploaded 2026-08-28 (see the dated entries above). ep71 is still
-> built and awaiting owner approval — do not upload without a live chat
-> approval naming it. Next scheduled event is either an owner approval
-> of ep71, an owner answer on the trending-audio risk-tolerance
-> question, a follow-up Analytics check once ep64-67 clear the reporting
-> lag, or the next 09:00 IDT daily build, whichever
-> comes first.
+> and uploaded 2026-08-28. ep71, ep74, and ep75 are all built and
+> awaiting owner approval — do not upload any without a live chat
+> approval naming it specifically. Next scheduled event is either an
+> owner approval of one of those three, an owner answer on the
+> trending-audio risk-tolerance question, a follow-up Analytics check
+> once ep64-67 clear the reporting lag, or the next 09:00 IDT daily
+> build, whichever comes first.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
@@ -645,6 +653,63 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-29 09:00 IDT build — ep74 Jack the baboon signalman
+> ### (STORY) + ep75 contagious yawning (FACTS) — 6th/7th GROWTH PIVOT
+> ### builds
+>
+> Fired by the scheduled daily build trigger. Backlog check first: only
+> ep71 was unapproved (1 episode) — well under the flag threshold, so
+> proceeded to build. Rolling-10 was ANIMAL 4/10 (under target: ep64,
+> 66, 70, 72) and EVERYDAY 6/10 (over the floor) — same pattern as the
+> prior build, so picked STORY=ANIMAL (Jack the baboon) to keep
+> correcting the deficit, FACTS=EVERYDAY (contagious yawning) continuing
+> the standing recommendation. Both fresh subjects, fact-checked via
+> WebSearch, built `--from-dry-run`/`--pre-written` given real hedges in
+> each. Disk space checked first (`df -h`): 14G free, no cleanup needed.
+>
+> **ep74 (Jack the baboon):** hook states "never made a mistake"
+> directly, matching the commonly-repeated core of the well-sourced
+> historical account (Amusing Planet, Mental Floss, A-Z Animals) — a
+> fun, low-stakes anecdote, not a contested claim, so no hedge dropped.
+> Deliberately picked a whimsical "animal beat humans at their own job"
+> register instead of another myth-debunk, for some format variety after
+> a run of debunk-style STORY hooks. Targeted 28-30s, landed 30.05s.
+> **Footage-species mismatch caught during probing** (see HANDOFF note
+> above) — "baboon close up primate" returned mostly macaques, only 2 of
+> 8 candidates were genuine baboons; picked the correct one. Mandatory
+> AI hook (a baboon at a vintage 1880s signal box, sepia tone) — this
+> dramatizes a specific real historical scene, so the AI-disclosure note
+> applies, already satisfied by `upload_video.py`'s default
+> `containsSyntheticMedia=true`. Real footage for 2 distinct vintage
+> steam-train beats, no hash collisions. Caption pulled verbatim via
+> `--from-dry-run`, zero risk. Full write-up:
+> docs/skill/story_jackbaboon_lead.txt, episode_log.csv row 74.
+>
+> **ep75 (contagious yawning):** self-referential hook/outro loop ("are
+> you about to yawn? reading this might make you do it" / "if you just
+> yawned reading this"). Targeted ~20s, landed 23.5s. **Caption
+> fact-conflation, CONFIRMED RECURRING (2nd occurrence, after ep73):**
+> first-pass caption merged the hedged prevalence stat and the contested
+> mirror-neuron theory into one sentence asserting "activates mirror
+> neurons... causing about sixty percent... to automatically mimic" as
+> flat settled fact, when the locked script explicitly hedged the
+> mirror-neuron link as "still mixed." Caught and hand-corrected before
+> sending — this is now a confirmed recurring caption-failure pattern,
+> not a one-off (see HANDOFF block). Also deliberately left out the
+> autism/psychopathy-correlation research angle to avoid an unnecessary
+> stigmatizing framing in a lighthearted format. Footage: pivoted away
+> from a failed "two people yawning together" search (false positives —
+> generic friends posing) to an abstract brain/neuron visual for the
+> mirror-neuron fact instead, same pattern as the phantom-vibration
+> build. Zero AI clips, no hash collisions. Full write-up:
+> docs/skill/facts_yawning_lead.txt, episode_log.csv row 75.
+>
+> Both episodes frame-verified (hook-discipline + loop-design confirmed
+> on both) and sent to Telegram manually for review (one transient
+> network ConnectionResetError on the first send attempt for ep74,
+> succeeded on immediate retry). Backlog now THREE unapproved episodes
+> (ep71, ep74, ep75) — flagged in the HANDOFF block.
 
 > ### 2026-08-28, later still — owner approved ep70 with an explicit
 > ### named-episode instruction

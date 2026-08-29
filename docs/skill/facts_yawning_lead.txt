@@ -1,0 +1,18 @@
+1	EVERYDAY/RELATABLE facts episode -- contagious yawning, FIRST time this topic. Built 2026-08-29, GROWTH PIVOT build -- target ~20s (--fact-count 3 --fact-max-words 14), hook-discipline + loop-design applied, TAKE A STANCE framing, "subscribe" CTA wording.
+
+2	WHY THIS TOPIC: universal, highly relatable everyday phenomenon almost everyone has experienced, mining the EVERYDAY/RELATABLE vein per the standing recommendation (best historical performer). Fresh subject, self-demonstrating hook potential (the video itself can trigger the phenomenon it's describing), well-documented in real research.
+
+3	ALL 3 FACTS INDEPENDENTLY WEB-VERIFIED:
+	#1. Prevalence: studies report roughly 40-70% of people yawn contagiously after seeing/hearing/reading about someone else yawning, with figures commonly cited around 60-68% -- HEDGE: real range across studies, not one fixed universal number, script uses "roughly sixty percent" framed as a general research finding, not false precision.
+	#2. Leading theory: contagious yawning is widely linked to mirror neurons and empathy-related brain activity (fMRI studies show empathy/self-awareness regions active during contagious yawning) -- HEDGE: a major PLOS One study found individual susceptibility is "largely unexplained by empathy or other known factors," and other studies have failed to replicate an empathy correlation, so the mirror-neuron/empathy link is described as "the leading theory," not settled fact.
+	#3 (payoff/stance, self-referential). Reading about yawning, or even just seeing the word "yawn," is itself a documented trigger for contagious yawning -- directly sourced, ties into the hook's "reading this might make you yawn" framing.
+
+4	WHY --pre-written: fact #1 (prevalence range) and fact #2 (contested empathy link) both carry real hedges at risk of being flattened into overclaimed universal statements by an LLM rewrite -- same discipline as every hedge-bearing facts build this session.
+
+5	FOOTAGE APPROACH: person yawning (close-up, candid), person covering mouth mid-yawn, another person yawning in response/reaction shot for the contagion beat. All well covered by Pexels. No AI expected needed for a FACTS build (optional-only per policy).
+
+6	SOURCES: Neuroscience News, PubMed (Haker et al., "Mirror neuron activity during contagious yawning - an fMRI study"), Psychology Today, Live Science, PLOS One ("Individual Variation in Contagious Yawning Susceptibility Is Highly Stable and Largely Unexplained by Empathy or Other Known Factors"), Scientific Reports (psychopathy/yawning study).
+
+7	SENSITIVITY: skipped the autism/psychopathy-correlation research angle from the script entirely -- while real and sourced, framing reduced yawn-contagion as linked to those conditions risks an unnecessary stigmatizing implication for a lighthearted Shorts format; the prevalence/mechanism/self-trigger facts chosen instead are equally interesting without that risk.
+
+8	LOOP DESIGN (GROWTH PIVOT): hook asks "are you about to yawn? reading this might make you do it" -- outro circles back to "if you just yawned reading this," directly closing the self-referential loop the hook opened.
