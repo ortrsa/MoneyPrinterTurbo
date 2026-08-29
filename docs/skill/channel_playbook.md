@@ -13,32 +13,39 @@ making this specific channel work, so a fresh session does not restart from zero
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
-> **Backlog: ONE episode awaiting owner approval — ep71 (FACTS, phantom
-> vibration, built 2026-08-27).** ep74 (STORY, Jack the baboon) and ep75
-> (FACTS, contagious yawning) were approved and scheduled 2026-08-29
-> (see below) — do not re-approve or re-upload them. ep70 (STORY,
-> Harriet), ep72 (STORY, Laika), and ep73 (FACTS, earworms) were all
-> approved and uploaded 2026-08-28 — do not re-approve or re-upload any
-> of them either. **A build instruction — including the daily trigger's
-> own firing — is still explicitly NOT upload approval** for ep71; wait
-> for a live chat message naming it specifically. ep68 and ep69 were
-> approved and uploaded 2026-08-27 — ep49, ep51-70, ep72-75 are all
+> **Backlog: EMPTY.** ep71 (FACTS, phantom vibration) was approved
+> 2026-08-29 ("גם הוא מאושר תעלה אותו ב 2 בלילה" — this one is also
+> approved, upload it at 2 at night) and scheduled via `--publish-at
+> 2026-08-29T23:00:00Z` (02:00 IDT — read as the coming night, not the
+> already-passed 02:00 earlier that same day):
+> https://youtube.com/shorts/DxvtmARp9r0. ep74 (STORY, Jack the baboon)
+> and ep75 (FACTS, contagious yawning) were approved and scheduled
+> earlier the same day (see below). ep70 (STORY, Harriet), ep72 (STORY,
+> Laika), and ep73 (FACTS, earworms) were all approved and uploaded
+> 2026-08-28. Do not re-approve or re-upload any of ep70-75. ep68 and
+> ep69 were approved and uploaded 2026-08-27 — ep49, ep51-75 are all
 > live/scheduled, see episode_log.csv for exact URLs and times.
 >
-> **APPROVAL-PHRASING NOTE (2026-08-29, yet another variant):** owner
-> approved ep74+ep75 with "2 מהסרטונים מאושרים תתזמן 1 לשעה 16:00 ואת
-> השני ל 23:00" ("2 of the videos are approved, schedule one for 16:00
-> and the other for 23:00") — explicit exact times given, no fallback
-> reasoning needed for timing. Read "2 of the videos" as the
+> **APPROVAL-PHRASING NOTE (2026-08-29, TWO variants in one day):**
+> first, owner approved ep74+ep75 with "2 מהסרטונים מאושרים תתזמן 1
+> לשעה 16:00 ואת השני ל 23:00" ("2 of the videos are approved, schedule
+> one for 16:00 and the other for 23:00") — explicit exact times given,
+> no fallback reasoning needed for timing. Read "2 of the videos" as the
 > most-recently-built pair (ep74/75), not reaching back to the older
-> ep71, consistent with every prior approval this session. Mapped the
-> earlier time (16:00) to STORY (ep74) and the later time (23:00) to
-> FACTS (ep75), per the established STORY-gets-earlier-slot convention
-> — the owner didn't name which video went to which time, so this
-> mapping was inferred, not confirmed. ep74 scheduled via `--publish-at
-> 2026-08-29T13:00:00Z`: https://youtube.com/shorts/KHip8oO-p7o. ep75
-> scheduled via `--publish-at 2026-08-29T20:00:00Z`:
-> https://youtube.com/shorts/3OSKUHbaipo.
+> ep71, consistent with every prior approval this session (this reading
+> was later implicitly CONFIRMED CORRECT — the owner's next message
+> treated ep71 as still separately unapproved: "גם הוא" / "this one
+> too"). Mapped the earlier time (16:00) to STORY (ep74) and the later
+> time (23:00) to FACTS (ep75), per the established STORY-gets-
+> earlier-slot convention — the owner didn't name which video went to
+> which time, so this mapping was inferred. ep74 scheduled via
+> `--publish-at 2026-08-29T13:00:00Z`:
+> https://youtube.com/shorts/KHip8oO-p7o. ep75 scheduled via
+> `--publish-at 2026-08-29T20:00:00Z`:
+> https://youtube.com/shorts/3OSKUHbaipo. Second, moments later, owner
+> approved ep71 separately with "גם הוא מאושר תעלה אותו ב 2 בלילה" —
+> confirms the "2 of the videos" reading above was correct (the owner
+> treated ep71 as a distinct, third approval, not part of "the 2").
 >
 > **APPROVAL-PHRASING NOTE (2026-08-28, new variant):** owner approved
 > ep72+ep73 with "שתיהם מאושרים תתזמן אותם" ("both approved, schedule
@@ -164,14 +171,12 @@ making this specific channel work, so a fresh session does not restart from zero
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
-> No open build is in progress. ep70, ep72, ep73, ep74, and ep75 were
-> all approved and uploaded/scheduled by 2026-08-29. ep71 is still built
-> and awaiting owner approval — do not upload without a live chat
-> approval naming it specifically. Next scheduled event is either an
-> owner approval of ep71, an owner answer on the trending-audio
-> risk-tolerance question, a follow-up Analytics check once ep64-67
-> clear the reporting lag, or the next 09:00 IDT daily build, whichever
-> comes first.
+> No open build is in progress. ep70-ep75 were all approved and
+> uploaded/scheduled by 2026-08-29 — backlog is empty. Next scheduled
+> event is either an owner answer on the trending-audio risk-tolerance
+> question, a follow-up Analytics check once ep64-67 clear the
+> reporting lag, or the next 09:00 IDT daily build, whichever comes
+> first.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
@@ -668,6 +673,20 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-29, moments later — owner approved ep71 separately,
+> ### confirming the "2 of the videos" reading, backlog now empty
+>
+> Owner, live in chat: "גם הוא מאושר תעלה אותו ב 2 בלילה" ("this one
+> too is approved, upload it at 2 at night"). "גם" (also/too) confirms
+> ep71 was a separate, distinct approval from the ep74+ep75 pair just
+> approved moments earlier — validating that "2 of the videos" in the
+> prior message correctly meant only the most-recently-built pair, not
+> reaching into the older ep71. "2 at night" read as the coming night
+> (02:00 IDT the next calendar day), not the already-passed 02:00
+> earlier that same day. Scheduled via `--publish-at
+> 2026-08-29T23:00:00Z`: https://youtube.com/shorts/DxvtmARp9r0. Backlog
+> now EMPTY — all of ep70 through ep75 are live or scheduled.
 
 > ### 2026-08-29, later same day — owner approved ep74 + ep75 with
 > ### explicit exact times, a third approval-phrasing variant
