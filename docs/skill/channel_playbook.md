@@ -13,19 +13,22 @@ making this specific channel work, so a fresh session does not restart from zero
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
-> **Backlog: ep76 (STORY, Cher Ami pigeon myth) + ep77 (FACTS, octopus
-> biology) built 2026-08-30 from the 09:00 IDT daily build trigger,
-> sent to Telegram, AWAITING OWNER APPROVAL — do not treat the trigger
-> firing itself as approval.** ep76 landed 29.74s after a trim (first
-> draft was 35.66s, over the 15-30s band). ep77 landed 26.44s after two
-> trims/rewrites. Both ANIMAL category, picked deliberately to correct
-> the rolling-10 topic mix (was ANIMAL 4/10 going in). See
-> episode_log.csv outcome_notes for full build detail, including two
-> new footage lessons (Pexels has almost no real octopus footage;
-> Pexels "WWI"/"trench" searches return wrong-era Napoleonic
-> reenactors) and a THIRD occurrence of the caption fact-conflation
-> pattern (ep73, ep75, now ep77 — worth flagging to the owner or
-> hardening the caption step if a 4th happens).
+> **Backlog: EMPTY.** ep76 (STORY, Cher Ami pigeon myth) and ep77
+> (FACTS, octopus biology) — built 2026-08-30 from the 09:00 IDT daily
+> build trigger — were approved the same day with "2 הסרטונים מאושרים"
+> ("2 of the videos are approved"). Backlog was exactly these two at
+> approval time, so no ambiguity about which 2 (unlike the 2026-08-29
+> 3-pending situation). No timing given and no "own times" phrasing →
+> applied fallback (1): ep76 (STORY) uploaded immediately as public:
+> https://youtube.com/shorts/LoCvIp0KxEU. ep77 (FACTS) scheduled via
+> `--publish-at 2026-08-30T20:00:00Z` (23:00 IDT):
+> https://youtube.com/shorts/hD_M9sFMKfw. Do not re-approve or
+> re-upload either. See episode_log.csv outcome_notes for full build
+> detail, including two new footage lessons (Pexels has almost no real
+> octopus footage; Pexels "WWI"/"trench" searches return wrong-era
+> Napoleonic reenactors) and a THIRD occurrence of the caption
+> fact-conflation pattern (ep73, ep75, now ep77 — worth flagging to the
+> owner or hardening the caption step if a 4th happens).
 >
 > ep71 (FACTS, phantom vibration) was approved 2026-08-29 ("גם הוא
 > מאושר תעלה אותו ב 2 בלילה" — this one is also approved, upload it at
@@ -209,14 +212,13 @@ making this specific channel work, so a fresh session does not restart from zero
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
-> No open build is in progress. ep76 and ep77 are built, frame-verified,
-> and sent to Telegram, awaiting owner approval in chat — see the
-> backlog note at the top of this block. ep70-ep75 were all approved and
-> uploaded/scheduled by 2026-08-29. Next event is most likely the
-> owner's approval of ep76/ep77, but could also be an owner answer on
-> the trending-audio risk-tolerance question, a follow-up Analytics
-> check once ep64-67 clear the reporting lag, or the next 09:00 IDT
-> daily build.
+> No open build is in progress. ep76 and ep77 were both approved and
+> uploaded/scheduled 2026-08-30 (see backlog note above) — backlog is
+> empty. ep70-ep75 were all approved and uploaded/scheduled by
+> 2026-08-29. Next event is either an owner answer on the
+> trending-audio risk-tolerance question, a follow-up Analytics check
+> once ep64-67 clear the reporting lag, or the next 09:00 IDT daily
+> build.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
@@ -713,6 +715,19 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-30, same day — owner approved ep76 + ep77 with plain
+> ### "2 of the videos" phrasing, backlog now empty
+>
+> Owner, live in chat: "2 הסרטונים מאושרים" ("2 of the videos are
+> approved") — no timing given, no "own times" qualifier. Unlike the
+> 2026-08-29 approval where 3 episodes were pending and "2 of the
+> videos" needed disambiguating, the backlog here was exactly ep76 +
+> ep77, so no ambiguity. Applied the plain-approval fallback: ep76
+> (STORY) uploaded immediately as public —
+> https://youtube.com/shorts/LoCvIp0KxEU. ep77 (FACTS) scheduled via
+> `--publish-at 2026-08-30T20:00:00Z` (23:00 IDT) —
+> https://youtube.com/shorts/hD_M9sFMKfw. Backlog now EMPTY.
 
 > ### 2026-08-30 09:00 IDT build — ep76 Cher Ami pigeon myth (STORY) +
 > ### ep77 octopus biology (FACTS) — 7th/8th GROWTH PIVOT builds
