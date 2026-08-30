@@ -1,0 +1,56 @@
+FACT-CHECK LEAD — episode 76 (STORY): Cher Ami, the WWI pigeon and the myth of the rescue
+
+TOPIC: Cher Ami, a US Army Signal Corps homing pigeon, October 1918, Argonne
+Forest, France. Angle: the popular "hero pigeon saved the battalion" legend
+is more contested than the legend admits — a documented 1928 report found
+the friendly-fire bombardment had already stopped by the time the message
+arrived. This is a myth-vs-record STORY, same shape as the Harriet tortoise
+and QWERTY-myth episodes (take a stance: the popular version overclaims).
+
+VERIFIED FACTS (WebSearch, 2026-08-30):
+- October 1918: a composite battalion of ~500 US soldiers (77th Division,
+  commanded by Major Charles Whittlesey) advanced ahead of flanking units in
+  the Argonne Forest and got surrounded/cut off by German forces for
+  several days — the "Lost Battalion."
+- On October 4, American heavy artillery began shelling the battalion's own
+  position by mistake (friendly fire), killing men as they held the line.
+- With supplies and pigeons running out, Whittlesey sent his last pigeon,
+  Cher Ami, with a note: "We are along the road parallel to 276.4. Our own
+  artillery is dropping a barrage directly on us. For heaven's sake, stop
+  it."
+- Cher Ami flew roughly 25 miles through gunfire and was wounded en route,
+  but reached headquarters about 25 minutes after being released.
+- CONTESTED PART (the actual twist): a 1928 report on the incident
+  concluded Cher Ami's arrival did NOT stop the friendly fire — it states
+  the message was received by the 154th Brigade commander at 4:38pm, but
+  "the firing had already ceased" by then. Sources across outlets (Snopes,
+  Military.com, Smithsonian) treat this as a real, documented complication
+  of the popular legend, not settled beyond dispute either way — hedge as
+  "one report found," not "proven."
+- Cher Ami was awarded the Croix de Guerre by the French government for
+  bravery.
+- 2021 Smithsonian DNA testing on the preserved remains confirmed Cher Ami
+  was male — the bird had long been referred to as "she" in popular
+  retellings.
+
+SOURCES: Smithsonian National Museum of American History (fact sheet),
+Military.com, Smithsonian Magazine, Snopes, History Hit, National WWI
+Museum/thenmusa.org, World War I Centennial site.
+
+STANCE TAKEN: the legend says the pigeon's flight saved hundreds of
+soldiers from their own army's shells. The more carefully documented
+record says the shelling had already stopped before the message landed —
+the genuinely remarkable part isn't that Cher Ami stopped the barrage,
+it's that a wounded bird crossed 25 miles of a WWI battlefield at all and
+the myth grew because that alone wasn't considered a good enough story on
+its own.
+
+HEDGE DISCIPLINE: keep "a 1928 report found" / "the record says," never
+flatten to "the pigeon didn't save anyone" as settled fact — the report is
+one document, not a full consensus verdict, and it's still true Cher Ami
+delivered a real message under real fire.
+
+LOOP DESIGN: open on the wounded pigeon mid-flight through smoke/gunfire
+(visual pattern interrupt + curiosity gap: "this pigeon's flight is more
+famous than it should be"); close by echoing that opening image/line —
+back on the bird, reframing what actually made it remarkable.

@@ -1,0 +1,34 @@
+FACT-CHECK LEAD — episode 77 (FACTS): octopus biology
+
+VERIFIED FACTS (WebSearch, 2026-08-30; Smithsonian Magazine, Natural
+History Museum UK, Shedd Aquarium):
+1. Octopuses have three hearts. Two branchial hearts push blood through
+   the gills to pick up oxygen; the third, systemic heart pumps that
+   oxygenated blood to the rest of the body.
+2. The systemic heart actually stops beating while the octopus swims -
+   which is a real, sourced explanation for why octopuses favor crawling
+   over swimming (swimming exhausts them).
+3. Their blood is blue, not red - they use a copper-based protein called
+   hemocyanin instead of iron-based hemoglobin, which works better than
+   hemoglobin in cold, low-oxygen water (part of why octopuses can live in
+   deep parts of the ocean).
+4. The brain is donut-shaped, and each of the eight arms has its own
+   cluster of neurons acting like a mini-brain - each arm can taste, touch,
+   and move on its own, while the central brain still exercises top-down
+   control.
+
+SOURCES: Smithsonian Magazine ("Ten Wild Facts About Octopuses"), Natural
+History Museum UK, Shedd Aquarium.
+
+STANCE / FRAMING: no contested claim here, all four facts are well-sourced
+biology - the "take a stance" angle is framing, not fact-bending: lead with
+the most counter-intuitive fact (a heart that turns off) rather than a flat
+"octopuses are interesting" opener.
+
+LOOP DESIGN: open on "one of its three hearts turns off every time it
+moves" (curiosity gap - why would evolution do that?); close by circling
+back to hearts/blood so the ending reads as the same idea landing, not a
+new topic.
+
+HEDGE DISCIPLINE: none of these facts are contested/hedged in the sources
+- state them directly, no hedge-flattening risk on this topic.

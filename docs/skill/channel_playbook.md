@@ -6,25 +6,39 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
-> ## 📍 HANDOFF — current state as of 2026-08-29 (read this first)
+> ## 📍 HANDOFF — current state as of 2026-08-30 (read this first)
 >
 > **RESPOND IN ENGLISH ONLY, per an explicit owner instruction in live
 > chat 2026-08-27 ("תשאר באנגלית מעכשיו" — stay in English from now on).
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
-> **Backlog: EMPTY.** ep71 (FACTS, phantom vibration) was approved
-> 2026-08-29 ("גם הוא מאושר תעלה אותו ב 2 בלילה" — this one is also
-> approved, upload it at 2 at night) and scheduled via `--publish-at
-> 2026-08-29T23:00:00Z` (02:00 IDT — read as the coming night, not the
-> already-passed 02:00 earlier that same day):
-> https://youtube.com/shorts/DxvtmARp9r0. ep74 (STORY, Jack the baboon)
-> and ep75 (FACTS, contagious yawning) were approved and scheduled
-> earlier the same day (see below). ep70 (STORY, Harriet), ep72 (STORY,
-> Laika), and ep73 (FACTS, earworms) were all approved and uploaded
-> 2026-08-28. Do not re-approve or re-upload any of ep70-75. ep68 and
-> ep69 were approved and uploaded 2026-08-27 — ep49, ep51-75 are all
-> live/scheduled, see episode_log.csv for exact URLs and times.
+> **Backlog: ep76 (STORY, Cher Ami pigeon myth) + ep77 (FACTS, octopus
+> biology) built 2026-08-30 from the 09:00 IDT daily build trigger,
+> sent to Telegram, AWAITING OWNER APPROVAL — do not treat the trigger
+> firing itself as approval.** ep76 landed 29.74s after a trim (first
+> draft was 35.66s, over the 15-30s band). ep77 landed 26.44s after two
+> trims/rewrites. Both ANIMAL category, picked deliberately to correct
+> the rolling-10 topic mix (was ANIMAL 4/10 going in). See
+> episode_log.csv outcome_notes for full build detail, including two
+> new footage lessons (Pexels has almost no real octopus footage;
+> Pexels "WWI"/"trench" searches return wrong-era Napoleonic
+> reenactors) and a THIRD occurrence of the caption fact-conflation
+> pattern (ep73, ep75, now ep77 — worth flagging to the owner or
+> hardening the caption step if a 4th happens).
+>
+> ep71 (FACTS, phantom vibration) was approved 2026-08-29 ("גם הוא
+> מאושר תעלה אותו ב 2 בלילה" — this one is also approved, upload it at
+> 2 at night) and scheduled via `--publish-at 2026-08-29T23:00:00Z`
+> (02:00 IDT — read as the coming night, not the already-passed 02:00
+> earlier that same day): https://youtube.com/shorts/DxvtmARp9r0. ep74
+> (STORY, Jack the baboon) and ep75 (FACTS, contagious yawning) were
+> approved and scheduled earlier the same day (see below). ep70 (STORY,
+> Harriet), ep72 (STORY, Laika), and ep73 (FACTS, earworms) were all
+> approved and uploaded 2026-08-28. Do not re-approve or re-upload any
+> of ep70-75. ep68 and ep69 were approved and uploaded 2026-08-27 —
+> ep49, ep51-75 are all live/scheduled, see episode_log.csv for exact
+> URLs and times.
 >
 > **APPROVAL-PHRASING NOTE (2026-08-29, TWO variants in one day):**
 > first, owner approved ep74+ep75 with "2 מהסרטונים מאושרים תתזמן 1
@@ -78,43 +92,67 @@ making this specific channel work, so a fresh session does not restart from zero
 > sharper-CTA-fixes-conversion premise). The long-form/Related-Video
 > question was asked and answered: **not now, stay Shorts-only.**
 >
-> **🚀 GROWTH PIVOT (adopted 2026-08-27) now has SIX builds under it**
-> (ep70 through ep75) — read that section below before touching any of
+> **🚀 GROWTH PIVOT (adopted 2026-08-27) now has EIGHT builds under it**
+> (ep70 through ep77) — read that section below before touching any of
 > them or building the next one. Actual landed durations: ep70 26.2s, ep71
-> 21.64s, ep72 30.96s, ep73 25.85s, ep74 30.05s, ep75 23.5s — all within
-> the 15-30s band; STORY keeps landing at its MIN_SECONDS=30 floor
-> (Harriet, Laika, Jack all ~30s). Hook-discipline and loop-design
-> confirmed on all six via frame-check. Trending audio remains ON HOLD
-> pending an owner risk-tolerance answer. **AI-disclosure note: both
-> ep72's hook (Laika in the capsule) and ep74's hook (Jack at the signal
-> levers) depict dramatized specific real historical scenes, unlike
-> ep70's generic tortoise close-up. Confirmed `upload_video.py` already
-> sets `containsSyntheticMedia = true` by default on every upload (every
-> episode uses AI TTS narration) — so this is already satisfied with no
-> extra action needed, on any episode.**
+> 21.64s, ep72 30.96s, ep73 25.85s, ep74 30.05s, ep75 23.5s, ep76 29.74s,
+> ep77 26.44s — all within the 15-30s band; STORY keeps landing at or
+> near its MIN_SECONDS=30 floor (Harriet, Laika, Jack, Cher Ami all
+> ~30s). Hook-discipline and loop-design confirmed on all eight via
+> frame-check — ep76 in particular deliberately reuses the exact hook
+> footage on the closing beat (not just an echoing line) for the
+> strongest loop-design execution yet. Trending audio remains ON HOLD
+> pending an owner risk-tolerance answer. **AI-disclosure note: ep72's
+> hook (Laika in the capsule), ep74's hook (Jack at the signal levers),
+> and ep76's hook+setup (Cher Ami flying through WWI shelling, soldiers
+> in the trench) all depict dramatized specific real historical scenes,
+> unlike ep70's generic tortoise close-up. Confirmed `upload_video.py`
+> already sets `containsSyntheticMedia = true` by default on every
+> upload (every episode uses AI TTS narration) — so this is already
+> satisfied with no extra action needed, on any episode.**
 >
-> **"🗣️ TAKE A STANCE" (adopted 2026-08-26) now has SIX builds** (ep68
-> through ep74 have stance hooks; ep73/75's hooks are also stance-y
-> though less contested/more self-referential). See the dated entries
-> for how each stayed inside the hedge discipline.
+> **"🗣️ TAKE A STANCE" (adopted 2026-08-26) now has SEVEN builds** (ep68
+> through ep74 have stance hooks; ep73/75/77's hooks are also stance-y
+> though less contested/more self-referential; ep76 is a clean example —
+> "the hero pigeon history got wrong"). See the dated entries for how
+> each stayed inside the hedge discipline.
 >
 > **Caption-hedge-flattening tally stays at 8 occurrences** (ep45, 48,
 > 54, 61, 63, 65, 67, 71) — no new occurrence on that specific axis since
-> ep71. **But the NEW "fact-conflation" caption-failure variant found on
-> ep73 (distinct from hedge-flattening and the ep69 mechanism-swap) is
-> now CONFIRMED RECURRING — ep75 hit the same pattern.** Both times, the
-> auto-generated caption merged multiple separately-hedged facts into
-> one sentence implying an unsupported causal link, dropping a hedge in
-> the process (ep73 also fabricated a CTA referencing a number never in
-> the script; ep75 asserted a contested mechanism as flat settled fact).
-> Both caught and corrected pre-send by the same "read the caption
-> against the locked script and the actual stated facts" discipline —
-> but with 2 occurrences now, treat fact-conflation as a standing,
-> equal-priority check alongside hedge-flattening and mechanism-swaps on
-> every FACTS caption, not a one-off. ep70/ep72/ep74's `--from-dry-run`
-> captions all pulled verbatim again, zero risk — STORY's
-> caption-flattening risk stays at zero occurrences ever, across 6
-> GROWTH PIVOT builds now.
+> ep71. **The "fact-conflation" caption-failure variant (distinct from
+> hedge-flattening and the ep69 mechanism-swap) is now at THREE
+> occurrences: ep73, ep75, and ep77.** All three times, the
+> auto-generated caption merged two separately-stated facts into one
+> sentence implying a causal/explanatory link the sourcing never quite
+> supported (ep73 also fabricated a CTA referencing a number never in
+> the script; ep75 asserted a contested mechanism as flat settled fact;
+> ep77 merged the blue-blood and cold-water-survival facts into one
+> "which makes/keeps... possible" sentence on every one of 3 separate
+> caption drafts, even as the surrounding wording changed each time —
+> suggesting this specific two-facts-about-one-mechanism shape may be a
+> structural LLM tendency, not noise). All three caught and corrected
+> pre-send by the same "read the caption against the locked script and
+> the actual stated facts" discipline — but with 3 occurrences now,
+> **consider flagging this pattern to the owner or hardening the
+> caption-generation step if a 4th happens**, rather than continuing to
+> treat it as a standing manual check indefinitely. ep70/ep72/ep74/ep76's
+> `--from-dry-run` captions all pulled verbatim again, zero risk —
+> STORY's caption-flattening risk stays at zero occurrences ever, across
+> 8 GROWTH PIVOT builds now.
+>
+> **Footage lessons (2026-08-30, TWO new ones):** (1) Pexels has almost
+> no genuine octopus footage — across ~10 search terms only 1 real clip
+> ever surfaced, everything else was reef/fish/turtle/shark b-roll or,
+> once, a food-prep shot of a cooked octopus dish; the fix was reusing
+> the one real clip across the hook/fact1/outro (which also served loop
+> design) rather than accept a wrong-animal substitute. (2) Pexels
+> "world war 1"/"trench"/"1918" search terms consistently return
+> Napoleonic-era military reenactor footage — wrong century, wrong
+> uniforms and weapons entirely — instead of anything WWI-accurate; this
+> is the same failure shape as a species mismatch (ep66, ep74) but for
+> historical era. Both cases: verify actual frames before trusting a
+> plausible-sounding search term, and prefer an AI-generated clip over a
+> stock clip that would misrepresent the subject.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -171,12 +209,14 @@ making this specific channel work, so a fresh session does not restart from zero
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
-> No open build is in progress. ep70-ep75 were all approved and
-> uploaded/scheduled by 2026-08-29 — backlog is empty. Next scheduled
-> event is either an owner answer on the trending-audio risk-tolerance
-> question, a follow-up Analytics check once ep64-67 clear the
-> reporting lag, or the next 09:00 IDT daily build, whichever comes
-> first.
+> No open build is in progress. ep76 and ep77 are built, frame-verified,
+> and sent to Telegram, awaiting owner approval in chat — see the
+> backlog note at the top of this block. ep70-ep75 were all approved and
+> uploaded/scheduled by 2026-08-29. Next event is most likely the
+> owner's approval of ep76/ep77, but could also be an owner answer on
+> the trending-audio risk-tolerance question, a follow-up Analytics
+> check once ep64-67 clear the reporting lag, or the next 09:00 IDT
+> daily build.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
@@ -673,6 +713,67 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-30 09:00 IDT build — ep76 Cher Ami pigeon myth (STORY) +
+> ### ep77 octopus biology (FACTS) — 7th/8th GROWTH PIVOT builds
+>
+> Fired by the scheduled daily build trigger. Backlog check first:
+> empty (ep70-75 all approved/uploaded by 2026-08-29) — proceeded to
+> build 2 new episodes. Rolling-10 was ANIMAL 4/10 (under the ~50%
+> target) — picked ANIMAL topics for both slots to correct it.
+>
+> **STORY (ep76): Cher Ami**, a WWI homing pigeon, framed as a
+> myth-vs-historical-record piece (TAKE A STANCE, same shape as the
+> Harriet tortoise / QWERTY myth episodes) — WebSearch-verified via
+> Smithsonian NMAH, Military.com, Snopes, History Hit. The popular
+> legend says Cher Ami's flight stopped a friendly-fire barrage on ~500
+> trapped American soldiers; a 1928 report on the incident found the
+> shelling had already stopped before the message actually arrived —
+> kept hedged throughout ("one report says," never flattened to
+> settled fact). First draft ran 35.66s (94 words, ~19% over the 15-30s
+> band) — trimmed to 77 words, re-rendered to 29.74s. AI HOOK
+> (mandatory-by-default for STORY): Pexels had nothing usable for the
+> WWI content — every "trench"/"1918"/"ww1 helmets" search returned
+> Napoleonic-era reenactors (wrong century/uniforms) instead, a new
+> footage-era-mismatch lesson alongside the existing species-mismatch
+> ones. Generated 2 AI clips via Vertex/Veo (hook: wounded pigeon
+> flying through battlefield smoke; setup: soldiers under bombardment
+> in a trench), both clean single-take renders, well inside the
+> up-to-3-without-asking allowance. Used genuine Pexels stock (a real
+> pigeon in flight) for the third beat rather than a needless third AI
+> clip. Loop design: the closing beat deliberately reuses the exact
+> hook footage, captioned "it's the flight" — echoes the opening beat
+> visually AND verbally, the strongest loop execution so far.
+>
+> **FACTS (ep77): octopus biology** — three hearts (one stops beating
+> during swimming), blue blood via copper-based hemocyanin instead of
+> iron, and that same protein's cold-water advantage explaining
+> deep-ocean survival. WebSearch-verified via Smithsonian Magazine,
+> Natural History Museum UK, Shedd Aquarium — no hedges needed, built
+> `--pre-written`. Took 3 renders to land: draft 1 (28.52s, in-band)
+> had the hook and fact #1 saying nearly the same sentence back to
+> back — rewrote the hook as a pure tease so fact #1 carries the
+> payoff instead of repeating it. Draft 2 overshot to 33.08s despite a
+> similar-length hook (TTS pacing varies run to run, not just word
+> count) — trimmed the remaining segments, draft 3 landed 26.44s.
+> Footage lesson: Pexels has almost no genuine octopus footage — only
+> 1 real clip surfaced across ~10 search terms, everything else was
+> reef/fish/turtle b-roll or once a cooked-octopus food-prep shot;
+> pinned that one real clip to hook/fact1/outro (serving loop design
+> too) and used generic "dark deep sea ocean" mood b-roll for the two
+> blood-chemistry facts, where no literal stock could ever exist.
+> **Caption fact-conflation hit a THIRD time** (ep73, ep75, now ep77)
+> — every one of the 3 caption drafts merged the blue-blood and
+> cold-water facts into one causal-sounding sentence regardless of the
+> exact wording; manually split back into 2 sentences before sending
+> each time, same as before. Three occurrences now looks structural for
+> this specific "two facts about one mechanism" shape — worth flagging
+> to the owner or hardening the caption step if a 4th happens.
+>
+> Both episodes frame-verified (hook discipline + loop design
+> confirmed on both) and sent to Telegram with pinned comments —
+> AWAITING OWNER APPROVAL, not yet uploaded. See HANDOFF block and
+> episode_log.csv for full detail.
 
 > ### 2026-08-29, moments later — owner approved ep71 separately,
 > ### confirming the "2 of the videos" reading, backlog now empty
