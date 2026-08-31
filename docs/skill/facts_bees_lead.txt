@@ -1,0 +1,40 @@
+FACT-CHECK LEAD — episode 81 (FACTS): honeybees
+
+VERIFIED FACTS (WebSearch, 2026-08-31; beekeeping/education sources incl.
+Montgomery County Beekeepers, BuzzAboutBees, Idaho Honey Industry
+Association, eeBoo, plus waggle-dance research literature):
+1. The waggle dance: honeybees communicate the DISTANCE to a food source
+   and its DIRECTION relative to the sun (and quality) through a
+   figure-eight "waggle" dance performed on the comb. Decoded by Karl von
+   Frisch, who shared the 1973 Nobel Prize in Physiology or Medicine for
+   it.
+2. Honeybees see ultraviolet light, which helps them pick out
+   nectar-rich flowers (many flowers carry UV patterns that act as
+   landing guides invisible to us). They CANNOT see red.
+3. A single worker bee produces only about one twelfth of a teaspoon of
+   honey in her entire life. Producing one pound of honey takes roughly 2
+   million flower visits and about 55,000 miles of flying. Worker
+   lifespan is around 4-6 weeks in season.
+
+HEDGE DISCIPLINE: the 1/12-teaspoon, 2-million-flowers and 55,000-miles
+figures are long-standing, widely-repeated beekeeping-literature
+estimates rather than a single precise measurement -- say "about" on each
+and don't stack all three in one breath. The waggle dance and UV vision
+are settled science and can be stated flatly.
+
+STANCE / FRAMING: lead with the least-expected framing -- bees aren't
+just foraging, they are actively giving each other navigational
+instructions. Reframes a familiar animal as a communicating one.
+
+LOOP DESIGN: open on "bees don't just find flowers - they give each other
+directions"; close by asking the viewer which fact they're passing on
+today, so the ending echoes the opening idea of information being handed
+between individuals.
+
+FOOTAGE PLAN (every segment DISTINCT, no repeats -- owner feedback
+2026-08-31 after ep78/79 reused clips):
+  seg0 hook   honeybee macro on citrus blossom
+  seg1 fact1  frame covered in bees (the comb, where the dance happens)
+  seg2 fact2  bee on a flower with pollen
+  seg3 fact3  bees at the hive entrance / landing board
+  seg4 outro  beekeeper lifting a hive frame

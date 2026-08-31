@@ -13,9 +13,48 @@ making this specific channel work, so a fresh session does not restart from zero
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
-> **Backlog: ep78 (STORY, Great Molasses Flood 1919) + ep79 (FACTS,
-> Roman gladiators) built 2026-08-31 from the 09:00 IDT daily build
-> trigger, sent to Telegram, AWAITING OWNER APPROVAL** — do not treat
+> ## 🚫 HARD RULE — DISTINCT FOOTAGE IN EVERY SEGMENT
+> ## (owner rejection, 2026-08-31 — read before building anything)
+>
+> **ep78 and ep79 were REJECTED by the owner, live in chat: "Both not
+> good, they have the same clip over and over."** Both had reused a
+> single clip file across 3 of their 4-5 segments. Root cause: the
+> GROWTH PIVOT loop-design rule ("the closing beat should echo the
+> opening") was over-applied into *recycling the same video file*.
+>
+> **Loop design means echoing the hook's FRAMING or WORDING — never
+> reusing the same clip.** Corrected rule, applies to every build:
+> - Every segment gets its own distinct clip. No exceptions.
+> - Verify it: `md5sum` the chosen clip files before rendering and
+>   confirm every hash is unique (done on ep81).
+> - A different crop/zoom of the same source **image** is acceptable
+>   ONLY when it is a genuinely different shot doing different work
+>   (ep80's extreme close-up of the watermark vs. the wide view) — it is
+>   not a licence to re-cut one video clip.
+> - **Topic selection now weighs footage depth, not just fact quality.**
+>   ep81 was going to be about crows (excellent facts) until probing
+>   found only ONE genuine crow clip on Pexels — switched to honeybees,
+>   which yielded five distinct clips. Probe first, then commit to a
+>   topic.
+>
+> ep80 and ep81 are the rebuilt replacements and both follow this rule.
+>
+> **Backlog: ep80 (STORY, Syrian passport watermark) + ep81 (FACTS,
+> honeybees) built 2026-08-31, sent to Telegram, AWAITING OWNER
+> APPROVAL.** These REPLACE ep78/ep79, which the owner rejected the same
+> day for reusing the same clip (see the HARD RULE block above — do not
+> upload ep78/ep79). ep80 was built on a direct owner lead (the Syrian
+> passport screenshots) with the owner's own images used as footage;
+> **a copyright flag is open on it** — the souq photo is Waseem Asmar's
+> work, used here as the subject of commentary and credited on screen,
+> but a Content-ID claim is possible, so that is the owner's call before
+> publishing. ep80 27.0s, ep81 21.76s, both in band on the first render.
+> ep81's caption hit a NEW failure variant — a **fabricated fact**
+> ("navigating using polarized light") that appeared nowhere in the
+> script or fact-check; hand-corrected before sending. That is distinct
+> from the ep73/75/77 fact-conflation pattern.
+>
+> The old ep78/ep79 build notes follow for reference — do not treat
 > the trigger firing itself as approval. Both HISTORY category
 > (non-animal), the first deliberate diversification away from ANIMAL
 > since the rolling-10 mix hit its ~50% target on 2026-08-30 (5/10) —

@@ -1,0 +1,56 @@
+FACT-CHECK LEAD — episode 80 (STORY): the Syrian passport with the
+photographer's watermark still on it (OWNER-SUPPLIED LEAD + IMAGES)
+
+TOPIC: Pages 34-35 of the Syrian biometric passport carry a photo of Souq
+al-Hamidiyah, the covered market in Damascus -- and the photographer's
+watermark, "WASEEM ASMAR PHOTOGRAPHY", is still visible in the printed
+design.
+
+VERIFIED FACTS (WebSearch, 2026-08-31):
+- The watermark "WASEEM ASMAR PHOTOGRAPHY" appears on pages 34-35 (the
+  VISAS / التأشيرات spread) of Syrian biometric passports.
+- The image is Souq al-Hamidiyah, the historic covered market in Damascus.
+- The photo was apparently taken from the internet without removing the
+  photographer's watermark first -- reported as an oversight. HEDGE: the
+  intent/route is characterised as "apparently" and "inadvertently" by
+  sources, not established fact. Say "apparently pulled from the
+  internet", never assert deliberate theft.
+- *** THE ACTUAL TWIST, and the thing the viral 2026 posts get wrong:
+  THIS IS NOT NEW. The watermarked photo has been on Syrian biometric
+  passports for YEARS, and the photographer himself explained the case in
+  a video back in 2024. The design comes from the older passport model;
+  stocks continued in use after Syria's 2025 leadership change. The viral
+  posts circulating now frame it as a fresh discovery / new passport --
+  that framing is wrong.
+
+SOURCES: Kurdistan 24 English, Lemmy.World threads (2), X/Twitter thread
+citing the photographer's own 2024 video, Wikipedia (Al-Hamidiyah Souq).
+Owner supplied the original Reddit/Facebook screenshots.
+
+STANCE TAKEN (TAKE A STANCE): the funny part is real and worth showing,
+but the "brand new blunder" framing everyone is sharing is the actual
+mistake -- it has been hiding in plain sight for years. This is the same
+myth-correcting shape as the Harriet tortoise and QWERTY episodes.
+
+SENSITIVITY: keep this strictly about the design/copyright blunder. Do
+NOT editorialise about Syrian politics, the Assad era, or the 2025
+leadership change -- mention the passport design's age only as far as the
+"it's not new" point requires. No political stance.
+
+COPYRIGHT NOTE: the souq photograph is Waseem Asmar's work and the video
+uses it as the subject of commentary about that exact photo. Flagged to
+the owner -- a Content-ID/copyright claim is possible even though this is
+commentary about the image itself.
+
+LOOP DESIGN: open on "look closely at this passport" over the passport
+spread; close on the watermark being there in plain sight for years, so
+the ending sends the viewer back to look again.
+
+FOOTAGE PLAN (owner instruction: use the supplied photos; every segment
+gets DISTINCT footage, no repeats):
+  seg0 passport spread photo (owner image 1), slow zoom to the circled area
+  seg1 souq photo with the watermark circled (owner image 2), slow push
+  seg2 extreme close-up crop of the watermark text itself (from image 2 --
+       a genuinely different shot, not a repeat of the same framing)
+  seg3 AI clip: passport pages being printed/turned (generic, no claim
+       about a specific real scene)

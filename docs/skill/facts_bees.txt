@@ -1,6 +1,3 @@
-Honeybees aren't native to the Americas. Colonists shipped hives to Virginia in 1622, and Native Americans called them the white man's fly.
-A single worker bee makes only about a twelfth of a teaspoon of honey in her whole life. One jar is hundreds of lifetimes.
-Honey doesn't spoil. Jars sealed in Egyptian tombs three thousand years ago still haven't, because honey is too dry and too acidic for microbes.
-Bees can learn individual human faces. They use the same configural trick your brain does, with a brain about one millimetre across.
-The waggle dance is a map. Its angle gives the food's direction relative to the sun, and the waggle's length gives the distance.
-Honeybees aren't endangered. They're farmed livestock, and researchers argue that adding hives starves the wild native bees that actually do need saving.
+The waggle dance tells other bees how far the food is, and its direction relative to the sun.
+Bees see ultraviolet, so flowers show landing patterns we can't see - but they can't see red.
+One worker bee makes about a twelfth of a teaspoon of honey in her whole life.
