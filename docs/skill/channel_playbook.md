@@ -13,6 +13,41 @@ making this specific channel work, so a fresh session does not restart from zero
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
+> ## 🚫 HARD RULE — NEVER REPEAT A TOPIC OR A FACT
+> ## (owner feedback, 2026-08-31 — check BEFORE locking any script)
+>
+> **Owner, live in chat after approving ep81:** "there's a fact that
+> repeats itself with the bees from previous videos. It doesn't matter
+> this time but pay attention not to do it again in the future."
+>
+> Investigated: it was worse than one fact. **ep45 was already a
+> bees/honeybees FACTS episode**, and TWO of ep81's three facts
+> duplicated it — ep45 had already used "~1/12 tsp of honey per worker
+> lifetime" AND "waggle dance encodes direction + distance". Only the
+> ultraviolet-vision fact was new. The "(FIRST time this topic)" tag
+> written on ep81's log row was **simply wrong**.
+>
+> **Root cause:** the pre-build check reads episode_log.csv for topic-mix
+> CATEGORY BALANCE (ANIMAL/EVERYDAY/HISTORY counts) and for recent
+> topics — it never checked whether the specific topic or the individual
+> facts had already been covered anywhere in the channel's history.
+> **Same-day near-miss from the same gap:** ep81 was originally going to
+> be crow intelligence — **ep54 was already a crow/corvid intelligence
+> episode.** It was only abandoned for unrelated footage reasons.
+>
+> **Required check, every build, before locking a script:**
+> 1. `grep -i` episode_log.csv for the candidate TOPIC (and its obvious
+>    synonyms — "bee"/"honey", "crow"/"corvid") across ALL episodes, not
+>    just recent ones.
+> 2. `grep -i` for each individual FACT's distinctive keyword (a number,
+>    a species, a proper noun) — a fresh-looking topic can still carry a
+>    fact already used inside an older multi-topic episode.
+> 3. Only write "(FIRST time this topic)" in the log after actually
+>    verifying it. That tag is a claim, not a formality.
+> 4. If the topic is already covered, either pick a different topic or
+>    build the episode from genuinely new facts only, and say so
+>    explicitly in the log row.
+>
 > ## 🚫 HARD RULE — DISTINCT FOOTAGE IN EVERY SEGMENT
 > ## (owner rejection, 2026-08-31 — read before building anything)
 >
@@ -39,20 +74,19 @@ making this specific channel work, so a fresh session does not restart from zero
 >
 > ep80 and ep81 are the rebuilt replacements and both follow this rule.
 >
-> **Backlog: ep80 (STORY, Syrian passport watermark) + ep81 (FACTS,
-> honeybees) built 2026-08-31, sent to Telegram, AWAITING OWNER
-> APPROVAL.** These REPLACE ep78/ep79, which the owner rejected the same
-> day for reusing the same clip (see the HARD RULE block above — do not
-> upload ep78/ep79). ep80 was built on a direct owner lead (the Syrian
-> passport screenshots) with the owner's own images used as footage;
-> **a copyright flag is open on it** — the souq photo is Waseem Asmar's
-> work, used here as the subject of commentary and credited on screen,
-> but a Content-ID claim is possible, so that is the owner's call before
-> publishing. ep80 27.0s, ep81 21.76s, both in band on the first render.
-> ep81's caption hit a NEW failure variant — a **fabricated fact**
-> ("navigating using polarized light") that appeared nowhere in the
-> script or fact-check; hand-corrected before sending. That is distinct
-> from the ep73/75/77 fact-conflation pattern.
+> **Backlog: EMPTY.** ep80 (STORY, Syrian passport watermark) and ep81
+> (FACTS, honeybees) were approved 2026-08-31 ("שתיהם מאושרים" — both
+> approved), no timing and no "own times" phrasing → plain-approval
+> fallback: ep80 live immediately as public
+> https://youtube.com/shorts/j4oD6rdS-4Y ; ep81 scheduled via
+> `--publish-at 2026-08-31T20:00:00Z` (23:00 IDT)
+> https://youtube.com/shorts/bWKQ8H8It-w . **ep78/ep79 stay REJECTED —
+> never upload them.** The ep80 copyright flag (Waseem Asmar's photo)
+> was raised to the owner before approval and they approved anyway, so
+> treat it as accepted — the underlying Content-ID risk still exists.
+> ep81 shipped with a repeated-fact defect the owner caught after
+> approving (see the NEVER REPEAT A TOPIC OR A FACT rule above); owner
+> said it doesn't matter this time, so no re-render.
 >
 > The old ep78/ep79 build notes follow for reference — do not treat
 > the trigger firing itself as approval. Both HISTORY category
@@ -282,15 +316,12 @@ making this specific channel work, so a fresh session does not restart from zero
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
-> No open build is in progress. ep78 and ep79 are built, frame-verified,
-> and sent to Telegram, awaiting owner approval — see the backlog note
-> at the top of this block. ep76 and ep77 were both approved and
-> uploaded/scheduled 2026-08-30. ep70-ep75 were all approved and
-> uploaded/scheduled by 2026-08-29. Next event is most likely the
-> owner's approval of ep78/ep79, but could also be an owner answer on
-> the trending-audio risk-tolerance question, a follow-up Analytics
-> check once ep64-67 clear the reporting lag, or the next 09:00 IDT
-> daily build.
+> No open build is in progress. ep80 and ep81 were approved and
+> uploaded/scheduled 2026-08-31 — backlog is empty. ep78/ep79 are
+> permanently rejected. Next event is either an owner answer on the
+> trending-audio risk-tolerance question, a follow-up Analytics check
+> once ep64-67 clear the reporting lag, or the next 09:00 IDT daily
+> build.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
