@@ -6,29 +6,48 @@ making this specific channel work, so a fresh session does not restart from zero
 
 **Read this before proposing changes to format, topic mix, or episode length.**
 
-> ## 📍 HANDOFF — current state as of 2026-08-30 (read this first)
+> ## 📍 HANDOFF — current state as of 2026-08-31 (read this first)
 >
 > **RESPOND IN ENGLISH ONLY, per an explicit owner instruction in live
 > chat 2026-08-27 ("תשאר באנגלית מעכשיו" — stay in English from now on).
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
-> **Backlog: EMPTY.** ep76 (STORY, Cher Ami pigeon myth) and ep77
-> (FACTS, octopus biology) — built 2026-08-30 from the 09:00 IDT daily
-> build trigger — were approved the same day with "2 הסרטונים מאושרים"
-> ("2 of the videos are approved"). Backlog was exactly these two at
-> approval time, so no ambiguity about which 2 (unlike the 2026-08-29
-> 3-pending situation). No timing given and no "own times" phrasing →
-> applied fallback (1): ep76 (STORY) uploaded immediately as public:
-> https://youtube.com/shorts/LoCvIp0KxEU. ep77 (FACTS) scheduled via
+> **Backlog: ep78 (STORY, Great Molasses Flood 1919) + ep79 (FACTS,
+> Roman gladiators) built 2026-08-31 from the 09:00 IDT daily build
+> trigger, sent to Telegram, AWAITING OWNER APPROVAL** — do not treat
+> the trigger firing itself as approval. Both HISTORY category
+> (non-animal), the first deliberate diversification away from ANIMAL
+> since the rolling-10 mix hit its ~50% target on 2026-08-30 (5/10) —
+> confirmed via computation that 2 non-animal builds would not drop the
+> new rolling-10 window's ANIMAL count below the floor. Both landed
+> in-band on the FIRST render (ep78 24.86s, ep79 24.54s) — no trims
+> needed, a first for back-to-back builds this pivot. ep79's caption
+> had **no fact-conflation** (each sentence mapped to one distinct
+> fact) — first clean FACTS caption since the pattern started
+> recurring at ep73/75/77. **NEW LESSON: ep78's raw render was 66MB
+> (3 of 4 segments used AI clips at much higher source bitrate than
+> typical Pexels footage) — over Telegram's 50MB bot-API sendVideo
+> limit, hit a 413 error on first send, recompressed with ffmpeg to
+> 45MB and resent successfully.** Check file size before every Telegram
+> send on AI-clip-heavy builds going forward. See episode_log.csv
+> outcome_notes for full build detail, including a repeat of the
+> footage-era-mismatch lesson ("gladiator reenactment" searches also
+> return wrong-era Napoleonic footage, confirming this is a general
+> pattern for specific-era combat/military searches, not a one-off tied
+> to WWI specifically).
+>
+> ep76 (STORY, Cher Ami pigeon myth) and ep77 (FACTS, octopus biology)
+> were built 2026-08-30 and approved the same day with "2 הסרטונים
+> מאושרים" ("2 of the videos are approved"). No timing given and no
+> "own times" phrasing → applied fallback (1): ep76 uploaded immediately
+> as public: https://youtube.com/shorts/LoCvIp0KxEU. ep77 scheduled via
 > `--publish-at 2026-08-30T20:00:00Z` (23:00 IDT):
 > https://youtube.com/shorts/hD_M9sFMKfw. Do not re-approve or
-> re-upload either. See episode_log.csv outcome_notes for full build
-> detail, including two new footage lessons (Pexels has almost no real
-> octopus footage; Pexels "WWI"/"trench" searches return wrong-era
-> Napoleonic reenactors) and a THIRD occurrence of the caption
-> fact-conflation pattern (ep73, ep75, now ep77 — worth flagging to the
-> owner or hardening the caption step if a 4th happens).
+> re-upload either. That build's footage lessons (Pexels has almost no
+> real octopus footage; Pexels "WWI"/"trench" searches return wrong-era
+> Napoleonic reenactors) and the THIRD fact-conflation occurrence
+> (ep73, ep75, ep77) are recorded in the 2026-08-30 dated entry below.
 >
 > ep71 (FACTS, phantom vibration) was approved 2026-08-29 ("גם הוא
 > מאושר תעלה אותו ב 2 בלילה" — this one is also approved, upload it at
@@ -95,67 +114,79 @@ making this specific channel work, so a fresh session does not restart from zero
 > sharper-CTA-fixes-conversion premise). The long-form/Related-Video
 > question was asked and answered: **not now, stay Shorts-only.**
 >
-> **🚀 GROWTH PIVOT (adopted 2026-08-27) now has EIGHT builds under it**
-> (ep70 through ep77) — read that section below before touching any of
+> **🚀 GROWTH PIVOT (adopted 2026-08-27) now has TEN builds under it**
+> (ep70 through ep79) — read that section below before touching any of
 > them or building the next one. Actual landed durations: ep70 26.2s, ep71
 > 21.64s, ep72 30.96s, ep73 25.85s, ep74 30.05s, ep75 23.5s, ep76 29.74s,
-> ep77 26.44s — all within the 15-30s band; STORY keeps landing at or
-> near its MIN_SECONDS=30 floor (Harriet, Laika, Jack, Cher Ami all
-> ~30s). Hook-discipline and loop-design confirmed on all eight via
-> frame-check — ep76 in particular deliberately reuses the exact hook
-> footage on the closing beat (not just an echoing line) for the
-> strongest loop-design execution yet. Trending audio remains ON HOLD
-> pending an owner risk-tolerance answer. **AI-disclosure note: ep72's
-> hook (Laika in the capsule), ep74's hook (Jack at the signal levers),
-> and ep76's hook+setup (Cher Ami flying through WWI shelling, soldiers
-> in the trench) all depict dramatized specific real historical scenes,
-> unlike ep70's generic tortoise close-up. Confirmed `upload_video.py`
-> already sets `containsSyntheticMedia = true` by default on every
-> upload (every episode uses AI TTS narration) — so this is already
-> satisfied with no extra action needed, on any episode.**
+> ep77 26.44s, ep78 24.86s, ep79 24.54s — all within the 15-30s band;
+> STORY keeps landing at or near its MIN_SECONDS=30 floor except ep78,
+> which landed comfortably mid-band on its first try (Molasses Flood
+> had less to unpack than the character-driven animal STORYs). Both
+> ep78 and ep79 landed in-band on the FIRST render, no trims needed —
+> the first time neither build of the day needed iteration. Hook-
+> discipline and loop-design confirmed on all ten via frame-check —
+> ep76 and ep78 both deliberately reuse the exact hook footage on the
+> closing beat (not just an echoing line); ep79 does the same with its
+> AI hook clip. Trending audio remains ON HOLD pending an owner risk-
+> tolerance answer. **AI-disclosure note: ep72's hook (Laika in the
+> capsule), ep74's hook (Jack at the signal levers), ep76's hook+setup
+> (Cher Ami flying through WWI shelling, soldiers in the trench), and
+> ep78's hook+setup (the molasses tank bursting, the wave crashing
+> through the street) all depict dramatized specific real historical
+> scenes, unlike ep70's generic tortoise close-up. Confirmed
+> `upload_video.py` already sets `containsSyntheticMedia = true` by
+> default on every upload — so this is already satisfied with no extra
+> action needed, on any episode.**
 >
-> **"🗣️ TAKE A STANCE" (adopted 2026-08-26) now has SEVEN builds** (ep68
-> through ep74 have stance hooks; ep73/75/77's hooks are also stance-y
-> though less contested/more self-referential; ep76 is a clean example —
-> "the hero pigeon history got wrong"). See the dated entries for how
-> each stayed inside the hedge discipline.
+> **"🗣️ TAKE A STANCE" (adopted 2026-08-26) now has EIGHT builds** (ep68
+> through ep74 have stance hooks; ep73/75/77/79's hooks are also
+> stance-y though less contested/more self-referential; ep76 and ep78
+> are clean examples — "the hero pigeon history got wrong," "this
+> disaster sounds like a joke, it isn't"). See the dated entries for
+> how each stayed inside the hedge discipline.
 >
 > **Caption-hedge-flattening tally stays at 8 occurrences** (ep45, 48,
 > 54, 61, 63, 65, 67, 71) — no new occurrence on that specific axis since
-> ep71. **The "fact-conflation" caption-failure variant (distinct from
-> hedge-flattening and the ep69 mechanism-swap) is now at THREE
-> occurrences: ep73, ep75, and ep77.** All three times, the
-> auto-generated caption merged two separately-stated facts into one
-> sentence implying a causal/explanatory link the sourcing never quite
-> supported (ep73 also fabricated a CTA referencing a number never in
-> the script; ep75 asserted a contested mechanism as flat settled fact;
-> ep77 merged the blue-blood and cold-water-survival facts into one
-> "which makes/keeps... possible" sentence on every one of 3 separate
-> caption drafts, even as the surrounding wording changed each time —
-> suggesting this specific two-facts-about-one-mechanism shape may be a
-> structural LLM tendency, not noise). All three caught and corrected
-> pre-send by the same "read the caption against the locked script and
-> the actual stated facts" discipline — but with 3 occurrences now,
-> **consider flagging this pattern to the owner or hardening the
-> caption-generation step if a 4th happens**, rather than continuing to
-> treat it as a standing manual check indefinitely. ep70/ep72/ep74/ep76's
+> ep71. **The "fact-conflation" caption-failure variant stays at THREE
+> occurrences (ep73, ep75, ep77) — ep79's caption was clean**, each
+> sentence mapped 1:1 to a distinct script fact with no causal merging.
+> One clean data point isn't enough to call the pattern resolved, but
+> it's the first FACTS caption since ep73 that didn't need a hand
+> correction — keep watching before deciding whether to flag it to the
+> owner or harden the caption step. ep70/ep72/ep74/ep76/ep78's
 > `--from-dry-run` captions all pulled verbatim again, zero risk —
 > STORY's caption-flattening risk stays at zero occurrences ever, across
-> 8 GROWTH PIVOT builds now.
+> 10 GROWTH PIVOT builds now.
 >
-> **Footage lessons (2026-08-30, TWO new ones):** (1) Pexels has almost
-> no genuine octopus footage — across ~10 search terms only 1 real clip
-> ever surfaced, everything else was reef/fish/turtle/shark b-roll or,
-> once, a food-prep shot of a cooked octopus dish; the fix was reusing
-> the one real clip across the hook/fact1/outro (which also served loop
-> design) rather than accept a wrong-animal substitute. (2) Pexels
-> "world war 1"/"trench"/"1918" search terms consistently return
-> Napoleonic-era military reenactor footage — wrong century, wrong
-> uniforms and weapons entirely — instead of anything WWI-accurate; this
-> is the same failure shape as a species mismatch (ep66, ep74) but for
-> historical era. Both cases: verify actual frames before trusting a
-> plausible-sounding search term, and prefer an AI-generated clip over a
-> stock clip that would misrepresent the subject.
+> **Footage lessons (TWO new on 2026-08-30, one CONFIRMED RECURRING on
+> 2026-08-31):** (1) Pexels has almost no genuine octopus footage —
+> across ~10 search terms only 1 real clip ever surfaced, everything
+> else was reef/fish/turtle/shark b-roll or, once, a food-prep shot of
+> a cooked octopus dish; the fix was reusing the one real clip across
+> the hook/fact1/outro (which also served loop design) rather than
+> accept a wrong-animal substitute. (2) Pexels "world war 1"/"trench"/
+> "1918" search terms consistently return Napoleonic-era military
+> reenactor footage — wrong century, wrong uniforms and weapons
+> entirely — instead of anything WWI-accurate; this is the same failure
+> shape as a species mismatch (ep66, ep74) but for historical era.
+> **(3) CONFIRMED RECURRING 2026-08-31: "gladiator reenactment"/
+> "gladiator sword" searches ALSO return the same wrong-era Napoleonic
+> footage** — this is now a general pattern for ANY specific-era
+> combat/military search on this Pexels account, not something tied to
+> WWI specifically. All three cases: verify actual frames before
+> trusting a plausible-sounding search term, and prefer an AI-generated
+> clip over a stock clip that would misrepresent the subject.
+>
+> **NEW LESSON (2026-08-31): Telegram's 50MB bot-API sendVideo limit.**
+> ep78's raw render came out to 66MB — 3 of its 4 segments used AI
+> clips at a noticeably higher source bitrate than typical Pexels
+> footage (contrast ep76's 2-AI-clip render, which was only 24MB).
+> First send attempt failed with a 413 (Request Entity Too Large);
+> recompressed with `ffmpeg -c:v libx264 -crf 23 -preset slow` to 45MB
+> and resent successfully. Check the rendered file size before every
+> Telegram send on AI-clip-heavy builds specifically, not just when it
+> looks large by eye — a build with 3+ AI segments is the pattern to
+> watch for.
 >
 > **Publish workflow (since 2026-08-19):** only one scheduled trigger
 > exists, the 09:00 IDT daily build (`trig_01KeLddHpRHZDY15UYZTPJFs`). It
@@ -212,13 +243,15 @@ making this specific channel work, so a fresh session does not restart from zero
 > trigger of 9" was read as 9:00 AM IDT (the live build trigger) — never
 > explicitly confirmed or corrected.
 >
-> No open build is in progress. ep76 and ep77 were both approved and
-> uploaded/scheduled 2026-08-30 (see backlog note above) — backlog is
-> empty. ep70-ep75 were all approved and uploaded/scheduled by
-> 2026-08-29. Next event is either an owner answer on the
-> trending-audio risk-tolerance question, a follow-up Analytics check
-> once ep64-67 clear the reporting lag, or the next 09:00 IDT daily
-> build.
+> No open build is in progress. ep78 and ep79 are built, frame-verified,
+> and sent to Telegram, awaiting owner approval — see the backlog note
+> at the top of this block. ep76 and ep77 were both approved and
+> uploaded/scheduled 2026-08-30. ep70-ep75 were all approved and
+> uploaded/scheduled by 2026-08-29. Next event is most likely the
+> owner's approval of ep78/ep79, but could also be an owner answer on
+> the trending-audio risk-tolerance question, a follow-up Analytics
+> check once ep64-67 clear the reporting lag, or the next 09:00 IDT
+> daily build.
 
 > ## 🗣️ TAKE A STANCE — adopted 2026-08-26, applies to every build from
 > ## here on
@@ -715,6 +748,67 @@ making this specific channel work, so a fresh session does not restart from zero
 > enough to treat it as reliable going forward — downgraded from
 > "unconfirmed, flag every time" to just noting it in the fallback
 > description (see HANDOFF block).
+
+> ### 2026-08-31 09:00 IDT build — ep78 Great Molasses Flood (STORY) +
+> ### ep79 Roman gladiators (FACTS) — 9th/10th GROWTH PIVOT builds
+>
+> Fired by the scheduled daily build trigger. Backlog check first:
+> empty (ep76-77 both approved/uploaded 2026-08-30) — proceeded to
+> build 2 new episodes. Rolling-10 was ANIMAL 5/10 (exactly at the
+> ~50% target — a floor, not a ceiling) and HISTORY just 1/10 (ep68) —
+> computed that 2 non-animal builds today would not drop the new
+> rolling-10 window below the ANIMAL floor, so used the room to
+> diversify for the first time since the mix hit target.
+>
+> **STORY (ep78): The Great Molasses Flood**, Boston's North End,
+> January 15 1919 — WebSearch-verified via Britannica, History.com,
+> Wikipedia, Massachusetts Secretary of the Commonwealth. No myth to
+> correct here (unlike recent STORY builds) — the twist is that this
+> sounds like an absurd urban legend and isn't: a burst storage tank
+> released ~2 million gallons of molasses in a wave up to 40ft high
+> moving ~35mph, killing 21 people and destroying several city blocks.
+> Landed 24.86s on the FIRST render, no trim needed. AI HOOK: Pexels
+> had nothing at all for 1919 Boston — "vintage 1919 street" returned a
+> modern building with parked cars, "flood disaster wave city" an
+> unrelated flooded-resort aerial shot, "molasses pouring" a food-prep
+> dessert clip. Generated 2 AI clips via Vertex/Veo (the tank rupturing;
+> the wave crashing through the street, sweeping away wagons and
+> buildings) — both exceptionally strong single-take renders with
+> legible period-accurate shop signage. Reused the wave-crashing clip
+> for the hook, the wave-description segment, AND the closing beat —
+> the strongest loop-design bookend yet, matching ep76's pattern.
+>
+> **FACTS (ep79): Roman gladiators** — the famous thumbs-down-means-
+> death gesture is a 19th-century painting invention, not an authentic
+> ancient signal; gladiators mostly ate barley and beans ("barley men"),
+> barely any meat; training was expensive so most fights weren't to the
+> death, and top fighters became celebrities. WebSearch-verified via
+> Through Eternity Tours, Oldest.org, Flavor of Italy podcast. Built
+> `--pre-written` (fact #1's hedge: the popular gesture's 19th-century
+> origin is well-documented, but what the real ancient signal meant is
+> NOT settled — kept that specific hedge). Landed 24.54s on the FIRST
+> render, no trim needed. **Caption had NO fact-conflation** — first
+> clean FACTS caption since the pattern started recurring at ep73.
+> FOOTAGE: Pexels had strong genuine Colosseum interior shots and a
+> real barley field, but "gladiator reenactment sword" returned the
+> SAME wrong-era Napoleonic reenactor footage as ep76's WWI search —
+> confirms this is a general pattern for specific-era combat searches
+> on this account, not a WWI-only quirk. A real thumbs-DOWN gesture
+> also wasn't available (only thumbs-up or CGI-style hands). Generated
+> 1 AI clip (a Roman emperor's hand giving the thumbs-down signal over
+> a packed Colosseum arena) — used sparingly per the FACTS AI-clip
+> policy, reused for fact #1 and the outro (loop design).
+>
+> **NEW LESSON: Telegram's 50MB bot-API limit.** ep78's raw render was
+> 66MB (3 of 4 segments AI-generated, at a much higher source bitrate
+> than typical Pexels footage) — got a 413 error on first Telegram send
+> attempt, recompressed with ffmpeg to 45MB and resent successfully.
+> Check file size before sending on AI-clip-heavy builds specifically.
+>
+> Both episodes frame-verified (hook discipline + loop design confirmed
+> on both) and sent to Telegram with pinned comments — AWAITING OWNER
+> APPROVAL, not yet uploaded. See HANDOFF block and episode_log.csv for
+> full detail.
 
 > ### 2026-08-30, same day — owner approved ep76 + ep77 with plain
 > ### "2 of the videos" phrasing, backlog now empty

@@ -1,0 +1,50 @@
+FACT-CHECK LEAD — episode 78 (STORY): The Great Molasses Flood, Boston 1919
+
+TOPIC: The Great Molasses Flood, Boston's North End, January 15, 1919.
+Angle: "this sounds like a joke, it isn't" - a wave of molasses actually
+killed people. Underrated-disaster stance, no myth-correction needed here
+(the story itself is the twist), matches the channel's "the real story is
+weirder/more serious than it sounds" pattern.
+
+VERIFIED FACTS (WebSearch, 2026-08-31; Britannica, History.com, Wikipedia,
+Massachusetts Secretary of State's office):
+- January 15, 1919: a huge steel storage tank on Commercial Street in
+  Boston's North End, owned by Purity Distilling Company (a subsidiary of
+  United States Industrial Alcohol), suddenly burst.
+- It released about 2 million gallons of molasses.
+- Temperatures had risen rapidly (above 40°F) after a cold snap, and a
+  fresh warm load of molasses had just been added to the tank -
+  investigators later concluded thermal stress from that swing, combined
+  with a tank that was not strong enough for the load, caused the burst.
+- The molasses surged out as a wave 15 to 40 feet high and about 160 feet
+  wide, moving at roughly 35 miles per hour - fast enough to outrun
+  people on foot.
+- It destroyed several city blocks: buildings were knocked off their
+  foundations, elevated train supports were bent, and people, horses, and
+  wagons were engulfed.
+- 21 people were killed (many by suffocation in the syrup) and about 150
+  were injured.
+- A 6-year legal investigation followed - one of the largest class-action
+  suits in Massachusetts at the time (~3,000 witnesses, ~45,000 pages of
+  testimony) - and found United States Industrial Alcohol at fault: the
+  tank had not been built strong enough for what it held.
+
+SOURCES: Britannica, History.com (two separate articles), Wikipedia,
+Massachusetts Secretary of the Commonwealth (sec.state.ma.us), New England
+Historical Society.
+
+STANCE TAKEN: no myth to correct - the "twist" is that this isn't an urban
+legend or exaggeration, it's a real, thoroughly documented disaster that
+still gets treated like a punchline because "molasses" sounds silly. Lean
+into that: "everyone laughs at this one until they hear the death count."
+
+HEDGE DISCIPLINE: the exact CAUSE (thermal expansion vs. structural
+failure) is what the 6-year investigation concluded, not eyewitness fact -
+phrase as "investigators found" / "the inquiry concluded," not flat
+certainty. Death toll (21) and speed/height of the wave are well-sourced
+across multiple independent outlets - safe to state directly.
+
+LOOP DESIGN: open on the sudden collapse / wave bearing down (visual
+pattern interrupt + curiosity gap: "this is why molasses used to be
+illegal to store like this"); close by circling back to how absurd the
+premise still sounds even knowing it's true.
