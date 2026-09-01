@@ -13,6 +13,55 @@ making this specific channel work, so a fresh session does not restart from zero
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
+> ## 🛑 BLOCKED 2026-09-01 — ALL CREDENTIALS WIPED BY A CONTAINER RESET
+> ## (owner action required; nothing can be built or published until fixed)
+>
+> **What happened.** Overnight the remote container was reclaimed and the
+> repo was re-cloned at an older commit (89339f0). All git-tracked work
+> was safe on the remote and has been fast-forwarded back to e922ba1
+> (91-row episode_log.csv intact). **But everything gitignored was
+> destroyed**, and that is where every credential lives:
+>
+> | Lost file | What it breaks |
+> |---|---|
+> | `config.toml` | Pexels API key (all stock footage), the LLM/Gemini key (**also the TTS voice `gemini:Puck-Male`, so no narration at all**), and the whole `[telegram]` section (**cannot even send a blocked-build FYI**) |
+> | `docs/skill/veo/token.json`, `service_account.json` | Vertex/Veo — no AI clips |
+> | `docs/skill/youtube/client_secret.json`, `token.json` | No uploads, no Analytics |
+> | `storage/` (whole tree) | `todays_uploads.json` (recreated by hand), all `storage/tasks/` renders, `stock_clips/`, `ai_clips/` |
+>
+> **Nothing of value was lost** — every published episode is already on
+> YouTube, and all scripts/leads/logs are in git. The damage is purely
+> that the pipeline cannot run.
+>
+> **What the owner must restore (only they can — these are secrets):**
+> 1. `config.toml` — at minimum `pexels_api_keys`, the LLM/Gemini key,
+>    and the `[telegram]` section. Everything else can stay default.
+> 2. `docs/skill/veo/token.json` — regenerate with
+>    `docs/skill/veo/authorize_local.py`, run locally (see SKILL.md).
+> 3. `docs/skill/youtube/client_secret.json` + `token.json` —
+>    regenerate with `docs/skill/youtube/authorize_local.py` locally.
+>
+> **STANDING LESSON — `storage/` and every credential file are
+> gitignored and DO NOT survive a container reclaim.** Never treat a
+> rendered `storage/tasks/<uuid>` dir, a downloaded Pexels clip, or a
+> generated AI clip as durable: if an old episode ever needs a
+> re-render, the footage must be re-downloaded or re-generated. Only
+> what is committed survives, so keep committing scripts, leads and the
+> log after every build.
+>
+> **The 2026-09-01 build is PREPARED BUT NOT BUILT.** All work that
+> doesn't need credentials is already done and committed: topics chosen
+> and duplicate-checked, both topics fact-checked, both scripts locked.
+> Once credentials are back, the two builds are ready to run:
+> - **ep82 STORY — Clever Hans**, the horse that "could do math"
+>   (`story_cleverhans_lead.txt`, `plans/locked_scripts/cleverhans_locked.json`)
+> - **ep83 FACTS — the alpha wolf myth**
+>   (`facts_wolves_lead.txt`, `facts_wolves.txt`)
+> Both are ANIMAL, which holds the rolling-10 ANIMAL mix at its ~50%
+> target. Both were verified against the whole log as genuinely new
+> topics. Footage still needs probing + md5-checking per the distinct-
+> footage rule before rendering.
+>
 > ## 🚫 HARD RULE — NEVER REPEAT A TOPIC OR A FACT
 > ## (owner feedback, 2026-08-31 — check BEFORE locking any script)
 >

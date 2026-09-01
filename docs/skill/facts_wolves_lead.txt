@@ -1,0 +1,53 @@
+FACT-CHECK LEAD — episode 83 (FACTS): the alpha wolf myth
+
+DUPLICATE CHECK (new hard rule, 2026-08-31): grepped episode_log.csv for
+"wolf" and "wolves" across ALL episodes -> NO prior use anywhere on the
+channel. Genuinely new topic. VERIFIED, not assumed. (Rejected candidates
+in the same pass: lightning -- already in ep25 weather; fingerprints --
+already a fact inside ep20 human body; penguins -- ep5/26/29 adjacency;
+giraffes -- already used in ep30 sleep.)
+
+VERIFIED FACTS (WebSearch, 2026-09-01; Scientific American, Science Arena
+interview with L. David Mech, A-Z Animals, Turpentine Creek Wildlife
+Refuge, Lobos of the Southwest):
+1. The "alpha/beta" wolf hierarchy came from mid-20th-century studies of
+   CAPTIVE wolves -- unrelated adult animals with no shared kinship
+   thrown together. A dominance hierarchy does arise in that situation,
+   but it is not how wolves behave when left to themselves.
+2. A wild wolf pack is a family: a breeding male, a breeding female and
+   their offspring from the past two or three years that haven't yet
+   dispersed -- roughly six to ten animals. The "alpha male" and "alpha
+   female" are simply the mother and father.
+3. L. David Mech helped popularize the alpha language in his influential
+   1970 book "The Wolf: Ecology and Behavior of an Endangered Species".
+   He then spent 13 summers observing free-living packs on Ellesmere
+   Island in the Canadian Arctic, and in 1999 published "Alpha Status,
+   Dominance, and Division of Labor in Wolf Packs", arguing the term does
+   not apply to wild wolves -- they don't dispute leadership, they just
+   form families. He has spent decades trying to get the idea retracted.
+
+SOURCES: Scientific American ("Is the Alpha Wolf Idea a Myth?"), Science
+Arena (interview with Mech on scientific self-correction), A-Z Animals,
+Turpentine Creek Wildlife Refuge, Lobos of the Southwest.
+
+STANCE TAKEN: state flatly that the alpha wolf doesn't exist in the wild,
+and that the most interesting part is the scientist who popularized it
+spending the rest of his career trying to undo it. That is a stance about
+a well-sourced fact, not an unsettled scientific question.
+
+HEDGE DISCIPLINE: none of the three facts is contested -- state directly.
+Do NOT overreach into dog-training claims (the "alpha dog" training
+debate is a separate, more argued area) -- stay on wolves.
+
+LOOP DESIGN: open on "the alpha wolf doesn't exist"; close by echoing it
+back at the viewer -- they've been using the word wrong.
+
+FOOTAGE PLAN (HARD RULE: every segment DISTINCT, md5-verified):
+  seg0 hook   single wolf portrait / close-up
+  seg1 fact1  wolf behind a fence or a captive/enclosure-feel shot
+  seg2 fact2  wolf pack together / pups
+  seg3 fact3  wolf in snow or wilderness, different from seg0
+  seg4 outro  wolf howling, distinct from all of the above
+NOTE: probe on Pexels and md5-check all five before rendering. If wolf
+coverage turns out thin (the ep81 crow lesson), switch topic rather than
+repeat a clip.

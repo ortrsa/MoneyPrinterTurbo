@@ -1,0 +1,53 @@
+FACT-CHECK LEAD — episode 82 (STORY): Clever Hans, the horse that "could do math"
+
+DUPLICATE CHECK (new hard rule, 2026-08-31): grepped episode_log.csv for
+"clever hans" -> NO prior use anywhere. "horse" appears only incidentally
+(ep7/ep9 animal ensembles, ep48 ancient Greece = Trojan horse). This topic
+is genuinely new to the channel. VERIFIED, not assumed.
+
+VERIFIED FACTS (WebSearch, 2026-09-01; Britannica, Wikipedia (Clever Hans /
+Oskar Pfungst), Lancaster Farming, Project MUSE):
+- Clever Hans was a horse in early-1900s Germany, owned by Wilhelm von
+  Osten, who appeared to solve arithmetic and other intellectual tasks,
+  answering by tapping his hoof.
+- A formal commission investigated (1904) and found no deliberate
+  trickery -- the owner genuinely believed the horse was doing the maths.
+- In 1907 Oskar Pfungst, working as a volunteer assistant in Carl
+  Stumpf's laboratory in Berlin, ran the decisive investigation. He
+  varied the questioner, sometimes letting them know the answer and
+  sometimes deliberately keeping them unaware, and changed how questions
+  were presented and the setting.
+- Result: Hans was not performing intellectual tasks. He was responding
+  to involuntary cues in the questioner's body language -- tapping until
+  a subtle, unconscious "tell" signalled the answer had been reached.
+  The trainer was entirely unaware he was producing those cues.
+- This is the origin of the "Clever Hans effect", which remains important
+  to the observer-expectancy effect and to the design of animal-cognition
+  studies to this day.
+
+SOURCES: Britannica ("Clever Hans | Story, Effect, & Facts"), Wikipedia
+(Clever Hans; Oskar Pfungst), Lancaster Farming (Horses & History),
+Project MUSE review.
+
+STANCE TAKEN: the debunk is the better story. Hans wasn't a fraud and
+neither was his owner -- and a horse that reads human micro-expressions
+well enough to fool a scientific commission is more impressive than a
+horse doing arithmetic. State that directly.
+
+HEDGE DISCIPLINE: the 1904 commission finding "no trickery" and the 1907
+Pfungst explanation are both well documented -- safe to state directly.
+Do NOT claim Hans "understood" anything about the humans' intentions;
+the sourced claim is that he responded to involuntary cues.
+
+LOOP DESIGN: open on "this horse could do math, nobody could find the
+trick"; close by echoing it -- he really was the cleverest one in the
+room, just not at maths.
+
+FOOTAGE PLAN (HARD RULE: every segment DISTINCT, md5-verified):
+  seg0 hook   horse close-up / eye
+  seg1        horse hoof / horse with a person
+  seg2        period-feel crowd or a different horse-and-handler shot
+  seg3        horse portrait, different animal/setting from seg0
+NOTE: probe these on Pexels and md5-check before rendering. Horses are
+well covered, so no AI clip should be needed -- but the STORY AI-hook
+default still applies if nothing usable turns up for the hook.
