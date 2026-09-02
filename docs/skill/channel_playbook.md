@@ -85,6 +85,20 @@ making this specific channel work, so a fresh session does not restart from zero
 > episode.** It was only abandoned for unrelated footage reasons.
 >
 > **Required check, every build, before locking a script:**
+>
+> **Run the tool — it does all of this for you:**
+> ```
+> uv run python docs/skill/check_topic_reuse.py wolf wolves "Clever Hans"
+> ```
+> It searches EVERY column of EVERY logged episode (a topic often hides
+> in an older multi-topic episode's `key_subjects`, which is exactly how
+> ep20's "yawning contagion" escaped notice and later became all of
+> ep75), separates real word-boundary hits from substring noise, and
+> exits non-zero if anything was already used. Written 2026-09-02;
+> verified to catch all three known misses (bees ep45/81, ancient Rome
+> ep33/79, yawning ep20/75).
+>
+> The manual equivalent, if the tool is ever unavailable:
 > 1. `grep -i` episode_log.csv for the candidate TOPIC (and its obvious
 >    synonyms — "bee"/"honey", "crow"/"corvid") across ALL episodes, not
 >    just recent ones.
