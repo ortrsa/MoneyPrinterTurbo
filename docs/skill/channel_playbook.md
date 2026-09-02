@@ -13,6 +13,33 @@ making this specific channel work, so a fresh session does not restart from zero
 > This is a durable constraint carrying across sessions — do not revert
 > to Hebrew replies even though the owner writes in Hebrew.**
 >
+> ## ⏸️ PAUSED 2026-09-02 — THE DAILY BUILD TRIGGER WAS DELETED
+> ## (owner's call; recreate it when credentials are restored)
+>
+> **Owner, live in chat: "Delete the task we will return when i fix it."**
+> `trig_01KeLddHpRHZDY15UYZTPJFs` ("RBT daily build (09:00 IDT)") has
+> been deleted. **There are now ZERO scheduled triggers on this account**
+> — nothing will fire, and no episode will be built, until the owner
+> comes back and it is recreated.
+>
+> Why: after the 2026-09-01 container reset wiped every credential, the
+> job could only fire each morning, fail, and re-report the same block.
+>
+> **Its full configuration and verbatim prompt are archived at
+> [`plans/daily_build_trigger_prompt.md`](plans/daily_build_trigger_prompt.md)**
+> — recreate from that file, don't rewrite it from memory. That archive
+> also lists two things worth updating in the prompt before it goes back
+> in (it predates the 2026-08-31 distinct-footage and no-repeat rules,
+> and its step 9 assumes only Veo can be dead rather than everything).
+>
+> **Order of operations when the owner returns:**
+> 1. Restore the credentials listed in the BLOCKED section below.
+> 2. Verify: `generate_ai_clip.py --probe`, and confirm
+>    `pexels_api_keys` / the Gemini key / `[telegram]` are set.
+> 3. Build the two already-prepared episodes (ep82 Clever Hans, ep83
+>    alpha wolf myth) — scripts are locked and duplicate-checked.
+> 4. Recreate the trigger from the archived prompt.
+>
 > ## 🛑 BLOCKED 2026-09-01 — ALL CREDENTIALS WIPED BY A CONTAINER RESET
 > ## (owner action required; nothing can be built or published until fixed)
 >
